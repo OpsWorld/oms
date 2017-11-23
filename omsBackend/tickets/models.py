@@ -5,13 +5,19 @@ from django.db import models
 from users.models import User, Group
 from tickets.storage import PathAndRename
 
+TicketLevel = {
+    'd': u'一般',
+    'c': u'严重',
+    'b': u'非常严重',
+    'a': u'爆炸',
+}
+
 TicketStatus = {
     '0': u'未接收',
     '1': u'处理中',
     '2': u'未解决关闭问题',
     '3': u'已解决关闭问题',
 }
-
 
 class WorkTicket(models.Model):
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
@@ -20,6 +26,7 @@ class WorkTicket(models.Model):
     create_user = models.ForeignKey(User, related_name='create_user', verbose_name=u'创建者')
     action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user', verbose_name=u'执行者')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
+    level = models.CharField(max_length=3, choices=TicketLevel.items(), default='0', verbose_name=u'工单等级')
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default='0', verbose_name=u'工单状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
     action_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单接收时间')

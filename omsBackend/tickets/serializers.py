@@ -14,9 +14,8 @@ class WorkTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTicket
         fields = (
-            'url', 'id', 'title', 'type', 'content', 'create_user', 'action_user', 'create_group', 'ticket_status',
-            'create_time',
-            'action_time', 'end_time', 'cost_time')
+            'url', 'id', 'title', 'type', 'content', 'create_user', 'action_user', 'create_group', 'level',
+            'ticket_status', 'create_time', 'action_time', 'end_time', 'cost_time')
         read_only_fields = ('cost_time',)
 
 
