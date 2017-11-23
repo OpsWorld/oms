@@ -1,0 +1,10 @@
+*.pyc
+.idea/
+.DS_Store
+.python-version
+upload/
+migrations/
+yarn-debug.log*
+yarn-error.log*
+*.out
+*.db

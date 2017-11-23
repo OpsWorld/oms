@@ -1,0 +1,12 @@
+Django==1.11.4
+django-cors-headers==2.1.0
+django-filter==1.0.4
+django-rest-auth==0.9.1
+djangorestframework==3.6.3
+djangorestframework-jwt==1.11.0
+dry-rest-permissions==0.1.9
+olefile==0.44
+Pillow==4.3.0
+PyJWT==1.5.3
+pytz==2017.2
+six==1.11.0
