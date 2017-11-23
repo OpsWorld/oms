@@ -7,10 +7,9 @@ from tickets.storage import PathAndRename
 
 TicketStatus = {
     '0': u'未接收',
-    '1': u'已接收',
+    '1': u'处理中',
     '2': u'未解决关闭问题',
     '3': u'已解决关闭问题',
-    '4': u'其他',
 }
 
 
