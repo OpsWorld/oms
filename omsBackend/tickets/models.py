@@ -6,10 +6,10 @@ from users.models import User, Group
 from tickets.storage import PathAndRename
 
 TicketLevel = {
-    'd': u'一般',
-    'c': u'严重',
-    'b': u'非常严重',
-    'a': u'爆炸',
+    'D': 'D',
+    'C': 'C',
+    'B': 'B',
+    'A': 'A',
 }
 
 TicketStatus = {
@@ -19,12 +19,14 @@ TicketStatus = {
     '3': u'已解决关闭问题',
 }
 
+
 class WorkTicket(models.Model):
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
     type = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')
     create_user = models.ForeignKey(User, related_name='create_user', verbose_name=u'创建者')
-    action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user', verbose_name=u'执行者')
+    action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user',
+                                    verbose_name=u'执行者')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     level = models.CharField(max_length=3, choices=TicketLevel.items(), default='0', verbose_name=u'工单等级')
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default='0', verbose_name=u'工单状态')
