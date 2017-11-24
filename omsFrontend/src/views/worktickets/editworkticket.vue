@@ -33,13 +33,14 @@
         },
         methods: {
             fetchData() {
-                const ticket_id = 1;
+                const route_path = this.$route.path.split('/');
+                const ticket_id = route_path[route_path.length-1];
                 const ticket_parms = null;
                 getWorkticket(ticket_id, ticket_parms).then(response => {
                     this.ticketData = response.data;
                 });
                 const comment_parms = {
-                    ticket__id: 1
+                    ticket__id: ticket_id
                 };
                 getTicketcomment(comment_parms).then(response => {
                     this.commentData = response.data.results;
