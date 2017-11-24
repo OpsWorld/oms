@@ -8,3 +8,4 @@ yarn-debug.log*
 yarn-error.log*
 *.out
 *.db
+node_modules/
