@@ -21,16 +21,15 @@
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column type="expand">
                         <template slot-scope="props">
-                            <el-steps :space="200" :active="0" finish-status="success">
+                            <el-steps :active="1" finish-status="success">
                                 <el-step title="未接收"></el-step>
-                                <el-step title="处理中"></el-step>
-                                <el-step title="完成"></el-step>
+                                <el-step title="正在处理"></el-step>
+                                <el-step title="已完成"></el-step>
                             </el-steps>
                         </template>
                     </el-table-column>
                     <el-table-column prop='title' label='标题'></el-table-column>
                     <el-table-column prop='type' label='工单类型'></el-table-column>
-                    <el-table-column prop='content' label='工单内容'></el-table-column>
                     <el-table-column prop='create_user' label='工单创建人'></el-table-column>
                     <el-table-column prop='level' label='工单等级' sortable>
                         <template scope="scope">
@@ -51,6 +50,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
+                    <el-table-column label="操作">
+                        <template scope="scope">
+                            <el-button type="success" size="small">接收</el-button>
+                            <el-button type="danger" size="small">关闭</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </div>
             <div class="table-footer">
@@ -94,7 +99,7 @@
                 rowdata: {},
                 TICKET_STATUS: {
                     '0': {"type": "未接收", "color": "#37474F"},
-                    '1': {"type": "处理中", "color": "#cacb1f"},
+                    '1': {"type": "正在处理", "color": "#cacb1f"},
                     '2': {"type": "未解决关闭问题", "color": "#f06292"},
                     '3': {"type": "已解决关闭问题", "color": "#17e16c"},
                 },
