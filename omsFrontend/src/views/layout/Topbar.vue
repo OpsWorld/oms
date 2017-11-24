@@ -2,7 +2,7 @@
     <div>
         <el-menu class="header" mode="horizontal">
             <a><img src="../../assets/oms_logo.png"></a>
-            <tabs-view class="tabs"></tabs-view>
+            <!--<tabs-view class="tabs"></tabs-view>-->
             <el-dropdown class="user-container" trigger="hover">
                 <div class="user-wrapper">
                     <a class="username">{{username}}</a>
@@ -39,12 +39,12 @@
 </template>
 
 <script>
-    import TabsView from './TabsView';
+//    import TabsView from './TabsView';
     import {changePassword} from 'api/auth'
 
     export default {
         components: {
-            TabsView,
+//            TabsView,
         },
         data() {
             const validatePass = (rule, value, callback) => {
