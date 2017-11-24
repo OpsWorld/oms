@@ -1,94 +1,48 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="标题" prop="title">
-            <el-input v-model="ruleForm.title"></el-input>
-        </el-form-item>
-        <el-form-item label="工单类型" prop="type">
-            <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
-                <el-option v-for="item in tickettypes" :key="item.name" :value="item.name"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="工单内容" prop="content">
-            <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 10, maxRows: 50}"></el-input>
-        </el-form-item>
-        <el-form-item label="工单等级" prop="level">
-            <el-rate
-                    v-model="ruleForm.level"
-                    :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                    show-text
-                    :texts="['E', 'D', 'C', 'B', 'A']">
-            </el-rate>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-            <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
-        </el-form-item>
-    </el-form>
+    <div>
+        <div class="workticket">
+            <h3 class="post-title">{{ticketData.title}}</h3>
+            <p class="datetime">创建时间：{{ticketData.create_time}}</p>
+            <p class="create_user">创建人：{{ticketData.create_user}}</p>
+            <p class="action_user">当前处理人人：{{ticketData.action_user}}</p>
+            <div class="content">详细内容：{{ticketData.content}}</div>
+        </div>
+        <div class="ticketcomment" v-for="item in commentData" :key="item.id">
+            <p class="datetime">回复时间：{{item.create_time}}</p>
+            <p class="create_user">回复人：{{item.create_user}}</p>
+            <div class="content">回复内容：{{item.content}}</div>
+        </div>
+    </div>
 </template>
 <script>
-    import {postWorkticket, getTickettype} from 'api/workticket'
+    import {getWorkticket, putWorkticket, getTicketcomment, postTicketcomment} from 'api/workticket'
 
     export default {
         components: {},
 
         data() {
             return {
-                ruleForm: {
-                    title: '',
-                    type: '',
-                    content: '',
-                    create_user: localStorage.getItem('username'),
-                    level: null,
-                    action_user: '',
-                    create_group: ''
-                },
-                rules: {
-                    title: [
-                        {required: true, message: '请输入工单标题', trigger: 'blur'},
-                    ],
-                    type: [
-                        {required: true, message: '请选择工单类型', trigger: 'change'}
-                    ],
-                    content: [
-                        {required: true, message: '请输入工单内容', trigger: 'blur'}
-                    ],
-                    level: [
-                        {required: true, type: 'number', message: '请确认工单等级', trigger: 'blur'},
-                    ],
-                },
-                tickettypes: [],
+                ticketData: {},
+                ticket__title: '',
+                commentData: {}
             };
         },
 
         created() {
-            this.getTickettypes();
+            this.fetchData()
         },
         methods: {
-            postForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        postWorkticket(this.ruleForm).then(response => {
-                            if (response.statusText = 'ok') {
-                                this.$message({
-                                    type: 'success',
-                                    message: '恭喜你，新建成功'
-                                });
-                            }
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
+            fetchData() {
+                const ticket_id = 1;
+                const ticket_parms = null;
+                getWorkticket(ticket_id, ticket_parms).then(response => {
+                    this.ticketData = response.data;
                 });
-                this.$emit('DialogStatus', false);
-            },
-
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-            getTickettypes() {
-                getTickettype().then(response => {
-                    this.tickettypes = response.data.results;
+                const comment_parms = {
+                    ticket__id: 1
+                };
+                getTicketcomment(comment_parms).then(response => {
+                    this.commentData = response.data.results;
                 })
             },
         }

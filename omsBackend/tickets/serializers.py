@@ -21,7 +21,6 @@ class WorkTicketSerializer(serializers.ModelSerializer):
 
 
 class TicketCommentSerializer(serializers.ModelSerializer):
-    ticket = serializers.SlugRelatedField(queryset=WorkTicket.objects.all(), slug_field='title')
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     create_group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
 

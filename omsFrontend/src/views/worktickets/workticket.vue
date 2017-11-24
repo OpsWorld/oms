@@ -28,7 +28,13 @@
                             </el-steps>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='title' label='标题'></el-table-column>
+                    <el-table-column prop='title' label='标题'>
+                        <template scope="scope">
+                            <a slot="reference" style="text-align: center; color: rgba(23,225,108,0.59)">
+                                <router-link :to="'editworkticket/'+scope.row.id">{{scope.row.title}}</router-link>
+                            </a>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop='type' label='工单类型'></el-table-column>
                     <el-table-column prop='create_user' label='工单创建人'></el-table-column>
                     <el-table-column prop='level' label='工单等级' sortable>
@@ -119,12 +125,13 @@
 
         methods: {
             fetchData() {
+                const id = null;
                 const parms = {
                     limit: this.limit,
                     offset: this.offset,
                     title__contains: this.searchdata
                 };
-                getWorkticket(parms).then(response => {
+                getWorkticket(id, parms).then(response => {
                     this.tableData = response.data.results;
                     this.tabletotal = response.data.count;
                 })

@@ -2,7 +2,7 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from tickets.models import WorkTicket
+from tickets.models import WorkTicket, TicketComment
 
 class WorkTicketFilter(filters.FilterSet):
     class Meta:
@@ -16,4 +16,11 @@ class WorkTicketFilter(filters.FilterSet):
             'create_time': ['exact', 'contains'],
             'level': ['exact'],
             'ticket_status': ['exact'],
+        }
+
+class TicketCommentFilter(filters.FilterSet):
+    class Meta:
+        model = TicketComment
+        fields = {
+            'ticket__id': ['exact'],
         }

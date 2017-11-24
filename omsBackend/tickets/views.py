@@ -3,8 +3,9 @@
 
 from rest_framework import viewsets
 from tickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
-from tickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, TicketTypeSerializer, TicketWikiSerializer
-from tickets.filters import WorkTicketFilter
+from tickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, \
+    TicketTypeSerializer, TicketWikiSerializer
+from tickets.filters import WorkTicketFilter, TicketCommentFilter
 
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
@@ -16,6 +17,7 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
 class TicketCommentViewSet(viewsets.ModelViewSet):
     queryset = TicketComment.objects.all().order_by('-create_time')
     serializer_class = TicketCommentSerializer
+    filter_class = TicketCommentFilter
 
 
 class TicketEnclosureViewSet(viewsets.ModelViewSet):

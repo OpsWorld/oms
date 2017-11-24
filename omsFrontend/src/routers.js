@@ -19,6 +19,7 @@ import Rolelist from '@/views/users/roles'
 import Workticket from '@/views/worktickets/workticket'
 import Tickettype from '@/views/worktickets/tickettype'
 import addWorkticket from '@/views/worktickets/addworkticket'
+import editWorkticket from '@/views/worktickets/editworkticket'
 
 /**
  * icon : the icon show in the sidebar
@@ -65,6 +66,7 @@ export const routes = [
             {path: 'workticket', component: Workticket, name: '工单列表'},
             {path: 'tickettype', component: Tickettype, name: '工单类型'},
             {path: 'addworkticket', hidden: true, component: addWorkticket, name: '添加工单'},
+            {path: 'editworkticket/:id', hidden: true, component: editWorkticket, name: '编辑工单'},
         ]
     },
     {path: '*', redirect: '/404', hidden: true}

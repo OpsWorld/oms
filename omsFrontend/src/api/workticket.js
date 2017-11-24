@@ -10,9 +10,10 @@ export function postWorkticket(data) {
         data
     });
 }
-export function getWorkticket(query) {
+
+export function getWorkticket(id,query) {
     return fetch({
-        url: apiURL.worktickers,
+        url: id?apiURL.worktickers + id + '/':apiURL.worktickers,
         method: 'get',
         params: query
     });
@@ -60,6 +61,37 @@ export function putTickettype(id, data) {
 export function deleteTickettype(id) {
     return fetch({
         url: apiURL.tickettypes + id,
+        method: 'delete',
+    });
+}
+
+//ticketcomments
+export function postTicketcomment(data) {
+    return fetch({
+        url: apiURL.ticketcomments,
+        method: 'post',
+        data
+    });
+}
+export function getTicketcomment(query) {
+    return fetch({
+        url: apiURL.ticketcomments,
+        method: 'get',
+        params: query
+    });
+}
+
+export function putTicketcomment(id, data) {
+    return fetch({
+        url: apiURL.ticketcomments + id + '/',
+        method: 'put',
+        data
+    });
+}
+
+export function deleteTicketcomment(id) {
+    return fetch({
+        url: apiURL.ticketcomments + id,
         method: 'delete',
     });
 }
