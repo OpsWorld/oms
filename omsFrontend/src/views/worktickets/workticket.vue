@@ -30,9 +30,9 @@
                     </el-table-column>
                     <el-table-column prop='title' label='标题'>
                         <template scope="scope">
-                            <a slot="reference" style="text-align: center; color: rgba(23,225,108,0.59)">
+                            <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
                                 <router-link :to="'editworkticket/'+scope.row.id">{{scope.row.title}}</router-link>
-                            </a>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop='type' label='工单类型'></el-table-column>

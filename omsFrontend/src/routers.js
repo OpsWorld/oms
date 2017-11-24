@@ -45,7 +45,7 @@ export const routes = [
     {
         path: '/users',
         component: Layout,
-        redirect: '/user/index',
+        redirect: '/users/user',
         name: '用户管理',
         icon: 'user',
         meta: {requiresAuth: true},
@@ -58,7 +58,7 @@ export const routes = [
         {
         path: '/worktickets',
         component: Layout,
-        redirect: '/workticket/index',
+        redirect: '/worktickets/workticket',
         name: '工单管理',
         icon: 'list',
         meta: {requiresAuth: true},
