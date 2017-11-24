@@ -6,10 +6,11 @@ from users.models import User, Group
 from tickets.storage import PathAndRename
 
 TicketLevel = {
-    'D': 'D',
-    'C': 'C',
-    'B': 'B',
-    'A': 'A',
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'D',
+    5: 'E',
 }
 
 TicketStatus = {
@@ -28,7 +29,7 @@ class WorkTicket(models.Model):
     action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user',
                                     verbose_name=u'执行者')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
-    level = models.CharField(max_length=3, choices=TicketLevel.items(), default='0', verbose_name=u'工单等级')
+    level = models.CharField(max_length=3, choices=TicketLevel.items(), default='5', verbose_name=u'工单等级')
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default='0', verbose_name=u'工单状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
     action_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单接收时间')
@@ -71,8 +72,8 @@ class TicketEnclosure(models.Model):
 
 
 class TicketType(models.Model):
-    title = models.CharField(max_length=100, blank=True, verbose_name=u'工单类型')
-    desc = models.CharField(max_length=100, blank=True, verbose_name=u'工单描述')
+    name = models.CharField(max_length=100, blank=True, verbose_name=u'工单类型')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'工单描述')
 
     class Meta:
         verbose_name = u'工单类型'

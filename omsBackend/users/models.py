@@ -53,7 +53,7 @@ class User(AbstractBaseUser):
 
 class Group(models.Model):
     name = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
-    desc = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'描述')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
