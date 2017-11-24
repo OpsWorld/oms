@@ -22,7 +22,7 @@ TicketStatus = {
 
 class WorkTicket(models.Model):
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
-    type = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'工单类型')
+    type = models.ForeignKey('TicketType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')
     create_user = models.ForeignKey(User, related_name='create_user', verbose_name=u'创建者')
     action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user',

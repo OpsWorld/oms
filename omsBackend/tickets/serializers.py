@@ -7,6 +7,7 @@ from users.models import User, Group
 
 
 class WorkTicketSerializer(serializers.ModelSerializer):
+    type = serializers.SlugRelatedField(queryset=TicketType.objects.all(), slug_field='title', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', allow_null=True)
     create_group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
