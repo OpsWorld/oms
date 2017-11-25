@@ -5,10 +5,10 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
                             @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            :suffix-icon="el-icon-search"
+                            @click="searchClick">
                     </el-input>
                 </div>
             </div>

@@ -4,7 +4,7 @@
             <div class="head-lavel">
                 <div class="table-button">
                     <router-link :to="'addworkticket'">
-                        <el-button type="info" icon="plus">新建工单</el-button>
+                        <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
                     </router-link>
                 </div>
                 <div class="table-search">
@@ -18,11 +18,11 @@
             </div>
             <div>
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column type="expand">
-                        <template slot-scope="props">
-                            <step></step>
-                        </template>
-                    </el-table-column>
+                    <!--<el-table-column type="expand">-->
+                        <!--<template slot-scope="props">-->
+                            <!--<step></step>-->
+                        <!--</template>-->
+                    <!--</el-table-column>-->
                     <el-table-column prop='title' label='标题'>
                         <template scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
@@ -51,10 +51,17 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
+                    <el-table-column prop='create_time' label='工单创建时间'>
+                        <template scope="scope">
+                            <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
+                                <a>{{scope.row.create_time|parseDate}}</a>
+                            </div>
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
-                            <el-button type="success" size="small">接收</el-button>
-                            <el-button type="danger" size="small">关闭</el-button>
+                            <el-button type="success" size="mini">接收</el-button>
+                            <el-button type="danger" size="mini">关闭</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

@@ -67,6 +67,7 @@ export const routes = [
             {path: 'tickettype', component: Tickettype, name: '工单类型'},
             {path: 'addworkticket', hidden: true, component: addWorkticket, name: '添加工单'},
             {path: 'editworkticket/:id', hidden: true, component: editWorkticket, name: '编辑工单'},
+            {path: 'test', component: require('@/views/worktickets/test'), name: '测试'},
         ]
     },
     {path: '*', redirect: '/404', hidden: true}

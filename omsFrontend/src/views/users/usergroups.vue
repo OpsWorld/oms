@@ -3,7 +3,7 @@
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
-                    <el-button type="info" icon="plus" @click="addGroup=true">新建用户组</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="addGroup=true">新建用户组</el-button>
                 </div>
                 <div class="table-search">
                     <el-input

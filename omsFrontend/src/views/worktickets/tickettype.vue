@@ -3,7 +3,7 @@
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
-                    <el-button type="info" icon="plus" @click="addForm=true">新建工单类型</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建工单类型</el-button>
                 </div>
                 <div class="table-search">
                     <el-input
