@@ -10,10 +10,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -21,11 +20,7 @@
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column type="expand">
                         <template slot-scope="props">
-                            <el-steps :active="1" finish-status="success">
-                                <el-step title="未接收"></el-step>
-                                <el-step title="正在处理"></el-step>
-                                <el-step title="已完成"></el-step>
-                            </el-steps>
+                            <step></step>
                         </template>
                     </el-table-column>
                     <el-table-column prop='title' label='标题'>
@@ -79,9 +74,6 @@
                 </div>
             </div>
         </el-card>
-        <el-dialog :visible.sync="addForm" size="small">
-            <add-workticket @DialogStatus="getDialogStatus"></add-workticket>
-        </el-dialog>
     </div>
 </template>
 
@@ -89,9 +81,10 @@
     import {getWorkticket, postWorkticket} from 'api/workticket'
     import {LIMIT} from '@/config'
     import addWorkticket from './addworkticket.vue'
+    import Step from '../components/Steps.vue'
 
     export default {
-        components: {addWorkticket},
+        components: {addWorkticket, Step},
         data() {
             return {
                 tableData: [],
@@ -136,12 +129,6 @@
                     this.tabletotal = response.data.count;
                 })
             },
-
-            getDialogStatus(data) {
-                this.addForm = data;
-                this.fetchData();
-            },
-
             handleCreate() {
                 this.reseRowdata();
                 this.addForm = true;

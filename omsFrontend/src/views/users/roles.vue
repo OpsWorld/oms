@@ -8,10 +8,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -40,7 +39,7 @@
                 </el-pagination>
             </div>
         </el-card>
-        <el-dialog :visible.sync="addGroup" size="tiny">
+        <el-dialog :visible.sync="addGroup">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="角色名" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>

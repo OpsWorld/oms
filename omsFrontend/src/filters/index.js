@@ -53,10 +53,12 @@ export function parseTime(time, cFormat) {
 }
 
 export function parseDate(datestr) {
-  let datetime = datestr.split('T');
-  let date = datetime[0];
-  let time = datetime[1].split('.')[0];
-  return date + ' ' + time
+    if (datestr!=undefined) {
+    let datetime = datestr.split('T');
+    let date = datetime[0];
+    let time = datetime[1].split('.')[0];
+    return date + ' ' + time
+}
 }
 
 export function formatTime(time, option) {

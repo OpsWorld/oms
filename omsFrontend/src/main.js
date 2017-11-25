@@ -7,7 +7,7 @@ import store from './store';
 
 /* elementUI && theme */
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-default/index.css';
+import 'element-ui/lib/theme-chalk/index.css';
 import 'assets/custom-theme/index.css'; // 换肤版本element-ui css
 
 /* icon */

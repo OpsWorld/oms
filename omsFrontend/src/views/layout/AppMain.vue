@@ -1,9 +1,7 @@
 <template>
     <section class="app-main">
         <levelbar></levelbar>
-        <transition name="fade" mode="out-in">
-            <router-view :key="key"></router-view>
-        </transition>
+        <router-view :key="key"></router-view>
     </section>
 </template>
 

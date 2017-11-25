@@ -27,6 +27,14 @@ export function putWorkticket(id, data) {
     });
 }
 
+export function patchWorkticket(id, data) {
+    return fetch({
+        url: apiURL.worktickers + id + '/',
+        method: 'patch',
+        data
+    });
+}
+
 export function deleteWorkticket(id) {
     return fetch({
         url: apiURL.worktickers + id,

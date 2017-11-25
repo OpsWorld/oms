@@ -3,3 +3,8 @@
     width: 200px!important;
     font-size: 16px;
 }
+
+.el-card__header {
+    padding: 5px!important;
+    background-color: rgba(42, 174, 200, 0.32);
+}

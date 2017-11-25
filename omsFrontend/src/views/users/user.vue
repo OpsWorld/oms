@@ -8,10 +8,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -57,10 +56,10 @@
                 </div>
             </div>
         </el-card>
-        <el-dialog :visible.sync="addForm" size="small">
+        <el-dialog :visible.sync="addForm">
             <add-user @DialogStatus="getDialogStatus"></add-user>
         </el-dialog>
-        <el-dialog :visible.sync="editForm" size="small">
+        <el-dialog :visible.sync="editForm">
             <edit-user :rowdata="rowdata" @DialogStatus="getDialogStatus"></edit-user>
         </el-dialog>
     </div>
