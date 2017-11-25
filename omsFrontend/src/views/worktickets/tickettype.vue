@@ -40,7 +40,7 @@
             </div>
         </el-card>
         <el-dialog :visible.sync="addForm">
-            <add-group @formdata="addGroupSubmit"></add-group>
+            <add-group @formdata="addGroupSubmit" @DialogStatus="getDialogStatus"></add-group>
         </el-dialog>
         <el-dialog :visible.sync="editForm">
             <edit-group :rowdata="rowdata" @DialogStatus="getDialogStatus"></edit-group>

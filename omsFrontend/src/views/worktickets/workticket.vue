@@ -17,11 +17,11 @@
                 </div>
             </div>
             <div>
-                <el-table :data="tableData" border style="width: 100%">
+                <el-table :data="tableData" border style="width: 100%" v-loading="loading">
                     <!--<el-table-column type="expand">-->
-                        <!--<template slot-scope="props">-->
-                            <!--<step></step>-->
-                        <!--</template>-->
+                    <!--<template slot-scope="props">-->
+                    <!--<step></step>-->
+                    <!--</template>-->
                     <!--</el-table-column>-->
                     <el-table-column prop='title' label='标题'>
                         <template scope="scope">
@@ -35,33 +35,27 @@
                     <el-table-column prop='level' label='工单等级' sortable>
                         <template scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-tag :type="LEVEL[scope.row.level].color">
-                                    {{LEVEL[scope.row.level].type}}
+                                <el-tag :type="LEVEL[scope.row.level].type">
+                                    {{LEVEL[scope.row.level].text}}
                                 </el-tag>
                             </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop='ticket_status' label='工单状态' sortable>
                         <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-tag :color="TICKET_STATUS[scope.row.ticket_status].color">
-                                    {{TICKET_STATUS[scope.row.ticket_status].type}}
-                                </el-tag>
-                            </div>
+                        <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                        <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
+                        {{TICKET_STATUS[scope.row.ticket_status].text}}
+                        </el-tag>
+                        </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
                     <el-table-column prop='create_time' label='工单创建时间'>
                         <template scope="scope">
-                            <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
-                                <a>{{scope.row.create_time|parseDate}}</a>
+                            <div slot="reference" style="text-align: center; color: rgb(41,225,28)">
+                                <a>{{scope.row.create_time | parseDate}}</a>
                             </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作">
-                        <template scope="scope">
-                            <el-button type="success" size="mini">接收</el-button>
-                            <el-button type="danger" size="mini">关闭</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -94,6 +88,7 @@
         components: {addWorkticket, Step},
         data() {
             return {
+                loading: true,
                 tableData: [],
                 tabletotal: 0,
                 searchdata: '',
@@ -102,19 +97,21 @@
                 offset: '',
                 pagesize: [10, 25, 50, 100],
                 addForm: false,
-                rowdata: {},
+                rowdata: {
+                    ticket_status: 0,
+                    action_user: localStorage.getItem('username')
+                },
                 TICKET_STATUS: {
-                    '0': {"type": "未接收", "color": "#37474F"},
-                    '1': {"type": "正在处理", "color": "#cacb1f"},
-                    '2': {"type": "未解决关闭问题", "color": "#f06292"},
-                    '3': {"type": "已解决关闭问题", "color": "#17e16c"},
+                    '0': {"text": "未接收", "type": "info"},
+                    '1': {"text": "正在处理", "type": ""},
+                    '2': {"text": "已解决", "type": "danger"},
                 },
                 LEVEL: {
-                    '1': {"type": 'A', "color": "danger"},
-                    '2': {"type": 'B', "color": "warning"},
-                    '3': {"type": 'C', "color": "success"},
-                    '4': {"type": 'D', "color": "info"},
-                    '5': {"type": 'E', "color": ""},
+                    '1': {"text": 'A', "type": "danger"},
+                    '2': {"text": 'B', "type": "warning"},
+                    '3': {"text": 'C', "type": "success"},
+                    '4': {"text": 'D', "type": "info"},
+                    '5': {"text": 'E', "type": ""},
                 },
             }
         },
@@ -134,12 +131,8 @@
                 getWorkticket(id, parms).then(response => {
                     this.tableData = response.data.results;
                     this.tabletotal = response.data.count;
+                    this.loading = false;
                 })
-            },
-            handleCreate() {
-                this.reseRowdata();
-                this.addForm = true;
-                setTimeout(this.fetchData, 1000);
             },
             searchClick() {
                 this.fetchData();
@@ -151,17 +144,6 @@
             handleCurrentChange(val) {
                 this.offset = val - 1;
                 this.fetchData();
-            },
-            reseRowdata() {
-                this.rowdata = {
-                    username: '',
-                    email: '',
-                    name: '',
-                    is_active: '',
-                    group: '',
-                    roles: '',
-                    password: '',
-                }
             },
         }
     }

@@ -4,7 +4,7 @@
             <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="desc">
-            <el-input v-model="ruleForm.desc" type="textarea"  :autosize="{ minRows: 10, maxRows: 30}"></el-input>
+            <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 10, maxRows: 30}"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -31,7 +31,11 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$emit('formdata', this.ruleForm)
+                        this.$emit('formdata', this.ruleForm);
+                        this.ruleForm = {
+                            name: '',
+                            desc: ''
+                        }
                     } else {
                         console.log('error submit!!');
                         return false;
