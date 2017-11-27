@@ -11,6 +11,7 @@
                         <el-radio label="0">未接收</el-radio>
                         <el-radio label="1">正在处理</el-radio>
                         <el-radio label="2">已解决</el-radio>
+                        <el-radio label="">全部</el-radio>
                     </el-radio-group>
 
                 </div>
@@ -51,7 +52,7 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='ticket_status' label='工单状态' sortable>
+                    <el-table-column prop='ticket_status' label='工单状态'>
                         <template scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                                 <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
@@ -61,7 +62,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
-                    <el-table-column prop='create_time' label='工单创建时间'>
+                    <el-table-column prop='create_time' label='工单创建时间' sortable>
                         <template scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(41,225,28)">
                                 <a>{{scope.row.create_time | parseDate}}</a>
@@ -99,7 +100,7 @@
         data() {
             return {
                 loading: true,
-                radio: '1',
+                radio: '',
                 tableData: [],
                 tabletotal: 0,
                 searchdata: '',
