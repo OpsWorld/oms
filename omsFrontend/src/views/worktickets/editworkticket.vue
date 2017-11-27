@@ -108,7 +108,7 @@
         getTicketenclosure,
         deleteTicketenclosure,
     } from 'api/workticket'
-    import {getUploadList, postUpload} from 'api/tool'
+    import {postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
 
     export default {

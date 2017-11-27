@@ -22,6 +22,24 @@
                         show-text
                         :texts="['E', 'D', 'C', 'B', 'A']">
                 </el-rate>
+                <div>
+                    <hr class="heng"/>
+                    <el-upload
+                            class="upload-demo"
+                            ref="upload"
+                            action="https://jsonplaceholder.typicode.com/posts/"
+                            :on-success="handleSuccess"
+                            :file-list="fileList"
+                            :disabled="count>0?true:false">
+                        <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
+                            上传文件
+                        </el-button>
+                        (可以不用上传)
+                        <div slot="tip" class="el-upload__tip">
+                            <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
+                        </div>
+                    </el-upload>
+                </div>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
@@ -34,9 +52,10 @@
     </div>
 </template>
 <script>
-    import {postWorkticket, getTickettype, postTickettype} from 'api/workticket'
+    import {postWorkticket, getTickettype, postTickettype, postTicketenclosure} from 'api/workticket'
     import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
     import addGroup from '../components/addgroup.vue'
+    import {postUpload} from 'api/tool'
 
     export default {
         components: {ElButton, addGroup},
@@ -67,7 +86,16 @@
                     ],
                 },
                 tickettypes: [],
-                addForm: false
+                addForm: false,
+                fileList: [],
+                count: 0,
+                enclosureFile: null,
+                enclosureForm: {
+                    ticket: '',
+                    create_user: localStorage.getItem('username'),
+                    file: '',
+                    create_group: ''
+                },
             };
         },
 
@@ -84,6 +112,11 @@
                                     type: 'success',
                                     message: '恭喜你，新建成功'
                                 });
+                            }
+                            if (this.enclosureFile) {
+                                this.enclosureForm.file = this.enclosureFile;
+                                this.enclosureForm.ticket = response.data.id;
+                                postTicketenclosure(this.enclosureForm);
                             }
                             this.$refs[formName].resetFields();
                         });
@@ -119,10 +152,45 @@
                     console.log(error);
                 });
             },
+            handleSuccess(file, fileList) {
+                let date = new Date(fileList.raw.uid);
+                let Y = date.getFullYear().toString();
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+                let D = date.getDate();
+                let h = date.getHours();
+                let m = date.getMinutes();
+                let s = date.getSeconds();
+                let formData = new FormData();
+                formData.append('username', this.enclosureForm.create_user);
+                formData.append('file', fileList.raw);
+                formData.append('create_time', Y + M + D + h + m + s);
+                formData.append('type', fileList.raw.type);
+                formData.append('archive', this.$route.path.split('/')[1]);
+                postUpload(formData).then(response => {
+                    this.enclosureFile = response.data.filepath;
+                    if (response.statusText = 'ok') {
+                        this.count += 1;
+                        this.$message({
+                            type: 'success',
+                            message: '恭喜你，上传成功'
+                        });
+                    }
+                }).catch(error => {
+                    this.$message.error('上传失败');
+                    this.$refs.upload.clearFiles();
+                    console.log(error);
+                });
+            },
         }
     }
 </script>
 
 <style lang='scss'>
-
+    .heng {
+        margin: 20px 0;
+        height: 1px;
+        border: 0px;
+        background-color: rgba(174, 127, 255, 0.38);
+        color: #29e11c;
+    }
 </style>
