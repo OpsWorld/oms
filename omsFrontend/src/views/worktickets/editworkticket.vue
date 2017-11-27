@@ -54,9 +54,15 @@
             <div v-if='enclosureData.length>0' class="ticketenclosure">
                 <ul>
                     <li v-for="item in enclosureData" :key="item.id">
-                        <!--<a :href="apiurl + '/upload/' +item.file" target="_blank">{{item.file}}</a>-->
-                        <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
-                        <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+                        <a v-if="extJudge(item.file)" :href="apiurl + '/upload/' +item.file" target="_blank">
+                            {{item.file}}
+                            <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+                        </a>
+                        <a v-else :href="apiurl + '/upload/' +item.file"
+                           download="item.id">
+                            {{item.file}}
+                            <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -228,6 +234,15 @@
                     console.log(error);
                 });
             },
+            extJudge(file) {
+                const extlist = ['jpg', 'png', 'txt'];
+                let ext = file.split('.')[1];
+                if (extlist.indexOf(ext) < 0) {
+                    return 0
+                } else {
+                    return 1
+                }
+            }
         }
     }
 </script>
