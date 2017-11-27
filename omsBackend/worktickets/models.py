@@ -57,7 +57,7 @@ class TicketComment(models.Model):
 
 class TicketEnclosure(models.Model):
     ticket = models.ForeignKey(WorkTicket, verbose_name=u'工单')
-    file = models.ManyToManyField(Upload, null=True, blank=True, verbose_name=u'附件')
+    file = models.ForeignKey(Upload, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')

@@ -34,7 +34,19 @@
                 </el-form-item>
                 <hr class="heng"/>
             </el-form>
-
+            <div>
+                <el-button type="info" icon="upload" @click="uploadForm('ruleForm')">上传附件</el-button>
+                <a style="color: red;">(最多允许上传3个附件,已上传1个)</a>
+                <hr class="heng"/>
+            </div>
+            <div v-if='enclosureData.length>0' class="ticketenclosure">
+                <ul>
+                    <li v-for="item in enclosureData" :key="item.id">
+                        <!--<a :href="apiurl + '/upload/' +item.file" target="_blank">{{item.file}}</a>-->
+                        <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
+                    </li>
+                </ul>
+            </div>
             <div class="ticketcomment" v-for="item in commentData" :key="item.id">
                 处理过程：
                 <hr class="heng"/>
@@ -68,7 +80,16 @@
     </div>
 </template>
 <script>
-    import {getWorkticket, patchWorkticket, getTicketcomment, postTicketcomment} from 'api/workticket'
+    import {
+        getWorkticket,
+        patchWorkticket,
+        getTicketcomment,
+        postTicketcomment,
+        postTicketenclosure,
+        getTicketenclosure
+    } from 'api/workticket'
+    import {getUploadList, postUpload} from 'api/tool'
+    import {apiUrl} from '@/config'
 
     export default {
         components: {},
@@ -80,6 +101,8 @@
                 ticketData: {},
                 ticket__title: '',
                 commentData: {},
+                enclosureData: {},
+                apiurl: apiUrl,
                 ruleForm: {
                     ticket: '',
                     create_user: localStorage.getItem('username'),
@@ -101,22 +124,31 @@
         created() {
             this.ticket_id = this.ruleForm.ticket = this.route_path[this.route_path.length - 1];
             this.fetchData();
-            this.CommentData()
+            this.CommentData();
+            this.EnclosureData();
         },
         methods: {
             fetchData() {
-                const ticket_parms = null;
-                getWorkticket(this.ticket_id, ticket_parms).then(response => {
+                const parms = null;
+                getWorkticket(this.ticket_id, parms).then(response => {
                     this.ticketData = response.data;
                 });
             },
             CommentData() {
-                const comment_parms = {
+                const parms = {
                     ticket__id: this.ticket_id
                 };
-                getTicketcomment(comment_parms).then(response => {
+                getTicketcomment(parms).then(response => {
                     this.commentData = response.data.results;
-                    this.rowdata.action_user = this.commentData.length==0?null:this.commentData[this.commentData.length - 1].create_user;
+                    this.rowdata.action_user = this.commentData.length == 0 ? null : this.commentData[this.commentData.length - 1].create_user;
+                })
+            },
+            EnclosureData() {
+                const parms = {
+                    ticket__id: this.ticket_id
+                };
+                getTicketenclosure(parms).then(response => {
+                    this.enclosureData = response.data.results;
                 })
             },
             submitForm(formName) {

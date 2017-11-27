@@ -3,7 +3,6 @@ import apiURL from '@/config'
 
 //worktickets
 export function postWorkticket(data) {
-    console.log(data)
     return fetch({
         url: apiURL.worktickers,
         method: 'post',

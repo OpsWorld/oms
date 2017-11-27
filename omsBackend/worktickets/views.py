@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
 from worktickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, \
     TicketTypeSerializer, TicketWikiSerializer
-from worktickets.filters import WorkTicketFilter, TicketCommentFilter
+from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
 
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
@@ -23,6 +23,7 @@ class TicketCommentViewSet(viewsets.ModelViewSet):
 class TicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = TicketEnclosure.objects.all()
     serializer_class = TicketEnclosureSerializer
+    filter_class = TicketEnclosureFilter
 
 
 class TicketTypeViewSet(viewsets.ModelViewSet):

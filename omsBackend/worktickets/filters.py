@@ -2,7 +2,7 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from worktickets.models import WorkTicket, TicketComment
+from worktickets.models import WorkTicket, TicketComment, TicketEnclosure
 
 class WorkTicketFilter(filters.FilterSet):
     class Meta:
@@ -21,6 +21,13 @@ class WorkTicketFilter(filters.FilterSet):
 class TicketCommentFilter(filters.FilterSet):
     class Meta:
         model = TicketComment
+        fields = {
+            'ticket__id': ['exact'],
+        }
+
+class TicketEnclosureFilter(filters.FilterSet):
+    class Meta:
+        model = TicketEnclosure
         fields = {
             'ticket__id': ['exact'],
         }
