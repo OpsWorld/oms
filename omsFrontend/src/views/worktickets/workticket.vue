@@ -6,13 +6,21 @@
                     <router-link :to="'addworkticket'">
                         <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
                     </router-link>
+
+                    <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
+                        <el-radio label="0">未接收</el-radio>
+                        <el-radio label="1">正在处理</el-radio>
+                        <el-radio label="2">已解决</el-radio>
+                    </el-radio-group>
+
                 </div>
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
+                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick">
-                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+                            @keyup.enter.native="searchClick"
+                            :on-icon-click="searchClick">
                     </el-input>
                 </div>
             </div>
@@ -26,7 +34,9 @@
                     <el-table-column prop='title' label='标题'>
                         <template scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
-                                <router-link :to="'editworkticket/'+scope.row.id">{{scope.row.title}}</router-link>
+                                <router-link :to="'editworkticket/'+scope.row.id">
+                                    {{scope.row.title}}
+                                </router-link>
                             </div>
                         </template>
                     </el-table-column>
@@ -43,11 +53,11 @@
                     </el-table-column>
                     <el-table-column prop='ticket_status' label='工单状态' sortable>
                         <template scope="scope">
-                        <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                        <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
-                        {{TICKET_STATUS[scope.row.ticket_status].text}}
-                        </el-tag>
-                        </div>
+                            <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                                <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
+                                    {{TICKET_STATUS[scope.row.ticket_status].text}}
+                                </el-tag>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
@@ -89,12 +99,14 @@
         data() {
             return {
                 loading: true,
+                radio: '1',
                 tableData: [],
                 tabletotal: 0,
                 searchdata: '',
                 currentPage: 1,
                 limit: LIMIT,
                 offset: '',
+                ticket_status: '',
                 pagesize: [10, 25, 50, 100],
                 addForm: false,
                 rowdata: {
@@ -126,7 +138,8 @@
                 const parms = {
                     limit: this.limit,
                     offset: this.offset,
-                    title__contains: this.searchdata
+                    title__contains: this.searchdata,
+                    ticket_status: this.ticket_status,
                 };
                 getWorkticket(id, parms).then(response => {
                     this.tableData = response.data.results;
@@ -143,6 +156,10 @@
             },
             handleCurrentChange(val) {
                 this.offset = val - 1;
+                this.fetchData();
+            },
+            statusChange(val) {
+                this.ticket_status = val;
                 this.fetchData();
             },
         }

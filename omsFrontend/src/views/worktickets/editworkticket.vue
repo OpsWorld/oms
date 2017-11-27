@@ -55,10 +55,10 @@
             <hr class="heng"/>
             <div v-if="ticketData.ticket_status!=2">
                 工单操作：
-                <el-button type="primary" plain @click="changeTicketStatus(1)"
+                <el-button type="success" @click="changeTicketStatus(1)"
                            :disabled="ticketData.ticket_status==0?false:true">接收
                 </el-button>
-                <el-button type="danger" plain @click="changeTicketStatus(2)"
+                <el-button type="danger" @click="changeTicketStatus(2)"
                            :disabled="ticketData.ticket_status!=2?false:true">关闭
                 </el-button>
             </div>
