@@ -1,54 +1,57 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div>
-        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="标题" prop="title">
-                <el-input v-model="ruleForm.title"></el-input>
-            </el-form-item>
-            <el-form-item label="工单类型" prop="type">
-                <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
-                    <el-option v-for="item in tickettypes" :key="item.name" :value="item.name"></el-option>
-                </el-select>
-                <el-tooltip class="item" effect="dark" content="添加新工单类型" placement="right">
-                    <el-button type="success" icon="plus" @click="addForm=true"></el-button>
-                </el-tooltip>
-            </el-form-item>
-            <el-form-item label="工单内容" prop="content">
-                <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 10, maxRows: 50}"></el-input>
-            </el-form-item>
-            <el-form-item label="工单等级" prop="level">
-                <el-rate
-                        v-model="ruleForm.level"
-                        :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                        show-text
-                        :texts="['E', 'D', 'C', 'B', 'A']">
-                </el-rate>
-                <div>
-                    <hr class="heng"/>
-                    <el-upload
-                            class="upload-demo"
-                            ref="upload"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                            :on-success="handleSuccess"
-                            :file-list="fileList"
-                            :disabled="count>0?true:false">
-                        <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
-                            上传文件
-                        </el-button>
-                        (可以不用上传)
-                        <div slot="tip" class="el-upload__tip">
-                            <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
-                        </div>
-                    </el-upload>
-                </div>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-                <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
-            </el-form-item>
-        </el-form>
-        <el-dialog :visible.sync="addForm">
-            <add-group @formdata="addGroupSubmit" @DialogStatus="getDialogStatus"></add-group>
-        </el-dialog>
+    <div class="addticket">
+        <el-card>
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="标题" prop="title">
+                    <el-input v-model="ruleForm.title"></el-input>
+                </el-form-item>
+                <el-form-item label="工单类型" prop="type">
+                    <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
+                        <el-option v-for="item in tickettypes" :key="item.name" :value="item.name"></el-option>
+                    </el-select>
+                    <el-tooltip class="item" effect="dark" content="添加新工单类型" placement="right">
+                        <el-button type="success" icon="plus" @click="addForm=true"></el-button>
+                    </el-tooltip>
+                </el-form-item>
+                <el-form-item label="工单内容" prop="content">
+                    <el-input v-model="ruleForm.content" type="textarea"
+                              :autosize="{ minRows: 10, maxRows: 50}"></el-input>
+                </el-form-item>
+                <el-form-item label="工单等级" prop="level">
+                    <el-rate
+                            v-model="ruleForm.level"
+                            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                            show-text
+                            :texts="['E', 'D', 'C', 'B', 'A']">
+                    </el-rate>
+                    <div>
+                        <hr class="heng"/>
+                        <el-upload
+                                class="upload-demo"
+                                ref="upload"
+                                action="https://jsonplaceholder.typicode.com/posts/"
+                                :on-success="handleSuccess"
+                                :file-list="fileList"
+                                :disabled="count>0?true:false">
+                            <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
+                                上传文件
+                            </el-button>
+                            (可以不用上传)
+                            <div slot="tip" class="el-upload__tip">
+                                <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
+                            </div>
+                        </el-upload>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+                    <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+                </el-form-item>
+            </el-form>
+            <el-dialog :visible.sync="addForm">
+                <add-group @formdata="addGroupSubmit" @DialogStatus="getDialogStatus"></add-group>
+            </el-dialog>
+        </el-card>
     </div>
 </template>
 <script>
@@ -192,5 +195,10 @@
         border: 0px;
         background-color: rgba(174, 127, 255, 0.38);
         color: #29e11c;
+    }
+
+    .addticket {
+        margin: 50px;
+        width: 800px;
     }
 </style>
