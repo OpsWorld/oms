@@ -3,7 +3,7 @@
 
 from django.db import models
 from users.models import User, Group
-from tickets.storage import PathAndRename, path_and_rename
+from tools.models import Upload
 
 TicketLevel = {
     1: 'A',
@@ -56,10 +56,8 @@ class TicketComment(models.Model):
 
 
 class TicketEnclosure(models.Model):
-    # path_and_rename = PathAndRename("./")
-
     ticket = models.ForeignKey(WorkTicket, verbose_name=u'工单')
-    file = models.FileField(upload_to=path_and_rename('./'), verbose_name=u'上传附件')
+    file = models.ManyToManyField(Upload, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')

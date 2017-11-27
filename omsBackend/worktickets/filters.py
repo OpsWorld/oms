@@ -2,7 +2,7 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from tickets.models import WorkTicket, TicketComment
+from worktickets.models import WorkTicket, TicketComment
 
 class WorkTicketFilter(filters.FilterSet):
     class Meta:

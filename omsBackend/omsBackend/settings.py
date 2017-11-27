@@ -19,8 +19,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'tickets',
+    'worktickets',
     'users',
+    'tools',
 ]
 
 MIDDLEWARE = [

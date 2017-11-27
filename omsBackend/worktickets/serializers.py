@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from tickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
+from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
 from rest_framework import serializers
 from users.models import User, Group
+from tools.models import Upload
 
 
 class WorkTicketSerializer(serializers.ModelSerializer):
@@ -33,6 +34,7 @@ class TicketEnclosureSerializer(serializers.ModelSerializer):
     ticket = serializers.SlugRelatedField(queryset=WorkTicket.objects.all(), slug_field='title')
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     create_group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
+    file = serializers.SlugRelatedField(many=True, queryset=Upload.objects.all(), slug_field='filepath')
 
     class Meta:
         model = TicketEnclosure

@@ -2,10 +2,10 @@
 # author: kiven
 
 from rest_framework import viewsets
-from tickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
-from tickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, \
+from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
+from worktickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, \
     TicketTypeSerializer, TicketWikiSerializer
-from tickets.filters import WorkTicketFilter, TicketCommentFilter
+from worktickets.filters import WorkTicketFilter, TicketCommentFilter
 
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
