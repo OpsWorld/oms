@@ -6,11 +6,12 @@
                     <div slot="header" class="clearfix">
                         <a class="title">{{ticketData.title}}</a>
                         <div class="appendInfo">
-                            <a class="ticketinfo create_user"><span
-                                    class="han">工单创建时间：</span>{{ticketData.create_time | parseDate}}</a>
-                            <a class="ticketinfo create_user"><span class="han">工单发起人：</span>{{ticketData.create_user}}</a>
-                            <a class="ticketinfo action_user"><span
-                                    class="han">当前处理人：</span>{{rowdata.action_user ? rowdata.action_user : ticketData.action_user}}</a>
+                            <a class="ticketinfo create_user"><span class="han">
+                                工单创建时间：</span>{{ticketData.create_time | parseDate}}</a>
+                            <a class="ticketinfo create_user"><span class="han">
+                                工单发起人：</span>{{ticketData.create_user}}</a>
+                            <a class="ticketinfo action_user"><span class="han">
+                                当前处理人：</span>{{rowdata.action_user ? rowdata.action_user : ticketData.action_user}}</a>
                         </div>
                     </div>
                     {{ticketData.content}}
@@ -31,11 +32,12 @@
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交</el-button>
                 </el-form-item>
+                <hr class="heng"/>
             </el-form>
-            <hr class="heng"/>
-            处理过程：
-            <hr class="heng"/>
+
             <div class="ticketcomment" v-for="item in commentData" :key="item.id">
+                处理过程：
+                <hr class="heng"/>
                 <el-row>
                     <el-col :span="1">
                         <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
@@ -52,8 +54,8 @@
                     </el-col>
                 </el-row>
             </div>
-            <hr class="heng"/>
             <div v-if="ticketData.ticket_status!=2">
+                <hr class="heng"/>
                 工单操作：
                 <el-button type="success" @click="changeTicketStatus(1)"
                            :disabled="ticketData.ticket_status==0?false:true">接收
@@ -114,7 +116,7 @@
                 };
                 getTicketcomment(comment_parms).then(response => {
                     this.commentData = response.data.results;
-                    this.rowdata.action_user = this.commentData[this.commentData.length - 1]['create_user'];
+                    this.rowdata.action_user = this.commentData.length==0?null:this.commentData[this.commentData.length - 1].create_user;
                 })
             },
             submitForm(formName) {

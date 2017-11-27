@@ -19,9 +19,9 @@ class PathAndRename(object):
 
         archive = instance.archive.split('/')
         if len(archive)>2:
-            return os.path.join(path, archive[1], archive[2], filename)
+            return os.path.join(self.path, archive[1], archive[2], filename)
         else:
-            return os.path.join(path, archive[1], filename)
+            return os.path.join(self.path, archive[1], filename)
 
 
 

@@ -99,7 +99,24 @@ export function putTicketcomment(id, data) {
 
 export function deleteTicketcomment(id) {
     return fetch({
-        url: apiURL.ticketcomments + id,
+        url: apiURL.ticketenclosures + id,
         method: 'delete',
+    });
+}
+
+//ticketenclosures
+export function postTicketenclosure(data) {
+    return fetch({
+        url: apiURL.ticketenclosures,
+        method: 'post',
+        data
+    });
+}
+
+export function getTicketenclosure(query) {
+    return fetch({
+        url: apiURL.ticketenclosures,
+        method: 'get',
+        params: query
     });
 }

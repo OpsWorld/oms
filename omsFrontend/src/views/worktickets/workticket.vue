@@ -115,7 +115,7 @@
                 },
                 TICKET_STATUS: {
                     '0': {"text": "未接收", "type": "info"},
-                    '1': {"text": "正在处理", "type": ""},
+                    '1': {"text": "正在处理", "type": "success"},
                     '2': {"text": "已解决", "type": "danger"},
                 },
                 LEVEL: {
