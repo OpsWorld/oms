@@ -13,9 +13,9 @@ class PathAndRename(object):
     def __call__(self, instance, filename):
         ext = os.path.splitext(filename)[1]
         if ext:
-            filename = "%s-%s%s" % (instance.username, instance.pid, ext)
+            filename = "%s-%s%s" % (instance.archive, instance.create_time, ext)
         else:
-            filename = "%s-%s%s" % (instance.username, instance.pid, '.png')
+            filename = "%s-%s%s" % (instance.archive, instance.create_time, '.png')
 
         return os.path.join(self.path, instance.archive, filename)
         # archive = instance.archive.split('/')
@@ -30,9 +30,9 @@ class PathAndRename(object):
 #     def wrapper(instance, filename):
 #         ext = os.path.splitext(filename)[1]
 #         if ext:
-#             filename = "%s-%s%s" % (instance.username, instance.pid, ext)
+#             filename = "%s-%s%s" % (instance.username, instance.create_time, ext)
 #         else:
-#             filename = "%s-%s%s" % (instance.username, instance.pid, '.png')
+#             filename = "%s-%s%s" % (instance.username, instance.create_time, '.png')
 #
 #         archive = instance.archive.split('/')
 #         if len(archive)>2:

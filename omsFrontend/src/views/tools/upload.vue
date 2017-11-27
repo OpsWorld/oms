@@ -33,11 +33,7 @@
                     <el-table-column prop='archive' label='文件归档' sortable></el-table-column>
                     <el-table-column prop='type' label='文件类型' sortable></el-table-column>
                     <el-table-column prop='size' label='文件大小'></el-table-column>
-                    <el-table-column prop='date' label='创建时间' sortable>
-                        <template scope="scope">
-                            <span>{{scope.row.date | parseDate}}</span>
-                        </template>
-                    </el-table-column>
+                    <el-table-column prop='create_time' label='文件日期' sortable></el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
                             <el-button type="success" size="small"><a :href="scope.row.file" target="_blank">查看文件</a>

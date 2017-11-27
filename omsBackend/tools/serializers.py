@@ -8,7 +8,7 @@ from tools.models import Duty, Upload
 class UploadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Upload
-        fields = ['url', 'id', 'pid', 'username', 'file', 'filename', 'filepath', 'archive', 'type', 'size', 'date']
+        fields = ['url', 'id', 'username', 'file', 'filename', 'filepath', 'archive', 'type', 'size', 'create_time']
 
 
 class DutySerializer(serializers.ModelSerializer):

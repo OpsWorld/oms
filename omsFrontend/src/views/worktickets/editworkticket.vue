@@ -18,13 +18,13 @@
                 </el-card>
             </div>
 
-            <el-form v-if="ticketData.ticket_status!=2" :model="ruleForm" :rules="rules" ref="ruleForm"
+            <el-form v-if="ticketData.ticket_status!=2" :model="commentForm" :rules="rules" ref="ruleForm"
                      label-width="80px" class="demo-ruleForm">
                 <hr class="heng"/>
                 <el-form-item label="问题回复" prop="content">
                     <el-tooltip class="item" effect="dark" content="先接收工单才能回复处理过程"
                                 :disabled="ticketData.ticket_status==0?false:true" placement="right">
-                        <el-input v-model="ruleForm.content" type="textarea"
+                        <el-input v-model="commentForm.content" type="textarea"
                                   :disabled="ticketData.ticket_status==0?true:false"
                                   :autosize="{ minRows: 3, maxRows: 5}"></el-input>
                     </el-tooltip>
@@ -35,8 +35,20 @@
                 <hr class="heng"/>
             </el-form>
             <div>
-                <el-button type="info" icon="upload" @click="uploadForm('ruleForm')">上传附件</el-button>
-                <a style="color: red;">(最多允许上传3个附件,已上传1个)</a>
+                <el-upload
+                        class="upload-demo"
+                        ref="upload"
+                        action="https://jsonplaceholder.typicode.com/posts/"
+                        :on-success="handleSuccess"
+                        :show-file-list="false"
+                        :disabled="count>2?true:false">
+                    <el-button slot="trigger" size="small" type="info" icon="upload2" :disabled="count>2?true:false">
+                        上传文件
+                    </el-button>
+                    <div slot="tip" class="el-upload__tip">
+                        <p>上传文件不超过500kb，<a style="color: red">最多只能上传3个文件</a></p>
+                    </div>
+                </el-upload>
                 <hr class="heng"/>
             </div>
             <div v-if='enclosureData.length>0' class="ticketenclosure">
@@ -44,6 +56,7 @@
                     <li v-for="item in enclosureData" :key="item.id">
                         <!--<a :href="apiurl + '/upload/' +item.file" target="_blank">{{item.file}}</a>-->
                         <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
+                        <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
                     </li>
                 </ul>
             </div>
@@ -86,7 +99,8 @@
         getTicketcomment,
         postTicketcomment,
         postTicketenclosure,
-        getTicketenclosure
+        getTicketenclosure,
+        deleteTicketenclosure,
     } from 'api/workticket'
     import {getUploadList, postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
@@ -103,10 +117,16 @@
                 commentData: {},
                 enclosureData: {},
                 apiurl: apiUrl,
-                ruleForm: {
+                commentForm: {
                     ticket: '',
                     create_user: localStorage.getItem('username'),
                     content: '',
+                    create_group: ''
+                },
+                enclosureForm: {
+                    ticket: '',
+                    create_user: localStorage.getItem('username'),
+                    file: '',
                     create_group: ''
                 },
                 rules: {
@@ -118,11 +138,12 @@
                     ticket_status: 1,
                     action_user: ''
                 },
+                count: 0,
             };
         },
 
         created() {
-            this.ticket_id = this.ruleForm.ticket = this.route_path[this.route_path.length - 1];
+            this.ticket_id = this.route_path[this.route_path.length - 1];
             this.fetchData();
             this.CommentData();
             this.EnclosureData();
@@ -149,12 +170,18 @@
                 };
                 getTicketenclosure(parms).then(response => {
                     this.enclosureData = response.data.results;
+                    this.count = response.data.count;
                 })
+            },
+            deleteEnclosure(id) {
+                deleteTicketenclosure(id);
+                setTimeout(this.EnclosureData, 1000);
             },
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        postTicketcomment(this.ruleForm);
+                        this.commentForm.ticket = this.ticket_id;
+                        postTicketcomment(this.commentForm);
                         this.patchForm(this.rowdata);
                     } else {
                         console.log('error submit!!');
@@ -169,7 +196,38 @@
             changeTicketStatus(status) {
                 this.rowdata.ticket_status = this.ticketData.ticket_status = status;
                 patchWorkticket(this.ticket_id, this.rowdata)
-            }
+            },
+            handleSuccess(file, fileList) {
+                let date = new Date(fileList.raw.uid);
+                let Y = date.getFullYear().toString();
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+                let D = date.getDate();
+                let h = date.getHours();
+                let m = date.getMinutes();
+                let s = date.getSeconds();
+                let formData = new FormData();
+                formData.append('username', this.enclosureForm.create_user);
+                formData.append('file', fileList.raw);
+                formData.append('create_time', Y + M + D + h + m + s);
+                formData.append('type', fileList.raw.type);
+                formData.append('archive', this.$route.path.split('/')[1]);
+                postUpload(formData).then(response => {
+                    this.enclosureForm.file = response.data.filepath;
+                    this.enclosureForm.ticket = this.ticket_id;
+                    postTicketenclosure(this.enclosureForm);
+                    setTimeout(this.EnclosureData, 1000);
+                    if (response.statusText = 'ok') {
+                        this.$message({
+                            type: 'success',
+                            message: '恭喜你，上传成功'
+                        });
+                    }
+                }).catch(error => {
+                    this.$message.error('上传失败');
+                    this.$refs.upload.clearFiles();
+                    console.log(error);
+                });
+            },
         }
     }
 </script>

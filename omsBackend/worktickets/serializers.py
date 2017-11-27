@@ -31,7 +31,6 @@ class TicketCommentSerializer(serializers.ModelSerializer):
 
 
 class TicketEnclosureSerializer(serializers.ModelSerializer):
-    ticket = serializers.SlugRelatedField(queryset=WorkTicket.objects.all(), slug_field='title')
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     create_group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
     file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
