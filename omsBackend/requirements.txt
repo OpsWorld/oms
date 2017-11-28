@@ -3,7 +3,6 @@ asgiref==1.1.2
 certifi==2017.11.5
 chardet==3.0.4
 Django==1.11.4
-django-channels==0.7.0
 django-cors-headers==2.1.0
 django-filter==1.0.4
 django-rest-auth==0.9.1
