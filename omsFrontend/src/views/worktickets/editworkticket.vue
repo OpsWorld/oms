@@ -53,16 +53,9 @@
             </div>
             <div v-if='enclosureData.length>0' class="ticketenclosure">
                 <ul>
-                    <li v-for="item in enclosureData" :key="item.id">
-                        <a v-if="extJudge(item.file)" :href="apiurl + '/upload/' +item.file" target="_blank">
-                            {{item.file}}
-                            <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
-                        </a>
-                        <a v-else :href="apiurl + '/upload/' +item.file"
-                           download="item.id">
-                            {{item.file}}
-                            <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
-                        </a>
+                    <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
+                        <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
+                        <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
                     </li>
                 </ul>
             </div>
@@ -204,19 +197,12 @@
                 patchWorkticket(this.ticket_id, this.rowdata)
             },
             handleSuccess(file, fileList) {
-                let date = new Date(fileList.raw.uid);
-                let Y = date.getFullYear().toString();
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-                let D = date.getDate();
-                let h = date.getHours();
-                let m = date.getMinutes();
-                let s = date.getSeconds();
                 let formData = new FormData();
                 formData.append('username', this.enclosureForm.create_user);
                 formData.append('file', fileList.raw);
-                formData.append('create_time', Y + M + D + h + m + s);
+                formData.append('create_time', this.afterFileUpload(fileList));
                 formData.append('type', fileList.raw.type);
-                formData.append('archive', this.$route.path.split('/')[1]);
+                formData.append('archive', this.route_path[1]);
                 postUpload(formData).then(response => {
                     this.enclosureForm.file = response.data.filepath;
                     this.enclosureForm.ticket = this.ticket_id;
@@ -234,14 +220,16 @@
                     console.log(error);
                 });
             },
-            extJudge(file) {
-                const extlist = ['jpg', 'png', 'txt'];
-                let ext = file.split('.')[1];
-                if (extlist.indexOf(ext) < 0) {
-                    return 0
-                } else {
-                    return 1
-                }
+            afterFileUpload(fileList){
+                let date = new Date(fileList.row.uid);
+                let Y = date.getFullYear().toString();
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+                let D = date.getDate();
+                let h = date.getHours();
+                let m = date.getMinutes();
+                let s = date.getSeconds();
+                let ctime = Y + M + D + h + m + s;
+                return ctime
             }
         }
     }

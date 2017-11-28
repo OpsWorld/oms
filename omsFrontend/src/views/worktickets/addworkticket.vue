@@ -67,6 +67,7 @@
 
         data() {
             return {
+                route_path: this.$route.path.split('/'),
                 ruleForm: {
                     title: '',
                     type: '',
@@ -112,7 +113,8 @@
                     fullscreen: true, // 全屏编辑
                     help: true,
                 },
-                img_file: {}
+                img_file: {},
+                formDataList: [],
             };
         },
 
@@ -142,7 +144,6 @@
                         return false;
                     }
                 });
-                this.$emit('DialogStatus', false);
             },
 
             getDialogStatus(data) {
@@ -170,19 +171,7 @@
                 });
             },
             handleSuccess(file, fileList) {
-                let date = new Date(fileList.raw.uid);
-                let Y = date.getFullYear().toString();
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-                let D = date.getDate();
-                let h = date.getHours();
-                let m = date.getMinutes();
-                let s = date.getSeconds();
-                let formData = new FormData();
-                formData.append('username', this.enclosureForm.create_user);
-                formData.append('file', fileList.raw);
-                formData.append('create_time', Y + M + D + h + m + s);
-                formData.append('type', fileList.raw.type);
-                formData.append('archive', this.$route.path.split('/')[1]);
+                let formData = this.afterFileUpload(fileList);
                 postUpload(formData).then(response => {
                     this.enclosureFile = response.data.filepath;
                     if (response.statusText = 'ok') {
@@ -199,31 +188,35 @@
                 });
             },
             imgAdd(pos, file){
-                var $vm = this;
-                var md = $vm.$refs.md;
-                console.log(md)
-//                this.img_file[pos] = file;
-                md.$imgAddByUrl(pos, '123')
+                this.img_file[pos] = file;
             },
             imgDel(pos){
                 delete this.img_file[pos];
             },
             uploadimg(){
-                console.log(this.img_file);
-                this.handleSuccess(this.img_file);
-                var formdata = new FormData();
+                let formData = new FormData();
                 for (var _img in this.img_file) {
-                    formdata.append(_img, this.img_file[_img]);
+                    formData.append('username', this.enclosureForm.create_user);
+                    formData.append('file', this.img_file[_img]);
+                    formData.append('create_time', this.afterFileUpload(this.img_file[_img]));
+                    formData.append('type', this.img_file[_img].type);
+                    formData.append('archive', this.route_path[1]);
+                    postUpload(formData).then(response => {
+                       console.log(response.data.file)
+                    });
                 }
-                axios({
-                    url: 'http://127.0.0.1/index.php',
-                    method: 'post',
-                    data: formdata,
-                    headers: {'Content-Type': 'multipart/form-data'},
-                }).then((res) => {
-                    console.log(res);
-                })
             },
+            afterFileUpload(file){
+                let date = new Date(file.lastModified);
+                let Y = date.getFullYear().toString();
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+                let D = date.getDate();
+                let h = date.getHours();
+                let m = date.getMinutes();
+                let s = date.getSeconds();
+                let ctime = Y + M + D + h + m + s;
+                return ctime
+            }
         }
     }
 </script>
