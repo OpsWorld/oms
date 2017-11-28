@@ -23,6 +23,7 @@ import editWorkticket from '@/views/worktickets/editworkticket'
 
 /* tools */
 import Upload from '@/views/tools/upload'
+import Test from '@/views/tools/test'
 
 /**
  * icon : the icon show in the sidebar
@@ -81,6 +82,7 @@ export const routes = [
         meta: {requiresAuth: true},
         children: [
             {path: 'upload', component: Upload, name: '上传管理'},
+            {path: 'test', component: Test, name: '测试页面'},
         ]
     },
     {path: '*', redirect: '/404', hidden: true}

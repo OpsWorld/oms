@@ -19,7 +19,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'corsheaders',
-    'channels',
+    #'channels',
     'worktickets',
     'users',
     'tools',

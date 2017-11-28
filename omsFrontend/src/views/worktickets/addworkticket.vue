@@ -14,8 +14,8 @@
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
-                    <el-input v-model="ruleForm.content" type="textarea"
-                              :autosize="{ minRows: 10, maxRows: 50}"></el-input>
+                    <mavon-editor default_open='edit' v-model="ruleForm.content" code_style="monokai"
+                                  :toolbars="toolbars" @imgAdd="imgAdd" @imgDel="imgDel" ref="md"></mavon-editor>
                 </el-form-item>
                 <el-form-item label="工单等级" prop="level">
                     <el-rate
@@ -41,10 +41,12 @@
                                 <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
                             </div>
                         </el-upload>
+                        <hr class="heng"/>
                     </div>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+                    <el-button type="wraning" @click="uploadimg">保存图片</el-button>
                     <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
                 </el-form-item>
             </el-form>
@@ -99,6 +101,18 @@
                     file: '',
                     create_group: ''
                 },
+                toolbars: {
+                    preview: true, // 预览
+                    bold: true, // 粗体
+                    italic: true, // 斜体
+                    header: true, // 标题
+                    underline: true, // 下划线
+                    strikethrough: true, // 中划线
+                    ol: true, // 有序列表
+                    fullscreen: true, // 全屏编辑
+                    help: true,
+                },
+                img_file: {}
             };
         },
 
@@ -183,6 +197,32 @@
                     this.$refs.upload.clearFiles();
                     console.log(error);
                 });
+            },
+            imgAdd(pos, file){
+                var $vm = this;
+                var md = $vm.$refs.md;
+                console.log(md)
+//                this.img_file[pos] = file;
+                md.$imgAddByUrl(pos, '123')
+            },
+            imgDel(pos){
+                delete this.img_file[pos];
+            },
+            uploadimg(){
+                console.log(this.img_file);
+                this.handleSuccess(this.img_file);
+                var formdata = new FormData();
+                for (var _img in this.img_file) {
+                    formdata.append(_img, this.img_file[_img]);
+                }
+                axios({
+                    url: 'http://127.0.0.1/index.php',
+                    method: 'post',
+                    data: formdata,
+                    headers: {'Content-Type': 'multipart/form-data'},
+                }).then((res) => {
+                    console.log(res);
+                })
             },
         }
     }
