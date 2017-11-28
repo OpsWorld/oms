@@ -15,7 +15,7 @@
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
                     <mavon-editor default_open='edit' v-model="ruleForm.content" code_style="monokai"
-                                  :toolbars="toolbars" @imgAdd="imgAdd" @imgDel="imgDel" ref="md"></mavon-editor>
+                                  :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
                 </el-form-item>
                 <el-form-item label="工单等级" prop="level">
                     <el-rate
@@ -46,7 +46,6 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-                    <el-button type="wraning" @click="uploadimg">保存图片</el-button>
                     <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
                 </el-form-item>
             </el-form>
@@ -188,28 +187,33 @@
                 });
             },
             imgAdd(pos, file){
-                this.img_file[pos] = file;
-                var $vm = this;
-                var md = $vm.$refs.md;
-                md.$img2Url(pos, "http://api.oms.com:8000/upload/worktickets/image-20171128151412.png");
-                console.log(this.ruleForm.content)
-            },
-            imgDel(pos){
-                delete this.img_file[pos];
-            },
-            uploadimg(){
+                var md = this.$refs.md;
                 let formData = new FormData();
-                for (var _img in this.img_file) {
-                    formData.append('username', this.enclosureForm.create_user);
-                    formData.append('file', this.img_file[_img]);
-                    formData.append('create_time', this.afterFileUpload(this.img_file[_img]));
-                    formData.append('type', this.img_file[_img].type);
-                    formData.append('archive', this.route_path[1]);
-                    postUpload(formData).then(response => {
-                        console.log(response.data.file)
-                    });
-                }
+                formData.append('username', this.enclosureForm.create_user);
+                formData.append('file', file);
+                formData.append('create_time', this.afterFileUpload(file));
+                formData.append('type', file.type);
+                formData.append('archive', this.route_path[1]);
+                postUpload(formData).then(response => {
+                    md.$imglst2Url([[pos, response.data.file]]);
+                });
             },
+//            imgDel(pos){
+//                delete this.img_file[pos];
+//            },
+//            uploadimg(){
+//                let formData = new FormData();
+//                for (var _img in this.img_file) {
+//                    formData.append('username', this.enclosureForm.create_user);
+//                    formData.append('file', this.img_file[_img]);
+//                    formData.append('create_time', this.afterFileUpload(this.img_file[_img]));
+//                    formData.append('type', this.img_file[_img].type);
+//                    formData.append('archive', this.route_path[1]);
+//                    postUpload(formData).then(response => {
+//                        console.log(response.data.file)
+//                    });
+//                }
+//            },
             afterFileUpload(file){
                 let date = new Date(file.lastModified);
                 let Y = date.getFullYear().toString();

@@ -14,7 +14,7 @@
                                 当前处理人：</span>{{rowdata.action_user ? rowdata.action_user : ticketData.action_user}}</a>
                         </div>
                     </div>
-                    {{ticketData.content}}
+                    <vue-markdown :source="ticketData.content"></vue-markdown>
                 </el-card>
             </div>
 
@@ -103,9 +103,10 @@
     } from 'api/workticket'
     import {postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
+    import VueMarkdown from 'vue-markdown'   //前端显示
 
     export default {
-        components: {},
+        components: {VueMarkdown},
 
         data() {
             return {
