@@ -137,7 +137,8 @@
                                 this.enclosureForm.ticket = response.data.id;
                                 postTicketenclosure(this.enclosureForm);
                             }
-                            this.$refs[formName].resetFields();
+                            let ticket_id = response.data.id;
+                            this.$router.push('/worktickets/editworkticket/' + ticket_id);
                         });
                     } else {
                         console.log('error submit!!');
@@ -145,7 +146,6 @@
                     }
                 });
             },
-
             getDialogStatus(data) {
                 this.addForm = data;
             },
@@ -189,6 +189,10 @@
             },
             imgAdd(pos, file){
                 this.img_file[pos] = file;
+                var $vm = this;
+                var md = $vm.$refs.md;
+                md.$img2Url(pos, "http://api.oms.com:8000/upload/worktickets/image-20171128151412.png");
+                console.log(this.ruleForm.content)
             },
             imgDel(pos){
                 delete this.img_file[pos];
@@ -202,7 +206,7 @@
                     formData.append('type', this.img_file[_img].type);
                     formData.append('archive', this.route_path[1]);
                     postUpload(formData).then(response => {
-                       console.log(response.data.file)
+                        console.log(response.data.file)
                     });
                 }
             },
