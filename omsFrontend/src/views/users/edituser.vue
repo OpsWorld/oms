@@ -6,9 +6,6 @@
         <el-form-item label="Email" prop="email">
             <el-input v-model="rowdata.email"></el-input>
         </el-form-item>
-        <el-form-item label="中文名" prop="name">
-            <el-input v-model="rowdata.name"></el-input>
-        </el-form-item>
         <el-form-item label="用户分组" prop="group">
             <el-select v-model="rowdata.group" placeholder="请选择用户分组">
                 <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
@@ -52,9 +49,6 @@
                     ],
                     email: [
                         {required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur'}
-                    ],
-                    name: [
-                        {required: true, message: '请输入中文名', trigger: 'blur'}
                     ],
                     group: [
                         {required: true, message: '请选择项目分组', trigger: 'change'},

@@ -26,7 +26,6 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='name' label='姓名' sortable></el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
                     <el-table-column prop='group' label='所在组' sortable></el-table-column>
                     <el-table-column prop='roles' label='角色' sortable></el-table-column>
@@ -161,7 +160,6 @@
                 this.rowdata = {
                     username: '',
                     email: '',
-                    name: '',
                     is_active: '',
                     group: '',
                     roles: '',

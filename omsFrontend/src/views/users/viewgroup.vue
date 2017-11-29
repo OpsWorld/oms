@@ -15,7 +15,6 @@
             <div>
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop='username' label='用户名' sortable='custom'></el-table-column>
-                    <el-table-column prop='name' label='姓名' sortable='custom'></el-table-column>
                     <el-table-column prop='roles' label='角色' sortable='custom'></el-table-column>
                 </el-table>
             </div>
@@ -50,9 +49,6 @@
                 limit: LIMIT,
                 offset: '',
                 pagesize: [10, 25, 50, 100],
-                addForm: false,
-                editForm: false,
-                rowdata: {}
             }
         },
 
