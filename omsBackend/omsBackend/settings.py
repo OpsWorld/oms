@@ -155,7 +155,7 @@ LDAP_AUTH_USE_TLS = False
 LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
 
 # The LDAP class that represents a user.
-LDAP_AUTH_OBJECT_CLASS = "person"
+LDAP_AUTH_OBJECT_CLASS = "user"
 
 # User model fields mapped to the LDAP
 # attributes that represent them.
