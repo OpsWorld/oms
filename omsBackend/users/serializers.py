@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 
 class UserSerializer(serializers.ModelSerializer):
-    group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
+    group = serializers.SlugRelatedField(many=True, queryset=Group.objects.all(), slug_field='name', allow_null=True)
     roles = serializers.SlugRelatedField(queryset=Role.objects.all(), slug_field='cnname', allow_null=True)
     class Meta:
         model = User

@@ -3,7 +3,7 @@
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
-                    <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建用户</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="addForm=true" disabled>查看信息</el-button>
                 </div>
                 <div class="table-search">
                     <el-input
@@ -18,14 +18,7 @@
             <div>
                 <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
                     <el-table-column type="selection"></el-table-column>
-                    <el-table-column prop='username' label='用户名' sortable>
-                        <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}
-                                </el-button>
-                            </div>
-                        </template>
-                    </el-table-column>
+                    <el-table-column prop='username' label='用户名' sortable></el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
                     <el-table-column prop='group' label='所在组' sortable></el-table-column>
                     <el-table-column prop='roles' label='角色' sortable></el-table-column>
