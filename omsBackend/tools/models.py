@@ -6,27 +6,6 @@ from tools.filesize import convert_size
 from tools.storage import PathAndRename
 import os
 
-SHIFT = (
-    ("M", u"早班"),
-    ("A", u"中班"),
-    ("N", u"晚班"),
-)
-
-
-class Duty(models.Model):
-    username = models.CharField(max_length=20, unique=True, verbose_name=u'用户名')
-    shift = models.CharField(choices=SHIFT, max_length=30, verbose_name=u'班次')
-    content = models.TextField(verbose_name=u'值班内容', null=True, blank=True)
-    images = models.ManyToManyField('Upload', null=True, blank=True, verbose_name=u'图片')
-    create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
-
-    def __str__(self):
-        return self.username
-
-    class Meta:
-        verbose_name = u'值班交接'
-        verbose_name_plural = u'值班交接'
-
 class Upload(models.Model):
     username = models.CharField(max_length=20, verbose_name=u'上传用户')
     file = models.FileField(upload_to=PathAndRename("./"), blank=True, verbose_name=u'上传文件')

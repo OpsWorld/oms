@@ -2,17 +2,7 @@
 # author: itimor
 
 from django_filters import rest_framework as filters
-from tools.models import Duty, Upload
-
-class DutyFilter(filters.FilterSet):
-    class Meta:
-        model = Duty
-        fields = {
-            'id': ['exact'],
-            'username': ['exact', 'contains'],
-            'shift': ['exact'],
-            'create_time': ['exact', 'contains'],
-        }
+from tools.models import Upload
 
 class UploadFilter(filters.FilterSet):
     class Meta:
