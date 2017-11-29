@@ -10,7 +10,10 @@ export function login(data) {
 }
 
 export function logout() {
-  return "logout"
+    return fetch({
+    url: apiURL.logout,
+    method: 'get',
+  });
 }
 
 export function getInfo(username) {
