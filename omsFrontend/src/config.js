@@ -27,14 +27,15 @@ module.exports = {
     LIMIT: 10,
 
     //qiniu 上传到七牛
-    qn_ack: 'Q0IABHxpUZfWiUxzWdT6cMXQKusAmTsfX_fiCWC2',
-    qn_sek: 'qQ6Rjq3Kz8k05xEI9GG1T74BHg-EThAfgwJbaw8S',
+    qn_ack: 'Q0IAB23HxpUZfWiUxzWdT6cMXQgqKusAmTsfX_fiCWC2',
+    qn_sek: 'qQ6Rjq123Kz8k05xEI9GG1T74BH23g-EThAfgwJbaw8S',
 
     //本地上传到服务器
     uploads: `${url}/api/upload/`,
 
     //登录
-    login: `${url}/api-token-auth/`,
+    // login: `${url}/api-token-auth/`,  //使用token
+    login: `${url}/api-auth/login/`,
     changePassword: `${url}/api/changepasswd/`,
 
     //主机
