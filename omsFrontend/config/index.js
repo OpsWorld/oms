@@ -38,7 +38,7 @@ module.exports = {
             //     // pathRewrite: {
             //     //   '^/api': '/api/v1'
             //     // }
-            //     target: 'http://localhost:9090',
+            //     target: 'http://api.oms.com:8000',
             //     pathRewrite: {
             //         '^/api': ''
             //     }

@@ -102,23 +102,23 @@ router.beforeEach((to, from, next) => {
     // console.log('to=', to.fullPath, '| from=', from.fullPath);
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.state.isLogin) {
-            // _checkToken().then(res => {
-            //     store.dispatch("getUserInfo");
-            //     next();
-            // }, function () {
+            _checkToken().then(res => {
+                store.dispatch("getUserInfo");
+                next();
+            }, function () {
                 next({
                     path: '/login'
                 })
-            // });
+            });
         } else {
-            // _checkToken().then(function () {
-            //     store.dispatch("getUserInfo");
-            //     next();
-            // }, function () {
+            _checkToken().then(function () {
+                store.dispatch("getUserInfo");
+                next();
+            }, function () {
                 next({
-                    path: '/'
+                    path: '/login'
                 })
-            // });
+            });
         }
     } else {
         next(); // 确保一定要调用 next()

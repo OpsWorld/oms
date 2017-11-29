@@ -34,9 +34,9 @@ module.exports = {
     uploads: `${url}/api/upload/`,
 
     //登录
-    // login: `${url}/api-token-auth/`,  //使用token
-    login: `${url}/api-auth/login/`,
-    logout: `${url}/api-auth/logout/`,
+    login: `${url}/api/api-token-auth/`,  //使用token
+    //login: `${url}/api/api-auth/login/`,
+    logout: `${url}/api/api-auth/logout/`,
     changePassword: `${url}/api/changepasswd/`,
 
     //主机
