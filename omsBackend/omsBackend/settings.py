@@ -60,10 +60,21 @@ WSGI_APPLICATION = 'omsBackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'omsBackend.db'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'omsBackend.db'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'oms',
+        'USER': 'oms',
+        'PASSWORD': '123456',
+        'HOST': '1.1.1.11',
+        'PORT': '5432'
     }
 }
 
