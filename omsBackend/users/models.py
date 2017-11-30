@@ -5,18 +5,6 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None):
-        '''username 是唯一标识，没有会报错'''
-        if not username:
-            raise ValueError('Users must have an username')
-
-        user = self.model(
-            username=username,
-        )
-        user.set_password(password)  # 设置密码
-        user.save(using=self._db)  # 保存密码
-        return user
-
     def create_superuser(self, username, password):
         user = self.create_user(username=username,
                                 password=password,

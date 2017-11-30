@@ -7,7 +7,7 @@
             <el-input v-model="rowdata.email"></el-input>
         </el-form-item>
         <el-form-item label="用户分组" prop="group">
-            <el-select v-model="rowdata.group" placeholder="请选择用户分组">
+            <el-select v-model="rowdata.group" multiple placeholder="请选择用户分组">
                 <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
             </el-select>
         </el-form-item>
