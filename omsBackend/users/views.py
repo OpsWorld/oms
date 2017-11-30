@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from users.serializers import UserSerializer, GroupSerializer, RoleSerializer
 from rest_framework import viewsets
-
+from users.serializers import UserSerializer, GroupSerializer, RoleSerializer
 from users.filters import UserFilter, GroupFilter, RoleFilter
-from users.models import User, Group, Role
+from users.models import User, Role
+from django.contrib.auth.models import Group
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -113,9 +113,9 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 # Add for vuejs
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "frontend/dist/static"),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "../omsFrontend/dist/static"),
+]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_URL = '/upload/'
