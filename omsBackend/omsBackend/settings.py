@@ -42,7 +42,8 @@ ROOT_URLCONF = 'omsBackend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        # 'DIRS': [],
+        'DIRS': ['../omsFrontend/dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
