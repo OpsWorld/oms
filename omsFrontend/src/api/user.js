@@ -18,7 +18,6 @@ export function getUserList(query) {
 }
 
 export function patchUser(id, data) {
-    console.log(data);
     return fetch({
         url: apiURL.users + id + '/',
         method: 'patch',

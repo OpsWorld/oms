@@ -42,10 +42,10 @@
                         {required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur'}
                     ],
                     group: [
-                        {required: true, type: 'array', message: '请选择项目分组', trigger: 'change'},
+                        {required: true, type: 'array', message: '请选择用户分组', trigger: 'change'},
                     ],
                     roles: [
-                        {required: true, message: '请选择角色', trigger: 'blur'},
+                        {required: true, message: '请选择用户角色', trigger: 'blur'},
                     ],
                 },
                 groups: '',
