@@ -6,6 +6,18 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
+    def create_user(self, username, password=None):
+        '''username 是唯一标识，没有会报错'''
+        if not username:
+            raise ValueError('Users must have an username')
+
+        user = self.model(
+            username=username,
+        )
+        user.set_password(password)  # 检测密码合理性
+        user.save(using=self._db)  # 保存密码
+        return user    
+
     def create_superuser(self, username, password):
         user = self.create_user(username=username,
                                 password=password,
@@ -16,7 +28,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=32, unique=True, db_index=True)
-    email = models.EmailField(max_length=255, unique=True, blank=True)
+    email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
     group = models.ManyToManyField(Group, null=True, blank=True, verbose_name=u'部门')
     create_date = models.DateField(auto_now=True, verbose_name=u'创建时间')
     is_active = models.BooleanField(default=True)
