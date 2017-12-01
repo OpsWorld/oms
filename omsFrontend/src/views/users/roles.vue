@@ -18,7 +18,6 @@
             <div>
                 <el-table :data='tableData' border style="width: 100%">
                     <el-table-column prop='name' label='角色' sortable></el-table-column>
-                    <el-table-column prop='cnname' label='中文名'></el-table-column>
                     <el-table-column prop='desc' label='描述'></el-table-column>
                     <el-table-column label="操作">
                         <template scope="scope">
@@ -44,9 +43,6 @@
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="角色名" prop="name">
                     <el-input v-model="ruleForm.name"></el-input>
-                </el-form-item>
-                <el-form-item label="中文名" prop="cnname">
-                    <el-input v-model="ruleForm.cnname"></el-input>
                 </el-form-item>
                 <el-form-item label="描述" prop="desc">
                     <el-input v-model="ruleForm.desc"></el-input>
@@ -78,16 +74,12 @@
                 addGroup: false,
                 ruleForm: {
                     name: '',
-                    cnname: '',
                     desc: ''
                 },
                 rules: {
                     name: [
                         {required: true, message: '请输入一个风骚的角色', trigger: 'blur'},
                     ],
-                    cnname: [
-                        {required: true, message: '请输入一个风骚的角色中文', trigger: 'blur'},
-                    ]
                 }
             }
         },
