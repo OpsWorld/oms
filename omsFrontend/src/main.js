@@ -7,8 +7,9 @@ import store from './store';
 
 /* elementUI && theme */
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-default/index.css';
+import 'element-ui/lib/theme-chalk/index.css'
 import 'assets/custom-theme/index.css'; // 换肤版本element-ui css
+Vue.use(ElementUI);
 
 /* icon */
 import 'vue-awesome/icons'
@@ -26,7 +27,6 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 });
 
-Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 // 生产环境错误日志

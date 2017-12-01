@@ -35,7 +35,7 @@
                     <el-table-column prop='size' label='文件大小'></el-table-column>
                     <el-table-column prop='create_time' label='文件日期' sortable></el-table-column>
                     <!--<el-table-column label="操作">-->
-                        <!--<template scope="scope">-->
+                        <!--<template slot-scope="scope">-->
                             <!--<el-button type="success" size="small"><a :href="scope.row.file" target="_blank">查看文件</a>-->
                             <!--</el-button>-->
                         <!--</template>-->
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </el-card>
-        <el-dialog :visible.sync="showPhoto" size="small">
+        <el-dialog :visible.sync="showPhoto">
             <img :src="photo" class="photo-align">
         </el-dialog>
     </div>

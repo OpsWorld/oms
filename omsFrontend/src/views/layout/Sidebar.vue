@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar">
-        <el-menu mode="vertical" theme="dark" :default-active="$route.path" :unique-opened="true">
+        <el-menu mode="vertical" background-color="#000" text-color="#fff" :default-active="$route.path"
+                 :unique-opened="true">
             <sidebar-item :routes='$router.options.routes'></sidebar-item>
         </el-menu>
     </div>

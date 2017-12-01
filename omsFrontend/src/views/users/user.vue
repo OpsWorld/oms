@@ -8,10 +8,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -19,7 +18,7 @@
                 <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
                     <el-table-column type="selection"></el-table-column>
                     <el-table-column prop='username' label='用户名' sortable>
-                        <!--<template scope="scope">-->
+                        <!--<template slot-scope="scope">-->
                             <!--<div slot="reference" class="name-wrapper" style="text-align: center">-->
                                 <!--<el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}-->
                                 <!--</el-button>-->
@@ -28,7 +27,7 @@
                     </el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
                     <el-table-column prop='group' label='所在组' sortable>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                                 <el-tag v-for="item in scope.row.group" :key="item" type="success">{{item}}</el-tag>
                             </div>

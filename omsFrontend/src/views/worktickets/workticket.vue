@@ -18,10 +18,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -33,7 +32,7 @@
                     <!--</template>-->
                     <!--</el-table-column>-->
                     <el-table-column prop='title' label='标题'>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
                                 <router-link :to="'editworkticket/'+scope.row.id">
                                     {{scope.row.title}}
@@ -44,7 +43,7 @@
                     <el-table-column prop='type' label='工单类型'></el-table-column>
                     <el-table-column prop='create_user' label='工单创建人'></el-table-column>
                     <el-table-column prop='level' label='工单等级' sortable>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                                 <el-tag :type="LEVEL[scope.row.level].type">
                                     {{LEVEL[scope.row.level].text}}
@@ -53,7 +52,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop='ticket_status' label='工单状态'>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                                 <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
                                     {{TICKET_STATUS[scope.row.ticket_status].text}}
@@ -63,7 +62,7 @@
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
                     <el-table-column prop='create_time' label='工单创建时间' sortable>
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(41,225,28)">
                                 <a>{{scope.row.create_time | parseDate}}</a>
                             </div>

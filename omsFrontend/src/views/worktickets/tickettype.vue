@@ -8,10 +8,9 @@
                 <div class="table-search">
                     <el-input
                             placeholder="搜索 ..."
-                            icon="search"
                             v-model="searchdata"
-                            @keyup.enter.native="searchClick"
-                            :on-icon-click="searchClick">
+                            @keyup.enter.native="searchClick">
+                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
                     </el-input>
                 </div>
             </div>
@@ -20,7 +19,7 @@
                     <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
                     <el-table-column prop='desc' label='描述'></el-table-column>
                     <el-table-column label="操作">
-                        <template scope="scope">
+                        <template slot-scope="scope">
                             <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
                             <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
                         </template>

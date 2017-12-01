@@ -21,7 +21,7 @@
             </el-dropdown>
         </el-menu>
 
-        <el-dialog title="修改密码" :visible.sync="changepw" size="tiny">
+        <el-dialog title="修改密码" :visible.sync="changepw">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                 <el-form-item label="密码" prop="new_password1">
                     <el-input type="password" v-model="ruleForm.new_password1"></el-input>

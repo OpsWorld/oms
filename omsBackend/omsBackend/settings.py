@@ -159,7 +159,7 @@ AUTH_USER_MODEL = "users.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 # The URL of the LDAP server.
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 

@@ -21,7 +21,6 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .app-main {
-        min-height: 100%;
         padding-top: 55px;
     }
 </style>

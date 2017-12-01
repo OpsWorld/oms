@@ -10,7 +10,7 @@
                         <el-option v-for="item in tickettypes" :key="item.name" :value="item.name"></el-option>
                     </el-select>
                     <el-tooltip class="item" effect="dark" content="添加新工单类型" placement="right">
-                        <el-button type="success" icon="plus" @click="addForm=true"></el-button>
+                        <el-button type="success" icon="el-icon-plus" @click="addForm=true"></el-button>
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">

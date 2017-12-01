@@ -2,7 +2,7 @@
     <div class="navbar">
         <hamburger class="hamburger-container" :toggleClick="toggleSideBar" :isActive="sidebar.opened"></hamburger>
         <el-breadcrumb class="app-levelbar" separator="/">
-            <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item">
+            <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.id">
                 <router-link v-if='item.redirect==="noredirect"||index==levelList.length-1' to="" class="no-redirect">
                     {{item.name}}
                 </router-link>
