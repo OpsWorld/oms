@@ -35,9 +35,9 @@
 
     .app-wrapper {
         @include clearfix;
+        max-width: 98%;
         position: relative;
         height: 100%;
-        width: 100%;
         &.hideSidebar {
             .sidebar-wrapper {
                 transform: translate(-140px, 0);
@@ -52,6 +52,7 @@
                 }
             }
             .main-container {
+                min-width: 65%;
                 margin-left: 70px;
             }
         }
