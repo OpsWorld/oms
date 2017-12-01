@@ -4,7 +4,7 @@
             <el-form autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left"
                      label-width="0px"
                      class="card-box login-form">
-                <h3 class="title">Lucifer运维系统</h3>
+                <h3 class="title">OMS运维系统</h3>
                 <el-form-item prop="username">
                     <span class="svg-container"><icon class="user-icon" name="user"></icon></span>
                     <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on"
