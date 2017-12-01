@@ -15,14 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'username', 'email', 'group', 'is_active', 'roles', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
-    def create(self, validated_data):
-        user = User(**validated_data)
-        try:
-            user.set_password(validated_data['password'])
-        except:
-            pass
-        user.save()
-        return user
+    # def create(self, validated_data):
+    #     user = User(**validated_data)
+    #     try:
+    #         user.set_password(validated_data['password'])
+    #     except:
+    #         pass
+    #     user.save()
+    #     return user
 
     def update(self, instance, validated_data):
         instance.username = validated_data.get('username', instance.username)
