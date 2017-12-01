@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=32, unique=True, db_index=True)
     email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
-    group = models.ManyToManyField(Group, null=True, blank=True, verbose_name=u'部门')
+    group = models.ForeignKey(Group, null=True, blank=True, verbose_name=u'部门')
     create_date = models.DateField(auto_now=True, verbose_name=u'创建时间')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -52,21 +52,8 @@ class User(AbstractBaseUser):
     objects = UserManager()  # 创建用户
 
 
-# class Group(models.Model):
-#     name = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
-#     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name = u'组'
-#         verbose_name_plural = u'部门'
-
-
 class Role(models.Model):
     name = models.CharField(max_length=64, unique=True, verbose_name=u'角色')
-    cnname = models.CharField(max_length=64, unique=True, verbose_name=u'中文名')
     desc = models.CharField(max_length=64, null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):

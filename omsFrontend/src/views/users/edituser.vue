@@ -13,23 +13,14 @@
         </el-form-item>
         <el-form-item label="是否激活" prop="is_active">
             <el-switch on-text="oo" off-text="xx" v-model="rowdata.is_active"></el-switch>
-            <a v-if="changePass" style="color: #ff2ff7">有bug,需要点击这个开关显示密码</a>
         </el-form-item>
         <el-form-item label="角色" prop="group">
             <el-select v-model="rowdata.roles" placeholder="请选择用户角色">
                 <el-option v-for="item in roles" :key="item.name" :value="item.name"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item v-if="changePass" label="密码" prop="password">
-            <el-input v-model="rowdata.password" :disabled="true">
-                <template slot="append">
-                    <el-button type="info" size="small" @click="setPasswd()">生成密码</el-button>
-                </template>
-            </el-input>
-        </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-            <el-button type="danger" @click="changePass=!changePass">重置密码</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -51,7 +42,7 @@
                         {required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur'}
                     ],
                     group: [
-                        {required: true, message: '请选择项目分组', trigger: 'change'},
+                        {required: true, type: 'array', message: '请选择项目分组', trigger: 'change'},
                     ],
                     roles: [
                         {required: true, message: '请选择角色', trigger: 'blur'},
@@ -70,6 +61,7 @@
             postForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        this.rowdata.password = 'qwert@12345';
                         patchUser(this.rowdata.id, this.rowdata).then(response => {
                             if (response.statusText = 'ok') {
                                 this.$message({

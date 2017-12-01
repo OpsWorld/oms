@@ -7,7 +7,7 @@
             <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
         <el-form-item label="用户分组" prop="group">
-            <el-select v-model="ruleForm.group" multiple placeholder="请选择用户分组">
+            <el-select v-model="ruleForm.group" placeholder="请选择用户分组">
                 <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
             </el-select>
         </el-form-item>
@@ -39,6 +39,7 @@
                     is_active: '',
                     group: '',
                     roles: '',
+                    password: 'qwert@12345'
                 },
                 rules: {
                     username: [
@@ -48,7 +49,7 @@
                         {required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur'}
                     ],
                     group: [
-                        {required: true, type: 'array', message: '请选择用户分组', trigger: 'change'},
+                        {required: true, message: '请选择用户分组', trigger: 'change'},
                     ],
                     roles: [
                         {required: true, message: '请选择用户角色', trigger: 'blur'},

@@ -14,7 +14,7 @@ class UserFilter(filters.FilterSet):
             'email': ['exact'],
             'group__name': ['exact'],
             'is_active': ['exact'],
-            'roles__cnname': ['exact'],
+            'roles__name': ['exact'],
         }
 
 class GroupFilter(filters.FilterSet):
