@@ -72,7 +72,7 @@
                     type: '',
                     content: '',
                     create_user: localStorage.getItem('username'),
-                    level: null,
+                    level: 2,
                     action_user: '',
                     create_group: ''
                 },
