@@ -19,12 +19,12 @@
                 <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
                     <el-table-column type="selection"></el-table-column>
                     <el-table-column prop='username' label='用户名' sortable>
-                        <template scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}
-                                </el-button>
-                            </div>
-                        </template>
+                        <!--<template scope="scope">-->
+                            <!--<div slot="reference" class="name-wrapper" style="text-align: center">-->
+                                <!--<el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}-->
+                                <!--</el-button>-->
+                            <!--</div>-->
+                        <!--</template>-->
                     </el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
                     <el-table-column prop='group' label='所在组' sortable>
