@@ -45,7 +45,12 @@ var webpackConfig = merge(baseWebpackConfig, {
         }),
         // Compress extracted CSS. We are using this plugin so that possible
         // duplicated CSS from different components can be deduped.
-        new OptimizeCSSPlugin(),
+        // css打包后变形
+        new OptimizeCSSPlugin({
+            cssProcessorOptions: {
+                safe: true
+            }
+        }),
         // generate dist index.html with correct asset hash for caching.
         // you can customize output by editing /index.html
         // see https://github.com/ampedandwired/html-webpack-plugin
@@ -68,7 +73,7 @@ var webpackConfig = merge(baseWebpackConfig, {
                 minifyCSS: true,
                 minifyURLs: true
             },
-             path:config.build.staticPath,
+            path: config.build.staticPath,
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
@@ -88,7 +93,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         }),
         // split echarts into its own file
         new webpack.optimize.CommonsChunkPlugin({
-            async:'echarts',
+            async: 'echarts',
             minChunks(module) {
                 var context = module.context;
                 return context && (context.indexOf('echarts') >= 0 || context.indexOf('zrender') >= 0);

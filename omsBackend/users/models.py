@@ -16,7 +16,7 @@ class UserManager(BaseUserManager):
         )
         user.set_password(password)  # 检测密码合理性
         user.save(using=self._db)  # 保存密码
-        return user    
+        return user
 
     def create_superuser(self, username, password):
         user = self.create_user(username=username,
