@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'users',
     'tools',
     'django_python3_ldap',
+    'permissions',
 ]
 
 MIDDLEWARE = [
