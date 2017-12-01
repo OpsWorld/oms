@@ -12,7 +12,7 @@ class Firstmenu(models.Model):
     icon = models.CharField(max_length=100, blank=True, verbose_name=u'菜单图标')
     redirect = models.CharField(max_length=100, blank=True, verbose_name=u'菜单rewrite路径')
     hidden = models.BooleanField(default=True, verbose_name=u'是否显示菜单')
-    mate = models.ManyToManyField("MenuMate", blank=True, null=True, verbose_name=u'扩展属性')
+    meta = models.ManyToManyField("MenuMate", blank=True, null=True, verbose_name=u'扩展属性')
 
     def __str__(self):
         return self.name
@@ -37,7 +37,7 @@ class Secondmenu(models.Model):
         verbose_name_plural = u'二级菜单'
 
 
-class MenuMate(models.Model):
+class MenuMeta(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'菜单属性')
     action = models.CharField(max_length=100, blank=True, verbose_name=u'属性动作')
 

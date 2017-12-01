@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from permissions.models import Firstmenu, Secondmenu, MenuMate
+from permissions.models import Firstmenu, Secondmenu, MenuMeta
 from rest_framework import serializers
 
 
-class MenuMateSerializer(serializers.ModelSerializer):
+class MenuMetaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuMate
+        model = MenuMeta
         fields = ('url', 'id', 'name', 'action')
 
 
 class FirstmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firstmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'mate')
+        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')
 
 
 class SecondmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Secondmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'parent', 'mate')
+        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'parent', 'meta')

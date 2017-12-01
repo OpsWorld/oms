@@ -22,5 +22,6 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
     .app-main {
         padding-top: 55px;
+        padding-left: 20px;
     }
 </style>
