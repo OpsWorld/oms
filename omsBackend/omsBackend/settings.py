@@ -17,15 +17,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters',
-    'corsheaders',
-    # 'channels',
+    'django_filters',   #过滤
+    'corsheaders',  #跨域
+    'django_python3_ldap',  #ldap认证
+    'dry_rest_permissions', #权限
+    'gunicorn',  # 部署djanog程序
+    # 'channels',   #djanog异步通信
     'worktickets',
-    'users',
     'tools',
-    'django_python3_ldap',
-    'permissions',
-    'gunicorn',  # 部署用
+    'users',
+    'menus',
+    'perms',
 ]
 
 MIDDLEWARE = [

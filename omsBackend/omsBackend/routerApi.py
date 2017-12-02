@@ -6,7 +6,8 @@ from users.views import UserViewSet, GroupViewSet, RoleViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet, \
     TicketWikiViewSet
 from tools.views import UploadViewSet
-from permissions.views import FirstmenuViewSet, SecondmenuViewSet, MenuMateViewSet
+from menus.views import FirstmenuViewSet, SecondmenuViewSet, MenuMetaViewSet
+from perms.views import UserMenuPermsViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -20,4 +21,5 @@ router.register(r'ticketwikis', TicketWikiViewSet)
 router.register(r'upload', UploadViewSet)
 router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)
-router.register(r'menumates', MenuMateViewSet)
+router.register(r'menumetas', MenuMetaViewSet)
+router.register(r'usermenuperms', UserMenuPermsViewSet)

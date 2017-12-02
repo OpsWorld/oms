@@ -37,6 +37,7 @@ export const routes = [
     {path: '/login', component: require('@/views/login/login'), hidden: true},
     {path: '/404', component: require('@/views/error/404'), hidden: true},
     {path: '/401', component: require('@/views/error/401'), hidden: true},
+    {path: '*', redirect: '/404', hidden: true},
     {
         path: '/',
         component: Layout,
@@ -59,7 +60,7 @@ export const routes = [
             {path: 'roles', component: Rolelist, name: '角色列表'},
         ]
     },
-        {
+    {
         path: '/worktickets',
         component: Layout,
         redirect: '/worktickets/workticket',
@@ -73,7 +74,7 @@ export const routes = [
             {path: 'editworkticket/:id', hidden: true, component: editWorkticket, name: '编辑工单'},
         ]
     },
-        {
+    {
         path: '/tools',
         component: Layout,
         redirect: '/tools/upload',
@@ -85,7 +86,6 @@ export const routes = [
             {path: 'test', component: Test, name: '测试页面'},
         ]
     },
-    {path: '*', redirect: '/404', hidden: true}
 ];
 
 const router = new VueRouter({

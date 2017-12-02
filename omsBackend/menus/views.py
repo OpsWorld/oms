@@ -2,8 +2,8 @@
 # author: kiven
 
 from rest_framework import viewsets
-from permissions.models import Firstmenu, Secondmenu, MenuMeta
-from permissions.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
+from menus.models import Firstmenu, Secondmenu, MenuMeta
+from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
 
 
 class FirstmenuViewSet(viewsets.ModelViewSet):
@@ -16,6 +16,6 @@ class SecondmenuViewSet(viewsets.ModelViewSet):
     serializer_class = SecondmenuSerializer
 
 
-class MenuMateViewSet(viewsets.ModelViewSet):
+class MenuMetaViewSet(viewsets.ModelViewSet):
     queryset = MenuMeta.objects.all()
     serializer_class = MenuMetaSerializer

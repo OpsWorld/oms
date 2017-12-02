@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from permissions.models import Firstmenu, Secondmenu, MenuMeta
+from menus.models import Firstmenu, Secondmenu, MenuMeta
 from rest_framework import serializers
 
 

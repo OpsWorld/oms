@@ -181,6 +181,9 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.commentForm.ticket = this.ticket_id;
+                        if (this.commentForm.create_user == this.ticketData.create_user) {
+                            this.rowdata.action_user = this.ticketData.action_user;
+                        }
                         postTicketcomment(this.commentForm);
                         this.patchForm(this.rowdata);
                     } else {
