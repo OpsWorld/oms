@@ -17,10 +17,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'django_filters',   #过滤
-    'corsheaders',  #跨域
-    'django_python3_ldap',  #ldap认证
-    'dry_rest_permissions', #权限
+    'django_filters',  # 过滤
+    'corsheaders',  # 跨域
+    'django_python3_ldap',  # ldap认证
+    'dry_rest_permissions',  # 权限
     'gunicorn',  # 部署djanog程序
     # 'channels',   #djanog异步通信
     'worktickets',
@@ -72,7 +72,7 @@ DATABASES = {
     }
 }
 
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.postgresql_psycopg2',
 #        'NAME': 'oms',
@@ -81,7 +81,7 @@ DATABASES = {
 #        'HOST': '1.1.1.11',
 #        'PORT': '5432'
 #    }
-#}
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -161,16 +161,17 @@ AUTH_USER_MODEL = "users.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
-#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 # The URL of the LDAP server.
-LDAP_AUTH_URL = "ldap://192.168.6.101:389"
+LDAP_AUTH_URL = "ldap://1.1.1.100:389"
+# LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 
 # Initiate TLS on connection.
 LDAP_AUTH_USE_TLS = False
 
 # The LDAP search base for looking up users.
-#LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
-LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
+LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
+# LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
 
 # The LDAP class that represents a user.
 LDAP_AUTH_OBJECT_CLASS = "user"
@@ -178,8 +179,9 @@ LDAP_AUTH_OBJECT_CLASS = "user"
 # User model fields mapped to the LDAP
 # attributes that represent them.
 LDAP_AUTH_USER_FIELDS = {
-   "username": "sAMAccountName",
-   "email": "mail",
+    "username": "sAMAccountName",
+    "email": "mail",
+    "groups": "memberOf",
 }
 
 # A tuple of django model fields used to uniquely identify a user.
@@ -212,27 +214,27 @@ LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
 # The LDAP username and password of a user for querying the LDAP database for user
 # details. If None, then the authenticated user will be used for querying, and
 # the `ldap_sync_users` command will perform an anonymous query.
-#LDAP_AUTH_CONNECTION_USERNAME = 'admin'
-#LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
-LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
-LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
+LDAP_AUTH_CONNECTION_USERNAME = 'admin'
+LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
+# LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
+# LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 
 # Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
 
 LOGGING = {
-   "version": 1,
-   "disable_existing_loggers": False,
-   "handlers": {
-       "console": {
-           "class": "logging.StreamHandler",
-       },
-   },
-   "loggers": {
-       "django_python3_ldap": {
-           "handlers": ["console"],
-           "level": "INFO",
-       },
-   },
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "loggers": {
+        "django_python3_ldap": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+    },
 }
