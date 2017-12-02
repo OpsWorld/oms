@@ -80,12 +80,13 @@
              * 获取数据
              */
             fetchData() {
+                const tick_id = '';
                 const parms = {
                     limit: this.limit,
                     offset: this.offset,
                     name__contains: this.searchdata
                 };
-                getTickettype(parms).then(response => {
+                getTickettype(tick_id,parms).then(response => {
                     this.tableData = response.data.results;
                     this.tabletotal = response.data.count;
                 })

@@ -1,11 +1,11 @@
 <template>
-    <mavon-editor :default_open='rowdata' v-model="content" code_style="monokai"
+    <mavon-editor :default_open='rawdata' v-model="content" code_style="monokai"
                   :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
 </template>
 <script>
     import {postUpload} from 'api/tool'
     export default {
-        props: ['rowdata'],
+        props: ['rawdata'],
         data() {
             return {
                 content: '',

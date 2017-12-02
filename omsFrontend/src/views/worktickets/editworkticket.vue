@@ -21,17 +21,17 @@
             <el-form v-if="ticketData.ticket_status!=2" :model="commentForm" :rules="rules" ref="ruleForm"
                      label-width="80px" class="demo-ruleForm">
                 <hr class="heng"/>
-                <el-tooltip class="item" effect="dark" content="先接收工单才能回复处理过程"
-                            :disabled="ticketData.ticket_status==0?false:true" placement="right">
+                <div v-if="ticketData.ticket_status==1">
                     <el-form-item label="问题处理" prop="content">
-                        <div v-if="ticketData.ticket_status==1">
-                            <add-content :rawdata="default_open"></add-content>
-                        </div>
+                        <mavon-editor :default_open="ticketData.ticket_status==1?'edit':'preview'" v-model="commentForm.content"
+                                      code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
+                                      ref="md"></mavon-editor>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交</el-button>
+                        <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
+                        </el-button>
                     </el-form-item>
-                </el-tooltip>
+                </div>
                 <hr class="heng"/>
             </el-form>
             <div v-if="ticketData.ticket_status!=2">
@@ -104,10 +104,9 @@
     import {postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
     import VueMarkdown from 'vue-markdown'   //前端显示
-    import addContent from '../components/addcontent.vue'
 
     export default {
-        components: {VueMarkdown, addContent},
+        components: {VueMarkdown},
 
         data() {
             return {
@@ -118,7 +117,6 @@
                 commentData: {},
                 enclosureData: {},
                 apiurl: apiUrl,
-                default_open: 'edit',
                 commentForm: {
                     ticket: '',
                     create_user: localStorage.getItem('username'),
@@ -141,6 +139,19 @@
                     action_user: ''
                 },
                 count: 0,
+                toolbars: {
+                    preview: true, // 预览
+                    bold: true, // 粗体
+                    italic: true, // 斜体
+                    header: true, // 标题
+                    underline: true, // 下划线
+                    strikethrough: true, // 中划线
+                    ol: true, // 有序列表
+                    fullscreen: true, // 全屏编辑
+                    help: true,
+                },
+                img_file: {},
+                formDataList: [],
             };
         },
 
@@ -152,8 +163,7 @@
         },
         methods: {
             fetchData() {
-                const parms = null;
-                getWorkticket(this.ticket_id, parms).then(response => {
+                getWorkticket(this.ticket_id).then(response => {
                     this.ticketData = response.data;
                 });
             },
@@ -164,7 +174,8 @@
                 getTicketcomment(parms).then(response => {
                     this.commentData = response.data.results;
                     this.rowdata.action_user = this.commentData.length == 0 ? null : this.commentData[this.commentData.length - 1].create_user;
-                })
+                });
+                this.commentForm.content = '';
             },
             EnclosureData() {
                 const parms = {
@@ -228,6 +239,29 @@
             },
             afterFileUpload(fileList){
                 let date = new Date(fileList.row.uid);
+                let Y = date.getFullYear().toString();
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
+                let D = date.getDate();
+                let h = date.getHours();
+                let m = date.getMinutes();
+                let s = date.getSeconds();
+                let ctime = Y + M + D + h + m + s;
+                return ctime
+            },
+            imgAdd(pos, file){
+                var md = this.$refs.md;
+                let formData = new FormData();
+                formData.append('username', localStorage.getItem('username'));
+                formData.append('file', file);
+                formData.append('create_time', this.afterFileUpload(file));
+                formData.append('type', file.type);
+                formData.append('archive', this.route_path[1]);
+                postUpload(formData).then(response => {
+                    md.$imglst2Url([[pos, response.data.file]]);
+                });
+            },
+            afterFileUpload(file){
+                let date = new Date(file.lastModified);
                 let Y = date.getFullYear().toString();
                 let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
                 let D = date.getDate();
