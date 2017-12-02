@@ -23,7 +23,7 @@
                 <hr class="heng"/>
                 <div v-if="ticketData.ticket_status==1">
                     <el-form-item label="问题处理" prop="content">
-                        <mavon-editor :default_open="ticketData.ticket_status==1?'edit':'preview'" v-model="commentForm.content"
+                        <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'" v-model="commentForm.content"
                                       code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
                                       ref="md"></mavon-editor>
                     </el-form-item>
@@ -278,7 +278,7 @@
 <style lang='scss'>
     .editticket {
         margin: 50px;
-        width: 800px;
+        width: 80%;
         .title {
             color: #feff25;
             font-size: 30px;

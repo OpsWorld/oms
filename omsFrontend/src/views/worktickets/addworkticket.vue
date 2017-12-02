@@ -14,7 +14,7 @@
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
-                    <mavon-editor default_open='edit' v-model="ruleForm.content" code_style="monokai"
+                    <mavon-editor style="z-index: 1"  default_open='edit' v-model="ruleForm.content" code_style="monokai"
                                   :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
                 </el-form-item>
                 <el-form-item label="工单等级" prop="level">
@@ -224,6 +224,6 @@
 
     .addticket {
         margin: 50px;
-        width: 800px;
+        width: 80%;
     }
 </style>
