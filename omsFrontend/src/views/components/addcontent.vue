@@ -1,5 +1,5 @@
 <template>
-    <mavon-editor :default_open='default_open' v-model="content" code_style="monokai"
+    <mavon-editor :default_open='rowdata' v-model="content" code_style="monokai"
                   :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
 </template>
 <script>
@@ -22,14 +22,13 @@
                 },
                 img_file: {},
                 formDataList: [],
-                default_open: this.rowdata.default_open,
             };
         },
         methods: {
             imgAdd(pos, file){
                 var md = this.$refs.md;
                 let formData = new FormData();
-                formData.append('username', this.rowdata.create_user);
+                formData.append('username', localStorage.getItem('username'));
                 formData.append('file', file);
                 formData.append('create_time', this.afterFileUpload(file));
                 formData.append('type', file.type);

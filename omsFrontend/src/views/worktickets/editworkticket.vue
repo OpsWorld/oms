@@ -21,19 +21,20 @@
             <el-form v-if="ticketData.ticket_status!=2" :model="commentForm" :rules="rules" ref="ruleForm"
                      label-width="80px" class="demo-ruleForm">
                 <hr class="heng"/>
-                <el-form-item label="问题回复" prop="content">
-                    <el-tooltip class="item" effect="dark" content="先接收工单才能回复处理过程"
-                                :disabled="ticketData.ticket_status==0?false:true" placement="right">
-                        <mavon-editor :default_open='show' v-model="ruleForm.content" code_style="monokai"
-                                  :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
-                    </el-tooltip>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交</el-button>
-                </el-form-item>
+                <el-tooltip class="item" effect="dark" content="先接收工单才能回复处理过程"
+                            :disabled="ticketData.ticket_status==0?false:true" placement="right">
+                    <el-form-item label="问题处理" prop="content">
+                        <div v-if="ticketData.ticket_status==1">
+                            <add-content :rawdata="default_open"></add-content>
+                        </div>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交</el-button>
+                    </el-form-item>
+                </el-tooltip>
                 <hr class="heng"/>
             </el-form>
-            <div>
+            <div v-if="ticketData.ticket_status!=2">
                 <el-upload
                         class="upload-demo"
                         ref="upload"
@@ -103,9 +104,10 @@
     import {postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
     import VueMarkdown from 'vue-markdown'   //前端显示
+    import addContent from '../components/addcontent.vue'
 
     export default {
-        components: {VueMarkdown},
+        components: {VueMarkdown, addContent},
 
         data() {
             return {
@@ -116,7 +118,7 @@
                 commentData: {},
                 enclosureData: {},
                 apiurl: apiUrl,
-                show: 'edit',
+                default_open: 'edit',
                 commentForm: {
                     ticket: '',
                     create_user: localStorage.getItem('username'),
