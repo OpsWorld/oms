@@ -24,9 +24,8 @@
                 <el-form-item label="问题回复" prop="content">
                     <el-tooltip class="item" effect="dark" content="先接收工单才能回复处理过程"
                                 :disabled="ticketData.ticket_status==0?false:true" placement="right">
-                        <el-input v-model="commentForm.content" type="textarea"
-                                  :disabled="ticketData.ticket_status==0?true:false"
-                                  :autosize="{ minRows: 3, maxRows: 5}"></el-input>
+                        <mavon-editor :default_open='show' v-model="ruleForm.content" code_style="monokai"
+                                  :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item>
@@ -117,6 +116,7 @@
                 commentData: {},
                 enclosureData: {},
                 apiurl: apiUrl,
+                show: 'edit',
                 commentForm: {
                     ticket: '',
                     create_user: localStorage.getItem('username'),

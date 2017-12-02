@@ -138,7 +138,7 @@
                 const parms = {
                     limit: this.limit,
                     offset: this.offset,
-                    title__contains: this.searchdata,
+                    content__contains: this.searchdata,
                     ticket_status: this.ticket_status,
                 };
                 getWorkticket(id, parms).then(response => {

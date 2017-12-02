@@ -198,22 +198,6 @@
                     md.$imglst2Url([[pos, response.data.file]]);
                 });
             },
-//            imgDel(pos){
-//                delete this.img_file[pos];
-//            },
-//            uploadimg(){
-//                let formData = new FormData();
-//                for (var _img in this.img_file) {
-//                    formData.append('username', this.enclosureForm.create_user);
-//                    formData.append('file', this.img_file[_img]);
-//                    formData.append('create_time', this.afterFileUpload(this.img_file[_img]));
-//                    formData.append('type', this.img_file[_img].type);
-//                    formData.append('archive', this.route_path[1]);
-//                    postUpload(formData).then(response => {
-//                        console.log(response.data.file)
-//                    });
-//                }
-//            },
             afterFileUpload(file){
                 let date = new Date(file.lastModified);
                 let Y = date.getFullYear().toString();

@@ -10,6 +10,7 @@ class WorkTicketFilter(filters.FilterSet):
         fields = {
             'id': ['exact'],
             'title': ['exact', 'contains'],
+            'content': ['contains'],
             'type__name': ['exact'],
             'create_user__username': ['exact'],
             'action_user__username': ['exact'],
