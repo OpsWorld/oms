@@ -2,7 +2,7 @@
 # author: kiven
 
 from channels.routing import route
-from salts.consumers import cmdrun_receive, sendmail_receive
+from crontab.consumers import cmdrun_receive, sendmail_receive
 
 salt_routing = [
     route('websocket.receive',cmdrun_receive, path='/cmdrun/'),

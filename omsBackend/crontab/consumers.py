@@ -5,7 +5,7 @@ import json
 import os
 from crontab.cmdrun import run
 # from salts.models import SaltCmdrun   #命令记录
-from djanog.settings from SEND_MAIL_CMD
+from omsBackend.settings import  SEND_MAIL_CMD
 
 salt_log = '/tmp/salt/'
 os.popen('mkdir -p {}'.format(salt_log))
