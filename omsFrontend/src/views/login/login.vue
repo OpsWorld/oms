@@ -62,7 +62,7 @@
                     if (valid) {
                         this.loading = true;
                         this.Login(this.loginForm).then(response => {
-                            this.$router.push('/');
+                            this.$router.push(this.$route.query.redirect || '/')
                         }).catch(error => {
                             console.log(error);
                         });

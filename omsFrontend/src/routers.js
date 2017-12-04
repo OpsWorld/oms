@@ -101,13 +101,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     // console.log('to=', to.fullPath, '| from=', from.fullPath);
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.state.isLogin) {
+        if (!store.state.user.islogin) {
             _checkToken().then(res => {
                 store.dispatch("getUserInfo");
                 next();
             }, function () {
                 next({
-                    path: '/login'
+                    path: '/login',
+                    query: {redirect: to.fullPath}
                 })
             });
         } else {
