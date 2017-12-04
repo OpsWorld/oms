@@ -22,7 +22,7 @@ INSTALLED_APPS = [
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
     'gunicorn',  # 部署djanog程序
-    'channels',   #djanog异步通信
+    #'channels',   #djanog异步通信
     'worktickets',
     'tools',
     'users',
@@ -161,7 +161,7 @@ AUTH_USER_MODEL = "users.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 # The URL of the LDAP server.
 # LDAP_AUTH_URL = "ldap://1.1.1.100:389"
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"

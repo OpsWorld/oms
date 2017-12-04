@@ -11,7 +11,7 @@ class Firstmenu(models.Model):
     component = models.CharField(max_length=100, blank=True, verbose_name=u'菜单指向页面')
     icon = models.CharField(max_length=100, blank=True, verbose_name=u'菜单图标')
     redirect = models.CharField(max_length=100, blank=True, verbose_name=u'菜单rewrite路径')
-    hidden = models.BooleanField(default=True, verbose_name=u'是否显示菜单')
+    hidden = models.BooleanField(default=False, verbose_name=u'是否隐藏菜单')
     meta = models.ManyToManyField("MenuMeta", blank=True, null=True, verbose_name=u'扩展属性')
 
     def __str__(self):
@@ -26,7 +26,7 @@ class Secondmenu(models.Model):
     name = models.CharField(max_length=100, blank=True, unique=True, verbose_name=u'菜单名')
     path = models.CharField(max_length=100, blank=True, verbose_name=u'菜单实际路径')
     component = models.CharField(max_length=100, blank=True, verbose_name=u'菜单指向页面')
-    hidden = models.BooleanField(default=True, verbose_name=u'是否显示菜单')
+    hidden = models.BooleanField(default=False, verbose_name=u'是否隐藏菜单')
     meta = models.ManyToManyField("MenuMeta", blank=True, null=True, verbose_name=u'扩展属性')
 
     def __str__(self):
