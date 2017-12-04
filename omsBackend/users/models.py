@@ -2,7 +2,7 @@
 # author: kiven
 
 from django.db import models
-from django.contrib.auth.models import Group
+#from django.contrib.auth.models import Group
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
 class UserManager(BaseUserManager):
@@ -29,7 +29,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=32, unique=True, db_index=True)
     email = models.EmailField(max_length=255, unique=True, null=True, blank=True)
-    group = models.ManyToManyField(Group, null=True, blank=True, verbose_name=u'部门')
+    group = models.ManyToManyField('Group', null=True, blank=True, verbose_name=u'部门')
     create_date = models.DateField(auto_now=True, verbose_name=u'创建时间')
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
@@ -50,6 +50,18 @@ class User(AbstractBaseUser):
         verbose_name_plural = u'用户'
 
     objects = UserManager()  # 创建用户
+
+class Group(models.Model):
+    name = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
+    email = models.EmailField(max_length=255, null=True, blank=True)
+    desc = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'组'
+        verbose_name_plural = u'部门'
 
 
 class Role(models.Model):

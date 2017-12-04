@@ -2,8 +2,8 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from users.models import User, Role
-from django.contrib.auth.models import Group
+from users.models import User, Role, Group
+#from django.contrib.auth.models import Group
 
 class UserFilter(filters.FilterSet):
     class Meta:

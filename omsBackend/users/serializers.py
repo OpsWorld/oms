@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from users.models import User, Role
-from django.contrib.auth.models import Group
+from users.models import User, Group, Role
+# from django.contrib.auth.models import Group
 from rest_framework import serializers
 
 
@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('url', 'id', 'name')
+        fields = ('url', 'id', 'name', 'email', 'desc')
 
 
 class RoleSerializer(serializers.ModelSerializer):
