@@ -2,7 +2,7 @@
 # author: kiven
 
 from rest_framework.routers import DefaultRouter
-from users.views import UserViewSet, GroupViewSet, RoleViewSet
+from users.views import UserViewSet, RoleViewSet, GroupViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet, \
     TicketWikiViewSet
 from tools.views import UploadViewSet

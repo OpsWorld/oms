@@ -7,7 +7,9 @@ from ldap3.core.exceptions import LDAPException
 import logging
 from contextlib import contextmanager
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from users.models import Group
+from django.conf import settings as django_settings
+#from django.contrib.auth.models import Group
 from django_python3_ldap.conf import settings
 from django_python3_ldap.utils import import_func, format_search_filter
 
@@ -100,7 +102,7 @@ class Connection(object):
                 name = str(group).split(',')[0].split('=')[1]  # Splitting ldap group DN to just the CN part.
                 permissions = None
                 django_group, created = Group.objects.update_or_create(
-                    name=name,
+                    name=name, email='{email}@{suffix}'.format(email=name, suffix=django_settings.LDAP_EMAILL_SUFFIX)
                 )
 
                 if created:

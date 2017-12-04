@@ -223,6 +223,8 @@ LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
 
+LDAP_EMAILL_SUFFIX = 'oms.com'
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
