@@ -3,6 +3,9 @@
         <el-form-item label="名称" prop="name">
             <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+            <el-input v-model="ruleForm.email"></el-input>
+        </el-form-item>
         <el-form-item label="描述" prop="desc">
             <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 10, maxRows: 30}"></el-input>
         </el-form-item>
@@ -18,11 +21,15 @@
             return {
                 ruleForm: {
                     name: '',
+                    email: '',
                     desc: ''
                 },
                 rules: {
                     name: [
-                        {required: true, message: '请陛下输入一个风骚的名字', trigger: 'blur'},
+                        {required: true, message: '请输入一个风骚的名字', trigger: 'blur'},
+                    ],
+                    email: [
+                        {required: true, type: 'email', message: '请输入一个风骚的email', trigger: 'blur'},
                     ]
                 }
             };

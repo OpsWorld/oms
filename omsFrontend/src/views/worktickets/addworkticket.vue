@@ -88,7 +88,7 @@
                     ],
                 },
                 groups: [],
-                sendmail: false,
+                sendmail: true,
                 fileList: [],
                 count: 0,
                 enclosureFile: null,
@@ -142,7 +142,7 @@
                                 sub: this.ruleForm.title,
                                 context: this.ruleForm.content,
                             };
-                            if (sendmail) {
+                            if (this.sendmail) {
                                 this.ws.send(JSON.stringify(mailForm));
                             }
                             this.$router.push('/worktickets/editworkticket/' + ticket_id);
@@ -207,7 +207,11 @@
                 self.ws = new WebSocket(ws_url + self.ws_stream);
                 if (self.ws.readyState == WebSocket.OPEN) self.ws.onopen();
                 self.ws.onmessage = (e) => {
-                    self.results.push(e.data);
+                    this.$message({
+                        type: 'info',
+                        message: '邮件信息: ' + e.data
+                    });
+                    // self.results.push(e.data);
                 };
             }
         }

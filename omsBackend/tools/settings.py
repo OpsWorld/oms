@@ -161,7 +161,7 @@ AUTH_USER_MODEL = "users.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 # The URL of the LDAP server.
 # LDAP_AUTH_URL = "ldap://1.1.1.100:389"
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
@@ -245,7 +245,7 @@ LOGGING = {
 }
 
 # sendmail
-SEND_MAIL_CMD = 'python tools/sendmail.py '
+SEND_MAIL_CMD = 'python ./sendmail.py '
 
 # Redis
 REDIS_OPTIONS = {
@@ -267,4 +267,3 @@ CHANNEL_LAYERS = {
         "ROUTING": "omsBackend.routing.channel_routing"
     }
 }
-

@@ -52,7 +52,7 @@
 <script>
     import {getGroupList, postGroup, deleteGroup} from 'api/user';
     import {LIMIT} from '@/config'
-    import addGroup from '../components/addgroup.vue'
+    import addGroup from './addgroup.vue'
     import viewGroup from './viewgroup.vue'
 
     export default {
