@@ -7,12 +7,13 @@
                 </el-form-item>
                 <el-form-item label="工单分组" prop="create_group">
                     <el-select v-model="ruleForm.create_group" placeholder="请选择工单分组">
-                        <el-option v-for="item in groups" :key="item.id" :label="item.desc" :value="item.name"></el-option>
+                        <el-option v-for="item in groups" :key="item.id" :label="item.desc"
+                                   :value="item.name"></el-option>
                     </el-select>
                     <el-checkbox v-model="sendmail">发送邮件提醒</el-checkbox>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
-                    <mavon-editor style="z-index: 1"  default_open='edit' v-model="ruleForm.content" code_style="monokai"
+                    <mavon-editor style="z-index: 1" default_open='edit' v-model="ruleForm.content" code_style="monokai"
                                   :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
                 </el-form-item>
                 <el-form-item label="工单等级" prop="level">
@@ -54,7 +55,8 @@
     import {postWorkticket, getTickettype, postTickettype, postTicketenclosure} from 'api/workticket'
     import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
     import {postUpload} from 'api/tool'
-    import {getGroupList} from 'api/user';
+    import {getGroupList} from 'api/user'
+    import {ws_url} from '@/config'
 
     export default {
         components: {ElButton},
@@ -75,7 +77,7 @@
                     title: [
                         {required: true, message: '请输入工单标题', trigger: 'blur'},
                     ],
-                    type: [
+                    create_group: [
                         {required: true, message: '请选择工单类型', trigger: 'change'}
                     ],
                     content: [
@@ -109,11 +111,14 @@
                 },
                 img_file: {},
                 formDataList: [],
+                ws_stream: '/salt/sendmail/',
+                ws: '',
             };
         },
 
         created() {
             this.getTicketGroups();
+            this.wsInit();  //ws 初始化
         },
         methods: {
             postForm(formName) {
@@ -132,6 +137,12 @@
                                 postTicketenclosure(this.enclosureForm);
                             }
                             let ticket_id = response.data.id;
+                            const mailForm = {
+                                to_list: this.ruleForm.create_group,
+                                sub: this.ruleForm.title,
+                                context: this.ruleForm.content,
+                            };
+                            this.ws.send(JSON.stringify(mailForm));
                             this.$router.push('/worktickets/editworkticket/' + ticket_id);
                         });
                     } else {
@@ -148,19 +159,6 @@
                 getGroupList().then(response => {
                     this.groups = response.data.results;
                 })
-            },
-            addGroupSubmit(formdata) {
-                postTickettype(formdata).then(response => {
-                    this.$message({
-                        message: '恭喜你，添加成功',
-                        type: 'success'
-                    });
-                    setTimeout(this.getTickettypes, 1000);
-                    this.addForm = false
-                }).catch(error => {
-                    this.$message.error('添加失败');
-                    console.log(error);
-                });
             },
             handleSuccess(file, fileList) {
                 let formData = this.afterFileUpload(fileList);
@@ -201,6 +199,14 @@
                 let s = date.getSeconds();
                 let ctime = Y + M + D + h + m + s;
                 return ctime
+            },
+            wsInit() {
+                let self = this;
+                self.ws = new WebSocket(ws_url + self.ws_stream);
+                if (self.ws.readyState == WebSocket.OPEN) self.ws.onopen();
+                self.ws.onmessage = (e) => {
+                    self.results.push(e.data);
+                };
             }
         }
     }

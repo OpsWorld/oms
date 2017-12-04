@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# author: itimor
+# author: kiven
 
 import sys
 import subprocess
