@@ -40,7 +40,7 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='type' label='工单类型'></el-table-column>
+                    <el-table-column prop='create_group' label='工单分组'></el-table-column>
                     <el-table-column prop='create_user' label='工单创建人'></el-table-column>
                     <el-table-column prop='level' label='工单等级' sortable>
                         <template slot-scope="scope">

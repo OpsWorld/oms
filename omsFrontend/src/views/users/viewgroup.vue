@@ -14,7 +14,7 @@
             <div>
                 <el-table :data="tableData" border style="width: 100%">
                     <el-table-column prop='username' label='用户名' sortable='custom'></el-table-column>
-                    <el-table-column prop='roles' label='角色' sortable='custom'></el-table-column>
+                    <el-table-column prop='email' label='邮箱' sortable='custom'></el-table-column>
                 </el-table>
             </div>
             <div class="table-pagination">

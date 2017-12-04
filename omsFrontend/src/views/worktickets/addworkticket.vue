@@ -5,13 +5,11 @@
                 <el-form-item label="标题" prop="title">
                     <el-input v-model="ruleForm.title"></el-input>
                 </el-form-item>
-                <el-form-item label="工单类型" prop="type">
-                    <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
-                        <el-option v-for="item in tickettypes" :key="item.name" :value="item.name"></el-option>
+                <el-form-item label="工单分组" prop="create_group">
+                    <el-select v-model="ruleForm.create_group" placeholder="请选择工单分组">
+                        <el-option v-for="item in groups" :key="item.id" :label="item.desc" :value="item.name"></el-option>
                     </el-select>
-                    <el-tooltip class="item" effect="dark" content="添加新工单类型" placement="right">
-                        <el-button type="success" icon="el-icon-plus" @click="addForm=true"></el-button>
-                    </el-tooltip>
+                    <el-checkbox v-model="sendmail">发送邮件提醒</el-checkbox>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
                     <mavon-editor style="z-index: 1"  default_open='edit' v-model="ruleForm.content" code_style="monokai"
@@ -49,20 +47,17 @@
                     <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
                 </el-form-item>
             </el-form>
-            <el-dialog :visible.sync="addForm">
-                <add-group @formdata="addGroupSubmit" @DialogStatus="getDialogStatus"></add-group>
-            </el-dialog>
         </el-card>
     </div>
 </template>
 <script>
     import {postWorkticket, getTickettype, postTickettype, postTicketenclosure} from 'api/workticket'
     import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
-    import addGroup from '../components/addgroup.vue'
     import {postUpload} from 'api/tool'
+    import {getGroupList} from 'api/user';
 
     export default {
-        components: {ElButton, addGroup},
+        components: {ElButton},
 
         data() {
             return {
@@ -90,8 +85,8 @@
                         {required: true, type: 'number', message: '请确认工单等级', trigger: 'blur'},
                     ],
                 },
-                tickettypes: [],
-                addForm: false,
+                groups: [],
+                sendmail: false,
                 fileList: [],
                 count: 0,
                 enclosureFile: null,
@@ -118,7 +113,7 @@
         },
 
         created() {
-            this.getTickettypes();
+            this.getTicketGroups();
         },
         methods: {
             postForm(formName) {
@@ -145,15 +140,13 @@
                     }
                 });
             },
-            getDialogStatus(data) {
-                this.addForm = data;
-            },
+
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            getTickettypes() {
-                getTickettype().then(response => {
-                    this.tickettypes = response.data.results;
+            getTicketGroups() {
+                getGroupList().then(response => {
+                    this.groups = response.data.results;
                 })
             },
             addGroupSubmit(formdata) {
