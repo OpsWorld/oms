@@ -246,3 +246,24 @@ LOGGING = {
 
 # sendmail
 SEND_MAIL_CMD = 'python ./sendmail.py '
+
+# Redis
+REDIS_OPTIONS = {
+    'HOST': '127.0.0.1',
+    'PORT': 6379,
+    'DB': 0
+}
+
+USE_REDIS = True
+# Channel settings
+CHANNEL_LAYERS = {
+    "default": {
+        'BACKEND': 'asgiref.inmemory.ChannelLayer',    #如果使用这个，消息变多时，会读不出来
+        # "BACKEND": "asgi_redis.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": ['redis://{}:{}'.format(REDIS_OPTIONS['HOST'],
+        #                                      REDIS_OPTIONS['PORT'])]
+        # },
+        "ROUTING": "lucifer.routing.channel_routing"
+    }
+}
