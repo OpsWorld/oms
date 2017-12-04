@@ -17,8 +17,8 @@ def send_mail(to_list, sub,context):
        msg['To'] = "".join(to_list)
        try:
             send_smtp = smtplib.SMTP()
-            send_smtp.connect(mail_host)
-            #send_smtp.starttls()
+            send_smtp.connect(mail_host,587)
+            send_smtp.starttls()
             send_smtp.login(mail_user, mail_pass)
             send_smtp.sendmail(me, to_list, msg.as_string())
             send_smtp.close()
@@ -29,8 +29,8 @@ def send_mail(to_list, sub,context):
 
 # 设置服务器名称、用户名、密码以及邮件后缀
 mail_host = "mail.tb-gaming.com"
-mail_user = "kiven@tb-gaming.com"
-mail_pass = "ZfaEWFbcW5"    #隐藏输入密码
+mail_user = "oms@tb-gaming.com"
+mail_pass = "u62En68D9d"    #隐藏输入密码
 mail_postfix="tb-gaming.com"
 #mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
 mailto_list = sys.argv[1]
