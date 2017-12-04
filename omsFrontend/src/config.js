@@ -3,7 +3,7 @@
  */
 
 let CONFIG;
-let rest_url = 'api.oms.com';
+let rest_url = 'oms.tb-gaming.local';
 // if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
     CONFIG = {
