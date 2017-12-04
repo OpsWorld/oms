@@ -142,7 +142,9 @@
                                 sub: this.ruleForm.title,
                                 context: this.ruleForm.content,
                             };
-                            this.ws.send(JSON.stringify(mailForm));
+                            if (sendmail) {
+                                this.ws.send(JSON.stringify(mailForm));
+                            }
                             this.$router.push('/worktickets/editworkticket/' + ticket_id);
                         });
                     } else {
