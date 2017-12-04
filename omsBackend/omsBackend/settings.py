@@ -187,6 +187,11 @@ LDAP_AUTH_USER_FIELDS = {
 # A tuple of django model fields used to uniquely identify a user.
 LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
 
+LDAP_AUTH_GROUP_FIELDS = {
+    "email": "mail",
+    "desc": "description"
+}
+
 # Path to a callable that takes a dict of {model_field_name: value},
 # returning a dict of clean model data.
 # Use this to customize how data loaded from LDAP is saved to the User model.

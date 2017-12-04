@@ -99,10 +99,24 @@ class Connection(object):
         for group in groups:
             logger.debug("Assigning {} to group {}".format(user_object, group))
             try:
-                name = str(group).split(',')[0].split('=')[1]  # Splitting ldap group DN to just the CN part.
-                permissions = None
+                import re
+                name = re.findall("CN=(\w+)",group)[0]  # Splitting ldap group DN to just the CN part.
+                adFltr = "(&(objectclass=group)(cn=" + name + "))"
+                # Search the LDAP database.
+                if self._connection.search(
+                        search_base=settings.LDAP_AUTH_SEARCH_BASE,
+                        search_filter=adFltr,
+                        search_scope=ldap3.SUBTREE,
+                        attributes=ldap3.ALL_ATTRIBUTES,
+                        get_operational_attributes=True,
+                        size_limit=1,
+                ):
+                    groupinfo = self._connection.response[0]['attributes']
+
                 django_group, created = Group.objects.update_or_create(
-                    name=name, email='{email}@{suffix}'.format(email=name, suffix=django_settings.LDAP_EMAILL_SUFFIX)
+                    name=name,
+                    email=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["email"]][0],
+                    desc=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["desc"]][0]
                 )
 
                 if created:

@@ -8,3 +8,5 @@ from perms.serializers import UserMenuPermsSerializer
 class UserMenuPermsViewSet(viewsets.ModelViewSet):
     queryset = UserMenuPerms.objects.all()
     serializer_class = UserMenuPermsSerializer
+
+
