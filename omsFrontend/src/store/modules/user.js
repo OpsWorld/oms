@@ -2,7 +2,7 @@ import {login, logout, getInfo} from 'api/auth';
 
 const user = {
     state: {
-        code: '',
+        user_id: localStorage.getItem('user_id'),
         token: localStorage.getItem('token'),
         islogin: false,
         username: localStorage.getItem('username'),
@@ -10,8 +10,8 @@ const user = {
     },
 
     mutations: {
-        SET_CODE: (state, code) => {
-            state.code = code;
+        SET_USER_ID: (state, user_id) => {
+            state.user_id = user_id;
         },
         SET_TOKEN: (state, token) => {
             state.token = token;
@@ -71,7 +71,9 @@ const user = {
             return new Promise((resolve, reject) => {
                 getInfo(state.username).then(response => {
                     const userinfo = response.data.results[0];
+                    localStorage.setItem('user_id', userinfo.id);
                     localStorage.setItem('roles', userinfo.roles);
+                    commit('SET_USER_ID', userinfo.id);
                     commit('SET_ROLES', userinfo.roles);
                     resolve();
                 }).catch(error => {

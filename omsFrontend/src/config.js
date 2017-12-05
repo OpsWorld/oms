@@ -54,4 +54,7 @@ module.exports = {
     ticketenclosures: `${url}/api/ticketenclosures/`,
     tickettypes: `${url}/api/tickettypes/`,
     ticketwikis: `${url}/api/ticketwikis/`,
+
+    //权限
+    usermenuperms: `${url}/api/usermenuperms/`,
 };
