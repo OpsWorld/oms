@@ -10,7 +10,8 @@ from menus.models import Firstmenu, Secondmenu, MenuMeta
 
 class UserMenuPerms(models.Model):
     user = models.ForeignKey(User)
-    menus = models.ManyToManyField(Secondmenu, verbose_name=u'菜单')
+    firstmenus = models.ManyToManyField(Firstmenu, verbose_name=u'一级菜单')
+    seaondmenus = models.ManyToManyField(Secondmenu, verbose_name=u'二级菜单')
 
     def __str__(self):
         return self.user
