@@ -9,7 +9,7 @@ from menus.models import Firstmenu, Secondmenu, MenuMeta
 
 
 class UserMenuPerms(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, unique=True)
     firstmenus = models.ManyToManyField(Firstmenu, verbose_name=u'一级菜单')
     seaondmenus = models.ManyToManyField(Secondmenu, verbose_name=u'二级菜单')
 

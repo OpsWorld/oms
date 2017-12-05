@@ -14,6 +14,8 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
     queryset = UserMenuPerms.objects.all()
     serializer_class = UserMenuPermsSerializer
 
+
+
     def retrieve(self, request, *args, **kwargs):
         queryset = UserMenuPerms.objects.get(user=request.user)
         serializer = UserMenuPermsSerializer(queryset, context={'request': request}).data
