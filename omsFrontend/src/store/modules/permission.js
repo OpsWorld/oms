@@ -3,7 +3,7 @@ import { asyncRouterMap, constantRouterMap } from '@/router'
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: []
+    addRouters: JSON.parse(localStorage.getItem('addRouters')),
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
@@ -21,7 +21,8 @@ const permission = {
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         }
-        commit('SET_ROUTERS', accessedRouters)
+          commit('SET_ROUTERS', accessedRouters)
+          localStorage.setItem('addRouters', accessedRouters);
         resolve()
       })
     }
