@@ -24,25 +24,23 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
         for onename in serializer['firstmenus']:
             firstmenu = Firstmenu.objects.get(name=onename)
             firstmenuserializer = FirstmenuSerializer(firstmenu, context={'request': request}).data
-            metas = []
+            onenames = model_to_dict(firstmenu)
+            onenames["meta"] = {}
             for meta_id in firstmenuserializer['meta']:
                 menumeta = MenuMeta.objects.get(id=meta_id)
                 menumetaserializer = MenuMetaSerializer(menumeta, context={'request': request}).data
-                metas.append(menumetaserializer)
-            onenames = model_to_dict(firstmenu)
-            onenames["meta"] = metas
+                onenames["meta"][menumetaserializer["name"]] = menumetaserializer["action"]
             onenames["children"] = []
 
             for twoname in serializer['seaondmenus']:
                 secondmenu = Secondmenu.objects.get(name=twoname)
                 secondmenuserializer = SecondmenuSerializer(secondmenu, context={'request': request}).data
-                metas = []
-                for meta_id in secondmenuserializer['meta']:
+                twonames = model_to_dict(secondmenu)
+                twonames["meta"] = {}
+                for meta_id in firstmenuserializer['meta']:
                     menumeta = MenuMeta.objects.get(id=meta_id)
                     menumetaserializer = MenuMetaSerializer(menumeta, context={'request': request}).data
-                    metas.append(menumetaserializer)
-                twonames = model_to_dict(secondmenu)
-                twonames["meta"] = metas
+                    twonames["meta"][menumetaserializer["name"]] = menumetaserializer["action"]
                 if firstmenuserializer['name'] == secondmenuserializer['parent']:
                     onenames["children"].append(twonames)
 
