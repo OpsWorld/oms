@@ -19,10 +19,10 @@
                     <el-table-column type="selection"></el-table-column>
                     <el-table-column prop='username' label='用户名' sortable>
                         <!--<template slot-scope="scope">-->
-                            <!--<div slot="reference" class="name-wrapper" style="text-align: center">-->
-                                <!--<el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}-->
-                                <!--</el-button>-->
-                            <!--</div>-->
+                        <!--<div slot="reference" class="name-wrapper" style="text-align: center">-->
+                        <!--<el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}-->
+                        <!--</el-button>-->
+                        <!--</div>-->
                         <!--</template>-->
                     </el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
@@ -68,6 +68,7 @@
     import {LIMIT} from '@/config'
     import addUser from './adduser.vue'
     import editUser from './edituser.vue'
+    import {mapGetters} from 'vuex'
 
     export default {
         components: {addUser, editUser},
@@ -90,8 +91,14 @@
 
         created() {
             this.fetchData();
+            console.log(this.username)
         },
 
+        computed: {
+            ...mapGetters([
+                'username'
+            ]),
+        },
         methods: {
             fetchData() {
                 const parms = {
