@@ -113,11 +113,14 @@ class Connection(object):
                 ):
                     groupinfo = self._connection.response[0]['attributes']
 
-                django_group, created = Group.objects.update_or_create(
-                    name=name,
-                    email=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["email"]][0],
-                    desc=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["desc"]][0]
-                )
+                try:
+                    django_group, created = Group.objects.update_or_create(
+                        name=name,
+                        email=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["email"]][0],
+                        desc=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["desc"]][0]
+                    )
+                except Exception as e:
+                    django_group, created = Group.objects.update_or_create(name=name,)
 
                 if created:
                     logger.debug("Created new group {}".format(name))

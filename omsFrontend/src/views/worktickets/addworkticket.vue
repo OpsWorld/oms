@@ -5,12 +5,15 @@
                 <el-form-item label="标题" prop="title">
                     <el-input v-model="ruleForm.title"></el-input>
                 </el-form-item>
-                <el-form-item label="工单分组" prop="create_group">
-                    <el-select v-model="ruleForm.create_group" placeholder="请选择工单分组">
-                        <el-option v-for="item in groups" :key="item.id" :label="item.desc"
-                                   :value="item.name"></el-option>
+                <el-form-item label="指派人" prop="action_user">
+                    <el-select v-model="ruleForm.action_user" placeholder="请选择指派人">
+                        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
                     </el-select>
-                    <el-checkbox v-model="sendmail">发送邮件提醒</el-checkbox>
+                </el-form-item>
+                <el-form-item label="跟踪者" prop="follower">
+                    <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
+                        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                    </el-select>
                 </el-form-item>
                 <el-form-item label="工单内容" prop="content">
                     <mavon-editor style="z-index: 1" default_open='edit' v-model="ruleForm.content" code_style="monokai"
@@ -55,7 +58,7 @@
     import {postWorkticket, getTickettype, postTickettype, postTicketenclosure} from 'api/workticket'
     import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
     import {postUpload} from 'api/tool'
-    import {getGroupList} from 'api/user'
+    import {getUserList} from 'api/user'
     import {ws_url} from '@/config'
 
     export default {
@@ -71,14 +74,18 @@
                     create_user: localStorage.getItem('username'),
                     level: 2,
                     action_user: '',
-                    create_group: ''
+                    follower: '',
+                    create_group: '',
                 },
                 rules: {
                     title: [
                         {required: true, message: '请输入工单标题', trigger: 'blur'},
                     ],
-                    create_group: [
-                        {required: true, message: '请选择工单类型', trigger: 'change'}
+                    action_user: [
+                        {required: true, message: '请选择指派者', trigger: 'change'}
+                    ],
+                    follower: [
+                        {required: true, type: 'array', message: '请选择工单跟踪者', trigger: 'change'}
                     ],
                     content: [
                         {required: true, message: '请输入工单内容', trigger: 'blur'}
@@ -87,7 +94,7 @@
                         {required: true, type: 'number', message: '请确认工单等级', trigger: 'blur'},
                     ],
                 },
-                groups: [],
+                users: [],
                 sendmail: true,
                 fileList: [],
                 count: 0,
@@ -113,12 +120,15 @@
                 formDataList: [],
                 ws_stream: '/salt/sendmail/',
                 ws: '',
+                to_list: '',
+                cc_list: ''
             };
         },
 
         created() {
-            this.getTicketGroups();
+            this.getTicketUsers();
             this.wsInit();  //ws 初始化
+            this.getEmail('aaa');
         },
         methods: {
             postForm(formName) {
@@ -138,7 +148,8 @@
                             }
                             let ticket_id = response.data.id;
                             const mailForm = {
-                                to_list: this.ruleForm.create_group,
+                                to_list: this.to_list,
+                                cc_list: this.cc_list,
                                 sub: this.ruleForm.title,
                                 context: this.ruleForm.content,
                             };
@@ -157,9 +168,18 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
-            getTicketGroups() {
-                getGroupList().then(response => {
-                    this.groups = response.data.results;
+            getTicketUsers() {
+                getUserList().then(response => {
+                    this.users = response.data.results;
+                })
+            },
+            getEmail(username) {
+                const parms = {
+                    username: username
+                };
+                getUserList(parms).then(response => {
+                    this.email_list = response.data.results;
+                    console.log(this.email_list)
                 })
             },
             handleSuccess(file, fileList) {

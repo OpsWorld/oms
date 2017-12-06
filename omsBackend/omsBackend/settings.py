@@ -162,16 +162,16 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
 #AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-# The URL of the LDAP server.
-# LDAP_AUTH_URL = "ldap://1.1.1.100:389"
-LDAP_AUTH_URL = "ldap://192.168.6.101:389"
-
-# Initiate TLS on connection.
-LDAP_AUTH_USE_TLS = False
-
-# The LDAP search base for looking up users.
-# LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
+LDAP_AUTH_URL = "ldap://1.1.1.100:389"
+LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
+LDAP_AUTH_CONNECTION_USERNAME = 'admin'
+LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
+# LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 # LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
+# LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
+# LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
+
+LDAP_AUTH_USE_TLS = False
 
 # The LDAP class that represents a user.
 LDAP_AUTH_OBJECT_CLASS = "user"
@@ -219,10 +219,6 @@ LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
 # The LDAP username and password of a user for querying the LDAP database for user
 # details. If None, then the authenticated user will be used for querying, and
 # the `ldap_sync_users` command will perform an anonymous query.
-# LDAP_AUTH_CONNECTION_USERNAME = 'admin'
-# LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
-LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
-LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 
 # Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
 LDAP_AUTH_CONNECT_TIMEOUT = None

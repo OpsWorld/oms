@@ -11,7 +11,14 @@
                             <a class="ticketinfo create_user"><span class="han">
                                 工单发起人：</span>{{ticketData.create_user}}</a>
                             <a class="ticketinfo action_user"><span class="han">
-                                当前处理人：</span>{{rowdata.action_user ? rowdata.action_user : ticketData.action_user}}</a>
+                                当前处理人：</span>{{ticketData.action_user}}</a>
+                        </div>
+                        <div class="appendInfo">
+                            <span class="han">问题跟踪人：</span>
+                            <el-tag type="warning" style="margin-right: 5px" v-for="item in ticketData.follower"
+                                    :key="item.id">
+                                {{item}}
+                            </el-tag>
                         </div>
                     </div>
                     <vue-markdown :source="ticketData.content"></vue-markdown>
@@ -23,7 +30,8 @@
                 <hr class="heng"/>
                 <div v-if="ticketData.ticket_status==1">
                     <el-form-item label="问题处理" prop="content">
-                        <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'" v-model="commentForm.content"
+                        <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
+                                      v-model="commentForm.content"
                                       code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
                                       ref="md"></mavon-editor>
                     </el-form-item>
@@ -87,6 +95,14 @@
                 <el-button type="danger" @click="changeTicketStatus(2)"
                            :disabled="ticketData.ticket_status!=2?false:true">关闭
                 </el-button>
+                <el-button type="warning" plain @click="change_action=true" v-if="ticketData.ticket_status!=2">更改指派者
+                </el-button>
+                <div v-if="change_action==true" style="display:inline;">
+                    <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
+                        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                    </el-select>
+                    <el-button type="primary" plain @click="changeActionForm">提交</el-button>
+                </div>
             </div>
         </el-card>
     </div>
@@ -104,6 +120,7 @@
     import {postUpload} from 'api/tool'
     import {apiUrl} from '@/config'
     import VueMarkdown from 'vue-markdown'   //前端显示
+    import {getUserList} from 'api/user'
 
     export default {
         components: {VueMarkdown},
@@ -152,6 +169,8 @@
                 },
                 img_file: {},
                 formDataList: [],
+                users: [],
+                change_action: false,
             };
         },
 
@@ -160,6 +179,7 @@
             this.fetchData();
             this.CommentData();
             this.EnclosureData();
+            this.getTicketUsers();
         },
         methods: {
             fetchData() {
@@ -212,6 +232,11 @@
             changeTicketStatus(status) {
                 this.rowdata.ticket_status = this.ticketData.ticket_status = status;
                 patchWorkticket(this.ticket_id, this.rowdata)
+            },
+            changeActionForm() {
+                patchWorkticket(this.ticket_id, this.rowdata);
+                this.change_action = false;
+                this.ticketData.action_user = this.rowdata.action_user
             },
             handleSuccess(file, fileList) {
                 let formData = new FormData();
@@ -270,7 +295,12 @@
                 let s = date.getSeconds();
                 let ctime = Y + M + D + h + m + s;
                 return ctime
-            }
+            },
+            getTicketUsers() {
+                getUserList().then(response => {
+                    this.users = response.data.results;
+                })
+            },
         }
     }
 </script>
@@ -285,12 +315,11 @@
             padding-left: 10px;
         }
         .appendInfo {
-            .ticketinfo {
+            padding: 5px;
+            .han {
+                color: rgba(43, 200, 13, 0.6);
+                font-size: 16px;
                 margin-left: 5px;
-                .han {
-                    color: rgba(43, 200, 13, 0.6);
-                    font-size: 16px;
-                }
             }
         }
     }

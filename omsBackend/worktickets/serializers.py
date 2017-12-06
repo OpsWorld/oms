@@ -11,12 +11,13 @@ class WorkTicketSerializer(serializers.ModelSerializer):
     type = serializers.SlugRelatedField(queryset=TicketType.objects.all(), slug_field='name', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', allow_null=True)
+    follower = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username', allow_null=True)
     create_group = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name', allow_null=True)
 
     class Meta:
         model = WorkTicket
         fields = (
-            'url', 'id', 'title', 'type', 'content', 'create_user', 'action_user', 'create_group', 'level',
+            'url', 'id', 'title', 'type', 'content', 'create_user', 'action_user', 'follower', 'create_group', 'level',
             'ticket_status', 'create_time', 'action_time', 'end_time', 'cost_time')
         read_only_fields = ('cost_time',)
 
