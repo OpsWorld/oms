@@ -103,7 +103,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.state.user.islogin) {
             _checkToken().then(res => {
-                store.dispatch("getUserInfo");
+                store.dispatch("GetUserInfo");
                 next();
             }, function () {
                 next({
@@ -113,7 +113,7 @@ router.beforeEach((to, from, next) => {
             });
         } else {
             _checkToken().then(function () {
-                store.dispatch("getUserInfo");
+                store.dispatch("GetUserInfo");
                 next();
             }, function () {
                 next({

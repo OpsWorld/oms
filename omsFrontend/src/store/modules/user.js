@@ -65,7 +65,7 @@ const user = {
         },
 
         // 获取用户信息
-        getUserInfo({commit, state}) {
+        GetUserInfo({commit, state}) {
             return new Promise((resolve, reject) => {
                 getInfo(state.username).then(response => {
                     const userinfo = response.data.results[0];
