@@ -14,8 +14,6 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
     queryset = UserMenuPerms.objects.all()
     serializer_class = UserMenuPermsSerializer
 
-
-
     def retrieve(self, request, *args, **kwargs):
         queryset = UserMenuPerms.objects.get(user=request.user)
         serializer = UserMenuPermsSerializer(queryset, context={'request': request}).data
@@ -37,7 +35,7 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
                 secondmenuserializer = SecondmenuSerializer(secondmenu, context={'request': request}).data
                 twonames = model_to_dict(secondmenu)
                 twonames["meta"] = {}
-                for meta_id in firstmenuserializer['meta']:
+                for meta_id in secondmenuserializer['meta']:
                     menumeta = MenuMeta.objects.get(id=meta_id)
                     menumetaserializer = MenuMetaSerializer(menumeta, context={'request': request}).data
                     twonames["meta"][menumetaserializer["name"]] = menumetaserializer["action"]
