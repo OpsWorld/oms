@@ -37,7 +37,6 @@ export const constantRouterMap = [
     {path: '/login', component: require('@/views/login/login'), hidden: true},
     {path: '/404', component: require('@/views/error/404'), hidden: true},
     {path: '/401', component: require('@/views/error/401'), hidden: true},
-    {path: '*', redirect: '/404', hidden: true},
     {
         path: '/',
         component: Layout,
@@ -96,6 +95,7 @@ export const  asyncRouterMap = [
             {path: 'test', component: Test, name: '测试页面'},
         ]
     },
+    {path: '*', redirect: '/404', hidden: true},
 ];
 // 设置路由拦截
 // 在vue-router的全局钩子中设置拦截

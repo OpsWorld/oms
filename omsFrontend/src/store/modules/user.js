@@ -58,8 +58,10 @@ const user = {
             return new Promise((resolve, reject) => {
                 commit('SET_TOKEN', ''),
                 commit('SET_USERNAME', ''),
+                commit('SET_ISLOGIN', false),
                 localStorage.removeItem('token');
                 localStorage.removeItem('username');
+                localStorage.removeItem('islogin');
                 resolve();
             })
         },
