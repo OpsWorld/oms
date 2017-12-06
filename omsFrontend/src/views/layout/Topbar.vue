@@ -39,8 +39,9 @@
 </template>
 
 <script>
-//    import TabsView from './TabsView';
+    //    import TabsView from './TabsView';
     import {changePassword} from 'api/auth'
+    import {mapGetters} from 'vuex'
 
     export default {
         components: {
@@ -70,7 +71,6 @@
                 }
             };
             return {
-                username: localStorage.getItem('username'),
                 ruleForm: {
                     new_password1: '',
                     new_password2: ''
@@ -88,6 +88,11 @@
                 changepw: false,
                 changeava: false,
             }
+        },
+        computed: {
+            ...mapGetters([
+                'username'
+            ]),
         },
         methods: {
             logout() {

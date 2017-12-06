@@ -7,13 +7,11 @@
                 <div class="table-search">
                     <el-input @keyup.enter.native="handleFilter" style="width: 110px;" class="filter-item"
                               placeholder="上传人员"
-                              v-model="listQuery.username__contains" icon="circle-close"
-                              :on-icon-click="handleIconUserClick">
+                              v-model="listQuery.username__contains">
                     </el-input>
                     <el-input @keyup.enter.native="handleFilter" style="width: 110px;" class="filter-item"
                               placeholder="文件类型"
-                              v-model="listQuery.type" icon="circle-close"
-                              :on-icon-click="handleIconTypeClick">
+                              v-model="listQuery.type">
                     </el-input>
                     <!--<el-date-picker-->
                     <!--class="filter-item"-->
