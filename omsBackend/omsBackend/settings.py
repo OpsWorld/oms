@@ -241,7 +241,7 @@ LOGGING = {
 }
 
 # sendmail
-SEND_MAIL_CMD = 'python tools/sendmail.py '
+SEND_MAIL_CMD = 'python utils/sendmail.py '
 
 # Redis
 REDIS_OPTIONS = {

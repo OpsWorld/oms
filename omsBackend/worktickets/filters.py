@@ -9,12 +9,11 @@ class WorkTicketFilter(filters.FilterSet):
         model = WorkTicket
         fields = {
             'id': ['exact'],
+            'ticketid': ['exact'],
             'title': ['exact', 'contains'],
             'content': ['contains'],
-            'type__name': ['exact'],
             'create_user__username': ['exact'],
             'action_user__username': ['exact'],
-            'create_time': ['exact', 'contains'],
             'level': ['exact'],
             'ticket_status': ['exact'],
         }

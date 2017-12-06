@@ -21,6 +21,7 @@ TicketStatus = {
 
 
 class WorkTicket(models.Model):
+    ticketid = models.IntegerField(null=True, blank=True, verbose_name=u'工单编号')
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
     type = models.ForeignKey('TicketType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')
@@ -41,6 +42,10 @@ class WorkTicket(models.Model):
     class Meta:
         verbose_name = u'工单'
         verbose_name_plural = u'工单'
+
+    def save(self, *args, **kwargs):
+        self.ticketid = self.create_time.strftime("%Y%m%d%H%M%S")
+        super(WorkTicket, self).save(*args, **kwargs)
 
 
 class TicketComment(models.Model):

@@ -16,31 +16,24 @@
 
                 </div>
                 <div class="table-search">
-                    <el-input
-                            placeholder="搜索 ..."
-                            v-model="searchdata"
-                            @keyup.enter.native="searchClick">
-                        <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
-                    </el-input>
+                    <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick" v-model="listQuery.create_user"></el-input>
+                    <el-input style="width: 110px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick" v-model="listQuery.ticketid"></el-input>
+                    <el-input style="width: 110px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick" v-model="listQuery.content"></el-input>
+                    <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
                 </div>
             </div>
             <div>
                 <el-table :data="tableData" border style="width: 100%" v-loading="loading">
-                    <!--<el-table-column type="expand">-->
-                    <!--<template slot-scope="props">-->
-                    <!--<step></step>-->
-                    <!--</template>-->
-                    <!--</el-table-column>-->
-                    <el-table-column prop='title' label='标题'>
+                    <el-table-column prop='title' label='工单编号'>
                         <template slot-scope="scope">
                             <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
                                 <router-link :to="'editworkticket/'+scope.row.id">
-                                    {{scope.row.title}}
+                                    {{scope.row.ticketid}}
                                 </router-link>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='create_group' label='工单分组'></el-table-column>
+                    <el-table-column prop='title' label='标题'></el-table-column>
                     <el-table-column prop='create_user' label='工单创建人'></el-table-column>
                     <el-table-column prop='level' label='工单等级' sortable>
                         <template slot-scope="scope">
@@ -61,13 +54,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop='action_user' label='当前处理人'></el-table-column>
-                    <el-table-column prop='create_time' label='工单创建时间' sortable>
-                        <template slot-scope="scope">
-                            <div slot="reference" style="text-align: center; color: rgb(41,225,28)">
-                                <a>{{scope.row.create_time | parseDate}}</a>
-                            </div>
-                        </template>
-                    </el-table-column>
                 </el-table>
             </div>
             <div class="table-footer">
@@ -125,6 +111,11 @@
                     '4': {"text": 'D', "type": "info"},
                     '5': {"text": 'E', "type": ""},
                 },
+                listQuery: {
+                    ticketid: '',
+                    create_user: '',
+                    content: '',
+                }
             }
         },
 
@@ -138,8 +129,10 @@
                 const parms = {
                     limit: this.limit,
                     offset: this.offset,
-                    content__contains: this.searchdata,
+                    content__contains: this.listQuery.content,
                     ticket_status: this.ticket_status,
+                    ticketid: this.listQuery.ticketid,
+                    create_user__username: this.listQuery.create_user,
                 };
                 getWorkticket(id, parms).then(response => {
                     this.tableData = response.data.results;
