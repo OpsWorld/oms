@@ -33,7 +33,7 @@ import Test from '@/views/tools/test'
  * meta : { role: ['admin'] }  will control the page role
  **/
 
-export const routes = [
+export const constantRouterMap = [
     {path: '/login', component: require('@/views/login/login'), hidden: true},
     {path: '/404', component: require('@/views/error/404'), hidden: true},
     {path: '/401', component: require('@/views/error/401'), hidden: true},
@@ -60,7 +60,17 @@ export const routes = [
             {path: 'roles', component: Rolelist, name: '角色列表'},
         ]
     },
-    {
+];
+
+export default  new VueRouter({
+    // mode: 'history', //后端支持可开
+    scrollBehavior: () => ({y: 0}),
+    routes: constantRouterMap,
+});
+
+
+export const  asyncRouterMap = [
+        {
         path: '/worktickets',
         component: Layout,
         redirect: '/worktickets/workticket',
@@ -87,62 +97,55 @@ export const routes = [
         ]
     },
 ];
-
-const router =  new VueRouter({
-    // mode: 'history', //后端支持可开
-    scrollBehavior: () => ({y: 0}),
-    routes
-});
-
 // 设置路由拦截
 // 在vue-router的全局钩子中设置拦截
 // 每个路由皆会的钩子函数
 // to 进入 from 离开 next 传递
-router.beforeEach((to, from, next) => {
-    // console.log('to=', to.fullPath, '| from=', from.fullPath);
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.state.user.islogin) {
-            _checkToken().then(res => {
-                store.dispatch("GetUserInfo");
-                next();
-            }, function () {
-                next({
-                    path: '/login',
-                    query: {redirect: to.fullPath}
-                })
-            });
-        } else {
-            _checkToken().then(function () {
-                store.dispatch("GetUserInfo");
-                next();
-            }, function () {
-                next({
-                    path: '/login'
-                })
-            });
-        }
-    } else {
-        next(); // 确保一定要调用 next()
-    }
-})
-
-/**
- * Token验证，Token验证是否有效，时间验证过期
- * */
-function _checkToken() {
-    return new Promise(function (resolve, reject) {
-        const token = localStorage.getItem('token');
-        const token_time = localStorage.getItem('token_time');
-        const now_time = new Date().getTime();  // 毫秒数，token过期时间为 2小时
-        if (token && (now_time - token_time) < 1000 * 60 * 60 * 2) {
-            // 设置全局请求的token， 参考 https://segmentfault.com/q/1010000008595567/a-1020000008596744
-            resolve();
-        } else {
-            localStorage.removeItem('token');
-            localStorage.removeItem('token_time');
-            reject();
-        }
-    })
-}
-
-export default router;
+// router.beforeEach((to, from, next) => {
+//     // console.log('to=', to.fullPath, '| from=', from.fullPath);
+//     if (to.matched.some(record => record.meta.requiresAuth)) {
+//         if (!store.state.user.islogin) {
+//             _checkToken().then(res => {
+//                 store.dispatch("GetUserInfo");
+//                 next();
+//             }, function () {
+//                 next({
+//                     path: '/login',
+//                     query: {redirect: to.fullPath}
+//                 })
+//             });
+//         } else {
+//             _checkToken().then(function () {
+//                 store.dispatch("GetUserInfo");
+//                 next();
+//             }, function () {
+//                 next({
+//                     path: '/login'
+//                 })
+//             });
+//         }
+//     } else {
+//         next(); // 确保一定要调用 next()
+//     }
+// })
+//
+// /**
+//  * Token验证，Token验证是否有效，时间验证过期
+//  * */
+// function _checkToken() {
+//     return new Promise(function (resolve, reject) {
+//         const token = localStorage.getItem('token');
+//         const token_time = localStorage.getItem('token_time');
+//         const now_time = new Date().getTime();  // 毫秒数，token过期时间为 2小时
+//         if (token && (now_time - token_time) < 1000 * 60 * 60 * 2) {
+//             // 设置全局请求的token， 参考 https://segmentfault.com/q/1010000008595567/a-1020000008596744
+//             resolve();
+//         } else {
+//             localStorage.removeItem('token');
+//             localStorage.removeItem('token_time');
+//             reject();
+//         }
+//     })
+// }
+//
+// export default router;
