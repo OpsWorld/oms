@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
         _checkToken().then(res => {
             const username = localStorage.getItem('username');
             store.dispatch('GenerateRoutes', { username }).then(() => { // 生成可访问的路由表
-                router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+                router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
                 next({ ...to }) // hack方法 确保addRoutes已完成
             })
                 next();

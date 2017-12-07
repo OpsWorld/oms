@@ -156,7 +156,7 @@
                             if (this.sendmail) {
                                 this.ws.send(JSON.stringify(mailForm));
                             }
-                            this.$router.push('/worktickets/editworkticket/' + ticket_id);
+                            this.$router.push('/worktickets/workticket/');
                         });
                     } else {
                         console.log('error submit!!');

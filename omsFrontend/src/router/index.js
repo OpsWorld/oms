@@ -76,9 +76,13 @@ export const asyncRouterMap = [
             {path: 'upload', component: require('@/views/tools/upload'), name: '上传管理'},
             {path: 'test', component: require('@/views/tools/test'), name: '测试页面'},
         ]
-    },
-    {name: '不存在', path: '*', redirect: '/404', hidden: true},
+    }
 ];
+
+export const errorRouterMap = [
+    {path: '*', redirect: '/404', hidden: true}
+];
+
 // 设置路由拦截
 // 在vue-router的全局钩子中设置拦截
 // 每个路由皆会的钩子函数

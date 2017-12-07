@@ -15,7 +15,7 @@
     export default {
         components: {SidebarItem},
         created() {
-            //console.log(this.permission_routers)
+            console.log(this.permission_routers)
         },
         computed: {
             ...mapGetters([

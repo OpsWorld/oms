@@ -1,4 +1,4 @@
-import { asyncRouterMap, constantRouterMap } from '@/router'
+import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
 import { getRouters } from '@/api/perm'
 
 const permission = {
@@ -18,13 +18,13 @@ const permission = {
         const { username } = data
         let accessedRouters
         if (username.indexOf('admin') >= 0) {
-              accessedRouters = asyncRouterMap;
+              accessedRouters = asyncRouterMap.concat(errorRouterMap);
               commit('SET_ROUTERS', accessedRouters);
               localStorage.setItem('addRouters', JSON.stringify(accessedRouters));
         } else{
               getRouters().then(response => {
                   const myrouter = response.data[0];
-                  const accessedRouters = generateRoutesFromMenu(asyncRouterMap, myrouter);
+                  const accessedRouters = generateRoutesFromMenu(asyncRouterMap, myrouter).concat(errorRouterMap);
                   commit('SET_ROUTERS', accessedRouters);
                   localStorage.setItem('addRouters', JSON.stringify(accessedRouters));
               })
