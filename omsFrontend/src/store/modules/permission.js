@@ -40,15 +40,19 @@ function generateRoutesFromMenu (asyncRouterMap, menus = [], routes = []) {
     for (var j of menus) {
       var c = [];
       if (i.name == j.name) {
-        for (var m of i.children) {
-          for (var n of j.children) {
-            if (m.name == n.name) {
-              c.push(m)
+        if (i.children) {
+            for (var m of i.children) {
+              for (var n of j.children) {
+                if (m.name == n.name) {
+                  c.push(m)
+                }
+              }
             }
-          }
+            i.children = c;
+            routes.push(i);
+        } else {
+          routes.push(i);
         }
-        i.children = c;
-        routes.push(i);
       }
     }
   }
