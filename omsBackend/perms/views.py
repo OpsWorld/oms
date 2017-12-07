@@ -4,17 +4,24 @@
 from rest_framework import viewsets
 from perms.models import UserMenuPerms
 from perms.serializers import UserMenuPermsSerializer
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from menus.models import Firstmenu, Secondmenu, MenuMeta
 from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
 from django.forms.models import model_to_dict
+
 
 
 class UserMenuPermsViewSet(viewsets.ModelViewSet):
     queryset = UserMenuPerms.objects.all()
     serializer_class = UserMenuPermsSerializer
 
-    def retrieve(self, request, *args, **kwargs):
+
+#根据不同用户生成不同的routers
+@api_view()
+def routers(request):
+    try:
         queryset = UserMenuPerms.objects.get(user=request.user)
         serializer = UserMenuPermsSerializer(queryset, context={'request': request}).data
         routers = []
@@ -44,5 +51,6 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
 
             firstmenus.append(onenames)
         routers.append(firstmenus)
-
         return Response(routers)
+    except Exception as e:
+        return Response(status=status.HTTP_404_NOT_FOUND)

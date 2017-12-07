@@ -19,7 +19,7 @@ class WorkTicketSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'ticketid', 'title', 'type', 'content', 'create_user', 'action_user', 'follower', 'create_group', 'level',
             'ticket_status', 'create_time', 'action_time', 'end_time', 'cost_time')
-        read_only_fields = ('ticketid', 'cost_time',)
+        read_only_fields = ('cost_time',)
 
 
 class TicketCommentSerializer(serializers.ModelSerializer):

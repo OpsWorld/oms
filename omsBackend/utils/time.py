@@ -9,6 +9,5 @@ d = '2017-12-06 12:58:20.097417'
 
 import datetime
 now = datetime.datetime.now()
-print(now)
-otherStyleTime = d.strftime("%Y-%m-%d %H:%M:%S")
+otherStyleTime = now.strftime("%Y%m%d%H%M%S")
 print(otherStyleTime)

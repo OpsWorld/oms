@@ -32,8 +32,7 @@ b = [
 
 ]
 
-d = []
-c = {}
+c = []
 for i in a:
     for j in b:
         if i["name"] == j["name"]:
@@ -43,5 +42,5 @@ for i in a:
                     if m["name"] == n["name"]:
                         d.append(m)
             i["children"] = d
-            d.append(i)
-print(d)
+            c.append(i)
+print(c)

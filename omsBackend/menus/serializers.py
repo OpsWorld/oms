@@ -8,13 +8,13 @@ from rest_framework import serializers
 class MenuMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuMeta
-        fields = ('name', 'action')
+        fields = ('url', 'id', 'name', 'action')
 
 
 class FirstmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firstmenu
-        fields = ('name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')
+        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')
 
 
 class SecondmenuSerializer(serializers.ModelSerializer):
@@ -22,4 +22,4 @@ class SecondmenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Secondmenu
-        fields = ('name', 'path', 'component', 'hidden', 'parent', 'meta')
+        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'parent', 'meta')

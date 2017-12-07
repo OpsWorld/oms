@@ -57,4 +57,5 @@ module.exports = {
 
     //权限
     usermenuperms: `${url}/api/usermenuperms/`,
+    routers: `${url}/api/routers/`,
 };

@@ -9,10 +9,11 @@ from django.views.generic.base import TemplateView
 
 from omsBackend import settings
 from omsBackend.routerApi import router
-
+from perms.views import routers
 
 urlpatterns = [
                   url(r'^api/', include(router.urls)),
+                  url(r'^api/routers', routers, name="myrouter"),
 
                   # 用户认证
                   url(r'^api/changepasswd/', PasswordChangeView.as_view(), name='changepasswd'),

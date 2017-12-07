@@ -7,24 +7,6 @@ Vue.use(VueRouter);
 /* layout */
 import Layout from '@/views/layout/Layout';
 
-/* dashboard */
-import Dashboard from '@/views/dashboard/index';
-
-/* user */
-import Userlist from '@/views/users/user'
-import Grouplist from '@/views/users/usergroups'
-import Rolelist from '@/views/users/roles'
-
-/* workticket */
-import Workticket from '@/views/worktickets/workticket'
-import Tickettype from '@/views/worktickets/tickettype'
-import addWorkticket from '@/views/worktickets/addworkticket'
-import editWorkticket from '@/views/worktickets/editworkticket'
-
-/* tools */
-import Upload from '@/views/tools/upload'
-import Test from '@/views/tools/test'
-
 /**
  * icon : the icon show in the sidebar
  * hidden : if hidden:true will not show in the sidebar
@@ -38,64 +20,64 @@ export const constantRouterMap = [
     {path: '/404', component: require('@/views/error/404'), hidden: true},
     {path: '/401', component: require('@/views/error/401'), hidden: true},
     {
-        path: '/',
-        component: Layout,
-        redirect: '/dashboard',
         name: 'dashboard',
+        path: '/',
+        component: require('@/views/layout/Layout'),
+        redirect: '/dashboard',
         hidden: true,
         meta: {requiresAuth: true},
-        children: [{path: 'dashboard', component: Dashboard}]
-    },
-    {
-        path: '/users',
-        component: Layout,
-        redirect: '/users/user',
-        name: '用户管理',
-        icon: 'user',
-        meta: {requiresAuth: true},
-        children: [
-            {path: 'user', component: Userlist, name: '用户列表'},
-            {path: 'groups', component: Grouplist, name: '用户组列表'},
-            {path: 'roles', component: Rolelist, name: '角色列表'},
-        ]
-    },
+        children: [{path: 'dashboard', component: require('@/views/dashboard/index')}]
+    }
 ];
 
 export default  new VueRouter({
     // mode: 'history', //后端支持可开
     scrollBehavior: () => ({y: 0}),
-    routes: constantRouterMap,
+    routes:constantRouterMap,
 });
 
 
-export const  asyncRouterMap = [
-        {
-        path: '/worktickets',
-        component: Layout,
-        redirect: '/worktickets/workticket',
-        name: '工单管理',
-        icon: 'list',
+export const asyncRouterMap = [
+    {
+        name: '用户管理',
+        path: '/users',
+        component: require('@/views/layout/Layout'),
+        icon: 'user',
+        redirect: '/users/user',
         meta: {requiresAuth: true},
         children: [
-            {path: 'workticket', component: Workticket, name: '工单列表'},
-            {path: 'tickettype', component: Tickettype, name: '工单类型'},
-            {path: 'addworkticket', hidden: true, component: addWorkticket, name: '添加工单'},
-            {path: 'editworkticket/:id', hidden: true, component: editWorkticket, name: '编辑工单'},
+            {path: 'user', component: require('@/views/users/user'), name: '用户列表'},
+            {path: 'groups', component: require('@/views/users/usergroups'), name: '用户组列表'},
+            {path: 'roles', component: require('@/views/users/roles'), name: '角色列表'},
         ]
     },
     {
-        path: '/tools',
-        component: Layout,
-        redirect: '/tools/upload',
-        name: '工具管理',
-        icon: 'cogs',
+        name: '工单管理',
+        path: '/worktickets',
+        component: require('@/views/layout/Layout'),
+        icon: 'list',
+        redirect: '/worktickets/workticket',
         meta: {requiresAuth: true},
         children: [
-            {path: 'upload', component: Upload, name: '上传管理'},
-            {path: 'test', component: Test, name: '测试页面'},
+            {path: 'workticket', component: require('@/views/worktickets/workticket'), name: '工单列表'},
+            {path: 'tickettype', component: require('@/views/worktickets/tickettype'), name: '工单类型'},
+            {path: 'addworkticket', hidden: true, component: require('@/views/worktickets/addworkticket'), name: '添加工单'},
+            {path: 'editworkticket/:id', hidden: true, component: require('@/views/worktickets/editworkticket'), name: '编辑工单'},
         ]
     },
-    {path: '*', redirect: '/404', hidden: true},
+    {
+        name: '工具管理',
+        path: '/tools',
+        component: require('@/views/layout/Layout'),
+        icon: 'cogs',
+        redirect: '/tools/upload',
+        meta: {requiresAuth: true},
+        children: [
+            {path: 'upload', component: require('@/views/tools/upload'), name: '上传管理'},
+            {path: 'test', component: require('@/views/tools/test'), name: '测试页面'},
+        ]
+    },
+    {name: '不存在', path: '*', redirect: '/404', hidden: true},
 ];
 // 设置路由拦截
 // 在vue-router的全局钩子中设置拦截

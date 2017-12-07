@@ -32,3 +32,11 @@ export function deleteMenuPerm(id) {
         method: 'delete',
     });
 }
+
+// routers
+export function getRouters() {
+    return fetch({
+        url: apiURL.routers,
+        method: 'get',
+    });
+}

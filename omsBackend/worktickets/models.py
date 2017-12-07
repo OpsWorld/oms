@@ -44,7 +44,9 @@ class WorkTicket(models.Model):
         verbose_name_plural = u'工单'
 
     def save(self, *args, **kwargs):
-        self.ticketid = self.create_time.strftime("%Y%m%d%H%M%S")
+        import datetime
+        now = datetime.datetime.now()
+        self.ticketid = now.strftime("%Y%m%d%H%M%S")
         super(WorkTicket, self).save(*args, **kwargs)
 
 
