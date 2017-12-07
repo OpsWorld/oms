@@ -4,11 +4,12 @@ import { getRouters } from '@/api/perm'
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: JSON.parse(localStorage.getItem('addRouters')),
+    addRouters: []
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
-      state.addRouters = routers,
+      state.addRouters = routers;
+      console.log(routers);
       state.routers = constantRouterMap.concat(routers)
     }
   },
@@ -20,13 +21,11 @@ const permission = {
         if (username.indexOf('admin') >= 0) {
               accessedRouters = asyncRouterMap.concat(errorRouterMap);
               commit('SET_ROUTERS', accessedRouters);
-              localStorage.setItem('addRouters', JSON.stringify(accessedRouters));
         } else{
               getRouters().then(response => {
                   const myrouter = response.data[0];
                   const accessedRouters = generateRoutesFromMenu(asyncRouterMap, myrouter).concat(errorRouterMap);
                   commit('SET_ROUTERS', accessedRouters);
-                  localStorage.setItem('addRouters', JSON.stringify(accessedRouters));
               })
           }
         resolve()
