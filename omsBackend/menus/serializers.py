@@ -14,10 +14,10 @@ class MenuMetaSerializer(serializers.ModelSerializer):
 class SecondmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Secondmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'meta')
+        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'meta', 'parent')
 
 
 class FirstmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firstmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'children', 'meta')
+        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')

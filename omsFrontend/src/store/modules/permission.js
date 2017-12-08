@@ -1,5 +1,40 @@
 import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
-import { getRouters } from '@/api/perm'
+
+/**
+ * 通过authority判断是否与当前用户权限匹配
+ * @param menus
+ * @param route
+ */
+function hasPermission(menus, route) {
+  if (route.authority) {
+    if (menus[route.authority] !== undefined) {
+      console.log(route.authority)
+      return menus[route.authority]
+    } else {
+      return false
+    }
+  } else {
+    return true
+  }
+}
+
+/**
+ * 递归过滤异步路由表，返回符合用户角色权限的路由表
+ * @param asyncRouterMap
+ * @param groups
+ */
+function filterAsyncRouter(asyncRouterMap, menus) {
+  const accessedRouters = asyncRouterMap.filter(route => {
+    if (hasPermission(menus, route)) {
+      if (route.children && route.children.length) {
+        route.children = filterAsyncRouter(route.children, menus)
+      }
+      return true
+    }
+    return false
+  })
+  return accessedRouters
+}
 
 const permission = {
   state: {
@@ -8,54 +43,24 @@ const permission = {
   },
   mutations: {
     SET_ROUTERS: (state, routers) => {
-      state.addRouters = routers;
-      console.log(routers);
+      state.addRouters = routers
       state.routers = constantRouterMap.concat(routers)
     }
   },
   actions: {
-    GenerateRoutes({ commit }, data) {
+    GenerateRoutes({ commit }, { groups, menus }) {
       return new Promise(resolve => {
-        const { username } = data
         let accessedRouters
-        if (username.indexOf('admin') >= 0) {
-              accessedRouters = asyncRouterMap.concat(errorRouterMap);
-              commit('SET_ROUTERS', accessedRouters);
-        } else{
-              getRouters().then(response => {
-                  const myrouter = response.data[0];
-                  const accessedRouters = generateRoutesFromMenu(asyncRouterMap, myrouter).concat(errorRouterMap);
-                  commit('SET_ROUTERS', accessedRouters);
-              })
-          }
+        if (groups.indexOf('admin') >= 0) {
+          accessedRouters = asyncRouterMap.concat(errorRouterMap)
+        } else {
+          accessedRouters = filterAsyncRouter(asyncRouterMap, menus).concat(errorRouterMap)
+        }
+        commit('SET_ROUTERS', accessedRouters)
         resolve()
       })
     }
   }
-}
-
-function generateRoutesFromMenu (asyncRouterMap, menus = [], routes = []) {
-  for (var i of asyncRouterMap) {
-    for (var j of menus) {
-      var c = [];
-      if (i.name == j.name) {
-        if (i.children) {
-            for (var m of i.children) {
-              for (var n of j.children) {
-                if (m.name == n.name) {
-                  c.push(m)
-                }
-              }
-            }
-            i.children = c;
-            routes.push(i);
-        } else {
-          routes.push(i);
-        }
-      }
-    }
-  }
-  return routes
 }
 
 export default permission

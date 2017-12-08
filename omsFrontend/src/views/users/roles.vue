@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div class="components-container" style='height:100vh'>
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
@@ -56,100 +56,100 @@
 </template>
 
 <script>
-    import {getRoleList, postRole, deleteRole} from 'api/user';
-    import {LIMIT} from '@/config'
+import { getRole, postRole, deleteRole } from 'api/user'
+import { LIMIT } from '@/config'
 
-    export default {
-        components: {},
-        data() {
-            return {
-                tableData: [],
-                tabletotal: 0,
-                searchdata: '',
-                currentPage: 1,
-                limit: LIMIT,
-                offset: '',
-                pagesize: [10, 25, 50, 100],
-                addGroup: false,
-                ruleForm: {
-                    name: '',
-                    desc: ''
-                },
-                rules: {
-                    name: [
-                        {required: true, message: '请输入一个风骚的角色', trigger: 'blur'},
-                    ],
-                }
-            }
-        },
+export default {
+  components: {},
+  data() {
+    return {
+      tableData: [],
+      tabletotal: 0,
+      searchdata: '',
+      currentPage: 1,
+      limit: LIMIT,
+      offset: '',
+      pagesize: [10, 25, 50, 100],
+      addGroup: false,
+      ruleForm: {
+        name: '',
+        desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入一个风骚的角色', trigger: 'blur' }
+        ]
+      }
+    }
+  },
 
-        created() {
-            this.fetchData();
-        },
+  created() {
+    this.fetchData()
+  },
 
-        methods: {
-            /*
+  methods: {
+    /*
              * 获取数据
              */
-            fetchData() {
-                const parms = {
-                    limit: this.limit,
-                    offset: this.offset,
-                    name__contains: this.searchdata
-                };
-                getRoleList(parms).then(response => {
-                    this.tableData = response.data.results;
-                    this.tabletotal = response.data.count;
-                })
-            },
+    fetchData() {
+      const parms = {
+        limit: this.limit,
+        offset: this.offset,
+        name__contains: this.searchdata
+      }
+      getRole(parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
+      })
+    },
 
-            addGroupSubmit(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        postRole(this.ruleForm).then(response => {
-                            this.$message({
-                                message: '恭喜你，添加成功',
-                                type: 'success'
-                            });
-                            this.fetchData();
-                            this.addGroup = false
-                        }).catch(error => {
-                            this.$message.error('添加失败');
-                            console.log(error);
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-            deleteGroup(id){
-                deleteRole(id).then(response => {
-                    this.$message({
-                        message: '恭喜你，删除成功',
-                        type: 'success'
-                    });
-                }).catch(error => {
-                    this.$message.error('删除失败');
-                    console.log(error);
-                });
-            },
-            searchClick() {
-                this.fetchData();
-            },
-            handleSizeChange(val) {
-                this.limit = val;
-                this.fetchData();
-            },
-            handleCurrentChange(val) {
-                this.offset = val - 1;
-                this.fetchData();
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            }
+    addGroupSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postRole(this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.fetchData()
+            this.addGroup = false
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
+      })
+    },
+    deleteGroup(id) {
+      deleteRole(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
+      })
+    },
+    searchClick() {
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.offset = val - 1
+      this.fetchData()
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
+  }
+}
 </script>
 
 <style lang='scss'>

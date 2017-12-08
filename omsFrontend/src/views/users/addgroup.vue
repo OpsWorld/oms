@@ -16,42 +16,42 @@
     </el-form>
 </template>
 <script>
-    export default {
-        data() {
-            return {
-                ruleForm: {
-                    name: '',
-                    email: '',
-                    desc: ''
-                },
-                rules: {
-                    name: [
-                        {required: true, message: '请输入一个风骚的名字', trigger: 'blur'},
-                    ],
-                    email: [
-                        {required: true, type: 'email', message: '请输入一个风骚的email', trigger: 'blur'},
-                    ]
-                }
-            };
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.$emit('formdata', this.ruleForm);
-                        this.ruleForm = {
-                            name: '',
-                            desc: ''
-                        }
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            }
-        }
+export default {
+  data() {
+    return {
+      ruleForm: {
+        name: '',
+        email: '',
+        desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入一个风骚的名字', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, type: 'email', message: '请输入一个风骚的email', trigger: 'blur' }
+        ]
+      }
     }
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$emit('formdata', this.ruleForm)
+          this.ruleForm = {
+            name: '',
+            desc: ''
+          }
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    }
+  }
+}
 </script>

@@ -12,37 +12,37 @@
     </el-form>
 </template>
 <script>
-    import {putTickettype} from 'api/workticket'
-    export default {
-        props: ['rowdata'],
-        data() {
-            return {
-                rules: {
-                    name: [
-                        {required: true, message: '请陛下输入一个风骚的名字', trigger: 'blur'},
-                    ]
-                }
-            };
-        },
-        methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        putTickettype(this.rowdata.id, this.rowdata).then(response => {
-                            if (response.statusText = 'ok') {
-                                this.$message({
-                                    type: 'success',
-                                    message: '恭喜你，更新成功'
-                                });
-                            }
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-                this.$emit('DialogStatus', false);
-            }
-        }
+import { putTickettype } from 'api/workticket'
+export default {
+  props: ['rowdata'],
+  data() {
+    return {
+      rules: {
+        name: [
+          { required: true, message: '请陛下输入一个风骚的名字', trigger: 'blur' }
+        ]
+      }
     }
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          putTickettype(this.rowdata.id, this.rowdata).then(response => {
+            if (response.statusText === 'ok') {
+              this.$message({
+                type: 'success',
+                message: '恭喜你，更新成功'
+              })
+            }
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+      this.$emit('DialogStatus', false)
+    }
+  }
+}
 </script>

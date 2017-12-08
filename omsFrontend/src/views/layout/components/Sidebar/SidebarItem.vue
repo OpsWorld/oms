@@ -1,0 +1,72 @@
+<template>
+  <div class="menu-wrapper">
+    <template v-for="item in routes" v-if="!item.hidden&&item.children">
+
+      <router-link v-if="item.children.length===1 && !item.children[0].children"
+                   :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
+        <el-menu-item :index="item.path+'/'+item.children[0].path" class='submenu-title-noDropdown'>
+          <icon v-if='item.children[0].icon' :name="item.children[0].icon" :scale="iconsize" class="wscn-icon"></icon>
+          <span v-if="item.children[0]&&item.children[0].name">{{generateTitle(item.children[0].name)}}</span>
+        </el-menu-item>
+      </router-link>
+
+      <el-submenu v-else :index="item.name||item.path" :key="item.name">
+        <template slot="title">
+          <!--<svg-icon v-if="item.meta&&item.icon" :icon-class="item.icon"></svg-icon>-->
+          <icon v-if='item.icon' :name="item.icon" :scale="iconsize" class="wscn-icon"></icon>
+          <span v-if="item&&item.name">{{generateTitle(item.name)}}</span>
+        </template>
+
+        <template v-for="child in item.children" v-if="!child.hidden">
+          <sidebar-item class="nest-menu" v-if="child.children&&child.children.length>0" :routes="[child]"
+                        :key="child.path"></sidebar-item>
+
+          <router-link v-else :to="item.path+'/'+child.path" :key="child.name">
+            <el-menu-item :index="item.path+'/'+child.path">
+              <icon name="dot-circle-o" scale="1" class="child-icon"></icon>
+              <span v-if="child&&child.name">{{generateTitle(child.name)}}</span>
+            </el-menu-item>
+          </router-link>
+        </template>
+      </el-submenu>
+
+    </template>
+  </div>
+</template>
+
+<script>
+import { generateTitle } from '@/utils/i18n'
+
+export default {
+  name: 'SidebarItem',
+  props: {
+    routes: {
+      type: Array
+    }
+  },
+  data() {
+    return {
+      iconsize: 1.4
+    }
+  },
+  methods: {
+    generateTitle
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .wscn-icon {
+    margin-right: 10px;
+  }
+
+  .child-icon {
+    color: rgba(88, 255, 40, 0.38);
+    margin-right: 10px;
+  }
+
+  .hideSidebar .menu-indent {
+    display: block;
+    text-indent: 10px;
+  }
+</style>

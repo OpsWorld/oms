@@ -1,7 +1,8 @@
 /**
  * Created by Itimor on 2017/7/13.
  */
-module.exports = function (date, fmt) {
+
+module.exports = function(date, fmt) {
   var o = {
     'M+': date.getMonth() + 1,
     'D+': date.getDate(),

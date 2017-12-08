@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div class="components-container" style='height:100vh'>
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
@@ -17,8 +17,8 @@
                 </div>
                 <div class="table-search">
                     <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick" v-model="listQuery.create_user"></el-input>
-                    <el-input style="width: 110px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick" v-model="listQuery.ticketid"></el-input>
-                    <el-input style="width: 110px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick" v-model="listQuery.content"></el-input>
+                    <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick" v-model="listQuery.ticketid"></el-input>
+                    <el-input style="width: 160px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick" v-model="listQuery.content"></el-input>
                     <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
                 </div>
             </div>
@@ -75,88 +75,87 @@
 </template>
 
 <script>
-    import {getWorkticket, postWorkticket} from 'api/workticket'
-    import {LIMIT} from '@/config'
-    import addWorkticket from './addworkticket.vue'
-    import Step from '../components/Steps.vue'
+import { getWorkticket } from 'api/workticket'
+import { LIMIT } from '@/config'
+import addWorkticket from './addworkticket.vue'
 
-    export default {
-        components: {addWorkticket, Step},
-        data() {
-            return {
-                loading: true,
-                radio: '',
-                tableData: [],
-                tabletotal: 0,
-                searchdata: '',
-                currentPage: 1,
-                limit: LIMIT,
-                offset: '',
-                ticket_status: '',
-                pagesize: [10, 25, 50, 100],
-                addForm: false,
-                rowdata: {
-                    ticket_status: 0,
-                    action_user: localStorage.getItem('username')
-                },
-                TICKET_STATUS: {
-                    '0': {"text": "未接收", "type": "info"},
-                    '1': {"text": "正在处理", "type": "success"},
-                    '2': {"text": "已解决", "type": "danger"},
-                },
-                LEVEL: {
-                    '1': {"text": 'A', "type": "danger"},
-                    '2': {"text": 'B', "type": "warning"},
-                    '3': {"text": 'C', "type": "success"},
-                    '4': {"text": 'D', "type": "info"},
-                    '5': {"text": 'E', "type": ""},
-                },
-                listQuery: {
-                    ticketid: '',
-                    create_user: '',
-                    content: '',
-                }
-            }
-        },
-
-        created() {
-            this.fetchData();
-        },
-
-        methods: {
-            fetchData() {
-                const id = null;
-                const parms = {
-                    limit: this.limit,
-                    offset: this.offset,
-                    content__contains: this.listQuery.content,
-                    ticket_status: this.ticket_status,
-                    ticketid: this.listQuery.ticketid,
-                    create_user__username: this.listQuery.create_user,
-                };
-                getWorkticket(id, parms).then(response => {
-                    this.tableData = response.data.results;
-                    this.tabletotal = response.data.count;
-                    this.loading = false;
-                })
-            },
-            searchClick() {
-                this.fetchData();
-            },
-            handleSizeChange(val) {
-                this.limit = val;
-                this.fetchData();
-            },
-            handleCurrentChange(val) {
-                this.offset = val - 1;
-                this.fetchData();
-            },
-            statusChange(val) {
-                this.ticket_status = val;
-                this.fetchData();
-            },
-        }
+export default {
+  components: { addWorkticket },
+  data() {
+    return {
+      loading: true,
+      radio: '',
+      tableData: [],
+      tabletotal: 0,
+      searchdata: '',
+      currentPage: 1,
+      limit: LIMIT,
+      offset: '',
+      ticket_status: '',
+      pagesize: [10, 25, 50, 100],
+      addForm: false,
+      rowdata: {
+        ticket_status: 0,
+        action_user: sessionStorage.getItem('username')
+      },
+      TICKET_STATUS: {
+        '0': { 'text': '未接收', 'type': 'info' },
+        '1': { 'text': '正在处理', 'type': 'success' },
+        '2': { 'text': '已解决', 'type': 'danger' }
+      },
+      LEVEL: {
+        '1': { 'text': 'A', 'type': 'danger' },
+        '2': { 'text': 'B', 'type': 'warning' },
+        '3': { 'text': 'C', 'type': 'success' },
+        '4': { 'text': 'D', 'type': 'info' },
+        '5': { 'text': 'E', 'type': '' }
+      },
+      listQuery: {
+        ticketid: '',
+        create_user: '',
+        content: ''
+      }
     }
+  },
+
+  created() {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData() {
+      const id = null
+      const parms = {
+        limit: this.limit,
+        offset: this.offset,
+        content__contains: this.listQuery.content,
+        ticket_status: this.ticket_status,
+        ticketid: this.listQuery.ticketid,
+        create_user__username: this.listQuery.create_user
+      }
+      getWorkticket(id, parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
+        this.loading = false
+      })
+    },
+    searchClick() {
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.offset = val - 1
+      this.fetchData()
+    },
+    statusChange(val) {
+      this.ticket_status = val
+      this.fetchData()
+    }
+  }
+}
 </script>
 
 <style lang='scss'>

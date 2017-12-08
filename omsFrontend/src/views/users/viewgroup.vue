@@ -34,53 +34,53 @@
 </template>
 
 <script>
-    import {getUserList} from 'api/user'
-    import {LIMIT} from '@/config'
+import { getUser } from 'api/user'
+import { LIMIT } from '@/config'
 
-    export default {
-        props: ['groupName'],
-        data() {
-            return {
-                tableData: [],
-                tabletotal: 0,
-                searchdata: '',
-                currentPage: 1,
-                limit: LIMIT,
-                offset: '',
-                pagesize: [10, 25, 50, 100],
-            }
-        },
-
-        created() {
-            this.fetchData();
-        },
-
-        methods: {
-            fetchData() {
-                const parms = {
-                    limit: this.limit,
-                    offset: this.offset,
-                    group__name: this.groupName,
-                    username__contains: this.searchdata
-                };
-                getUserList(parms).then(response => {
-                    this.tableData = response.data.results;
-                    this.tabletotal = response.data.count;
-                })
-            },
-            searchClick() {
-                this.fetchData();
-            },
-            handleSizeChange(val) {
-                this.limit = val;
-                this.fetchData();
-            },
-            handleCurrentChange(val) {
-                this.offset = val - 1;
-                this.fetchData();
-            },
-        }
+export default {
+  props: ['groupName'],
+  data() {
+    return {
+      tableData: [],
+      tabletotal: 0,
+      searchdata: '',
+      currentPage: 1,
+      limit: LIMIT,
+      offset: '',
+      pagesize: [10, 25, 50, 100]
     }
+  },
+
+  created() {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData() {
+      const parms = {
+        limit: this.limit,
+        offset: this.offset,
+        group__name: this.groupName,
+        username__contains: this.searchdata
+      }
+      getUser(parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
+      })
+    },
+    searchClick() {
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.offset = val - 1
+      this.fetchData()
+    }
+  }
+}
 </script>
 
 <style lang='scss'>

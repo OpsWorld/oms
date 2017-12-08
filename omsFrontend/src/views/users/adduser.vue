@@ -26,89 +26,89 @@
     </el-form>
 </template>
 <script>
-    import {postUser, getGroupList, getRoleList} from 'api/user';
+import { postUser, getGroup, getRole } from 'api/user'
 
-    export default {
-        components: {},
+export default {
+  components: {},
 
-        data() {
-            return {
-                ruleForm: {
-                    username: '',
-                    email: '',
-                    is_active: '',
-                    group: '',
-                    roles: '',
-                    password: 'qwert@12345'
-                },
-                rules: {
-                    username: [
-                        {required: true, message: '请输入用户名', trigger: 'blur'},
-                    ],
-                    email: [
-                        {required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur'}
-                    ],
-                    group: [
-                        {required: true, message: '请选择用户分组', trigger: 'change'},
-                    ],
-                    roles: [
-                        {required: true, message: '请选择用户角色', trigger: 'blur'},
-                    ]
-                },
-                groups: '',
-                roles: '',
-            };
-        },
-
-        created() {
-            this.getGroups();
-            this.getRoles();
-        },
-        methods: {
-            postForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        postUser(this.ruleForm).then(response => {
-                            if (response.statusText = 'ok') {
-                                this.$message({
-                                    type: 'success',
-                                    message: '恭喜你，新建成功'
-                                });
-                            }
-                        }).catch(error => {
-                            this.$message.error('新建失败');
-                            console.log(error);
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-                this.$emit('DialogStatus', false);
-            },
-
-            resetForm(formName) {
-                this.ruleForm.hosts = [];
-                this.$refs[formName].resetFields();
-            },
-            getHosts(data) {
-                this.ruleForm.hosts = data
-            },
-            getGroups() {
-                getGroupList().then(response => {
-                    this.groups = response.data.results;
-                })
-            },
-            getRoles() {
-                getRoleList().then(response => {
-                    this.roles = response.data.results;
-                })
-            },
-            setPasswd() {
-                this.ruleForm.password = Math.random().toString(35).slice(2);
-            },
-        }
+  data() {
+    return {
+      ruleForm: {
+        username: '',
+        email: '',
+        is_active: '',
+        group: '',
+        roles: '',
+        password: 'qwert@12345'
+      },
+      rules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur' }
+        ],
+        group: [
+          { required: true, message: '请选择用户分组', trigger: 'change' }
+        ],
+        roles: [
+          { required: true, message: '请选择用户角色', trigger: 'blur' }
+        ]
+      },
+      groups: '',
+      roles: ''
     }
+  },
+
+  created() {
+    this.getGroups()
+    this.getRoles()
+  },
+  methods: {
+    postForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postUser(this.ruleForm).then(response => {
+            if (response.statusText === 'ok') {
+              this.$message({
+                type: 'success',
+                message: '恭喜你，新建成功'
+              })
+            }
+          }).catch(error => {
+            this.$message.error('新建失败')
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+      this.$emit('DialogStatus', false)
+    },
+
+    resetForm(formName) {
+      this.ruleForm.hosts = []
+      this.$refs[formName].resetFields()
+    },
+    getHosts(data) {
+      this.ruleForm.hosts = data
+    },
+    getGroups() {
+      getGroup().then(response => {
+        this.groups = response.data.results
+      })
+    },
+    getRoles() {
+      getRole().then(response => {
+        this.roles = response.data.results
+      })
+    },
+    setPasswd() {
+      this.ruleForm.password = Math.random().toString(35).slice(2)
+    }
+  }
+}
 </script>
 
 <style lang='scss'>

@@ -1,5 +1,5 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div class="editticket">
+  <div class="components-container" style='height:100vh'>
         <el-card>
             <div class="workticket">
                 <el-card>
@@ -108,201 +108,201 @@
     </div>
 </template>
 <script>
-    import {
-        getWorkticket,
-        patchWorkticket,
-        getTicketcomment,
-        postTicketcomment,
-        postTicketenclosure,
-        getTicketenclosure,
-        deleteTicketenclosure,
-    } from 'api/workticket'
-    import {postUpload} from 'api/tool'
-    import {apiUrl} from '@/config'
-    import VueMarkdown from 'vue-markdown'   //前端显示
-    import {getUserList} from 'api/user'
+import {
+  getWorkticket,
+  patchWorkticket,
+  getTicketcomment,
+  postTicketcomment,
+  postTicketenclosure,
+  getTicketenclosure,
+  deleteTicketenclosure
+} from 'api/workticket'
+import { postUpload } from 'api/tool'
+import { apiUrl } from '@/config'
+import VueMarkdown from 'vue-markdown' // 前端显示
+import { getUser } from 'api/user'
 
-    export default {
-        components: {VueMarkdown},
+export default {
+  components: { VueMarkdown },
 
-        data() {
-            return {
-                route_path: this.$route.path.split('/'),
-                ticket_id: '',
-                ticketData: {},
-                ticket__title: '',
-                commentData: {},
-                enclosureData: {},
-                apiurl: apiUrl,
-                commentForm: {
-                    ticket: '',
-                    create_user: localStorage.getItem('username'),
-                    content: '',
-                    create_group: ''
-                },
-                enclosureForm: {
-                    ticket: '',
-                    create_user: localStorage.getItem('username'),
-                    file: '',
-                    create_group: ''
-                },
-                rules: {
-                    content: [
-                        {required: true, message: '赏几个字吧', trigger: 'blur'},
-                    ]
-                },
-                rowdata: {
-                    ticket_status: 1,
-                    action_user: ''
-                },
-                count: 0,
-                toolbars: {
-                    preview: true, // 预览
-                    bold: true, // 粗体
-                    italic: true, // 斜体
-                    header: true, // 标题
-                    underline: true, // 下划线
-                    strikethrough: true, // 中划线
-                    ol: true, // 有序列表
-                    fullscreen: true, // 全屏编辑
-                    help: true,
-                },
-                img_file: {},
-                formDataList: [],
-                users: [],
-                change_action: false,
-            };
-        },
-
-        created() {
-            this.ticket_id = this.route_path[this.route_path.length - 1];
-            this.fetchData();
-            this.CommentData();
-            this.EnclosureData();
-            this.getTicketUsers();
-        },
-        methods: {
-            fetchData() {
-                getWorkticket(this.ticket_id).then(response => {
-                    this.ticketData = response.data;
-                });
-            },
-            CommentData() {
-                const parms = {
-                    ticket__id: this.ticket_id
-                };
-                getTicketcomment(parms).then(response => {
-                    this.commentData = response.data.results;
-                    this.rowdata.action_user = this.commentData.length == 0 ? null : this.commentData[this.commentData.length - 1].create_user;
-                });
-                this.commentForm.content = '';
-            },
-            EnclosureData() {
-                const parms = {
-                    ticket__id: this.ticket_id
-                };
-                getTicketenclosure(parms).then(response => {
-                    this.enclosureData = response.data.results;
-                    this.count = response.data.count;
-                })
-            },
-            deleteEnclosure(id) {
-                deleteTicketenclosure(id);
-                setTimeout(this.EnclosureData, 1000);
-            },
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        this.commentForm.ticket = this.ticket_id;
-                        if (this.commentForm.create_user == this.ticketData.create_user) {
-                            this.rowdata.action_user = this.ticketData.action_user;
-                        }
-                        postTicketcomment(this.commentForm);
-                        this.patchForm(this.rowdata);
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                    setTimeout(this.CommentData, 1000);
-                });
-            },
-            patchForm(rowdata) {
-                patchWorkticket(this.ticket_id, rowdata)
-            },
-            changeTicketStatus(status) {
-                this.rowdata.ticket_status = this.ticketData.ticket_status = status;
-                patchWorkticket(this.ticket_id, this.rowdata)
-            },
-            changeActionForm() {
-                patchWorkticket(this.ticket_id, this.rowdata);
-                this.change_action = false;
-                this.ticketData.action_user = this.rowdata.action_user
-            },
-            handleSuccess(file, fileList) {
-                let formData = new FormData();
-                formData.append('username', this.enclosureForm.create_user);
-                formData.append('file', fileList.raw);
-                formData.append('create_time', this.afterFileUpload(fileList));
-                formData.append('type', fileList.raw.type);
-                formData.append('archive', this.route_path[1]);
-                postUpload(formData).then(response => {
-                    this.enclosureForm.file = response.data.filepath;
-                    this.enclosureForm.ticket = this.ticket_id;
-                    postTicketenclosure(this.enclosureForm);
-                    setTimeout(this.EnclosureData, 1000);
-                    if (response.statusText = 'ok') {
-                        this.$message({
-                            type: 'success',
-                            message: '恭喜你，上传成功'
-                        });
-                    }
-                }).catch(error => {
-                    this.$message.error('上传失败');
-                    this.$refs.upload.clearFiles();
-                    console.log(error);
-                });
-            },
-            afterFileUpload(fileList){
-                let date = new Date(fileList.row.uid);
-                let Y = date.getFullYear().toString();
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-                let D = date.getDate();
-                let h = date.getHours();
-                let m = date.getMinutes();
-                let s = date.getSeconds();
-                let ctime = Y + M + D + h + m + s;
-                return ctime
-            },
-            imgAdd(pos, file){
-                var md = this.$refs.md;
-                let formData = new FormData();
-                formData.append('username', localStorage.getItem('username'));
-                formData.append('file', file);
-                formData.append('create_time', this.afterFileUpload(file));
-                formData.append('type', file.type);
-                formData.append('archive', this.route_path[1]);
-                postUpload(formData).then(response => {
-                    md.$imglst2Url([[pos, response.data.file]]);
-                });
-            },
-            afterFileUpload(file){
-                let date = new Date(file.lastModified);
-                let Y = date.getFullYear().toString();
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-                let D = date.getDate();
-                let h = date.getHours();
-                let m = date.getMinutes();
-                let s = date.getSeconds();
-                let ctime = Y + M + D + h + m + s;
-                return ctime
-            },
-            getTicketUsers() {
-                getUserList().then(response => {
-                    this.users = response.data.results;
-                })
-            },
-        }
+  data() {
+    return {
+      route_path: this.$route.path.split('/'),
+      ticket_id: '',
+      ticketData: {},
+      ticket__title: '',
+      commentData: {},
+      enclosureData: {},
+      apiurl: apiUrl,
+      commentForm: {
+        ticket: '',
+        create_user: sessionStorage.getItem('username'),
+        content: '',
+        create_group: ''
+      },
+      enclosureForm: {
+        ticket: '',
+        create_user: sessionStorage.getItem('username'),
+        file: '',
+        create_group: ''
+      },
+      rules: {
+        content: [
+          { required: true, message: '赏几个字吧', trigger: 'blur' }
+        ]
+      },
+      rowdata: {
+        ticket_status: 1,
+        action_user: ''
+      },
+      count: 0,
+      toolbars: {
+        preview: true, // 预览
+        bold: true, // 粗体
+        italic: true, // 斜体
+        header: true, // 标题
+        underline: true, // 下划线
+        strikethrough: true, // 中划线
+        ol: true, // 有序列表
+        fullscreen: true, // 全屏编辑
+        help: true
+      },
+      img_file: {},
+      formDataList: [],
+      users: [],
+      change_action: false
     }
+  },
+
+  created() {
+    this.ticket_id = this.route_path[this.route_path.length - 1]
+    this.fetchData()
+    this.CommentData()
+    this.EnclosureData()
+    this.getTicketUsers()
+  },
+  methods: {
+    fetchData() {
+      getWorkticket(this.ticket_id).then(response => {
+        this.ticketData = response.data
+      })
+    },
+    CommentData() {
+      const parms = {
+        ticket__id: this.ticket_id
+      }
+      getTicketcomment(parms).then(response => {
+        this.commentData = response.data.results
+        this.rowdata.action_user = this.commentData.length === 0 ? null : this.commentData[this.commentData.length - 1].create_user
+      })
+      this.commentForm.content = ''
+    },
+    EnclosureData() {
+      const parms = {
+        ticket__id: this.ticket_id
+      }
+      getTicketenclosure(parms).then(response => {
+        this.enclosureData = response.data.results
+        this.count = response.data.count
+      })
+    },
+    deleteEnclosure(id) {
+      deleteTicketenclosure(id)
+      setTimeout(this.EnclosureData, 1000)
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.commentForm.ticket = this.ticket_id
+          if (this.commentForm.create_user === this.ticketData.create_user) {
+            this.rowdata.action_user = this.ticketData.action_user
+          }
+          postTicketcomment(this.commentForm)
+          this.patchForm(this.rowdata)
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+        setTimeout(this.CommentData, 1000)
+      })
+    },
+    patchForm(rowdata) {
+      patchWorkticket(this.ticket_id, rowdata)
+    },
+    changeTicketStatus(status) {
+      this.rowdata.ticket_status = this.ticketData.ticket_status = status
+      patchWorkticket(this.ticket_id, this.rowdata)
+    },
+    changeActionForm() {
+      patchWorkticket(this.ticket_id, this.rowdata)
+      this.change_action = false
+      this.ticketData.action_user = this.rowdata.action_user
+    },
+    handleSuccess(file, fileList) {
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', fileList.raw)
+      formData.append('create_time', this.afterFileUpload(fileList))
+      formData.append('type', fileList.raw.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        this.enclosureForm.file = response.data.filepath
+        this.enclosureForm.ticket = this.ticket_id
+        postTicketenclosure(this.enclosureForm)
+        setTimeout(this.EnclosureData, 1000)
+        if (response.statusText === 'ok') {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
+    },
+    afterFileUpload(fileList) {
+      const date = new Date(fileList.row.uid)
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
+    imgAdd(pos, file) {
+      var md = this.$refs.md
+      const formData = new FormData()
+      formData.append('username', localStorage.getItem('username'))
+      formData.append('file', file)
+      formData.append('create_time', this.afterUpload(file))
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        md.$imglst2Url([[pos, response.data.file]])
+      })
+    },
+    afterUpload(file) {
+      const date = new Date(file.lastModified)
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
+    getTicketUsers() {
+      getUser().then(response => {
+        this.users = response.data.results
+      })
+    }
+  }
+}
 </script>
 
 <style lang='scss'>

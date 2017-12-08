@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div class="components-container" style='height:100vh'>
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
@@ -65,90 +65,89 @@
 </template>
 
 <script>
-    import {getUploadList, deleteUpload} from 'api/tool'
-    import {LIMIT} from '@/config'
-    import format from '@/utils/dateformat'
+import { getUploadList, deleteUpload } from 'api/tool'
+import { LIMIT } from '@/config'
+import format from '@/utils/dateformat'
 
-    export default {
-        components: {},
-        data() {
-            return {
-                tableData: [],
-                tabletotal: 0,
-                searchdata: '',
-                pagesize: [10, 25, 50, 100],
-                rowdata: {},
-                selectId: [],
-                butstatus: true,
-                listQuery: {
-                    offset: 0,
-                    limit: LIMIT,
-                    username__contains: '',
-                    type: '',
-                    date_lte: '',
-                    date_gte: '',
-                },
-                datefilter: [],
-                photo: '',
-                showPhoto: false,
-            }
-        },
-
-        created() {
-            this.fetchData();
-        },
-
-        methods: {
-            fetchData() {
-                getUploadList(this.listQuery).then(response => {
-                    this.tableData = response.data.results;
-                    this.tabletotal = response.data.count;
-                })
-            },
-
-            handleSelectionChange(val) {
-                this.selectId = [];
-                for (var i = 0, len = val.length; i < len; i++) {
-                    this.selectId.push(val[i].id);
-                }
-                if (this.selectId.length > 0) {
-                    this.butstatus = false
-                } else {
-                    this.butstatus = true
-                }
-            },
-
-            handleIconUserClick() {
-                this.listQuery.username__contains = ''
-            },
-            handleIconTypeClick() {
-
-                this.listQuery.type = ''
-            },
-            searchClick() {
-                this.listQuery.date_gte = format(new Date(this.datefilter[0]), 'YYYY-MM-DD');
-                this.listQuery.date_lte = format(new Date(this.datefilter[1]), 'YYYY-MM-DD');
-                this.fetchData();
-            },
-            handleSizeChange(val) {
-                this.listQuery.limit = val;
-                this.fetchData();
-            },
-            handleCurrentChange(val) {
-                this.listQuery.offset = val - 1;
-                this.fetchData();
-            },
-            deleteForm() {
-                console.log(this.selectId);
-                for (var i = 0, len = this.selectId.length; i < len; i++) {
-                    deleteUpload(this.selectId[i]).then(response => {
-                        delete this.selectId[i]
-                    })
-                }
-                setTimeout(this.fetchData, 1000);
-            }
-        }
+export default {
+  components: {},
+  data() {
+    return {
+      tableData: [],
+      tabletotal: 0,
+      searchdata: '',
+      pagesize: [10, 25, 50, 100],
+      rowdata: {},
+      selectId: [],
+      butstatus: true,
+      listQuery: {
+        offset: 0,
+        limit: LIMIT,
+        username__contains: '',
+        type: '',
+        date_lte: '',
+        date_gte: ''
+      },
+      datefilter: [],
+      photo: '',
+      showPhoto: false
     }
+  },
+
+  created() {
+    this.fetchData()
+  },
+
+  methods: {
+    fetchData() {
+      getUploadList(this.listQuery).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
+      })
+    },
+
+    handleSelectionChange(val) {
+      this.selectId = []
+      for (var i = 0, len = val.length; i < len; i++) {
+        this.selectId.push(val[i].id)
+      }
+      if (this.selectId.length > 0) {
+        this.butstatus = false
+      } else {
+        this.butstatus = true
+      }
+    },
+
+    handleIconUserClick() {
+      this.listQuery.username__contains = ''
+    },
+    handleIconTypeClick() {
+      this.listQuery.type = ''
+    },
+    searchClick() {
+      this.listQuery.date_gte = format(new Date(this.datefilter[0]), 'YYYY-MM-DD')
+      this.listQuery.date_lte = format(new Date(this.datefilter[1]), 'YYYY-MM-DD')
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.offset = val - 1
+      this.fetchData()
+    },
+    deleteForm() {
+      console.log(this.selectId)
+      for (var i = 0, len = this.selectId.length; i < len; i++) {
+        deleteUpload(this.selectId[i]).then(response => {
+          delete this.selectId[i]
+        })
+      }
+      setTimeout(this.fetchData, 1000)
+    }
+  }
+}
 </script>
 
 <style lang='scss'>

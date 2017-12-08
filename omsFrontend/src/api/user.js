@@ -1,99 +1,98 @@
-import fetch from 'utils/fetch';
+import request from '@/utils/request'
 import apiURL from '@/config'
 
-//users
+// users
 export function postUser(data) {
-    return fetch({
-        url: apiURL.users,
-        method: 'post',
-        data
-    });
+  return request({
+    url: apiURL.users,
+    method: 'post',
+    data
+  })
 }
-export function getUserList(query) {
-    return fetch({
-        url: apiURL.users,
-        method: 'get',
-        params: query
-    });
+
+export function getUser(query) {
+  return request({
+    url: apiURL.users,
+    method: 'get',
+    params: query
+  })
 }
 
 export function patchUser(id, data) {
-    return fetch({
-        url: apiURL.users + id + '/',
-        method: 'patch',
-        data
-    });
+  return request({
+    url: apiURL.users + id + '/',
+    method: 'patch',
+    data
+  })
 }
 
 export function deleteUser(id) {
-    return fetch({
-        url: apiURL.users + id,
-        method: 'delete',
-    });
+  return request({
+    url: apiURL.users + id,
+    method: 'delete'
+  })
 }
 
-
-//groups
+// groups
 export function postGroup(data) {
-    console.log(data);
-    return fetch({
-        url: apiURL.groups,
-        method: 'post',
-        data
-    });
+  return request({
+    url: apiURL.groups,
+    method: 'post',
+    data
+  })
 }
 
-export function getGroupList(query) {
-    return fetch({
-        url: apiURL.groups,
-        method: 'get',
-        params: query
-    });
+export function getGroup(query) {
+  return request({
+    url: apiURL.groups,
+    method: 'get',
+    params: query
+  })
 }
 
 export function putGroup(id, data) {
-    return fetch({
-        url: apiURL.groups + id + '/',
-        method: 'put',
-        data
-    });
+  return request({
+    url: apiURL.groups + id + '/',
+    method: 'put',
+    data
+  })
 }
 
 export function deleteGroup(id) {
-    return fetch({
-        url: apiURL.groups + id,
-        method: 'delete',
-    });
+  return request({
+    url: apiURL.groups + id,
+    method: 'delete'
+  })
 }
 
-//roles
+// roles
 export function postRole(data) {
-    return fetch({
-        url: apiURL.roles,
-        method: 'post',
-        data
-    });
+  return request({
+    url: apiURL.roles,
+    method: 'post',
+    data
+  })
 }
 
-export function getRoleList(query) {
-    return fetch({
-        url: apiURL.roles,
-        method: 'get',
-        params: query
-    });
+export function getRole(query) {
+  return request({
+    url: apiURL.roles,
+    method: 'get',
+    params: query
+  })
 }
 
 export function putRole(id, data) {
-    return fetch({
-        url: apiURL.roles + id + '/',
-        method: 'put',
-        data
-    });
+  return request({
+    url: apiURL.roles + id + '/',
+    method: 'put',
+    data
+  })
 }
 
 export function deleteRole(id) {
-    return fetch({
-        url: apiURL.roles + id,
-        method: 'delete',
-    });
+  return request({
+    url: apiURL.roles + id,
+    method: 'delete'
+  })
 }

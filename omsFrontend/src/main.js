@@ -1,53 +1,42 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue';
-import App from './App';
-import router from './router';
-import store from './store';
-import './permission'
-
-/* elementUI && theme */
-import ElementUI from 'element-ui';
+import Vue from 'vue'
+import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import 'assets/custom-theme/index.css'; // 换肤版本element-ui css
-Vue.use(ElementUI);
+import i18n from './lang' // 国际化
+import App from './App'
+import router from './router'
+import store from './store'
+import * as filters from './filters' // 全局filter
+import './icons' // icon
+import './errorLog'// error log
+import './permission' // 权限
+import './mock' // 该项目所有请求使用mockjs模拟
+
+Vue.use(Element, {
+  i18n: (key, value) => i18n.t(key, value)
+})
 
 /* icon */
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
-Vue.component('icon', Icon);
+Vue.component('icon', Icon)
 
 /* markdown */
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
-Vue.use(mavonEditor);
+Vue.use(mavonEditor)
 
-/* 注册全局vue filter */
-import * as filters from './filters';
+// register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
-});
+})
 
-Vue.config.productionTip = false;
-
-// 生产环境错误日志
-if (process.env === 'production') {
-  Vue.config.errorHandler = function(err, vm) {
-    console.log(err, window.location.href);
-    errLog.pushLog({
-      err,
-      url: window.location.href,
-      vm
-    })
-  };
-}
+Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   template: '<App/>',
   components: { App }
 })
-
-

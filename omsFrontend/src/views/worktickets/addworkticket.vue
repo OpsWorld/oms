@@ -1,254 +1,253 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <div class="addticket">
-        <el-card>
-            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="标题" prop="title">
-                    <el-input v-model="ruleForm.title"></el-input>
-                </el-form-item>
-                <el-form-item label="指派人" prop="action_user">
-                    <el-select v-model="ruleForm.action_user" placeholder="请选择指派人">
-                        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="跟踪者" prop="follower">
-                    <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
-                        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="工单内容" prop="content">
-                    <mavon-editor style="z-index: 1" default_open='edit' v-model="ruleForm.content" code_style="monokai"
-                                  :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
-                </el-form-item>
-                <el-form-item label="工单等级" prop="level">
-                    <el-rate
-                            v-model="ruleForm.level"
-                            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                            show-text
-                            :texts="['E', 'D', 'C', 'B', 'A']">
-                    </el-rate>
-                    <div>
-                        <hr class="heng"/>
-                        <el-upload
-                                class="upload-demo"
-                                ref="upload"
-                                action="https://jsonplaceholder.typicode.com/posts/"
-                                :on-success="handleSuccess"
-                                :file-list="fileList"
-                                :disabled="count>0?true:false">
-                            <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
-                                上传文件
-                            </el-button>
-                            (可以不用上传)
-                            <div slot="tip" class="el-upload__tip">
-                                <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
-                            </div>
-                        </el-upload>
-                        <hr class="heng"/>
-                    </div>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-                    <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
-                </el-form-item>
-            </el-form>
-        </el-card>
-    </div>
+  <div class="components-container" style='height:100vh'>
+    <el-card>
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="ruleForm.title"></el-input>
+        </el-form-item>
+        <el-form-item label="指派人" prop="action_user">
+          <el-select v-model="ruleForm.action_user" placeholder="请选择指派人">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="跟踪者" prop="follower">
+          <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工单内容" prop="content">
+          <mavon-editor style="z-index: 1" default_open='edit' v-model="ruleForm.content" code_style="monokai"
+                        :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
+        </el-form-item>
+        <el-form-item label="工单等级" prop="level">
+          <el-rate
+            v-model="ruleForm.level"
+            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+            show-text
+            :texts="['E', 'D', 'C', 'B', 'A']">
+          </el-rate>
+          <div>
+            <hr class="heng"/>
+            <el-upload
+              class="upload-demo"
+              ref="upload"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-success="handleSuccess"
+              :file-list="fileList"
+              :disabled="count>0?true:false">
+              <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
+                上传文件
+              </el-button>
+              (可以不用上传)
+              <div slot="tip" class="el-upload__tip">
+                <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
+              </div>
+            </el-upload>
+            <hr class="heng"/>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 <script>
-    import {postWorkticket, getTickettype, postTickettype, postTicketenclosure} from 'api/workticket'
-    import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
-    import {postUpload} from 'api/tool'
-    import {getUserList} from 'api/user'
-    import {ws_url} from '@/config'
+import { postWorkticket, postTicketenclosure } from 'api/workticket'
+import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
+import { postUpload } from 'api/tool'
+import { getUser } from 'api/user'
+import { ws_url } from '@/config'
 
-    export default {
-        components: {ElButton},
+export default {
+  components: { ElButton },
 
-        data() {
-            return {
-                route_path: this.$route.path.split('/'),
-                ruleForm: {
-                    title: '',
-                    type: '',
-                    content: '',
-                    create_user: localStorage.getItem('username'),
-                    level: 2,
-                    action_user: '',
-                    follower: '',
-                    create_group: '',
-                },
-                rules: {
-                    title: [
-                        {required: true, message: '请输入工单标题', trigger: 'blur'},
-                    ],
-                    action_user: [
-                        {required: true, message: '请选择指派者', trigger: 'change'}
-                    ],
-                    follower: [
-                        {required: true, type: 'array', message: '请选择工单跟踪者', trigger: 'change'}
-                    ],
-                    content: [
-                        {required: true, message: '请输入工单内容', trigger: 'blur'}
-                    ],
-                    level: [
-                        {required: true, type: 'number', message: '请确认工单等级', trigger: 'blur'},
-                    ],
-                },
-                users: [],
-                sendmail: true,
-                fileList: [],
-                count: 0,
-                enclosureFile: null,
-                enclosureForm: {
-                    ticket: '',
-                    create_user: localStorage.getItem('username'),
-                    file: '',
-                    create_group: ''
-                },
-                toolbars: {
-                    preview: true, // 预览
-                    bold: true, // 粗体
-                    italic: true, // 斜体
-                    header: true, // 标题
-                    underline: true, // 下划线
-                    strikethrough: true, // 中划线
-                    ol: true, // 有序列表
-                    fullscreen: true, // 全屏编辑
-                    help: true,
-                },
-                img_file: {},
-                formDataList: [],
-                ws_stream: '/salt/sendmail/',
-                ws: '',
-                to_list: '',
-                cc_list: ''
-            };
-        },
-
-        created() {
-            this.getTicketUsers();
-            this.wsInit();  //ws 初始化
-            this.getEmail('aaa');
-        },
-        methods: {
-            postForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        postWorkticket(this.ruleForm).then(response => {
-                            if (response.statusText = 'ok') {
-                                this.$message({
-                                    type: 'success',
-                                    message: '恭喜你，新建成功'
-                                });
-                            }
-                            if (this.enclosureFile) {
-                                this.enclosureForm.file = this.enclosureFile;
-                                this.enclosureForm.ticket = response.data.id;
-                                postTicketenclosure(this.enclosureForm);
-                            }
-                            let ticket_id = response.data.id;
-                            const mailForm = {
-                                to_list: this.to_list,
-                                cc_list: this.cc_list,
-                                sub: this.ruleForm.title,
-                                context: this.ruleForm.content,
-                            };
-                            if (this.sendmail) {
-                                this.ws.send(JSON.stringify(mailForm));
-                            }
-                            this.$router.push('/worktickets/workticket/');
-                        });
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
-            getTicketUsers() {
-                getUserList().then(response => {
-                    this.users = response.data.results;
-                })
-            },
-            getEmail(username) {
-                const parms = {
-                    username: username
-                };
-                getUserList(parms).then(response => {
-                    this.email_list = response.data.results;
-                    console.log(this.email_list)
-                })
-            },
-            handleSuccess(file, fileList) {
-                let formData = this.afterFileUpload(fileList);
-                postUpload(formData).then(response => {
-                    this.enclosureFile = response.data.filepath;
-                    if (response.statusText = 'ok') {
-                        this.count += 1;
-                        this.$message({
-                            type: 'success',
-                            message: '恭喜你，上传成功'
-                        });
-                    }
-                }).catch(error => {
-                    this.$message.error('上传失败');
-                    this.$refs.upload.clearFiles();
-                    console.log(error);
-                });
-            },
-            imgAdd(pos, file){
-                var md = this.$refs.md;
-                let formData = new FormData();
-                formData.append('username', this.enclosureForm.create_user);
-                formData.append('file', file);
-                formData.append('create_time', this.afterFileUpload(file));
-                formData.append('type', file.type);
-                formData.append('archive', this.route_path[1]);
-                postUpload(formData).then(response => {
-                    md.$imglst2Url([[pos, response.data.file]]);
-                });
-            },
-            afterFileUpload(file){
-                let date = new Date(file.lastModified);
-                let Y = date.getFullYear().toString();
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1);
-                let D = date.getDate();
-                let h = date.getHours();
-                let m = date.getMinutes();
-                let s = date.getSeconds();
-                let ctime = Y + M + D + h + m + s;
-                return ctime
-            },
-            wsInit() {
-                let self = this;
-                self.ws = new WebSocket(ws_url + self.ws_stream);
-                if (self.ws.readyState == WebSocket.OPEN) self.ws.onopen();
-                self.ws.onmessage = (e) => {
-                    this.$message({
-                        type: 'info',
-                        message: '邮件信息: ' + e.data
-                    });
-                    // self.results.push(e.data);
-                };
-            }
-        }
+  data() {
+    return {
+      route_path: this.$route.path.split('/'),
+      ruleForm: {
+        title: '',
+        type: '',
+        content: '',
+        create_user: sessionStorage.getItem('username'),
+        level: 2,
+        action_user: '',
+        follower: '',
+        create_group: ''
+      },
+      rules: {
+        title: [
+          { required: true, message: '请输入工单标题', trigger: 'blur' }
+        ],
+        action_user: [
+          { required: true, message: '请选择指派者', trigger: 'change' }
+        ],
+        follower: [
+          { required: true, type: 'array', message: '请选择工单跟踪者', trigger: 'change' }
+        ],
+        content: [
+          { required: true, message: '请输入工单内容', trigger: 'blur' }
+        ],
+        level: [
+          { required: true, type: 'number', message: '请确认工单等级', trigger: 'blur' }
+        ]
+      },
+      users: [],
+      sendmail: true,
+      fileList: [],
+      count: 0,
+      enclosureFile: null,
+      enclosureForm: {
+        ticket: '',
+        create_user: sessionStorage.getItem('username'),
+        file: '',
+        create_group: ''
+      },
+      toolbars: {
+        preview: true, // 预览
+        bold: true, // 粗体
+        italic: true, // 斜体
+        header: true, // 标题
+        underline: true, // 下划线
+        strikethrough: true, // 中划线
+        ol: true, // 有序列表
+        fullscreen: true, // 全屏编辑
+        help: true
+      },
+      img_file: {},
+      formDataList: [],
+      ws_stream: '/salt/sendmail/',
+      ws: '',
+      to_list: '',
+      cc_list: ''
     }
+  },
+
+  created() {
+    this.getTicketUsers()
+    this.wsInit() // ws 初始化
+    this.getEmail('aaa')
+  },
+  methods: {
+    postForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postWorkticket(this.ruleForm).then(response => {
+            if (response.statusText === 'ok') {
+              this.$message({
+                type: 'success',
+                message: '恭喜你，新建成功'
+              })
+            }
+            if (this.enclosureFile) {
+              this.enclosureForm.file = this.enclosureFile
+              this.enclosureForm.ticket = response.data.id
+              postTicketenclosure(this.enclosureForm)
+            }
+            const mailForm = {
+              to_list: this.to_list,
+              cc_list: this.cc_list,
+              sub: this.ruleForm.title,
+              context: this.ruleForm.content
+            }
+            if (this.sendmail) {
+              this.ws.send(JSON.stringify(mailForm))
+            }
+            this.$router.push('/worktickets/workticketlist/')
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    getTicketUsers() {
+      getUser().then(response => {
+        this.users = response.data.results
+      })
+    },
+    getEmail(username) {
+      const parms = {
+        username: username
+      }
+      getUser(parms).then(response => {
+        this.email_list = response.data.results
+        console.log(this.email_list)
+      })
+    },
+    handleSuccess(file, fileList) {
+      const formData = this.afterFileUpload(fileList)
+      postUpload(formData).then(response => {
+        this.enclosureFile = response.data.filepath
+        if (response.statusText === 'ok') {
+          this.count += 1
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
+    },
+    imgAdd(pos, file) {
+      var md = this.$refs.md
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', file)
+      formData.append('create_time', this.afterFileUpload(file))
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        md.$imglst2Url([[pos, response.data.file]])
+      })
+    },
+    afterFileUpload(file) {
+      const date = new Date(file.lastModified)
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
+    wsInit() {
+      const self = this
+      self.ws = new WebSocket(ws_url + self.ws_stream)
+      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
+      self.ws.onmessage = (e) => {
+        this.$message({
+          type: 'info',
+          message: '邮件信息: ' + e.data
+        })
+        // self.results.push(e.data);
+      }
+    }
+  }
+}
 </script>
 
 <style lang='scss'>
-    .heng {
-        margin: 20px 0;
-        height: 1px;
-        border: 0px;
-        background-color: rgba(174, 127, 255, 0.38);
-        color: #29e11c;
-    }
+  .heng {
+    margin: 20px 0;
+    height: 1px;
+    border: 0px;
+    background-color: rgba(174, 127, 255, 0.38);
+    color: #29e11c;
+  }
 
-    .addticket {
-        margin: 50px;
-        width: 80%;
-    }
+  .addticket {
+    margin: 50px;
+    width: 80%;
+  }
 </style>

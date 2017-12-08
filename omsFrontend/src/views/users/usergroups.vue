@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div class="components-container" style='height:100vh'>
         <el-card>
             <div class="head-lavel">
                 <div class="table-button">
@@ -50,90 +50,90 @@
 </template>
 
 <script>
-    import {getGroupList, postGroup, deleteGroup} from 'api/user';
-    import {LIMIT} from '@/config'
-    import addGroup from './addgroup.vue'
-    import viewGroup from './viewgroup.vue'
+import { getGroup, postGroup, deleteGroup } from 'api/user'
+import { LIMIT } from '@/config'
+import addGroup from './addgroup.vue'
+import viewGroup from './viewgroup.vue'
 
-    export default {
-        components: {addGroup, viewGroup},
-        data() {
-            return {
-                tableData: [],
-                tabletotal: 0,
-                searchdata: '',
-                currentPage: 1,
-                limit: LIMIT,
-                offset: '',
-                pagesize: [10, 25, 50, 100],
-                addGroup: false,
-                viewGroup: false,
-                groupName: ''
-            }
-        },
+export default {
+  components: { addGroup, viewGroup },
+  data() {
+    return {
+      tableData: [],
+      tabletotal: 0,
+      searchdata: '',
+      currentPage: 1,
+      limit: LIMIT,
+      offset: '',
+      pagesize: [10, 25, 50, 100],
+      addGroup: false,
+      viewGroup: false,
+      groupName: ''
+    }
+  },
 
-        created() {
-            this.fetchData();
-        },
+  created() {
+    this.fetchData()
+  },
 
-        methods: {
-            /*
+  methods: {
+    /*
              * 获取数据
              */
-            fetchData() {
-                const parms = {
-                    limit: this.limit,
-                    offset: this.offset,
-                    name__contains: this.searchdata
-                };
-                getGroupList(parms).then(response => {
-                    this.tableData = response.data.results;
-                    this.tabletotal = response.data.count;
-                })
-            },
+    fetchData() {
+      const parms = {
+        limit: this.limit,
+        offset: this.offset,
+        name__contains: this.searchdata
+      }
+      getGroup(parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
+      })
+    },
 
-            addGroupSubmit(formdata) {
-                postGroup(formdata).then(response => {
-                    this.$message({
-                        message: '恭喜你，添加成功',
-                        type: 'success'
-                    });
-                    this.fetchData();
-                    this.addGroup = false
-                }).catch(error => {
-                    this.$message.error('添加失败');
-                    console.log(error);
-                });
-            },
-            deleteGroup(id){
-                deleteGroup(id).then(response => {
-                    this.$message({
-                        message: '恭喜你，删除成功',
-                        type: 'success'
-                    });
-                    this.fetchData();
-                }).catch(error => {
-                    this.$message.error('删除失败');
-                    console.log(error);
-                });
-            },
-            showGroup(groupName){
-                this.viewGroup = true;
-                this.groupName = groupName
-            },
-            searchClick() {
-                this.fetchData();
-            },
-            handleSizeChange(val) {
-                this.limit = val;
-                this.fetchData();
-            },
-            handleCurrentChange(val) {
-                this.offset = val - 1;
-                this.fetchData();
-            }
-        }
+    addGroupSubmit(formdata) {
+      postGroup(formdata).then(response => {
+        this.$message({
+          message: '恭喜你，添加成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.addGroup = false
+      }).catch(error => {
+        this.$message.error('添加失败')
+        console.log(error)
+      })
+    },
+    deleteGroup(id) {
+      deleteGroup(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
+      })
+    },
+    showGroup(groupName) {
+      this.viewGroup = true
+      this.groupName = groupName
+    },
+    searchClick() {
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.offset = val - 1
+      this.fetchData()
     }
+  }
+}
 </script>
 
 <style lang='scss'>
