@@ -12,11 +12,14 @@ from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMet
 from django.forms.models import model_to_dict
 from users.models import User, Group
 from users.serializers import UserSerializer, RoleSerializer, GroupSerializer
+from perms.filters import UserMenuPermsFilter
 
 
 class UserMenuPermsViewSet(viewsets.ModelViewSet):
     queryset = UserMenuPerms.objects.all()
     serializer_class = UserMenuPermsSerializer
+    filter_class = UserMenuPermsFilter
+
 
 @api_view()
 def routers(request):
@@ -24,14 +27,16 @@ def routers(request):
         userqueryset = User.objects.get(username=request.user)
         userserializer = UserSerializer(userqueryset, context={'request': request}).data
         groups = userserializer['groups']
+        menus = []
+        elements = []
         for group in groups:
             menuqueryset = UserMenuPerms.objects.get(group=group)
-            #menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
-            print(menuqueryset)
-        return Response({"a":1})
+            menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
+            menus = menuserializer["firstmenus"] + menuserializer["secondmenus"] + menus
+            elements = menuserializer["elements"] + elements
+        return Response({"groups": groups, "menus": menus, "elements": elements})
     except Exception as e:
-        return Response({e:e})
-
+        return Response({"code": "not found group"})
 
 # #根据不同用户生成不同的routers
 # @api_view()

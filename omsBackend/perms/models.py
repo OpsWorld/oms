@@ -2,13 +2,11 @@
 # author: itimor
 
 from django.db import models
-
-from users.models import Group
 from menus.models import Firstmenu, Secondmenu, MenuMeta
 
 
 class UserMenuPerms(models.Model):
-    group = models.OneToOneField(Group)
+    group = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
     firstmenus = models.ManyToManyField(Firstmenu, verbose_name=u'一级菜单')
     secondmenus = models.ManyToManyField(Secondmenu, verbose_name=u'二级菜单')
     elements = models.ManyToManyField(MenuMeta, verbose_name=u'菜单元素')
