@@ -12,7 +12,7 @@ class UserFilter(filters.FilterSet):
             'id': ['gt'],
             'username': ['exact', 'contains'],
             'email': ['exact'],
-            'group__name': ['exact'],
+            'groups__name': ['exact'],
             'is_active': ['exact'],
             'roles__name': ['exact'],
         }

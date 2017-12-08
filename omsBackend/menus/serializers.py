@@ -8,18 +8,16 @@ from rest_framework import serializers
 class MenuMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuMeta
-        fields = ('url', 'id', 'name', 'action')
+        fields = ('url', 'id', 'name')
+
+
+class SecondmenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Secondmenu
+        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'meta')
 
 
 class FirstmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firstmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')
-
-
-class SecondmenuSerializer(serializers.ModelSerializer):
-    parent = serializers.SlugRelatedField(queryset=Firstmenu.objects.all(), slug_field='name')
-
-    class Meta:
-        model = Secondmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'parent', 'meta')
+        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'children', 'meta')

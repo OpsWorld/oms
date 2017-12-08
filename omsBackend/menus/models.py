@@ -2,8 +2,6 @@
 # author: kiven
 
 from django.db import models
-from users.models import User
-
 
 class Firstmenu(models.Model):
     name = models.CharField(max_length=100, blank=True, unique=True, verbose_name=u'菜单名')
@@ -12,6 +10,7 @@ class Firstmenu(models.Model):
     icon = models.CharField(max_length=100, blank=True, verbose_name=u'菜单图标')
     redirect = models.CharField(max_length=100, blank=True, verbose_name=u'菜单rewrite路径')
     hidden = models.BooleanField(default=False, verbose_name=u'是否隐藏菜单')
+    children = models.ManyToManyField("Secondmenu", blank=True, null=True, verbose_name=u'子菜单')
     meta = models.ManyToManyField("MenuMeta", blank=True, null=True, verbose_name=u'扩展属性')
 
     def __str__(self):
@@ -22,7 +21,6 @@ class Firstmenu(models.Model):
         verbose_name_plural = u'一级菜单'
 
 class Secondmenu(models.Model):
-    parent = models.ForeignKey("Firstmenu", verbose_name=u'父菜单')
     name = models.CharField(max_length=100, blank=True, unique=True, verbose_name=u'菜单名')
     path = models.CharField(max_length=100, blank=True, verbose_name=u'菜单实际路径')
     component = models.CharField(max_length=100, blank=True, verbose_name=u'菜单指向页面')
@@ -30,7 +28,7 @@ class Secondmenu(models.Model):
     meta = models.ManyToManyField("MenuMeta", blank=True, null=True, verbose_name=u'扩展属性')
 
     def __str__(self):
-        return '{}-{}'.format(self.parent, self.name)
+        return self.name
 
     class Meta:
         verbose_name = u'二级菜单'
@@ -39,10 +37,9 @@ class Secondmenu(models.Model):
 
 class MenuMeta(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'菜单属性')
-    action = models.CharField(max_length=100, blank=True, verbose_name=u'属性动作')
 
     def __str__(self):
-        return '{}-{}'.format(self.name,self.action)
+        return self.name
 
     class Meta:
         verbose_name = u'菜单属性'
