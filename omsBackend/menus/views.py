@@ -4,7 +4,7 @@
 from rest_framework import viewsets
 from menus.models import Firstmenu, Secondmenu, MenuMeta
 from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
-from menus.models import FirstmenuFilter, SecondmenuFilter, MenuMetaFilter
+from menus.filters import FirstmenuFilter, SecondmenuFilter, MenuMetaFilter
 
 
 class FirstmenuViewSet(viewsets.ModelViewSet):

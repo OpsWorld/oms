@@ -12,6 +12,8 @@ class MenuMetaSerializer(serializers.ModelSerializer):
 
 
 class SecondmenuSerializer(serializers.ModelSerializer):
+    parent = serializers.SlugRelatedField(queryset=Firstmenu.objects.all(), slug_field='name', allow_null=True)
+
     class Meta:
         model = Secondmenu
         fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'meta', 'parent')

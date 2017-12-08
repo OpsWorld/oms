@@ -10,7 +10,7 @@ class FirstmenuFilter(filters.FilterSet):
         model = Firstmenu
         fields = {
             'id': ['exact'],
-            'group': ['exact'],
+            'name': ['exact'],
         }
 
 
@@ -19,7 +19,8 @@ class SecondmenuFilter(filters.FilterSet):
         model = Secondmenu
         fields = {
             'id': ['exact'],
-            'group': ['exact'],
+            'name': ['exact'],
+            'parent__name': ['exact'],
         }
 
 
@@ -28,5 +29,5 @@ class MenuMetaFilter(filters.FilterSet):
         model = MenuMeta
         fields = {
             'id': ['exact'],
-            'group': ['exact'],
+            'name': ['exact'],
         }
