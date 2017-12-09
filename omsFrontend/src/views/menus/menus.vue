@@ -29,7 +29,6 @@ export default {
   data() {
     return {
       firstData: [],
-      secondData: [],
       props: {
         label: 'name',
         children: ''
@@ -51,9 +50,9 @@ export default {
         parent__name: res.data.name
       }
       getSecondmenus(parmas).then(response => {
-        resolve = response.data.results
-        console.log(resolve)
-        return resolve
+        const data = response.data.results
+        console.log(data)
+        resolve(data)
       })
     },
     handleCheckChange(data, checked, indeterminate) {
