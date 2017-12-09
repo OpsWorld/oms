@@ -95,7 +95,6 @@ export default {
         ]
       },
       users: [],
-      sendmail: true,
       fileList: [],
       count: 0,
       enclosureFile: null,
@@ -120,8 +119,8 @@ export default {
       formDataList: [],
       ws_stream: '/salt/sendmail/',
       ws: '',
-      to_list: '',
-      cc_list: ''
+      to_list: [],
+      cc_list: []
     }
   },
 
@@ -146,16 +145,16 @@ export default {
               this.enclosureForm.ticket = response.data.id
               postTicketenclosure(this.enclosureForm)
             }
+            this.getEmail(this.ruleForm.action_user, this.ruleForm.follower)
             const mailForm = {
               to_list: this.to_list,
               cc_list: this.cc_list,
               sub: this.ruleForm.title,
               context: this.ruleForm.content
             }
-            if (this.sendmail) {
-              this.ws.send(JSON.stringify(mailForm))
-            }
-            this.$router.push('/worktickets/workticketlist/')
+            console.log(mailForm)
+            this.ws.send(JSON.stringify(mailForm))
+            this.$router.push('/worktickets/workticket')
           })
         } else {
           console.log('error submit!!')
@@ -170,15 +169,6 @@ export default {
     getTicketUsers() {
       getUser().then(response => {
         this.users = response.data.results
-      })
-    },
-    getEmail(username) {
-      const parms = {
-        username: username
-      }
-      getUser(parms).then(response => {
-        this.email_list = response.data.results
-        console.log(this.email_list)
       })
     },
     handleSuccess(file, fileList) {
@@ -221,14 +211,32 @@ export default {
       const ctime = Y + M + D + h + m + s
       return ctime
     },
+    getEmail(to_list, cc_list) {
+      const to_list_parms = {
+        username: to_list
+      }
+      getUser(to_list_parms).then(response => {
+        const data = response.data.results[0]
+        this.to_list.push(data.email)
+      })
+      for (const cc of cc_list) {
+        const cc_list_parms = {
+          username: cc
+        }
+        getUser(cc_list_parms).then(response => {
+          const data = response.data.results[0]
+          this.cc_list.push(data.email)
+        })
+      }
+    },
     wsInit() {
       const self = this
       self.ws = new WebSocket(ws_url + self.ws_stream)
       if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
       self.ws.onmessage = (e) => {
         this.$message({
-          type: 'info',
-          message: '邮件信息: ' + e.data
+          type: e.code,
+          message: e.msg
         })
         // self.results.push(e.data);
       }

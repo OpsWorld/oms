@@ -37,8 +37,16 @@ export const constantRouterMap = [
       icon: 'dashboard',
       meta: { noCache: true }
     }]
-  },
+  }
+]
 
+export default new Router({
+  // mode: 'history', //后端支持可开
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRouterMap
+})
+
+export const asyncRouterMap = [
   {
     path: '/components',
     component: Layout,
@@ -103,16 +111,7 @@ export const constantRouterMap = [
       { path: 'line', component: _import('charts/line'), name: 'lineChart', meta: { noCache: true }},
       { path: 'mixchart', component: _import('charts/mixChart'), name: 'mixChart', meta: { noCache: true }}
     ]
-  }
-]
-
-export default new Router({
-  // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRouterMap
-})
-
-export const asyncRouterMap = [
+  },
   {
     name: 'userManager',
     path: '/users',

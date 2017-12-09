@@ -43,4 +43,6 @@ sub = sys.argv[3]
 context = sys.argv[4]
 
 if send_mail(to_list, cc_list, sub, context):
-    print("Send mail succed!")
+    print({"code":'success',"msg":"通知邮件发送成功"})
+else:
+    print({"code":'error',"msg":"通知邮件发送失败"})

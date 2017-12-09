@@ -6,7 +6,7 @@
       </pan-thumb>
       <div class="info-container">
         <span class="display_name">{{username}}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">你只是个普通的用户</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">你只是一介平民</span>
       </div>
     </div>
     <div>
