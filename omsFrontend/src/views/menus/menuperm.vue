@@ -3,24 +3,26 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
-          <div slot="header" class="clearfix">
-            <span>菜单列表</span>
+          <div slot="header">
+            <span class="card-title">菜单列表</span>
           </div>
           <el-tree
             :data="firstData"
             :props="menuprops"
+            default-expand-all
+            ref="menutree"
             :load="fetchSecondData"
-            :accordion="true"
             lazy
             show-checkbox
+            :default-checked-keys="default_checked_keys"
             @check-change="handleCheckChange">
           </el-tree>
         </el-card>
       </el-col>
       <el-col :span="8">
         <el-card>
-          <div slot="header" class="clearfix">
-            <span>用户组列表</span>
+          <div slot="header">
+            <span class="card-title">用户组列表</span>
             <el-button-group>
               <el-button type="success" plain size="mini" icon="plus">
                 添加
@@ -36,10 +38,8 @@
           <el-tree
             :data="routerData"
             :props="routerprops"
-            :load="fetchSecondData"
-            :accordion="true"
-            lazy
-            @check-change="handleCheckChange">
+            accordion
+            @node-click="handleNodeClick">
           </el-tree>
         </el-card>
       </el-col>
@@ -55,16 +55,17 @@ export default {
   data() {
     return {
       firstData: [],
+      secondData: [],
       routerData: [],
       menuprops: {
         label: 'title',
-        children: ''
+        children: 'children'
       },
       routerprops: {
-        label: 'group',
-        children: ''
+        label: 'group'
       },
-      count: 1
+      count: 1,
+      default_checked_keys: []
     }
   },
   created() {
@@ -75,6 +76,15 @@ export default {
     fetchFirstData() {
       getFirstmenus().then(response => {
         this.firstData = response.data.results
+        // 对象map用法
+        //        this.firstData.map(function(data) {
+        //          const parmas = {
+        //            parent__title: data.title
+        //          }
+        //          getSecondmenus(parmas).then(response => {
+        //            data['children'] = response.data.results
+        //          })
+        //        })
       })
     },
     fetchSecondData(node, resolve) {
@@ -88,9 +98,7 @@ export default {
       }
       getSecondmenus(parmas).then(response => {
         const data = response.data.results
-        setTimeout(() => {
-          resolve(data)
-        }, 500)
+        resolve(data)
       })
     },
     fetchRouterData() {
@@ -102,19 +110,15 @@ export default {
       console.log(data, checked, indeterminate)
     },
     handleNodeClick(data) {
-      console.log(data)
+      this.default_checked_keys = data.firstmenus.concat(data.secondmenus)
+      console.log(this.default_checked_keys)
     }
   }
 }
 </script>
 
 <style>
-  .bg-purple {
-    background: #d3dce6;
-  }
-
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
+  .card-title {
+    padding-right: 30px;
   }
 </style>
