@@ -105,6 +105,10 @@
         </div>
       </div>
     </el-card>
+    <el-tooltip placement="top" content="带你装逼带你飞">
+      <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
+                   :backPosition="50"></back-to-top>
+    </el-tooltip>
   </div>
 </template>
 <script>
@@ -122,9 +126,10 @@ import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
 import { ws_url } from '@/config'
+import BackToTop from '@/components/BackToTop'
 
 export default {
-  components: { VueMarkdown },
+  components: { VueMarkdown, BackToTop },
 
   data() {
     return {
@@ -174,7 +179,16 @@ export default {
       change_action: false,
       ws_stream: '/salt/sendmail/',
       ws: '',
-      to_list: []
+      to_list: [],
+      BackToTopStyle: {
+        right: '50px',
+        bottom: '50px',
+        width: '40px',
+        height: '40px',
+        'border-radius': '4px',
+        'line-height': '45px', // 请保持与高度一致以垂直居中
+        background: '#f5152d'// 按钮的背景颜色
+      }
     }
   },
 
