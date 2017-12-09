@@ -45,14 +45,20 @@ export default {
         this.firstData = response.data.results
       })
     },
-    fetchSecondData(res, resolve) {
+    fetchSecondData(node, resolve) {
+      if (node.level === 0) {
+        return resolve([{ name: 'region' }])
+      }
+      if (node.level > 1) return resolve([])
+
       const parmas = {
-        parent__name: res.data.name
+        parent__name: node.data.name
       }
       getSecondmenus(parmas).then(response => {
         const data = response.data.results
-        console.log(data)
-        resolve(data)
+        setTimeout(() => {
+          resolve(data)
+        }, 500)
       })
     },
     handleCheckChange(data, checked, indeterminate) {
