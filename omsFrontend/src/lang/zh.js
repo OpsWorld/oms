@@ -36,7 +36,7 @@ export default {
     editworkticket: '编辑工单',
     menuManager: '菜单管理',
     menulist: '菜单列表',
-    exportZip: 'Zip',
+    menuperm: '菜单权限',
     theme: 'Theme',
     errorPages: '错误页面',
     page401: '401',

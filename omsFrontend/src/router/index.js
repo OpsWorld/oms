@@ -161,7 +161,7 @@ export const asyncRouterMap = [
     authority: 'menuManager',
     children: [
       { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: 'menulist' },
-      { path: 'test', component: _import('menus/test'), name: 'test', authority: 'test' }
+      { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: 'menuperm' }
     ]
   }
 ]

@@ -36,7 +36,7 @@ export default {
     editworkticket: 'editworkticket',
     menuManager: 'menuManager',
     menulist: 'menulist',
-    exportZip: 'Zip',
+    menuperm: 'menuperm',
     theme: 'Theme',
     errorPages: 'Error Pages',
     page401: '401',
