@@ -50,7 +50,7 @@
           :on-success="handleSuccess"
           :show-file-list="false"
           :disabled="count>2?true:false">
-          <el-button slot="trigger" size="small" type="info" icon="upload2" :disabled="count>2?true:false">
+          <el-button slot="trigger" size="small" type="primary" icon="upload2" :disabled="count>2?true:false">
             上传文件
           </el-button>
           <div slot="tip" class="el-upload__tip">
@@ -343,19 +343,22 @@ export default {
   .editticket {
     margin: 50px;
     width: 80%;
-    .title {
-      color: #feff25;
-      font-size: 30px;
-      padding-left: 10px;
-    }
-    .appendInfo {
-      padding: 5px;
-      .han {
-        color: rgba(43, 200, 13, 0.6);
-        font-size: 16px;
-        margin-left: 5px;
-      }
-    }
+  }
+
+  .title {
+    color: #f10df5;
+    font-size: 30px;
+    padding-left: 10px;
+  }
+
+  .appendInfo {
+    padding: 5px;
+  }
+
+  .han {
+    color: rgba(43, 200, 13, 0.6);
+    font-size: 16px;
+    margin-left: 5px;
   }
 
   .content {
