@@ -43,6 +43,24 @@
           </el-tree>
         </el-card>
       </el-col>
+      <el-col :span="8">
+        <el-card>
+          <div slot="header">
+            <span class="card-title">资源列表</span>
+          </div>
+          <el-tree
+            :data="firstData"
+            :props="menuprops"
+            node-key="name"
+            default-expand-all
+            ref="menutree"
+            :load="fetchSecondData"
+            lazy
+            show-checkbox
+            @check-change="handleCheckChange">
+          </el-tree>
+        </el-card>
+      </el-col>
     </el-row>
     <el-dialog :visible.sync="addForm">
       <add-menuperm :treedata="firstData" :groupdata="groups"></add-menuperm>

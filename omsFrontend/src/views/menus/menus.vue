@@ -26,7 +26,7 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="8">
         <el-card class="box-card">
           <el-form label-width="80px" :model="menuform" ref="menuform">
             <el-form-item label="菜单类型" prop="hidden">
@@ -72,7 +72,9 @@
             </el-form-item>
           </el-form>
         </el-card>
-        <el-card v-if="!is_second" class="box-card">
+      </el-col>
+      <el-col :span="8">
+        <el-card v-if="is_second" class="box-card">
           <span>按钮或资源</span>
           <!--<menu-element :menuId='currentId' ref="menuElement"></menu-element>-->
         </el-card>
