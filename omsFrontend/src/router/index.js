@@ -154,7 +154,7 @@ export const asyncRouterMap = [
   },
   {
     name: 'menuManager',
-    path: '/tools',
+    path: '/menus',
     component: Layout,
     icon: 'fire',
     redirect: 'noredirect',

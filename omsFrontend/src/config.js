@@ -25,49 +25,40 @@ module.exports = {
   apiUrl: url,
   ws_url: ws_scheme + '://' + rest_url + ':8000',
 
-  /*
-  数据分页限制
-   */
+  // 数据分页限制
   LIMIT: 10,
 
-  /*
-  本地上传到服务器
-   */
+  // 本地上传到服务器
   uploads: `${url}/api/upload/`,
 
-  /*
-  登录
-   */
+  // 登录
   login: `${url}/api/api-token-auth/`,
   // login: `${url}/api/api-auth/login/`,
   logout: `${url}/api/api-auth/logout/`,
   changePassword: `${url}/api/changepasswd/`,
 
-  /*
-  主机
-   */
+  // 主机
   hosts: `${url}/api/hosts/`,
   hostgroups: `${url}/api/hostgroups/`,
 
-  /*
-  用户
-   */
+  // 用户
   users: `${url}/api/users/`,
   groups: `${url}/api/groups/`,
   roles: `${url}/api/roles/`,
 
-  /*
-  工单
-   */
+  // 工单
   worktickers: `${url}/api/worktickers/`,
   ticketcomments: `${url}/api/ticketcomments/`,
   ticketenclosures: `${url}/api/ticketenclosures/`,
   tickettypes: `${url}/api/tickettypes/`,
   ticketwikis: `${url}/api/ticketwikis/`,
 
-  /*
-  权限
-  */
+  // 权限
   usermenuperms: `${url}/api/usermenuperms/`,
-  routerinfo: `${url}/api/routers/`
+  routerinfo: `${url}/api/routers/`,
+
+  // 菜单
+  firstmenus: `${url}/api/firstmenus/`,
+  secondmenus: `${url}/api/secondmenus/`,
+  menumetas: `${url}/api/menumetas/`
 }
