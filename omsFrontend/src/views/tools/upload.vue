@@ -46,7 +46,6 @@
                 </div>
                 <div class="table-pagination">
                     <el-pagination
-                            small
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
                             :current-page.sync="listQuery.offset"

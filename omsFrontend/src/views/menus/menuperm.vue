@@ -4,27 +4,9 @@
       <el-col :span="8">
         <el-card>
           <div slot="header">
-            <span class="card-title">菜单列表</span>
-          </div>
-          <el-tree
-            :data="firstData"
-            :props="menuprops"
-            node-key="name"
-            default-expand-all
-            ref="menutree"
-            :load="fetchSecondData"
-            lazy
-            show-checkbox
-            @check-change="handleCheckChange">
-          </el-tree>
-        </el-card>
-      </el-col>
-      <el-col :span="8">
-        <el-card>
-          <div slot="header">
             <span class="card-title">用户组列表</span>
             <el-button-group>
-              <el-button type="success" plain size="mini" icon="plus">
+              <el-button type="success" plain size="mini" icon="plus" @click="addForm=true">
                 添加
               </el-button>
               <el-button type="primary" plain size="mini" icon="edit">
@@ -43,15 +25,39 @@
           </el-tree>
         </el-card>
       </el-col>
+      <el-col :span="8">
+        <el-card>
+          <div slot="header">
+            <span class="card-title">菜单列表</span>
+          </div>
+          <el-tree
+            :data="firstData"
+            :props="menuprops"
+            node-key="name"
+            default-expand-all
+            ref="menutree"
+            :load="fetchSecondData"
+            lazy
+            show-checkbox
+            @check-change="handleCheckChange">
+          </el-tree>
+        </el-card>
+      </el-col>
     </el-row>
+    <el-dialog :visible.sync="addForm">
+      <add-menuperm :treedata="firstData" :groupdata="groups"></add-menuperm>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getFirstmenus, getSecondmenus } from '@/api/menu'
 import { getMenuPerm } from '@/api/perm'
+import { getGroup } from '@/api/user'
+import addMenuperm from './addmenuperm.vue'
 
 export default {
+  components: { addMenuperm },
   data() {
     return {
       firstData: [],
@@ -65,26 +71,28 @@ export default {
         label: 'group'
       },
       count: 1,
-      default_checked_keys: []
+      groups: [],
+      addForm: false
     }
   },
   created() {
     this.fetchFirstData()
     this.fetchRouterData()
+    this.getGroups()
   },
   methods: {
     fetchFirstData() {
       getFirstmenus().then(response => {
         this.firstData = response.data.results
         // 对象map用法
-        //        this.firstData.map(function(data) {
-        //          const parmas = {
-        //            parent__title: data.title
-        //          }
-        //          getSecondmenus(parmas).then(response => {
-        //            data['children'] = response.data.results
-        //          })
-        //        })
+        this.firstData.map(function(data) {
+          const parmas = {
+            parent__title: data.title
+          }
+          getSecondmenus(parmas).then(response => {
+            data['children'] = response.data.results
+          })
+        })
       })
     },
     fetchSecondData(node, resolve) {
@@ -109,7 +117,16 @@ export default {
     handleCheckChange(data, checked, indeterminate) {
     },
     handleNodeClick(data) {
+      this.$refs.menutree.setCheckedKeys([])
       this.$refs.menutree.setCheckedKeys(data.secondmenus)
+    },
+    addFormSubmit(Form) {
+
+    },
+    getGroups() {
+      getGroup().then(response => {
+        this.groups = response.data.results
+      })
     }
   }
 }

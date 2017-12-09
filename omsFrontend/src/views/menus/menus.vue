@@ -3,23 +3,19 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
-          <div class="filter-container">
+          <div slot="header">
             <el-button-group>
-              <el-button type="success" plain size="mini" v-if="menuManager_btn_add" icon="plus"
-                         @click="handlerAdd('menuform')">
+              <el-button type="success" plain size="mini" v-if="menuManager_btn_add" icon="plus" @click="handlerAdd">
                 添加
               </el-button>
               <el-button type="primary" plain size="mini" v-if="menuManager_btn_edit" icon="edit" @click="handlerEdit">
                 编辑
               </el-button>
-              <el-button type="danger" plain size="mini" v-if="menuManager_btn_del" icon="delete" @click="handleDelete"
-                         disabled>
+              <el-button type="danger" plain size="mini" v-if="menuManager_btn_del" icon="delete" @click="handleDelete">
                 删除
               </el-button>
             </el-button-group>
           </div>
-        </el-card>
-        <el-card>
           <el-tree
             :data="firstData"
             :props="props"
