@@ -12,7 +12,7 @@ class ElementSerializer(serializers.ModelSerializer):
 
 
 class SecondmenuSerializer(serializers.ModelSerializer):
-    parent = serializers.SlugRelatedField(queryset=Firstmenu.objects.all(), slug_field='name', allow_null=True)
+    parent = serializers.SlugRelatedField(queryset=Firstmenu.objects.all(), slug_field='title', allow_null=True)
 
     class Meta:
         model = Secondmenu
