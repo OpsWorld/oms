@@ -3,9 +3,12 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
+          <div slot="header" class="clearfix">
+            <span>菜单列表</span>
+          </div>
           <el-tree
             :data="firstData"
-            :props="props"
+            :props="menuprops"
             :load="fetchSecondData"
             :accordion="true"
             lazy
@@ -14,9 +17,30 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="8">
         <el-card>
-          <div class="grid-content bg-purple"></div>
+          <div slot="header" class="clearfix">
+            <span>用户组列表</span>
+            <el-button-group>
+              <el-button type="success" plain size="mini" icon="plus">
+                添加
+              </el-button>
+              <el-button type="primary" plain size="mini" icon="edit">
+                编辑
+              </el-button>
+              <el-button type="danger" plain size="mini" icon="delete">
+                删除
+              </el-button>
+            </el-button-group>
+          </div>
+          <el-tree
+            :data="routerData"
+            :props="routerprops"
+            :load="fetchSecondData"
+            :accordion="true"
+            lazy
+            @check-change="handleCheckChange">
+          </el-tree>
         </el-card>
       </el-col>
     </el-row>
@@ -25,13 +49,19 @@
 
 <script>
 import { getFirstmenus, getSecondmenus } from '@/api/menu'
+import { getMenuPerm } from '@/api/perm'
 
 export default {
   data() {
     return {
       firstData: [],
-      props: {
-        label: 'name',
+      routerData: [],
+      menuprops: {
+        label: 'title',
+        children: ''
+      },
+      routerprops: {
+        label: 'group',
         children: ''
       },
       count: 1
@@ -39,6 +69,7 @@ export default {
   },
   created() {
     this.fetchFirstData()
+    this.fetchRouterData()
   },
   methods: {
     fetchFirstData() {
@@ -53,7 +84,7 @@ export default {
       if (node.level > 1) return resolve([])
 
       const parmas = {
-        parent__name: node.data.name
+        parent__title: node.data.title
       }
       getSecondmenus(parmas).then(response => {
         const data = response.data.results
@@ -62,41 +93,16 @@ export default {
         }, 500)
       })
     },
+    fetchRouterData() {
+      getMenuPerm().then(response => {
+        this.routerData = response.data.results
+      })
+    },
     handleCheckChange(data, checked, indeterminate) {
       console.log(data, checked, indeterminate)
     },
     handleNodeClick(data) {
       console.log(data)
-    },
-    loadNode(node, resolve) {
-      if (node.level === 0) {
-        return resolve([{ name: 'region1' }, { name: 'region2' }])
-      }
-      if (node.level > 3) return resolve([])
-
-      var hasChild
-      if (node.data.name === 'region1') {
-        hasChild = true
-      } else if (node.data.name === 'region2') {
-        hasChild = false
-      } else {
-        hasChild = Math.random() > 0.5
-      }
-
-      setTimeout(() => {
-        var data
-        if (hasChild) {
-          data = [{
-            name: 'zone' + this.count++
-          }, {
-            name: 'zone' + this.count++
-          }]
-        } else {
-          data = []
-        }
-
-        resolve(data)
-      }, 500)
     }
   }
 }

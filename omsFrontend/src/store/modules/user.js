@@ -51,9 +51,9 @@ const user = {
     },
 
     // 获取用户信息
-    GetUserInfo({ commit }) {
+    GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getRouterInfo().then(response => {
+        getRouterInfo(state.username).then(response => {
           const data = response.data
           const groups = data.groups
           commit('SET_GROUPS', groups)

@@ -2,7 +2,7 @@
 # author: itimor
 
 from django_filters import rest_framework as filters
-from menus.models import Firstmenu, Secondmenu, MenuMeta
+from menus.models import Firstmenu, Secondmenu, Element
 
 
 class FirstmenuFilter(filters.FilterSet):
@@ -10,6 +10,7 @@ class FirstmenuFilter(filters.FilterSet):
         model = Firstmenu
         fields = {
             'id': ['exact'],
+            'title': ['exact'],
             'name': ['exact'],
         }
 
@@ -19,15 +20,18 @@ class SecondmenuFilter(filters.FilterSet):
         model = Secondmenu
         fields = {
             'id': ['exact'],
+            'title': ['exact'],
             'name': ['exact'],
-            'parent__name': ['exact'],
+            'parent__title': ['exact'],
         }
 
 
-class MenuMetaFilter(filters.FilterSet):
+class ElementFilter(filters.FilterSet):
     class Meta:
-        model = MenuMeta
+        model = Element
         fields = {
             'id': ['exact'],
             'name': ['exact'],
+            'code': ['exact'],
+            'parent__title': ['exact'],
         }

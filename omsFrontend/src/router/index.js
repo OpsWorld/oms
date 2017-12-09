@@ -134,8 +134,8 @@ export const asyncRouterMap = [
     redirect: 'noredirect',
     authority: 'ticketManager',
     children: [
-      { path: 'workticketlist', component: _import('worktickets/workticket'), name: 'workticketlist', authority: 'workticketlist' },
-      { path: 'tickettypelist', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: 'tickettypelist' },
+      { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: 'workticketlist' },
+      { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: 'tickettypelist' },
       { path: 'addworkticket', hidden: true, component: _import('worktickets/addworkticket'), name: 'addworkticket', authority: 'addworkticket' },
       { path: 'editworkticket/:id', hidden: true, component: _import('worktickets/editworkticket'), name: 'editworkticket', authority: 'editworkticket' }
     ]

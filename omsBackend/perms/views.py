@@ -7,8 +7,8 @@ from perms.serializers import UserMenuPermsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from menus.models import Firstmenu, Secondmenu, MenuMeta
-from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
+from menus.models import Firstmenu, Secondmenu, Element
+from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, ElementSerializer
 from django.forms.models import model_to_dict
 from users.models import User, Group
 from users.serializers import UserSerializer, RoleSerializer, GroupSerializer
@@ -22,9 +22,9 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
 
 
 @api_view()
-def routers(request):
+def routers(request,username=None):
     try:
-        userqueryset = User.objects.get(username=request.user)
+        userqueryset = User.objects.get(username=username)
         userserializer = UserSerializer(userqueryset, context={'request': request}).data
         groups = userserializer['groups']
         menus = []

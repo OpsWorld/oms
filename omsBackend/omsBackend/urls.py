@@ -13,11 +13,11 @@ from perms.views import routers
 
 urlpatterns = [
                   url(r'^api/', include(router.urls)),
-                  url(r'^api/routers', routers, name="myrouter"),
+                  url(r'^api/routers/(?P<username>\w+)', routers, name="myrouter"),
 
                   # 用户认证
                   url(r'^api/changepasswd/', PasswordChangeView.as_view(), name='changepasswd'),
                   url(r'^api/api-token-auth/', obtain_jwt_token, name='rest_framework_token'),
                   url(r'^api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-                  url(r'', TemplateView.as_view(template_name="index.html")),
+                  #url(r'', TemplateView.as_view(template_name="index.html")),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

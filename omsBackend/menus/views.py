@@ -2,9 +2,9 @@
 # author: kiven
 
 from rest_framework import viewsets
-from menus.models import Firstmenu, Secondmenu, MenuMeta
-from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, MenuMetaSerializer
-from menus.filters import FirstmenuFilter, SecondmenuFilter, MenuMetaFilter
+from menus.models import Firstmenu, Secondmenu, Element
+from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, ElementSerializer
+from menus.filters import FirstmenuFilter, SecondmenuFilter, ElementFilter
 
 
 class FirstmenuViewSet(viewsets.ModelViewSet):
@@ -19,7 +19,7 @@ class SecondmenuViewSet(viewsets.ModelViewSet):
     filter_class = SecondmenuFilter
 
 
-class MenuMetaViewSet(viewsets.ModelViewSet):
-    queryset = MenuMeta.objects.all()
-    serializer_class = MenuMetaSerializer
-    filter_class = MenuMetaFilter
+class ElementViewSet(viewsets.ModelViewSet):
+    queryset = Element.objects.all()
+    serializer_class = ElementSerializer
+    filter_class = ElementFilter

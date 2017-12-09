@@ -34,10 +34,9 @@ export function deleteMenuPerm(id) {
 }
 
 // router
-export function getRouterInfo(query) {
+export function getRouterInfo(username) {
   return request({
-    url: apiURL.routerinfo,
-    method: 'get',
-    params: query
+    url: apiURL.routerinfo + username,
+    method: 'get'
   })
 }

@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from menus.models import Firstmenu, Secondmenu, MenuMeta
+from menus.models import Firstmenu, Secondmenu, Element
 from rest_framework import serializers
 
 
-class MenuMetaSerializer(serializers.ModelSerializer):
+class ElementSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MenuMeta
-        fields = ('url', 'id', 'name')
+        model = Element
+        fields = ('url', 'id', 'parent', 'name', 'code')
 
 
 class SecondmenuSerializer(serializers.ModelSerializer):
@@ -16,10 +16,10 @@ class SecondmenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Secondmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'hidden', 'meta', 'parent')
+        fields = ('url', 'id', 'title', 'name', 'path', 'component', 'hidden', 'parent')
 
 
 class FirstmenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Firstmenu
-        fields = ('url', 'id', 'name', 'path', 'component', 'icon', 'redirect', 'hidden', 'meta')
+        fields = ('url', 'id', 'title', 'name', 'path', 'component', 'icon', 'redirect', 'hidden')
