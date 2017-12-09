@@ -9,12 +9,12 @@
           <el-tree
             :data="firstData"
             :props="menuprops"
+            node-key="name"
             default-expand-all
             ref="menutree"
             :load="fetchSecondData"
             lazy
             show-checkbox
-            :default-checked-keys="default_checked_keys"
             @check-change="handleCheckChange">
           </el-tree>
         </el-card>
@@ -107,11 +107,9 @@ export default {
       })
     },
     handleCheckChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate)
     },
     handleNodeClick(data) {
-      this.default_checked_keys = data.firstmenus.concat(data.secondmenus)
-      console.log(this.default_checked_keys)
+      this.$refs.menutree.setCheckedKeys(data.secondmenus)
     }
   }
 }

@@ -1,39 +1,53 @@
 <template>
   <div>
-    <el-input
-      placeholder="输入关键字进行过滤"
-      v-model="filterText">
-    </el-input>
-
     <el-tree
-      class="filter-tree"
       :data="data2"
-      :props="defaultProps"
+      show-checkbox
       default-expand-all
-      :filter-node-method="filterNode"
-      ref="tree2">
+      node-key="name"
+      ref="tree"
+      highlight-current
+      :props="defaultProps">
     </el-tree>
+
+    <div class="buttons">
+      <el-button @click="getCheckedNodes">通过 node 获取</el-button>
+      <el-button @click="getCheckedKeys">通过 key 获取</el-button>
+      <el-button @click="setCheckedNodes">通过 node 设置</el-button>
+      <el-button @click="setCheckedKeys">通过 key 设置</el-button>
+      <el-button @click="resetChecked">清空</el-button>
+    </div>
 
   </div>
 </template>
 <script>
 export default {
-  watch: {
-    filterText(val) {
-      this.$refs.tree2.filter(val)
-    }
-  },
-
   methods: {
-    filterNode(value, data) {
-      if (!value) return true
-      return data.label.indexOf(value) !== -1
+    getCheckedNodes() {
+      console.log(this.$refs.tree.getCheckedNodes())
+    },
+    getCheckedKeys() {
+      console.log(this.$refs.tree.getCheckedKeys())
+    },
+    setCheckedNodes() {
+      this.$refs.tree.setCheckedNodes([{
+        id: 5,
+        label: '二级 2-1'
+      }, {
+        id: 9,
+        label: '三级 1-1-1'
+      }])
+    },
+    setCheckedKeys() {
+      this.$refs.tree.setCheckedKeys([3])
+    },
+    resetChecked() {
+      this.$refs.tree.setCheckedKeys([])
     }
   },
 
   data() {
     return {
-      filterText: '',
       data2: [{
         id: 1,
         label: '一级 1',
