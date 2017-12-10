@@ -9,15 +9,15 @@
               <el-button type="primary" plain size="mini" icon="edit">
                 编辑
               </el-button>
-              <el-button type="danger" plain size="mini" icon="delete">
-                删除
-              </el-button>
             </el-button-group>
           </div>
           <div>
-            <p v-for="item in groups" :key="item.id">
-              <el-button type="success" plain size="small" @click="groupClick(item.name)">{{item.name}}</el-button>
-            </p>
+            <el-tree
+              :data="routerData"
+              :props="routerprops"
+              accordion
+              @node-click="handleNodeClick">
+            </el-tree>
           </div>
         </el-card>
       </el-col>
@@ -177,11 +177,6 @@ export default {
       getGroup().then(response => {
         this.groups = response.data.results
       })
-    },
-    groupClick(group) {
-      this.$refs.menutree.setCheckedKeys([])
-      this.fetchRouterData(group)
-      this.$refs.menutree.setCheckedKeys(this.routerData[0].secondmenus)
     },
     searchClick() {
       this.fetchData()
