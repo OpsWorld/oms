@@ -5,18 +5,16 @@
         <el-card>
           <div slot="header">
             <span class="card-title">用户组列表</span>
-            <el-button-group>
-              <el-button type="primary" plain size="mini" icon="edit">
-                编辑
-              </el-button>
-            </el-button-group>
+            <el-button type="primary" plain size="mini" v-if="select_group" @click="edit_menu=true">
+              编辑
+            </el-button>
           </div>
           <div>
             <el-tree
               :data="routerData"
               :props="routerprops"
               accordion
-              @node-click="handleNodeClick">
+              @node-click="handleGroupClick">
             </el-tree>
           </div>
         </el-card>
@@ -25,17 +23,21 @@
         <el-card>
           <div slot="header">
             <span class="card-title">菜单列表</span>
+            <el-button v-if="edit_menu" type="primary" plain size="mini">
+              保存
+            </el-button>
           </div>
           <el-tree
             :data="firstData"
             :props="menuprops"
             node-key="name"
             default-expand-all
-            ref="menutree"
+            ref="grouptree"
             :load="fetchSecondData"
             lazy
             show-checkbox
-            @check-change="handleCheckChange">
+            @check-change="handleCheckChange"
+            @node-click="handleNodeClick">
           </el-tree>
         </el-card>
       </el-col>
@@ -43,6 +45,9 @@
         <el-card>
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
+            <el-button v-if="edit_menu" type="primary" plain size="mini">
+              保存
+            </el-button>
           </div>
           <div class="head-lavel">
             <div class="table-search">
@@ -94,6 +99,7 @@ export default {
     return {
       firstData: [],
       secondData: [],
+      elementData: [],
       routerData: [],
       menuprops: {
         label: 'title',
@@ -104,13 +110,14 @@ export default {
       },
       count: 1,
       groups: [],
-      elementData: [],
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
       limit: LIMIT,
       offset: '',
-      pagesize: [10, 25, 50, 100]
+      pagesize: [10, 25, 50, 100],
+      select_group: false,
+      edit_menu: false
     }
   },
   created() {
@@ -161,17 +168,18 @@ export default {
         parent__title: title
       }
       getMenumetas(parmas).then(response => {
-        this.routerData = response.data.results
+        this.elementData = response.data.results
       })
     },
     handleCheckChange(data, checked, indeterminate) {
     },
-    handleNodeClick(data) {
-      this.$refs.menutree.setCheckedKeys([])
-      this.$refs.menutree.setCheckedKeys(data.secondmenus)
+    handleGroupClick(data) {
+      this.select_group = true
+      this.$refs.grouptree.setCheckedKeys([])
+      this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
-    addFormSubmit(Form) {
-
+    handleNodeClick(data) {
+      this.fetchElementData(data.title)
     },
     getGroups() {
       getGroup().then(response => {
