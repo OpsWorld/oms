@@ -1,7 +1,7 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card>
           <div slot="header">
             <el-button-group>
@@ -73,7 +73,7 @@
           </el-form>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="10">
         <el-card v-if="is_second" class="box-card">
           <span>按钮或资源</span>
           <!--<menu-element :menuId='currentId' ref="menuElement"></menu-element>-->

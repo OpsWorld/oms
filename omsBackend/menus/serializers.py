@@ -6,6 +6,8 @@ from rest_framework import serializers
 
 
 class ElementSerializer(serializers.ModelSerializer):
+    parent = serializers.SlugRelatedField(queryset=Firstmenu.objects.all(), slug_field='title', allow_null=True)
+
     class Meta:
         model = Element
         fields = ('url', 'id', 'parent', 'name', 'code')

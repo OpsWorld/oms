@@ -36,7 +36,7 @@ class Secondmenu(models.Model):
 
 
 class Element(models.Model):
-    parent = models.ForeignKey("Firstmenu", verbose_name=u'所属菜单')
+    parent = models.ForeignKey("Secondmenu", verbose_name=u'所属菜单')
     name = models.CharField(max_length=100, blank=True, verbose_name=u'菜单元素')
     code = models.CharField(max_length=100, blank=True, verbose_name=u'元素code')
 

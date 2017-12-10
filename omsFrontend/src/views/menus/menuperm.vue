@@ -1,14 +1,11 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card>
           <div slot="header">
             <span class="card-title">用户组列表</span>
             <el-button-group>
-              <el-button type="success" plain size="mini" icon="plus" @click="addForm=true">
-                添加
-              </el-button>
               <el-button type="primary" plain size="mini" icon="edit">
                 编辑
               </el-button>
@@ -17,15 +14,14 @@
               </el-button>
             </el-button-group>
           </div>
-          <el-tree
-            :data="routerData"
-            :props="routerprops"
-            accordion
-            @node-click="handleNodeClick">
-          </el-tree>
+          <div>
+            <p v-for="item in groups" :key="item.id">
+              <el-button type="success" plain size="small" @click="groupClick(item.name)">{{item.name}}</el-button>
+            </p>
+          </div>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card>
           <div slot="header">
             <span class="card-title">菜单列表</span>
@@ -43,39 +39,57 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="12">
         <el-card>
           <div slot="header">
-            <span class="card-title">资源列表</span>
+            <span class="card-title">资源按钮列表</span>
           </div>
-          <el-tree
-            :data="firstData"
-            :props="menuprops"
-            node-key="name"
-            default-expand-all
-            ref="menutree"
-            :load="fetchSecondData"
-            lazy
-            show-checkbox
-            @check-change="handleCheckChange">
-          </el-tree>
+          <div class="head-lavel">
+            <div class="table-search">
+              <el-input
+                placeholder="搜索 ..."
+                v-model="searchdata"
+                @keyup.enter.native="searchClick">
+                <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+              </el-input>
+            </div>
+          </div>
+          <div>
+            <el-table :data="elementData" border style="width: 100%">
+              <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
+              <el-table-column prop='code' label='资源代码'></el-table-column>
+            </el-table>
+          </div>
+          <div class="table-pagination">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="pagesize"
+              :page-size="limit"
+              layout="prev, pager, next, sizes"
+              :total="tabletotal">
+            </el-pagination>
+          </div>
         </el-card>
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="addForm">
-      <add-menuperm :treedata="firstData" :groupdata="groups"></add-menuperm>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getFirstmenus, getSecondmenus } from '@/api/menu'
+import { getFirstmenus, getSecondmenus, getMenumetas } from '@/api/menu'
 import { getMenuPerm } from '@/api/perm'
 import { getGroup } from '@/api/user'
 import addMenuperm from './addmenuperm.vue'
+import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
+import { LIMIT } from '@/config'
 
 export default {
-  components: { addMenuperm },
+  components: {
+    ElButton,
+    addMenuperm
+  },
   data() {
     return {
       firstData: [],
@@ -90,12 +104,19 @@ export default {
       },
       count: 1,
       groups: [],
-      addForm: false
+      elementData: [],
+      tabletotal: 0,
+      searchdata: '',
+      currentPage: 1,
+      limit: LIMIT,
+      offset: '',
+      pagesize: [10, 25, 50, 100]
     }
   },
   created() {
     this.fetchFirstData()
     this.fetchRouterData()
+    this.fetchElementData()
     this.getGroups()
   },
   methods: {
@@ -127,8 +148,19 @@ export default {
         resolve(data)
       })
     },
-    fetchRouterData() {
-      getMenuPerm().then(response => {
+    fetchRouterData(group) {
+      const parmas = {
+        group: group
+      }
+      getMenuPerm(parmas).then(response => {
+        this.routerData = response.data.results
+      })
+    },
+    fetchElementData(title) {
+      const parmas = {
+        parent__title: title
+      }
+      getMenumetas(parmas).then(response => {
         this.routerData = response.data.results
       })
     },
@@ -145,6 +177,22 @@ export default {
       getGroup().then(response => {
         this.groups = response.data.results
       })
+    },
+    groupClick(group) {
+      this.$refs.menutree.setCheckedKeys([])
+      this.fetchRouterData(group)
+      this.$refs.menutree.setCheckedKeys(this.routerData[0].secondmenus)
+    },
+    searchClick() {
+      this.fetchData()
+    },
+    handleSizeChange(val) {
+      this.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.offset = val - 1
+      this.fetchData()
     }
   }
 }
@@ -153,5 +201,18 @@ export default {
 <style>
   .card-title {
     padding-right: 30px;
+  }
+
+  .head-lavel {
+    padding-bottom: 50px;
+  }
+
+  .table-search {
+    float: right;
+  }
+
+  .table-pagination {
+    padding: 10px 0;
+    float: right;
   }
 </style>
