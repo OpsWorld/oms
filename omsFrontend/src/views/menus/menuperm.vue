@@ -9,8 +9,11 @@
               <el-button type="success" plain size="mini" @click="add_menu=true">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="select_group" @click="edit_menu=!edit_menu">
+              <el-button type="primary" plain size="mini" v-if="select_group&&edit_menu" @click="edit_menu=false">
                 编辑
+              </el-button>
+              <el-button type="primary" plain size="mini" v-if="select_group&&!edit_menu" @click="putFormSubmit">
+                保存
               </el-button>
             </el-button-group>
           </div>
@@ -28,9 +31,6 @@
         <el-card>
           <div slot="header">
             <span class="card-title">菜单列表</span>
-            <el-button v-if="edit_menu" type="primary" plain size="mini">
-              保存
-            </el-button>
           </div>
           <el-tree
             :data="firstData"
@@ -50,9 +50,6 @@
         <el-card>
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
-            <el-button v-if="edit_menu" type="primary" plain size="mini">
-              保存
-            </el-button>
           </div>
           <div class="head-lavel">
             <div class="table-search">
@@ -135,7 +132,7 @@ export default {
       offset: '',
       pagesize: [10, 25, 50, 100],
       select_group: false,
-      edit_menu: false,
+      edit_menu: true,
       add_menu: false,
       addform: {
         group: '',
@@ -236,6 +233,12 @@ export default {
               type: 'success'
             })
             this.fetchRouterData()
+            this.addform = {
+              group: '',
+              firstmenus: [],
+              secondmenus: [],
+              elements: []
+            }
             this.add_menu = false
           }).catch(error => {
             this.$message.error('添加失败')
@@ -245,6 +248,18 @@ export default {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    putFormSubmit() {
+      postMenuPerm(this.addform).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.fetchRouterData()
+      }).catch(error => {
+        this.$message.error('更新失败')
+        console.log(error)
       })
     },
     resetForm(formName) {
