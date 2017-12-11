@@ -67,6 +67,7 @@ export function deleteSecondmenus(id) {
 
 // menumetas
 export function postMenumetas(data) {
+  console.log(data)
   return request({
     url: apiURL.menumetas,
     method: 'post',

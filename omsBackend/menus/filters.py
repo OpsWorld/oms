@@ -31,7 +31,7 @@ class ElementFilter(filters.FilterSet):
         model = Element
         fields = {
             'id': ['exact'],
-            'name': ['exact'],
+            'name': ['exact', 'contains'],
             'code': ['exact'],
             'parent__title': ['exact'],
         }

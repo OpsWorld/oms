@@ -28,12 +28,15 @@ class Secondmenu(models.Model):
     hidden = models.BooleanField(default=False, verbose_name=u'是否隐藏菜单')
 
     def __str__(self):
-        return '{}-{}'.format(self.parent,self.title)
+        return self.title
 
     class Meta:
         verbose_name = u'二级菜单'
         verbose_name_plural = u'二级菜单'
 
+    def save(self, *args, **kwargs):
+        self.title = '{}-{}'.format(self.parent,self.title)
+        super(Secondmenu, self).save(*args, **kwargs)
 
 class Element(models.Model):
     parent = models.ForeignKey("Secondmenu", verbose_name=u'所属菜单')
@@ -46,3 +49,9 @@ class Element(models.Model):
     class Meta:
         verbose_name = u'菜单元素'
         verbose_name_plural = u'菜单元素'
+
+    def save(self, *args, **kwargs):
+        parent = Secondmenu.objects.get(title=self.parent)
+        self.name = '{}-{}'.format(parent.title,self.name)
+        self.code = '{}:{}'.format(parent.name,self.code)
+        super(Element, self).save(*args, **kwargs)

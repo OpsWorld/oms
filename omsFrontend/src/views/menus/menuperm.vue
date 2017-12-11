@@ -62,6 +62,12 @@
             <el-table :data="elementData" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
               <el-table-column prop='code' label='资源代码'></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="success" plain size="mini">添加</el-button>
+                  <el-button type="danger" plain size="mini">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="table-pagination">
@@ -96,7 +102,7 @@
 
 <script>
 import { getFirstmenus, getSecondmenus, getMenumetas } from '@/api/menu'
-import { getMenuPerm, postMenuPerm } from '@/api/perm'
+import { getMenuPerm, postMenuPerm, putMenuPerm } from '@/api/perm'
 import { getGroup } from '@/api/user'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 import { LIMIT } from '@/config'
@@ -211,9 +217,6 @@ export default {
         this.groups = response.data.results
       })
     },
-    searchClick() {
-      this.fetchElementData()
-    },
     handleSizeChange(val) {
       this.limit = val
       this.fetchElementData()
@@ -249,7 +252,7 @@ export default {
       })
     },
     putFormSubmit() {
-      postMenuPerm(this.addform).then(response => {
+      putMenuPerm(this.addform).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
