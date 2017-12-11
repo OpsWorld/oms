@@ -5,9 +5,14 @@
         <el-card>
           <div slot="header">
             <span class="card-title">用户组列表</span>
-            <el-button type="primary" plain size="mini" v-if="select_group" @click="edit_menu=true">
-              编辑
-            </el-button>
+            <el-button-group>
+              <el-button type="success" plain size="mini" @click="add_menu=true">
+                添加
+              </el-button>
+              <el-button type="primary" plain size="mini" v-if="select_group" @click="edit_menu=!edit_menu">
+                编辑
+              </el-button>
+            </el-button-group>
           </div>
           <div>
             <el-tree
@@ -79,21 +84,34 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="add_menu">
+      <el-form :model="addform" :rules="ruleaddfrom" ref="addform" label-width="100px">
+        <el-form-item label="用户组" prop="group">
+          <el-select v-model="addform.group" placeholder="请选择用户分组">
+            <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addFormSubmit('addform')">立即创建</el-button>
+          <el-button @click="resetForm('addform')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getFirstmenus, getSecondmenus, getMenumetas } from '@/api/menu'
-import { getMenuPerm } from '@/api/perm'
+import { getMenuPerm, postMenuPerm } from '@/api/perm'
 import { getGroup } from '@/api/user'
-import addMenuperm from './addmenuperm.vue'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 import { LIMIT } from '@/config'
+import ElDialog from '../../../node_modules/element-ui/packages/dialog/src/component.vue'
 
 export default {
   components: {
-    ElButton,
-    addMenuperm
+    ElDialog,
+    ElButton
   },
   data() {
     return {
@@ -117,7 +135,19 @@ export default {
       offset: '',
       pagesize: [10, 25, 50, 100],
       select_group: false,
-      edit_menu: false
+      edit_menu: false,
+      add_menu: false,
+      addform: {
+        group: '',
+        firstmenus: [],
+        secondmenus: [],
+        elements: []
+      },
+      ruleaddfrom: {
+        group: [
+          { required: true, message: '请选择用户组', trigger: 'change' }
+        ]
+      }
     }
   },
   created() {
@@ -187,15 +217,38 @@ export default {
       })
     },
     searchClick() {
-      this.fetchData()
+      this.fetchElementData()
     },
     handleSizeChange(val) {
       this.limit = val
-      this.fetchData()
+      this.fetchElementData()
     },
     handleCurrentChange(val) {
       this.offset = val - 1
-      this.fetchData()
+      this.fetchElementData()
+    },
+    addFormSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postMenuPerm(this.addform).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.fetchRouterData()
+            this.add_menu = false
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }
