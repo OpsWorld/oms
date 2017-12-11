@@ -53,12 +53,9 @@
           </div>
           <div class="head-lavel">
             <div class="table-search">
-              <el-input
-                placeholder="搜索 ..."
-                v-model="searchdata"
-                @keyup.enter.native="searchClick">
-                <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
-              </el-input>
+              <el-select v-model="select_menu" placeholder="请选择二级菜单">
+                <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
+              </el-select>
             </div>
           </div>
           <div>
@@ -144,7 +141,8 @@ export default {
         group: [
           { required: true, message: '请选择用户组', trigger: 'change' }
         ]
-      }
+      },
+      select_menu: ''
     }
   },
   created() {
