@@ -39,7 +39,7 @@
             node-key="title"
             default-expand-all
             ref="grouptree"
-            :load="fetchSecondData"
+            :load="fetchNodeData"
             lazy
             show-checkbox
             @check-change="handleCheckChange"
@@ -54,7 +54,7 @@
           </div>
           <div class="head-lavel">
             <div class="table-search">
-              <el-select v-model="select_menu" placeholder="请选择二级菜单">
+              <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
                 <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
               </el-select>
             </div>
@@ -65,7 +65,8 @@
               <el-table-column prop='code' label='资源代码'></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="success" plain size="mini">添加</el-button>
+                  <el-button v-if="select_elements.indexOf(scope.row.name)>0" type="success" plain size="mini">添加
+                  </el-button>
                   <el-button type="danger" plain size="mini">删除</el-button>
                 </template>
               </el-table-column>
@@ -86,9 +87,9 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="add_menu">
-      <el-form :model="menuform" :rules="ruleaddfrom" ref="addform" label-width="100px">
+      <el-form :model="menuform" ref="addform" label-width="100px">
         <el-form-item label="用户组" prop="group">
-          <el-select v-model="menuform.group" placeholder="请选择用户分组">
+          <el-select v-model="menuform.group" filterable placeholder="请选择用户分组">
             <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
@@ -144,17 +145,16 @@ export default {
         secondmenus: [],
         elements: []
       },
-      ruleaddfrom: {
-        group: [
-          { required: true, message: '请选择用户组', trigger: 'change' }
-        ]
-      },
-      select_menu: '',
-      firstmenus: []
+      element_add: true,
+      element_del: true,
+      firstmenus: [],
+      second_title: undefined,
+      select_elements: []
     }
   },
   created() {
     this.fetchFirstData()
+    this.fetchSecondData()
     this.fetchRouterData()
     this.fetchElementData()
     this.getGroups()
@@ -174,7 +174,7 @@ export default {
         })
       })
     },
-    fetchSecondData(node, resolve) {
+    fetchNodeData(node, resolve) {
       if (node.level === 0) {
         return resolve([{ name: 'region' }])
       }
@@ -188,6 +188,15 @@ export default {
         resolve(data)
       })
     },
+    fetchSecondData() {
+      getSecondmenus().then(response => {
+        this.secondData = response.data.results
+      })
+    },
+    changeSelectTitle(res) {
+      this.second_title = res
+      this.fetchElementData()
+    },
     fetchRouterData(group) {
       const parmas = {
         group: group
@@ -196,26 +205,38 @@ export default {
         this.routerData = response.data.results
       })
     },
-    fetchElementData(title) {
+    fetchElementData() {
       const parmas = {
-        parent__title: title
+        parent__title: this.second_title
       }
       getMenumetas(parmas).then(response => {
         this.elementData = response.data.results
       })
     },
-    handleCheckChange(data, checked, indeterminate) {
-      console.log(data, checked, indeterminate)
+    handleCheckChange(data, checked) {
       if (checked) {
         if (data.parent) {
+          this.getIndeterminate()
           this.menuform.secondmenus.push(data.title)
         } else {
           this.menuform.firstmenus.push(data.title)
+          this.menuform.firstmenus = [...new Set(this.menuform.firstmenus)]
         }
       } else {
+        this.menuform.firstmenus.remove(data.title)
         this.menuform.secondmenus.remove(data.title)
       }
-      this.menuform.firstmenus = [...new Set(this.menuform.firstmenus)]
+    },
+    getIndeterminate() {
+      const nodesDOM = this.$refs.grouptree.$el.querySelectorAll('.el-tree-node')
+      const nodesVue = [].map.call(nodesDOM, node => node.__vue__)
+      const first = nodesVue.filter(item => item.indeterminate === true)
+      if (first.length > 0) {
+        for (const item of first) {
+          this.menuform.firstmenus.push(item.node.data.title)
+          this.menuform.firstmenus = [...new Set(this.menuform.firstmenus)]
+        }
+      }
     },
     handleGroupClick(data) {
       this.select_group = true
@@ -224,7 +245,17 @@ export default {
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
     handleNodeClick(data) {
-      this.fetchElementData(data.title)
+      const parmas = {
+        parent__title: data.title
+      }
+      this.select_elements = []
+      getMenumetas(parmas).then(response => {
+        const elements = response.data.results
+        for (const item of elements) {
+          this.select_elements.push(item.id)
+        }
+      })
+      console.log(Array.from(this.select_elements))
     },
     getGroups() {
       getGroup().then(response => {
