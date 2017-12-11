@@ -12,7 +12,8 @@
               <el-button type="primary" plain size="mini" v-if="select_group&&edit_menu" @click="edit_menu=false">
                 编辑
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="select_group&&!edit_menu" @click="putFormSubmit">
+              <el-button type="primary" plain size="mini" v-if="select_group&&!edit_menu"
+                         @click="putFormSubmit(menuform.id)">
                 保存
               </el-button>
             </el-button-group>
@@ -35,7 +36,7 @@
           <el-tree
             :data="firstData"
             :props="menuprops"
-            node-key="name"
+            node-key="title"
             default-expand-all
             ref="grouptree"
             :load="fetchSecondData"
@@ -85,9 +86,9 @@
       </el-col>
     </el-row>
     <el-dialog :visible.sync="add_menu">
-      <el-form :model="addform" :rules="ruleaddfrom" ref="addform" label-width="100px">
+      <el-form :model="menuform" :rules="ruleaddfrom" ref="addform" label-width="100px">
         <el-form-item label="用户组" prop="group">
-          <el-select v-model="addform.group" placeholder="请选择用户分组">
+          <el-select v-model="menuform.group" placeholder="请选择用户分组">
             <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
@@ -137,7 +138,7 @@ export default {
       select_group: false,
       edit_menu: true,
       add_menu: false,
-      addform: {
+      menuform: {
         group: '',
         firstmenus: [],
         secondmenus: [],
@@ -148,7 +149,8 @@ export default {
           { required: true, message: '请选择用户组', trigger: 'change' }
         ]
       },
-      select_menu: ''
+      select_menu: '',
+      firstmenus: []
     }
   },
   created() {
@@ -203,9 +205,21 @@ export default {
       })
     },
     handleCheckChange(data, checked, indeterminate) {
+      console.log(data, checked, indeterminate)
+      if (checked) {
+        if (data.parent) {
+          this.menuform.secondmenus.push(data.title)
+        } else {
+          this.menuform.firstmenus.push(data.title)
+        }
+      } else {
+        this.menuform.secondmenus.remove(data.title)
+      }
+      this.menuform.firstmenus = [...new Set(this.menuform.firstmenus)]
     },
     handleGroupClick(data) {
       this.select_group = true
+      this.menuform = data
       this.$refs.grouptree.setCheckedKeys([])
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
@@ -228,13 +242,13 @@ export default {
     addFormSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          postMenuPerm(this.addform).then(response => {
+          postMenuPerm(this.menuform).then(response => {
             this.$message({
               message: '恭喜你，添加成功',
               type: 'success'
             })
             this.fetchRouterData()
-            this.addform = {
+            this.menuform = {
               group: '',
               firstmenus: [],
               secondmenus: [],
@@ -251,8 +265,8 @@ export default {
         }
       })
     },
-    putFormSubmit() {
-      putMenuPerm(this.addform).then(response => {
+    putFormSubmit(id) {
+      putMenuPerm(id, this.menuform).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'

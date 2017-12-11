@@ -62,7 +62,7 @@ module.exports = {
         'no-empty-pattern': 2,
         'no-eval': 2,
         'no-ex-assign': 2,
-        'no-extend-native': 2,
+        'no-extend-native': 0,
         'no-extra-bind': 2,
         'no-extra-boolean-cast': 2,
         'no-extra-parens': [2, 'functions'],

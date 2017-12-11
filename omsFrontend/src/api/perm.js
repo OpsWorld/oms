@@ -19,6 +19,7 @@ export function getMenuPerm(query, id) {
 }
 
 export function putMenuPerm(id, data) {
+  console.log(data)
   return request({
     url: apiURL.usermenuperms + id + '/',
     method: 'put',

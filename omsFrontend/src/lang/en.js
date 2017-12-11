@@ -1,10 +1,6 @@
 export default {
   route: {
     dashboard: 'Dashboard',
-    introduction: 'Introduction',
-    documentation: 'Documentation',
-    permission: 'Permission',
-    icons: 'Icons',
     components: 'Components',
     componentIndex: 'Introduction',
     tinymce: 'Tinymce',
@@ -43,6 +39,7 @@ export default {
     page404: '404',
     errorLog: 'Error Log',
     clipboard: 'Clipboard',
-    i18n: 'I18n'
+    i18n: 'I18n',
+    deployManager: 'deployManager'
   }
 }

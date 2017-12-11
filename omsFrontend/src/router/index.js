@@ -117,7 +117,7 @@ export const asyncRouterMap = [
     path: '/users',
     component: Layout,
     icon: 'user',
-    redirect: 'noredirect',
+    redirect: 'users',
     authority: 'userManager',
     children: [
       { path: 'users', component: _import('users/users'), name: 'userlist', authority: 'userlist' },
@@ -130,7 +130,7 @@ export const asyncRouterMap = [
     path: '/worktickets',
     component: Layout,
     icon: 'leaf',
-    redirect: 'noredirect',
+    redirect: 'workticket',
     authority: 'ticketManager',
     children: [
       { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: 'workticketlist' },
@@ -144,7 +144,7 @@ export const asyncRouterMap = [
     path: '/tools',
     component: Layout,
     icon: 'cogs',
-    redirect: 'noredirect',
+    redirect: 'upload',
     authority: 'toolManager',
     children: [
       { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: 'upload' },
@@ -156,11 +156,21 @@ export const asyncRouterMap = [
     path: '/menus',
     component: Layout,
     icon: 'fire',
-    redirect: 'noredirect',
+    redirect: 'menus',
     authority: 'menuManager',
     children: [
       { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: 'menulist' },
       { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: 'menuperm' }
+    ]
+  },
+  {
+    name: 'deployManager',
+    path: '/deploys',
+    component: Layout,
+    icon: 'fire',
+    redirect: 'noredirect',
+    authority: 'deployManager',
+    children: [
     ]
   }
 ]

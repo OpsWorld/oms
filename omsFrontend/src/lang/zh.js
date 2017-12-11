@@ -1,10 +1,6 @@
 export default {
   route: {
     dashboard: '首页',
-    introduction: '简述',
-    documentation: '文档',
-    permission: '权限测试页',
-    icons: '图标',
     components: '组件',
     componentIndex: '介绍',
     tinymce: '富文本编辑器',
@@ -43,6 +39,7 @@ export default {
     page404: '404',
     errorLog: '错误日志',
     clipboard: 'clipboard',
-    i18n: '国际化'
+    i18n: '国际化',
+    deployManager: '发布管理'
   }
 }
