@@ -57,8 +57,7 @@ class Group(models.Model):
     desc = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
-        print(type(self.name))
-        return str(self.name) if self.name else ''
+        return self.name
 
     class Meta:
         verbose_name = u'组'

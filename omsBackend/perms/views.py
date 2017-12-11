@@ -30,7 +30,7 @@ def routers(request,username=None):
         menus = []
         elements = []
         for group in groups:
-            menuqueryset = UserMenuPerms.objects.get(group=group)
+            menuqueryset = UserMenuPerms.objects.get(group__name=group)
             menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
             menus = menuserializer["firstmenus"] + menuserializer["secondmenus"] + menus
             elements = menuserializer["elements"] + elements

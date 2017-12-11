@@ -32,11 +32,11 @@
             <el-form-item label="菜单类型" prop="hidden">
               <el-switch
                 v-model="is_second"
-                active-text="父级菜单"
-                inactive-text="子菜单">
+                active-text="子菜单"
+                inactive-text="父菜单">
               </el-switch>
             </el-form-item>
-            <el-form-item v-if="!is_second" label="父级菜单" prop="parent">
+            <el-form-item v-if="is_second" label="父级菜单" prop="parent">
               <el-select v-model="menuform.parent" placeholder="请选择父级菜单">
                 <el-option v-for="item in firstData" :key="item.id" :value="item.title"></el-option>
               </el-select>
@@ -53,10 +53,10 @@
             <el-form-item label="前端组件" prop="component">
               <el-input v-model="menuform.component" :disabled="formEdit" placeholder="请输入描述"></el-input>
             </el-form-item>
-            <el-form-item v-if="is_second" label="图标" prop="icon">
+            <el-form-item v-if="!is_second" label="图标" prop="icon">
               <el-input v-model="menuform.icon" :disabled="formEdit" placeholder="请输入图标"></el-input>
             </el-form-item>
-            <el-form-item v-if="is_second" label="redirect" prop="redirect">
+            <el-form-item v-if="!is_second" label="redirect" prop="redirect">
               <el-input v-model="menuform.redirect" :disabled="formEdit" placeholder="请输入redirect"></el-input>
             </el-form-item>
             <el-form-item label="是否隐藏" prop="hidden">
@@ -117,7 +117,7 @@ export default {
         redirect: undefined,
         hidden: undefined
       },
-      is_second: false
+      is_second: true
     }
   },
   computed: {
