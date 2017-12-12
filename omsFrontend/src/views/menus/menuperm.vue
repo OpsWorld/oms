@@ -48,7 +48,7 @@
         </el-card>
       </el-col>
       <el-col :span="12">
-        <el-card>
+        <el-card v-if="selent_menu&&select_group">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
           </div>
@@ -105,6 +105,18 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="table-pagination">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="currentPage"
+          :page-sizes="pagesize"
+          :page-size="limit"
+          layout="prev, pager, next, sizes"
+          :total="tabletotal">
+        </el-pagination>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -157,7 +169,8 @@ export default {
       firstmenus: [],
       second_title: undefined,
       select_elements: [],
-      add_element: false
+      add_element: false,
+      selent_menu: false
     }
   },
   created() {
@@ -260,7 +273,7 @@ export default {
       getMenumetas(parmas).then(response => {
         this.select_elements = response.data.results
       })
-      console.log(Array.from(this.select_elements))
+      this.selent_menu = true
     },
     getGroups() {
       getGroup().then(response => {
