@@ -21,8 +21,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
-    'gunicorn',  # 部署djanog程序
-    #'channels',   #djanog异步通信
+    'channels',   #djanog异步通信
     'worktickets',
     'tools',
     'users',
@@ -65,23 +64,24 @@ WSGI_APPLICATION = 'omsBackend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'omsBackend.db'),
-    }
-}
-
 # DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'oms',
-#        'USER': 'oms',
-#        'PASSWORD': '123456',
-#        'HOST': '1.1.1.11',
-#        'PORT': '5432'
-#    }
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'omsBackend.db'),
+#     }
 # }
+
+AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': 'oms',
+       'USER': 'oms',
+       'PASSWORD': '123456',
+       'HOST': '127.0.0.1',
+       'PORT': '5432'
+   }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -161,15 +161,14 @@ AUTH_USER_MODEL = "users.User"
 CORS_ORIGIN_ALLOW_ALL = True
 
 # 使用ldap认证
-#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
-LDAP_AUTH_URL = "ldap://1.1.1.100:389"
-LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
-LDAP_AUTH_CONNECTION_USERNAME = 'admin'
-LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
-# LDAP_AUTH_URL = "ldap://192.168.6.101:389"
-# LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
-# LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
-# LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
+# LDAP_AUTH_URL = "ldap://1.1.1.100:389"
+# LDAP_AUTH_SEARCH_BASE = "ou=tty,dc=oms,dc=com"
+# LDAP_AUTH_CONNECTION_USERNAME = 'admin'
+# LDAP_AUTH_CONNECTION_PASSWORD = 'qwert@12345'
+LDAP_AUTH_URL = "ldap://192.168.6.101:389"
+LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
+LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
+LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 
 LDAP_AUTH_USE_TLS = False
 

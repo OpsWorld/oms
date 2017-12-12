@@ -9,6 +9,6 @@ class UserMenuPermsFilter(filters.FilterSet):
         model = UserMenuPerms
         fields = {
             'id': ['exact'],
-            'group__name': ['exact'],
+            'group': ['exact'],
             'secondmenus__title': ['exact', 'contains'],
         }

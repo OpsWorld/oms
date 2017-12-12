@@ -67,28 +67,9 @@ const user = {
             elements[i] = true
           }
           commit('SET_ELEMENTS', elements)
-          // sessionStorage.setItem('groups', groups)
-          // const menus = {}
-          // const elements = {}
-          // for (let i = 0; i < groups.length; i++) {
-          //   const params = { group: groups[i] }
-          //   getMenuPerm(params).then(response => {
-          //     const data = response.data.results[0]
-          //     for (let i = 0; i < data.firstmenus.length; i++) {
-          //       menus[data.firstmenus[i]] = true
-          //     }
-          //     for (let i = 0; i < data.secondmenus.length; i++) {
-          //       menus[data.secondmenus[i]] = true
-          //     }
-          //     for (let i = 0; i < data.elements.length; i++) {
-          //       elements[data.elements[i]] = true
-          //     }
-          //   })
-          // }
-          // commit('SET_MENUS', menus)
-          // commit('SET_ELEMENTS', elements)
           resolve(response)
         }).catch(error => {
+          console.log(error)
           reject(error)
         })
       })

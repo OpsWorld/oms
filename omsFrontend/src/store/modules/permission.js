@@ -51,7 +51,7 @@ const permission = {
     GenerateRoutes({ commit }, { groups, menus }) {
       return new Promise(resolve => {
         let accessedRouters
-        if (groups.indexOf('admin') >= 0) {
+        if (groups.indexOf('opadmin') >= 0) {
           accessedRouters = asyncRouterMap.concat(errorRouterMap)
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, menus).concat(errorRouterMap)

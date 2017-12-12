@@ -1,0 +1,9 @@
+[Unit]
+Description=uWSGI instance to serve oms
+
+[Service]
+ExecStartPre=-/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown oms:nginx /run/uwsgi'
+ExecStart=/usr/bin/bash -c 'cd /data/projects/oms/omsBackend; pyenv activate envoms; uwsgi --ini oms.ini'
+
+[Install]
+WantedBy=multi-user.target
