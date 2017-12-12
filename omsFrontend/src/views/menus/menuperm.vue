@@ -47,7 +47,7 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-card v-if="selent_menu&&select_group">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
@@ -60,10 +60,24 @@
           <div>
             <el-table :data="select_elements" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column prop='code' label='资源代码'></el-table-column>
-              <el-table-column prop='parent' label='所属菜单'></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="success" plain size="mini">添加</el-button>
+                  <el-button type="danger" plain size="mini">移除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
+        </el-card>
+      </el-col>
+      <el-col :span="4">
+        <el-card v-if="select_group">
+          <div slot="header">
+            <span class="card-title">已有按钮列表</span>
+          </div>
+          <ul>
+            <li v-for="item in have_elements" :key="item.id">{{item}}</li>
+          </ul>
         </el-card>
       </el-col>
     </el-row>
@@ -79,46 +93,6 @@
           <el-button @click="resetForm('addform')">重置</el-button>
         </el-form-item>
       </el-form>
-    </el-dialog>
-
-    <el-dialog :visible.sync="add_element">
-      <el-row :gutter="20">
-        <el-col :span="16">
-          <div class="head-lavel">
-            <div class="table-search">
-              <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
-                <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
-              </el-select>
-            </div>
-          </div>
-          <div>
-            <el-table :data="elementData" border style="width: 100%">
-              <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column prop='code' label='资源代码'></el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button type="success" plain size="mini">添加</el-button>
-                  <el-button type="danger" plain size="mini">移除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="table-pagination">
-            <el-pagination
-              background
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage"
-              :page-sizes="pagesize"
-              :page-size="limit"
-              layout="prev, pager, next, sizes"
-              :total="tabletotal">
-            </el-pagination>
-          </div>
-        </el-col>
-        <el-col :span="8">
-        </el-col>
-      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -173,8 +147,8 @@ export default {
       firstmenus: [],
       second_title: undefined,
       select_elements: [],
-      add_element: false,
-      selent_menu: false
+      selent_menu: false,
+      have_elements: []
     }
   },
   created() {
@@ -267,6 +241,7 @@ export default {
     handleGroupClick(data) {
       this.select_group = true
       this.menuform = data
+      this.have_elements = data.elements
       this.$refs.grouptree.setCheckedKeys([])
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
