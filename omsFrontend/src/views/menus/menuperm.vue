@@ -82,7 +82,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="add_menu">
+    <el-dialog :visible.sync="add_menu" style="z-index: 1024">
       <el-form :model="menuform" ref="addform" label-width="100px">
         <el-form-item label="用户组" prop="group">
           <el-select v-model="menuform.group" filterable placeholder="请选择用户分组">
