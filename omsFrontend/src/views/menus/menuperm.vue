@@ -61,11 +61,7 @@
             <el-table :data="select_elements" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
               <el-table-column prop='code' label='资源代码'></el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button type="danger" plain size="mini">删除</el-button>
-                </template>
-              </el-table-column>
+              <el-table-column prop='parent' label='所属菜单'></el-table-column>
             </el-table>
           </div>
         </el-card>
@@ -86,37 +82,43 @@
     </el-dialog>
 
     <el-dialog :visible.sync="add_element">
-      <div class="head-lavel">
-        <div class="table-search">
-          <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
-            <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
-          </el-select>
-        </div>
-      </div>
-      <div>
-        <el-table :data="elementData" border style="width: 100%">
-          <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-          <el-table-column prop='code' label='资源代码'></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button type="success" plain size="mini">添加
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="table-pagination">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="limit"
-          layout="prev, pager, next, sizes"
-          :total="tabletotal">
-        </el-pagination>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="16">
+          <div class="head-lavel">
+            <div class="table-search">
+              <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
+                <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <div>
+            <el-table :data="elementData" border style="width: 100%">
+              <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
+              <el-table-column prop='code' label='资源代码'></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="success" plain size="mini">添加</el-button>
+                  <el-button type="danger" plain size="mini">移除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table-pagination">
+            <el-pagination
+              background
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="pagesize"
+              :page-size="limit"
+              layout="prev, pager, next, sizes"
+              :total="tabletotal">
+            </el-pagination>
+          </div>
+        </el-col>
+        <el-col :span="8">
+        </el-col>
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -128,9 +130,11 @@ import { getGroup } from '@/api/user'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 import { LIMIT } from '@/config'
 import ElDialog from '../../../node_modules/element-ui/packages/dialog/src/component.vue'
+import ElCol from 'element-ui/packages/col/src/col'
 
 export default {
   components: {
+    ElCol,
     ElDialog,
     ElButton
   },
@@ -228,6 +232,7 @@ export default {
     },
     fetchElementData() {
       const parmas = {
+        limit: this.limit,
         parent__title: this.second_title
       }
       getMenumetas(parmas).then(response => {
@@ -267,7 +272,7 @@ export default {
     },
     handleNodeClick(data) {
       const parmas = {
-        parent__title: data.title
+        parent__title: this.second_title
       }
       this.select_elements = []
       getMenumetas(parmas).then(response => {
