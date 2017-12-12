@@ -16,7 +16,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /*
-接口API根地址
+ 接口API根地址
  */
 const url = CONFIG.apiUrl
 const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
@@ -24,6 +24,9 @@ const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
 module.exports = {
   apiUrl: url,
   ws_url: ws_scheme + '://' + rest_url + ':8000',
+
+  // 超级管理组
+  super_group: 'OMS_Super_Admin',
 
   // 数据分页限制
   LIMIT: 10,
