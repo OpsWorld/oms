@@ -34,9 +34,6 @@ class Secondmenu(models.Model):
         verbose_name = u'二级菜单'
         verbose_name_plural = u'二级菜单'
 
-    def save(self, *args, **kwargs):
-        self.title = '{}-{}'.format(self.parent,self.title)
-        super(Secondmenu, self).save(*args, **kwargs)
 
 class Element(models.Model):
     parent = models.ForeignKey("Secondmenu", verbose_name=u'所属菜单')

@@ -53,11 +53,11 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'user',
     redirect: 'users',
-    authority: 'userManager',
+    authority: '用户管理',
     children: [
-      { path: 'users', component: _import('users/users'), name: 'userlist', authority: 'userlist' },
-      { path: 'usergroups', component: _import('users/usergroups'), name: 'grouplist', authority: 'grouplist' },
-      { path: 'roles', component: _import('users/roles'), name: 'rolelist', authority: 'rolelist' }
+      { path: 'users', component: _import('users/users'), name: 'userlist', authority: '用户列表' },
+      { path: 'usergroups', component: _import('users/usergroups'), name: 'grouplist', authority: '用户组列表' },
+      { path: 'roles', component: _import('users/roles'), name: 'rolelist', authority: '角色列表' }
     ]
   },
   {
@@ -66,12 +66,12 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'leaf',
     redirect: 'workticket',
-    authority: 'ticketManager',
+    authority: '工单管理',
     children: [
-      { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: 'workticketlist' },
-      { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: 'tickettypelist' },
-      { path: 'addworkticket', hidden: true, component: _import('worktickets/addworkticket'), name: 'addworkticket', authority: 'addworkticket' },
-      { path: 'editworkticket/:id', hidden: true, component: _import('worktickets/editworkticket'), name: 'editworkticket', authority: 'editworkticket' }
+      { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: '工单列表' },
+      { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: '工单类型' },
+      { path: 'addworkticket', hidden: true, component: _import('worktickets/addworkticket'), name: 'addworkticket', authority: '添加工单' },
+      { path: 'editworkticket/:id', hidden: true, component: _import('worktickets/editworkticket'), name: 'editworkticket', authority: '编辑工单' }
     ]
   },
   {
@@ -80,10 +80,10 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'cogs',
     redirect: 'upload',
-    authority: 'toolManager',
+    authority: '工具管理',
     children: [
-      { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: 'upload' },
-      { path: 'test', component: _import('tools/test'), name: 'test', authority: 'test' }
+      { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
+      { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
     ]
   },
   {
@@ -92,10 +92,10 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'fire',
     redirect: 'menus',
-    authority: 'menuManager',
+    authority: '菜单管理',
     children: [
-      { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: 'menulist' },
-      { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: 'menuperm' }
+      { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: '菜单列表' },
+      { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: '菜单权限' }
     ]
   },
   {
@@ -104,7 +104,7 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'flag',
     redirect: 'noredirect',
-    authority: 'deployManager',
+    authority: '发布管理',
     children: [
     ]
   }

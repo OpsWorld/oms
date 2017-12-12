@@ -29,7 +29,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card>
+        <el-card v-if="edit_menu">
           <div slot="header">
             <span class="card-title">菜单列表</span>
           </div>
@@ -58,7 +58,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card v-if="selent_menu&&select_group">
+        <el-card v-if="selent_menu&&select_group&&edit_menu">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
           </div>
