@@ -1,5 +1,5 @@
 import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
-// import { super_group } from '@/config'
+import { super_group } from '@/config'
 
 /**
  * 通过authority判断是否与当前用户权限匹配
@@ -50,6 +50,9 @@ const permission = {
   },
   actions: {
     GenerateRoutes({ commit }, { groups, menus }) {
+      console.log(super_group)
+      console.log(groups.indexOf('OMS_Super_Admin'))
+      console.log(groups)
       return new Promise(resolve => {
         let accessedRouters
         if (groups.indexOf('OMS_Super_Admin') >= 0) {
