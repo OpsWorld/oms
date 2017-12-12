@@ -26,20 +26,19 @@ def routers(request,username=None):
     userqueryset = User.objects.get(username=username)
     userserializer = UserSerializer(userqueryset, context={'request': request}).data
     groups = userserializer['groups']
-    try:
-        menus = []
-        elements = []
-        for group in groups:
+    menus = []
+    elements = []
+    for group in groups:
+        try:
             menuqueryset = UserMenuPerms.objects.get(group=group)
             menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
             menus = menuserializer["firstmenus"] + menuserializer["secondmenus"] + menus
             elements = menuserializer["elements"] + elements
-        menus = set(menus)
-        elements = set(elements)
-        return Response({"groups": groups, "menus": menus, "elements": elements})
-    except Exception as e:
-        raise e
-        #return Response({"groups": groups, "menus": ['jjyy'], "elements": ['jjyy']})
+            menus = set(menus)
+            elements = set(elements)
+        except Exception as e:
+            pass
+    return Response({"groups": groups, "menus": menus, "elements": elements})
 
 # #根据不同用户生成不同的routers
 # @api_view()
