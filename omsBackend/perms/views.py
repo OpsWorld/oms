@@ -23,10 +23,10 @@ class UserMenuPermsViewSet(viewsets.ModelViewSet):
 
 @api_view()
 def routers(request,username=None):
+    userqueryset = User.objects.get(username=username)
+    userserializer = UserSerializer(userqueryset, context={'request': request}).data
+    groups = userserializer['groups']
     try:
-        userqueryset = User.objects.get(username=username)
-        userserializer = UserSerializer(userqueryset, context={'request': request}).data
-        groups = userserializer['groups']
         menus = []
         elements = []
         for group in groups:
@@ -41,7 +41,7 @@ def routers(request,username=None):
         elements = set(elements)
         return Response({"groups": groups, "menus": menus, "elements": elements})
     except Exception as e:
-        return Response({"groups": ['jjyy'], "menus": ['jjyy'], "elements": ['jjyy']})
+        return Response({"groups": groups, "menus": ['jjyy'], "elements": ['jjyy']})
 
 # #根据不同用户生成不同的routers
 # @api_view()

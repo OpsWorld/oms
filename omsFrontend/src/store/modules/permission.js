@@ -50,12 +50,9 @@ const permission = {
   },
   actions: {
     GenerateRoutes({ commit }, { groups, menus }) {
-      console.log(super_group)
-      console.log(groups.indexOf('OMS_Super_Admin'))
-      console.log(groups)
       return new Promise(resolve => {
         let accessedRouters
-        if (groups.indexOf('OMS_Super_Admin') >= 0) {
+        if (groups.indexOf(super_group) >= 0) {
           accessedRouters = asyncRouterMap.concat(errorRouterMap)
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, menus).concat(errorRouterMap)
