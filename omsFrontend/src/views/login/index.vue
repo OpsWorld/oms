@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form class="card-box login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm"
+    <el-form class="card-box login-form" autoComplete="on" :model="loginForm" ref="loginForm"
              label-position="left">
       <h3 class="title">OMS系统登录</h3>
 
@@ -33,16 +33,6 @@ export default {
       loginForm: {
         username: '',
         password: ''
-      },
-      loginRules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '密码长度不能小于6位', trigger: 'blur' }
-        ]
       },
       pwdType: 'password',
       loading: false,
