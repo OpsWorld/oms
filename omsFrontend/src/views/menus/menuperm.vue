@@ -47,29 +47,6 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="8">
-        <el-card v-if="selent_menu&&select_group">
-          <div slot="header">
-            <span class="card-title">资源按钮列表</span>
-          </div>
-          <div class="head-lavel">
-            <div class="table-button">
-              <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="add_element=true">添加</el-button>
-            </div>
-          </div>
-          <div>
-            <el-table :data="select_elements" border style="width: 100%">
-              <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column label="操作">
-                <template slot-scope="scope">
-                  <el-button type="success" plain size="mini">添加</el-button>
-                  <el-button type="danger" plain size="mini">移除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-card>
-      </el-col>
       <el-col :span="4">
         <el-card v-if="select_group">
           <div slot="header">
@@ -78,6 +55,28 @@
           <ul>
             <li v-for="item in have_elements" :key="item.id">{{item}}</li>
           </ul>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card v-if="selent_menu&&select_group">
+          <div slot="header">
+            <span class="card-title">资源按钮列表</span>
+          </div>
+          <div class="head-lavel">
+          </div>
+          <div>
+            <el-table :data="elementData" border style="width: 100%">
+              <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button v-if="have_elements.indexOf(scope.row.name)<0" type="success" plain size="mini">添加
+                  </el-button>
+                  <el-button v-if="have_elements.indexOf(scope.row.name)>-1" type="danger" plain size="mini">移除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -142,11 +141,8 @@ export default {
         secondmenus: [],
         elements: []
       },
-      element_add: true,
-      element_del: true,
       firstmenus: [],
       second_title: undefined,
-      select_elements: [],
       selent_menu: false,
       have_elements: []
     }
@@ -191,10 +187,6 @@ export default {
       getSecondmenus().then(response => {
         this.secondData = response.data.results
       })
-    },
-    changeSelectTitle(res) {
-      this.second_title = res
-      this.fetchElementData()
     },
     fetchRouterData(group) {
       const parmas = {
@@ -246,14 +238,9 @@ export default {
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
     handleNodeClick(data) {
-      const parmas = {
-        parent__title: this.second_title
-      }
-      this.select_elements = []
-      getMenumetas(parmas).then(response => {
-        this.select_elements = response.data.results
-      })
+      this.second_title = data.title
       this.selent_menu = true
+      this.fetchElementData()
     },
     getGroups() {
       getGroup().then(response => {
