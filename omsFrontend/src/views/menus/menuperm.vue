@@ -53,35 +53,20 @@
             <span class="card-title">资源按钮列表</span>
           </div>
           <div class="head-lavel">
-            <div class="table-search">
-              <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
-                <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
-              </el-select>
+            <div class="table-button">
+              <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="add_element=true">添加</el-button>
             </div>
           </div>
           <div>
-            <el-table :data="elementData" border style="width: 100%">
+            <el-table :data="select_elements" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
               <el-table-column prop='code' label='资源代码'></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button v-if="select_elements.indexOf(scope.row.name)>0" type="success" plain size="mini">添加
-                  </el-button>
                   <el-button type="danger" plain size="mini">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
-          </div>
-          <div class="table-pagination">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage"
-              :page-sizes="pagesize"
-              :page-size="limit"
-              layout="prev, pager, next, sizes"
-              :total="tabletotal">
-            </el-pagination>
           </div>
         </el-card>
       </el-col>
@@ -98,6 +83,28 @@
           <el-button @click="resetForm('addform')">重置</el-button>
         </el-form-item>
       </el-form>
+    </el-dialog>
+
+    <el-dialog :visible.sync="add_element">
+      <div class="head-lavel">
+        <div class="table-search">
+          <el-select v-model="second_title" placeholder="请选择二级菜单" @change="changeSelectTitle">
+            <el-option v-for="item in secondData" :key="item.id" :value="item.title"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div>
+        <el-table :data="elementData" border style="width: 100%">
+          <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
+          <el-table-column prop='code' label='资源代码'></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button type="success" plain size="mini">添加
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -149,7 +156,8 @@ export default {
       element_del: true,
       firstmenus: [],
       second_title: undefined,
-      select_elements: []
+      select_elements: [],
+      add_element: false
     }
   },
   created() {
@@ -250,10 +258,7 @@ export default {
       }
       this.select_elements = []
       getMenumetas(parmas).then(response => {
-        const elements = response.data.results
-        for (const item of elements) {
-          this.select_elements.push(item.id)
-        }
+        this.select_elements = response.data.results
       })
       console.log(Array.from(this.select_elements))
     },
@@ -328,8 +333,8 @@ export default {
     float: right;
   }
 
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
+  .table-button {
+    float: left;
   }
+
 </style>
