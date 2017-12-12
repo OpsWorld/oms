@@ -26,6 +26,7 @@ def routers(request,username=None):
     userqueryset = User.objects.get(username=username)
     userserializer = UserSerializer(userqueryset, context={'request': request}).data
     groups = userserializer['groups']
+    print(groups)
     try:
         menus = []
         elements = []
