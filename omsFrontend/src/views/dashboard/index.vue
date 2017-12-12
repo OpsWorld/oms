@@ -8,6 +8,7 @@
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
+import { super_group } from '@/config'
 
 export default {
   name: 'dashboard',
@@ -23,7 +24,7 @@ export default {
     ])
   },
   created() {
-    if (!this.groups.includes('admin')) {
+    if (!this.groups.includes(super_group)) {
       this.currentRole = 'editorDashboard'
     }
   }
