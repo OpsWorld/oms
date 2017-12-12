@@ -30,10 +30,7 @@ def routers(request,username=None):
         menus = []
         elements = []
         for group in groups:
-            try:
-                menuqueryset = UserMenuPerms.objects.get(group=group)
-            except Exception as e:
-                pass
+            menuqueryset = UserMenuPerms.objects.get(group=group)
             menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
             menus = menuserializer["firstmenus"] + menuserializer["secondmenus"] + menus
             elements = menuserializer["elements"] + elements
@@ -41,7 +38,8 @@ def routers(request,username=None):
         elements = set(elements)
         return Response({"groups": groups, "menus": menus, "elements": elements})
     except Exception as e:
-        return Response({"groups": groups, "menus": ['jjyy'], "elements": ['jjyy']})
+        raise e
+        #return Response({"groups": groups, "menus": ['jjyy'], "elements": ['jjyy']})
 
 # #根据不同用户生成不同的routers
 # @api_view()
