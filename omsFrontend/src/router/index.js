@@ -167,7 +167,7 @@ export const asyncRouterMap = [
     name: 'deployManager',
     path: '/deploys',
     component: Layout,
-    icon: 'fire',
+    icon: 'flag',
     redirect: 'noredirect',
     authority: 'deployManager',
     children: [

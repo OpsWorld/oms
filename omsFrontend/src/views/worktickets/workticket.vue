@@ -4,7 +4,7 @@
             <div class="head-lavel">
                 <div class="table-button">
                     <router-link :to="'addworkticket'">
-                        <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
+                        <el-button v-if="role==='super'||workticketlist_btn_add" type="primary" icon="el-icon-plus">新建工单</el-button>
                     </router-link>
 
                     <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
@@ -25,7 +25,7 @@
             <div>
                 <el-table :data="tableData" border style="width: 100%" v-loading="loading">
                     <el-table-column prop='title' label='工单编号'>
-                        <template slot-scope="scope">
+                        <template slot-scope="scope" v-if="role==='super'||workticketlist_btn_edit">
                             <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
                                 <router-link :to="'editworkticket/'+scope.row.id">
                                     {{scope.row.ticketid}}
@@ -77,6 +77,7 @@
 import { getWorkticket } from 'api/workticket'
 import { LIMIT } from '@/config'
 import addWorkticket from './addworkticket.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { addWorkticket },
@@ -113,12 +114,23 @@ export default {
         ticketid: '',
         create_user: '',
         content: ''
-      }
+      },
+      workticketlist_btn_add: false,
+      workticketlist_btn_edit: false
     }
+  },
+
+  computed: {
+    ...mapGetters([
+      'role',
+      'elements'
+    ])
   },
 
   created() {
     this.fetchData()
+    this.workticketlist_btn_add = this.elements['workticketlist:btn_add']
+    this.workticketlist_btn_edit = this.elements['workticketlist:btn_edit']
   },
 
   methods: {

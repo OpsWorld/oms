@@ -1,5 +1,6 @@
 import { login, logout, getUserInfo } from '@/api/login'
 import { getRouterInfo } from '@/api/perm'
+import { super_group } from '@/config'
 
 const user = {
   state: {
@@ -8,7 +9,8 @@ const user = {
     groups: [],
     menus: undefined,
     eleemnts: undefined,
-    permissionMenus: undefined
+    permissionMenus: undefined,
+    role: 'user'
   },
 
   mutations: {
@@ -20,6 +22,9 @@ const user = {
     },
     SET_GROUPS: (state, groups) => {
       state.groups = groups
+    },
+    SET_ROLE: (state, role) => {
+      state.role = role
     },
     SET_MENUS: (state, menus) => {
       state.menus = menus
@@ -57,6 +62,9 @@ const user = {
           const data = response.data
           const groups = data.groups
           commit('SET_GROUPS', groups)
+          if (groups.indexOf(super_group) >= 0) {
+            commit('SET_ROLE', 'super')
+          }
           const menus = {}
           for (const i of data.menus) {
             menus[i] = true

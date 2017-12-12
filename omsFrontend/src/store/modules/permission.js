@@ -1,5 +1,4 @@
 import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
-import { super_group } from '@/config'
 
 /**
  * 通过authority判断是否与当前用户权限匹配
@@ -49,10 +48,11 @@ const permission = {
     }
   },
   actions: {
-    GenerateRoutes({ commit }, { groups, menus }) {
+    GenerateRoutes({ commit }, { role, menus }) {
       return new Promise(resolve => {
         let accessedRouters
-        if (groups.indexOf(super_group) >= 0) {
+        if (role === 'super') {
+          commit('SET_ROUTERS', accessedRouters)
           accessedRouters = asyncRouterMap.concat(errorRouterMap)
         } else {
           accessedRouters = filterAsyncRouter(asyncRouterMap, menus).concat(errorRouterMap)

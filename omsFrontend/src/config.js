@@ -7,11 +7,13 @@ const rest_url = 'oms.tb-gaming.local'
 // if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
   CONFIG = {
-    apiUrl: ''
+    apiUrl: '',
+    super_group: 'OMS_Super_Admin'
   }
 } else {
   CONFIG = {
-    apiUrl: 'http://' + rest_url + ':8000'
+    apiUrl: 'http://' + rest_url + ':8000',
+    super_group: 'admin'
   }
 }
 
@@ -26,7 +28,7 @@ module.exports = {
   ws_url: ws_scheme + '://' + rest_url + ':8000',
 
   // 超级管理组
-  super_group: 'OMS_Super_Admin',
+  super_group: CONFIG.super_group,
 
   // 数据分页限制
   LIMIT: 10,

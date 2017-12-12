@@ -1,7 +1,7 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col :span="6">
+      <el-col :span="8">
         <el-card>
           <div slot="header">
             <span class="card-title">菜单列表</span>
@@ -28,14 +28,15 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="8">
         <el-card class="box-card">
           <div slot="header">
             <span class="card-title">菜单表单</span>
             <el-switch
               v-model="is_second"
               active-text="子菜单"
-              inactive-text="父菜单">
+              inactive-text="父菜单"
+              @change="resetForm">
             </el-switch>
           </div>
           <el-form label-width="80px" :model="menuform" ref="menuform">
@@ -84,7 +85,7 @@
           </el-form>
         </el-card>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="8">
         <el-card v-if="is_second" class="box-card">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
@@ -183,7 +184,6 @@ export default {
       menuManager_btn_add: true,
       menuManager_btn_edit: true,
       menuManager_btn_del: true,
-      currentId: -1,
       menuform: {
         parent: undefined,
         title: undefined,
@@ -263,6 +263,7 @@ export default {
     },
     handleNodeClick(data, res) {
       this.is_second = res.isLeaf
+      this.formEdit = true
       this.menuform = data
     },
     handlerEdit() {
@@ -338,6 +339,7 @@ export default {
           type: 'success'
         })
         this.fetchFirstData()
+        this.fetchSecondData()
       }).catch(error => {
         this.$message.error('添加失败')
         console.log(error)
@@ -350,6 +352,7 @@ export default {
           type: 'success'
         })
         this.fetchFirstData()
+        this.fetchSecondData()
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)

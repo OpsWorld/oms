@@ -6,6 +6,7 @@ const getters = {
   token: state => state.user.token,
   username: state => state.user.username,
   groups: state => state.user.groups,
+  role: state => state.user.role,
   menus: state => state.user.menus,
   elements: state => state.user.elements,
   permission_routers: state => state.permission.routers,
