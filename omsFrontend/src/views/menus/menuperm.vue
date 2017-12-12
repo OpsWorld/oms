@@ -9,10 +9,10 @@
               <el-button type="success" plain size="mini" @click="add_menu=true">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="select_group&&edit_menu" @click="edit_menu=false">
+              <el-button type="primary" plain size="mini" v-if="select_group" @click="show_menus=true">
                 编辑
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="select_group&&!edit_menu"
+              <el-button type="danger" plain size="mini" v-if="select_group&&show_menus"
                          @click="putFormSubmit(menuform.id)">
                 保存
               </el-button>
@@ -29,7 +29,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card>
+        <el-card v-show="show_menus">
           <div slot="header">
             <span class="card-title">菜单列表</span>
           </div>
@@ -67,7 +67,7 @@
           <div>
             <el-table :data="elementData" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column label="操作" v-if="!edit_menu">
+              <el-table-column label="操作" v-if="show_menus">
                 <template slot-scope="scope">
                   <el-button v-if="menuform.elements.indexOf(scope.row.name)<0" type="success" plain size="mini"
                              @click="menuform.elements.push(scope.row.name)">添加
@@ -135,8 +135,8 @@ export default {
       offset: '',
       pagesize: [10, 25, 50, 100],
       select_group: false,
-      edit_menu: true,
       add_menu: false,
+      show_menus: false,
       menuform: {
         group: '',
         firstmenus: [],
@@ -216,9 +216,10 @@ export default {
           this.menuform.firstmenus = [...new Set(this.menuform.firstmenus)]
         }
       } else {
-        this.menuform.firstmenus.remove(data.title)
         this.menuform.secondmenus.remove(data.title)
+        this.menuform.firstmenus.remove(data.title)
       }
+      this.menuform.secondmenus = [...new Set(this.menuform.secondmenus)]
     },
     getIndeterminate() {
       const nodesDOM = this.$refs.grouptree.$el.querySelectorAll('.el-tree-node')
@@ -234,6 +235,7 @@ export default {
     handleGroupClick(data) {
       this.select_group = true
       this.menuform = data
+      console.log(data)
       this.menuform.elements = data.elements
       this.$refs.grouptree.setCheckedKeys([])
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
@@ -283,12 +285,12 @@ export default {
       })
     },
     putFormSubmit(id) {
+      console.log(this.menuform)
       putMenuPerm(id, this.menuform).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        this.edit_menu = true
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)
