@@ -29,7 +29,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card v-if="edit_menu">
+        <el-card>
           <div slot="header">
             <span class="card-title">菜单列表</span>
           </div>
@@ -58,7 +58,7 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card v-if="selent_menu&&select_group&&edit_menu">
+        <el-card v-if="selent_menu&&select_group">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
           </div>
@@ -157,14 +157,14 @@ export default {
   methods: {
     fetchFirstData() {
       getFirstmenus().then(response => {
-        this.firstData = response.data.results
+        this.firstData = response.data
         // 对象map用法
         this.firstData.map(function(data) {
           const parmas = {
             parent__title: data.title
           }
           getSecondmenus(parmas).then(response => {
-            data['children'] = response.data.results
+            data['children'] = response.data
           })
         })
       })
@@ -179,13 +179,13 @@ export default {
         parent__title: node.data.title
       }
       getSecondmenus(parmas).then(response => {
-        const data = response.data.results
+        const data = response.data
         resolve(data)
       })
     },
     fetchSecondData() {
       getSecondmenus().then(response => {
-        this.secondData = response.data.results
+        this.secondData = response.data
       })
     },
     fetchRouterData(group) {
@@ -193,7 +193,7 @@ export default {
         group: group
       }
       getMenuPerm(parmas).then(response => {
-        this.routerData = response.data.results
+        this.routerData = response.data
       })
     },
     fetchElementData() {
@@ -203,6 +203,7 @@ export default {
       }
       getMenumetas(parmas).then(response => {
         this.elementData = response.data.results
+        console.log(this.elementData)
       })
     },
     handleCheckChange(data, checked) {
@@ -244,7 +245,7 @@ export default {
     },
     getGroups() {
       getGroup().then(response => {
-        this.groups = response.data.results
+        this.groups = response.data
       })
     },
     handleSizeChange(val) {

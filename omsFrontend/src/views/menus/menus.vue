@@ -226,7 +226,7 @@ export default {
   methods: {
     fetchFirstData() {
       getFirstmenus().then(response => {
-        this.firstData = response.data.results
+        this.firstData = response.data
       })
     },
     fetchNodeData(node, resolve) {
@@ -239,7 +239,7 @@ export default {
         parent__title: node.data.title
       }
       getSecondmenus(parmas).then(response => {
-        const data = response.data.results
+        const data = response.data
         setTimeout(() => {
           resolve(data)
         }, 500)
@@ -250,7 +250,7 @@ export default {
         parent__title: undefined
       }
       getSecondmenus(parmas).then(response => {
-        this.secondData = response.data.results
+        this.secondData = response.data
       })
     },
     fetchElementData() {
@@ -258,7 +258,7 @@ export default {
         parent__title: undefined
       }
       getMenumetas(parmas).then(response => {
-        this.elementData = response.data.results
+        this.elementData = response.data
       })
     },
     handleNodeClick(data, res) {
