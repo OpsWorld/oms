@@ -3,6 +3,7 @@ import apiURL from '@/config'
 
 // upload
 export function postMenuPerm(data) {
+  console.log(data)
   return request({
     url: apiURL.usermenuperms,
     method: 'post',
