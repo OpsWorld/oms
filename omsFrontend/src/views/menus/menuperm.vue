@@ -47,17 +47,17 @@
           </el-tree>
         </el-card>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="6">
         <el-card v-if="select_group">
           <div slot="header">
             <span class="card-title">已有按钮列表</span>
           </div>
           <ul>
-            <li v-for="item in have_elements" :key="item.id">{{item}}</li>
+            <li class="has_element" v-for="item in menuform.elements" :key="item.id">{{item}}</li>
           </ul>
         </el-card>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-card v-if="selent_menu&&select_group">
           <div slot="header">
             <span class="card-title">资源按钮列表</span>
@@ -67,11 +67,13 @@
           <div>
             <el-table :data="elementData" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="操作" v-if="!edit_menu">
                 <template slot-scope="scope">
-                  <el-button v-if="have_elements.indexOf(scope.row.name)<0" type="success" plain size="mini">添加
+                  <el-button v-if="menuform.elements.indexOf(scope.row.name)<0" type="success" plain size="mini"
+                             @click="menuform.elements.push(scope.row.name)">添加
                   </el-button>
-                  <el-button v-if="have_elements.indexOf(scope.row.name)>-1" type="danger" plain size="mini">移除
+                  <el-button v-if="menuform.elements.indexOf(scope.row.name)>-1" type="danger" plain size="mini"
+                             @click="menuform.elements.remove(scope.row.name)">移除
                   </el-button>
                 </template>
               </el-table-column>
@@ -143,15 +145,13 @@ export default {
       },
       firstmenus: [],
       second_title: undefined,
-      selent_menu: false,
-      have_elements: []
+      selent_menu: false
     }
   },
   created() {
     this.fetchFirstData()
     this.fetchSecondData()
     this.fetchRouterData()
-    this.fetchElementData()
     this.getGroups()
   },
   methods: {
@@ -233,7 +233,7 @@ export default {
     handleGroupClick(data) {
       this.select_group = true
       this.menuform = data
-      this.have_elements = data.elements
+      this.menuform.elements = data.elements
       this.$refs.grouptree.setCheckedKeys([])
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
     },
@@ -287,7 +287,7 @@ export default {
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        this.fetchRouterData()
+        this.edit_menu = true
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)
@@ -309,12 +309,8 @@ export default {
     padding-bottom: 50px;
   }
 
-  .table-search {
-    float: right;
+  .has_element {
+    color: #3aa41d;
+    list-style: none;
   }
-
-  .table-button {
-    float: left;
-  }
-
 </style>
