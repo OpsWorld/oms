@@ -17,7 +17,7 @@ def send_mail(to_list, cc_list, sub, context):
     msg['From'] = me
     msg['To'] = ";".join(to_list)
     msg['Cc'] = ";".join(cc_list)
-    list = (msg['To'] + msg['Cc']).split(';')[:-1]
+    list = to_list + cc_list
     print(list)
     try:
         send_smtp = smtplib.SMTP()
