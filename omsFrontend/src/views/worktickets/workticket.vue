@@ -6,13 +6,13 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
             <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
           </router-link>
-          <el-button type="success" @click="showMyTicket()">我的工单</el-button>
+          <el-button v-if="showme" type="success" @click="showMeTicket">我的工单</el-button>
+          <el-button v-else type="danger" @click="showAllTicket">全部</el-button>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
             <el-radio label="1">正在处理</el-radio>
             <el-radio label="2">已解决</el-radio>
-            <el-radio label="">全部</el-radio>
           </el-radio-group>
 
         </div>
@@ -118,7 +118,8 @@ export default {
         create_user: '',
         content: ''
       },
-      workticketlist_btn_add: false
+      workticketlist_btn_add: false,
+      showme: true
     }
   },
 
@@ -165,8 +166,15 @@ export default {
       this.ticket_status = val
       this.fetchData()
     },
-    showMyTicket() {
+    showMeTicket() {
       this.listQuery.create_user = sessionStorage.getItem('username')
+      this.showme = false
+      this.fetchData()
+    },
+    showAllTicket() {
+      this.listQuery.create_user = ''
+      this.ticket_status = ''
+      this.showme = true
       this.fetchData()
     }
   }
