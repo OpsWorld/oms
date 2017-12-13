@@ -17,13 +17,15 @@ def send_mail(to_list, cc_list, sub, context):
     msg['From'] = me
     msg['To'] = ";".join(to_list)
     msg['Cc'] = ";".join(cc_list)
+    list = (msg['To'] + msg['Cc']).split(';')[:-1]
+    print(list)
     try:
         send_smtp = smtplib.SMTP()
         send_smtp.connect(mail_host, 587)
         send_smtp.starttls()
         send_smtp.login(mail_user, mail_pass)
 
-        send_smtp.sendmail(me, (msg['To'] + msg['Cc']).split(';')[:-1], msg.as_string())
+        send_smtp.sendmail(me, list, msg.as_string())
         send_smtp.close()
         return True
     except Exception as e:
