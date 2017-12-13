@@ -182,7 +182,7 @@ export default {
       change_action: false,
       ws_stream: '/salt/sendmail/',
       ws: '',
-      to_list: [],
+      to_list: '',
       BackToTopStyle: {
         right: '50px',
         bottom: '50px',
@@ -347,7 +347,7 @@ export default {
       }
       getUser(to_list_parms).then(response => {
         const data = response.data[0]
-        this.to_list.push(data.email)
+        this.to_list = data.email
       })
     },
     wsInit() {

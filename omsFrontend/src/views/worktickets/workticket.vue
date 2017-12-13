@@ -5,6 +5,7 @@
         <div class="table-button">
           <router-link :to="'addworkticket'">
             <el-button v-if="role==='super'||workticketlist_btn_add" type="primary" icon="el-icon-plus">新建工单</el-button>
+            <el-button type="success" icon="el-icon-plus" @click="showMyTicket">我的工单</el-button>
           </router-link>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
@@ -164,6 +165,10 @@ export default {
     },
     statusChange(val) {
       this.ticket_status = val
+      this.fetchData()
+    },
+    showMyTicket() {
+      this.create_user__username = sessionStorage.getItem('username')
       this.fetchData()
     }
   }

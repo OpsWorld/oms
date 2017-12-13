@@ -120,8 +120,8 @@ export default {
       formDataList: [],
       ws_stream: '/salt/sendmail/',
       ws: '',
-      to_list: [],
-      cc_list: [],
+      to_list: '',
+      cc_list: '',
       uploadurl: uploadurl
     }
   },
@@ -240,7 +240,7 @@ export default {
       }
       getUser(to_list_parms).then(response => {
         const data = response.data[0]
-        this.to_list.push(data.email)
+        this.to_list = data.email
       })
       for (const cc of cc_list) {
         const cc_list_parms = {
@@ -248,7 +248,7 @@ export default {
         }
         getUser(cc_list_parms).then(response => {
           const data = response.data[0]
-          this.cc_list.push(data.email)
+          this.cc_list = this.cc_list + data.email + ';'
         })
       }
     },
