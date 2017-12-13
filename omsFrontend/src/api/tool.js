@@ -39,6 +39,7 @@ export function deleteUpload(id) {
 
 // sendmail
 export function postSendmail(data) {
+  console.log(data)
   return request({
     url: apiURL.sendmail,
     method: 'post',
