@@ -2,6 +2,7 @@ import request from '@/utils/request'
 import apiURL from '@/config'
 
 export function login(data) {
+  console.log(data)
   return request({
     url: apiURL.login,
     method: 'post',

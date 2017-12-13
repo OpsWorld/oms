@@ -3,7 +3,7 @@
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title"></el-input>
+          <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
           <el-select v-model="ruleForm.action_user" placeholder="请选择指派人">
@@ -101,7 +101,7 @@ export default {
       enclosureFile: null,
       enclosureForm: {
         ticket: '',
-        create_user: this.username,
+        create_user: sessionStorage.getItem('username'),
         file: '',
         create_group: ''
       },
@@ -178,7 +178,12 @@ export default {
       })
     },
     handleSuccess(file, fileList) {
-      const formData = this.afterFileUpload(fileList)
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', fileList.raw)
+      formData.append('create_time', this.afterFileUpload(fileList))
+      formData.append('type', fileList.type)
+      formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         this.enclosureFile = response.data.filepath
         if (response.statusText === 'ok') {
@@ -194,19 +199,30 @@ export default {
         console.log(error)
       })
     },
+    afterFileUpload(fileList) {
+      const date = new Date(fileList.uid)
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', file)
-      formData.append('create_time', this.afterFileUpload(file))
+      formData.append('create_time', this.afterUpload(file))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
     },
-    afterFileUpload(file) {
+    afterUpload(file) {
       const date = new Date(file.lastModified)
       const Y = date.getFullYear().toString()
       const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
