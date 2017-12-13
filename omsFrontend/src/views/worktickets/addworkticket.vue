@@ -139,6 +139,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          console.log(this.ruleForm)
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === 'ok') {
               this.$message({
