@@ -56,10 +56,11 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure } from 'api/workticket'
+import { postCmdrun } from 'api/cmdrun'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
-import { ws_url, uploadurl } from '@/config'
+import { uploadurl, py_cmd, sendmail } from '@/config'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -118,8 +119,6 @@ export default {
       },
       img_file: {},
       formDataList: [],
-      ws_stream: '/salt/sendmail/',
-      ws: '',
       to_list: '',
       cc_list: '',
       uploadurl: uploadurl
@@ -133,7 +132,6 @@ export default {
   },
   created() {
     this.getTicketUsers()
-    this.wsInit() // ws 初始化
   },
   methods: {
     postForm(formName) {
@@ -153,14 +151,17 @@ export default {
               postTicketenclosure(this.enclosureForm)
             }
             this.getEmail(this.ruleForm.action_user, this.ruleForm.follower)
-            const mailForm = {
-              to_list: this.to_list,
-              cc_list: this.cc_list,
-              sub: this.ruleForm.title,
-              context: this.ruleForm.content
+            //            const mailForm = {
+            //              to_list: this.to_list,
+            //              cc_list: this.cc_list,
+            //              sub: this.ruleForm.title,
+            //              context: this.ruleForm.content
+            //            }
+            const cmdFrom = {
+              cmd: py_cmd + ' ' + sendmail + ' ' + this.to_list + ' ' + this.cc_list + ' ' + this.ruleForm.title + '' + this.ruleForm.content,
+              user: sessionStorage.getItem('username')
             }
-            console.log(mailForm)
-            this.ws.send(JSON.stringify(mailForm))
+            postCmdrun(cmdFrom)
             this.$router.push('/worktickets/workticket')
           })
         } else {
@@ -251,19 +252,20 @@ export default {
           this.cc_list = this.cc_list + data.email + ';'
         })
       }
-    },
-    wsInit() {
-      const self = this
-      self.ws = new WebSocket(ws_url + self.ws_stream)
-      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
-      self.ws.onmessage = (e) => {
-        this.$message({
-          type: e.code,
-          message: e.msg
-        })
-        // self.results.push(e.data);
-      }
     }
+
+    //    wsInit() {
+    //      const self = this
+    //      self.ws = new WebSocket(ws_url + self.ws_stream)
+    //      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
+    //      self.ws.onmessage = (e) => {
+    //        this.$message({
+    //          type: e.code,
+    //          message: e.msg
+    //        })
+    //        // self.results.push(e.data);
+    //      }
+    //    }
   }
 }
 </script>

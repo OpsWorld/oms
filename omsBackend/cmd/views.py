@@ -7,6 +7,7 @@ from cmd.models import Cmdrun
 from cmd.serializers import CmdrunSerializer
 from cmd.cmdrun import run
 from rest_framework import status
+import io
 
 class CmdrunViewSet(viewsets.ModelViewSet):
     queryset = Cmdrun.objects.all()
@@ -14,10 +15,13 @@ class CmdrunViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = CmdrunSerializer(data=request.data, context={'request': request})
+        cmd = request.data["cmd"]
+        print(cmd)
+        results = run(cmd).stdout
+        fbuf = io.BufferedReader(results)
+        print(fbuf.read(20))
         if serializer.is_valid():
             serializer.save()
-            cmd = serializer.data['cmd']
-            results = run(cmd).stdout
-            return Response({'results':results}, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
