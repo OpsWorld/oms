@@ -4,16 +4,20 @@
 
 let CONFIG
 const rest_url = 'oms.tb-gaming.local'
+const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
+
 // if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
   CONFIG = {
     apiUrl: '',
-    super_group: 'OMS_Super_Admin'
+    super_group: 'OMS_Super_Admin',
+    wsurl: ws_scheme + '://' + rest_url
   }
 } else {
   CONFIG = {
     apiUrl: 'http://' + rest_url + ':8000',
-    super_group: 'admin'
+    super_group: 'admin',
+    wsurl: ws_scheme + '://' + rest_url + ':8000'
   }
 }
 
@@ -21,11 +25,10 @@ if (process.env.NODE_ENV === 'production') {
  接口API根地址
  */
 const url = CONFIG.apiUrl
-const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
 
 module.exports = {
-  apiUrl: url,
-  ws_url: ws_scheme + '://' + rest_url + ':8000',
+  apiUrl: CONFIG.apiUrl,
+  ws_url: CONFIG.wsurl,
 
   // 超级管理组
   super_group: CONFIG.super_group,
