@@ -30,16 +30,16 @@
                  :rules="rules" ref="ruleForm"
                  label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
-            <el-form-item label="问题处理" prop="content">
-              <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
-                            v-model="commentForm.content"
-                            code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
-                            ref="md"></mavon-editor>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
-              </el-button>
-            </el-form-item>
+          <el-form-item label="问题处理" prop="content">
+            <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
+                          v-model="commentForm.content"
+                          code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
+                          ref="md"></mavon-editor>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
+            </el-button>
+          </el-form-item>
           <hr class="heng"/>
         </el-form>
         <el-upload
@@ -89,7 +89,7 @@
         <hr class="heng"/>
         工单操作：
         <!--<el-button type="success" @click="changeTicketStatus(1)"-->
-                   <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
+        <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
         <!--</el-button>-->
         <el-button type="danger" @click="changeTicketStatus(2)"
                    :disabled="ticketData.ticket_status!=2?false:true">关闭
@@ -124,9 +124,10 @@ import { postUpload } from 'api/tool'
 import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
-import { ws_url, uploadurl } from '@/config'
+import { uploadurl, py_cmd, sendmail } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
+import { postCmdrun } from 'api/cmdrun'
 
 export default {
   components: { VueMarkdown, BackToTop },
@@ -177,8 +178,6 @@ export default {
       formDataList: [],
       users: [],
       change_action: false,
-      ws_stream: '/salt/sendmail/',
-      ws: '',
       to_list: '',
       BackToTopStyle: {
         right: '50px',
@@ -266,14 +265,11 @@ export default {
       this.change_action = false
       this.ticketData.action_user = this.rowdata.action_user
       this.getEmail(this.ticketData.action_user)
-      const mailForm = {
-        to_list: this.to_list,
-        cc_list: this.cc_list,
-        sub: this.ruleForm.title,
-        context: this.ruleForm.content
+      const cmdFrom = {
+        cmd: py_cmd + ' ' + sendmail + ' ' + this.to_list + ' ' + this.cc_list + ' ' + this.ruleForm.title + '' + this.ruleForm.content,
+        user: sessionStorage.getItem('username')
       }
-      console.log(mailForm)
-      this.ws.send(JSON.stringify(mailForm))
+      postCmdrun(cmdFrom)
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()
@@ -346,18 +342,6 @@ export default {
         const data = response.data[0]
         this.to_list = data.email
       })
-    },
-    wsInit() {
-      const self = this
-      self.ws = new WebSocket(ws_url + self.ws_stream)
-      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
-      self.ws.onmessage = (e) => {
-        this.$message({
-          type: e.code,
-          message: e.msg
-        })
-        // self.results.push(e.data);
-      }
     }
   }
 }
