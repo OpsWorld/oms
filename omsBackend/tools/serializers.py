@@ -13,5 +13,5 @@ class UploadSerializer(serializers.ModelSerializer):
 
 class SendmailSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Upload
+        model = Sendmail
         fields = ['url', 'id', 'to', 'cc', 'sub', 'content', 'create_time']

@@ -120,7 +120,7 @@ import {
   getTicketenclosure,
   deleteTicketenclosure
 } from 'api/workticket'
-import { postUpload } from 'api/tool'
+import { postUpload, postSendmail } from 'api/tool'
 import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
@@ -264,6 +264,13 @@ export default {
       this.change_action = false
       this.ticketData.action_user = this.rowdata.action_user
       this.getEmail(this.ticketData.action_user)
+      const mailForm = {
+        to: this.to_list,
+        cc: '',
+        sub: '【' + this.ticketData.title + '】指派人被改变',
+        content: '【' + this.ticketData.title + '】指派人被改变'
+      }
+      postSendmail(mailForm)
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()

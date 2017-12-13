@@ -8,8 +8,6 @@ from cmd.models import Cmdrun
 from cmd.serializers import CmdrunSerializer
 from cmd.cmdrun import run
 
-import io
-
 class CmdrunViewSet(viewsets.ModelViewSet):
     queryset = Cmdrun.objects.all()
     serializer_class = CmdrunSerializer
@@ -17,10 +15,7 @@ class CmdrunViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = CmdrunSerializer(data=request.data, context={'request': request})
         cmd = request.data["cmd"]
-        print(cmd)
         results = run(cmd).stdout
-        fbuf = io.BufferedReader(results)
-        print(fbuf.read(20))
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

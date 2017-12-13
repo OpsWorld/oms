@@ -57,7 +57,7 @@
 <script>
 import { postWorkticket, postTicketenclosure } from 'api/workticket'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
-import { postUpload } from 'api/tool'
+import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
@@ -150,12 +150,13 @@ export default {
               postTicketenclosure(this.enclosureForm)
             }
             this.getEmail(this.ruleForm.action_user, this.ruleForm.follower)
-            //            const mailForm = {
-            //              to_list: this.to_list,
-            //              cc_list: this.cc_list,
-            //              sub: this.ruleForm.title,
-            //              context: this.ruleForm.content
-            //            }
+            const mailForm = {
+              to: this.to_list,
+              cc: this.cc_list,
+              sub: this.ruleForm.title,
+              content: this.ruleForm.content
+            }
+            postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')
           })
         } else {
