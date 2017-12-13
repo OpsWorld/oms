@@ -81,7 +81,7 @@
               <span class="bot"></span>
               <span class="top"></span>
               <div class="comment">
-                {{item.content}}
+                <vue-markdown :source="item.content"></vue-markdown>
                 <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
               </div>
             </div>

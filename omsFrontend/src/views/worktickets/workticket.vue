@@ -6,9 +6,12 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
             <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
           </router-link>
+
+          <el-button-group>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button type="success" plain size="small" @click="showMeCreate">我创建的工单</el-button>
           <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
+          </el-button-group>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
