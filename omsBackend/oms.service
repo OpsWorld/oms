@@ -2,8 +2,8 @@
 Description=uWSGI instance to serve oms
 
 [Service]
-ExecStartPre=-/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown oms:nginx /run/uwsgi'
-ExecStart=/root/.pyenv/shims/uwsgi --ini oms.ini --touch-reload=/etc/nginx/uwsgi_params
+ExecStartPre=/usr/bin/bash -c 'mkdir -p /run/uwsgi; chown oms:nginx /run/uwsgi'
+ExecStart=/usr/bin/bash -c 'cd /data/projects/oms/omsBackend; /root/.pyenv/shims/uwsgi --ini oms.ini --touch-reload=/etc/nginx/uwsgi_params'
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
