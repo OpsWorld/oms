@@ -8,7 +8,6 @@ import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
 function hasPermission(menus, route) {
   if (route.authority) {
     if (menus[route.authority] !== undefined) {
-      console.log(route.authority)
       return menus[route.authority]
     } else {
       return false

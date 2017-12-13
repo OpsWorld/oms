@@ -31,7 +31,7 @@
             <el-upload
               class="upload-demo"
               ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="uploadurl"
               :on-success="handleSuccess"
               :file-list="fileList"
               :disabled="count>0?true:false">
@@ -59,7 +59,8 @@ import { postWorkticket, postTicketenclosure } from 'api/workticket'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
-import { ws_url } from '@/config'
+import { ws_url, uploadurl } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { ElButton },
@@ -71,7 +72,7 @@ export default {
         title: '',
         type: '',
         content: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: this.username,
         level: 2,
         action_user: '',
         follower: '',
@@ -100,7 +101,7 @@ export default {
       enclosureFile: null,
       enclosureForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: this.username,
         file: '',
         create_group: ''
       },
@@ -120,14 +121,19 @@ export default {
       ws_stream: '/salt/sendmail/',
       ws: '',
       to_list: [],
-      cc_list: []
+      cc_list: [],
+      uploadurl: uploadurl
     }
   },
 
+  computed: {
+    ...mapGetters([
+      'username'
+    ])
+  },
   created() {
     this.getTicketUsers()
     this.wsInit() // ws 初始化
-    this.getEmail('aaa')
   },
   methods: {
     postForm(formName) {
@@ -168,7 +174,7 @@ export default {
     },
     getTicketUsers() {
       getUser().then(response => {
-        this.users = response.data.results
+        this.users = response.data
       })
     },
     handleSuccess(file, fileList) {
@@ -216,7 +222,7 @@ export default {
         username: to_list
       }
       getUser(to_list_parms).then(response => {
-        const data = response.data.results[0]
+        const data = response.data[0]
         this.to_list.push(data.email)
       })
       for (const cc of cc_list) {
@@ -224,7 +230,7 @@ export default {
           username: cc
         }
         getUser(cc_list_parms).then(response => {
-          const data = response.data.results[0]
+          const data = response.data[0]
           this.cc_list.push(data.email)
         })
       }

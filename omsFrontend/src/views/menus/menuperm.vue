@@ -203,7 +203,6 @@ export default {
       }
       getMenumetas(parmas).then(response => {
         this.elementData = response.data.results
-        console.log(this.elementData)
       })
     },
     handleCheckChange(data, checked) {
@@ -235,7 +234,6 @@ export default {
     handleGroupClick(data) {
       this.select_group = true
       this.menuform = data
-      console.log(data)
       this.menuform.elements = data.elements
       this.$refs.grouptree.setCheckedKeys([])
       this.$refs.grouptree.setCheckedKeys(data.secondmenus)
@@ -285,7 +283,6 @@ export default {
       })
     },
     putFormSubmit(id) {
-      console.log(this.menuform)
       putMenuPerm(id, this.menuform).then(response => {
         this.$message({
           message: '恭喜你，更新成功',

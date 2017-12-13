@@ -1,6 +1,6 @@
 <template>
   <div class="menu-wrapper">
-    <template v-for="item in routes" v-if="!item.hidden&&item.children">
+    <template v-for="item in routes" v-if="!item.hidden&&item.children.length>0">
 
       <router-link v-if="item.children.length===1 && !item.children[0].children"
                    :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">

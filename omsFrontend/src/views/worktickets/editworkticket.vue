@@ -25,28 +25,30 @@
         </el-card>
       </div>
 
-      <el-form v-if="ticketData.ticket_status!=2" :model="commentForm" :rules="rules" ref="ruleForm"
-               label-width="80px" class="demo-ruleForm">
-        <hr class="heng"/>
-        <div v-if="ticketData.ticket_status==1">
-          <el-form-item label="问题处理" prop="content">
-            <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
-                          v-model="commentForm.content"
-                          code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
-                          ref="md"></mavon-editor>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
-            </el-button>
-          </el-form-item>
-        </div>
-        <hr class="heng"/>
-      </el-form>
-      <div v-if="ticketData.ticket_status!=2">
+      <div v-if="ticketData.ticket_status!=2&&workticketlist_btn_edit||role==='super'">
+
+        <el-form :model="commentForm"
+                 :rules="rules" ref="ruleForm"
+                 label-width="80px" class="demo-ruleForm">
+          <hr class="heng"/>
+          <div v-if="ticketData.ticket_status==1">
+            <el-form-item label="问题处理" prop="content">
+              <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
+                            v-model="commentForm.content"
+                            code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
+                            ref="md"></mavon-editor>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
+              </el-button>
+            </el-form-item>
+          </div>
+          <hr class="heng"/>
+        </el-form>
         <el-upload
           class="upload-demo"
           ref="upload"
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :action="uploadurl"
           :on-success="handleSuccess"
           :show-file-list="false"
           :disabled="count>2?true:false">
@@ -125,8 +127,9 @@ import { postUpload } from 'api/tool'
 import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
-import { ws_url } from '@/config'
+import { ws_url, uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
+import { mapGetters } from 'vuex'
 
 export default {
   components: { VueMarkdown, BackToTop },
@@ -142,13 +145,13 @@ export default {
       apiurl: apiUrl,
       commentForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: this.username,
         content: '',
         create_group: ''
       },
       enclosureForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: this.username,
         file: '',
         create_group: ''
       },
@@ -188,12 +191,23 @@ export default {
         'border-radius': '4px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#f5152d'// 按钮的背景颜色
-      }
+      },
+      workticketlist_btn_edit: false,
+      uploadurl: uploadurl
     }
+  },
+
+  computed: {
+    ...mapGetters([
+      'role',
+      'elements',
+      'username'
+    ])
   },
 
   created() {
     this.ticket_id = this.route_path[this.route_path.length - 1]
+    this.workticketlist_btn_edit = this.elements['工单列表-编辑工单按钮']
     this.fetchData()
     this.CommentData()
     this.EnclosureData()
@@ -210,7 +224,7 @@ export default {
         ticket__id: this.ticket_id
       }
       getTicketcomment(parms).then(response => {
-        this.commentData = response.data.results
+        this.commentData = response.data
         this.rowdata.action_user = this.commentData.length === 0 ? null : this.commentData[this.commentData.length - 1].create_user
       })
       this.commentForm.content = ''
@@ -220,8 +234,8 @@ export default {
         ticket__id: this.ticket_id
       }
       getTicketenclosure(parms).then(response => {
-        this.enclosureData = response.data.results
-        this.count = response.data.count
+        this.enclosureData = response.data
+        this.count = response.data.length
       })
     },
     deleteEnclosure(id) {
@@ -303,7 +317,7 @@ export default {
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
-      formData.append('username', localStorage.getItem('username'))
+      formData.append('username', this.username)
       formData.append('file', file)
       formData.append('create_time', this.afterUpload(file))
       formData.append('type', file.type)
@@ -325,7 +339,7 @@ export default {
     },
     getTicketUsers() {
       getUser().then(response => {
-        this.users = response.data.results
+        this.users = response.data
       })
     },
     getEmail(to_list) {
@@ -333,7 +347,7 @@ export default {
         username: to_list
       }
       getUser(to_list_parms).then(response => {
-        const data = response.data.results[0]
+        const data = response.data[0]
         this.to_list.push(data.email)
       })
     },

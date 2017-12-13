@@ -1,76 +1,79 @@
 <template>
   <div class="components-container" style='height:100vh'>
-        <el-card>
-            <div class="head-lavel">
-                <div class="table-button">
-                    <router-link :to="'addworkticket'">
-                        <el-button v-if="role==='super'||workticketlist_btn_add" type="primary" icon="el-icon-plus">新建工单</el-button>
-                    </router-link>
+    <el-card>
+      <div class="head-lavel">
+        <div class="table-button">
+          <router-link :to="'addworkticket'">
+            <el-button v-if="role==='super'||workticketlist_btn_add" type="primary" icon="el-icon-plus">新建工单</el-button>
+          </router-link>
 
-                    <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
-                        <el-radio label="0">未接收</el-radio>
-                        <el-radio label="1">正在处理</el-radio>
-                        <el-radio label="2">已解决</el-radio>
-                        <el-radio label="">全部</el-radio>
-                    </el-radio-group>
+          <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
+            <el-radio label="0">未接收</el-radio>
+            <el-radio label="1">正在处理</el-radio>
+            <el-radio label="2">已解决</el-radio>
+            <el-radio label="">全部</el-radio>
+          </el-radio-group>
 
-                </div>
-                <div class="table-search">
-                    <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick" v-model="listQuery.create_user"></el-input>
-                    <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick" v-model="listQuery.ticketid"></el-input>
-                    <el-input style="width: 160px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick" v-model="listQuery.content"></el-input>
-                    <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
-                </div>
-            </div>
-            <div>
-                <el-table :data="tableData" border style="width: 100%" v-loading="loading">
-                    <el-table-column prop='title' label='工单编号'>
-                        <template slot-scope="scope" v-if="role==='super'||workticketlist_btn_edit">
-                            <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
-                                <router-link :to="'editworkticket/'+scope.row.id">
-                                    {{scope.row.ticketid}}
-                                </router-link>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop='title' label='标题'></el-table-column>
-                    <el-table-column prop='create_user' label='工单创建人'></el-table-column>
-                    <el-table-column prop='level' label='工单等级' sortable>
-                        <template slot-scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-tag :type="LEVEL[scope.row.level].type">
-                                    {{LEVEL[scope.row.level].text}}
-                                </el-tag>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop='ticket_status' label='工单状态'>
-                        <template slot-scope="scope">
-                            <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                                <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
-                                    {{TICKET_STATUS[scope.row.ticket_status].text}}
-                                </el-tag>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop='action_user' label='当前处理人'></el-table-column>
-                </el-table>
-            </div>
-            <div class="table-footer">
-                <div class="table-pagination">
-                    <el-pagination
-                            @size-change="handleSizeChange"
-                            @current-change="handleCurrentChange"
-                            :current-page.sync="currentPage"
-                            :page-sizes="pagesize"
-                            :page-size="limit"
-                            layout="prev, pager, next, sizes"
-                            :total="tabletotal">
-                    </el-pagination>
-                </div>
-            </div>
-        </el-card>
-    </div>
+        </div>
+        <div class="table-search">
+          <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick"
+                    v-model="listQuery.create_user"></el-input>
+          <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick"
+                    v-model="listQuery.ticketid"></el-input>
+          <el-input style="width: 160px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick"
+                    v-model="listQuery.content"></el-input>
+          <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
+        </div>
+      </div>
+      <div>
+        <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+          <el-table-column prop='ticketid' label='工单编号'>
+            <template slot-scope="scope">
+              <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
+                <router-link :to="'editworkticket/'+scope.row.id">
+                  {{scope.row.ticketid}}
+                </router-link>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='title' label='标题'></el-table-column>
+          <el-table-column prop='create_user' label='工单创建人'></el-table-column>
+          <el-table-column prop='level' label='工单等级' sortable>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center">
+                <el-tag :type="LEVEL[scope.row.level].type">
+                  {{LEVEL[scope.row.level].text}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='ticket_status' label='工单状态'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
+                  {{TICKET_STATUS[scope.row.ticket_status].text}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='action_user' label='当前处理人'></el-table-column>
+        </el-table>
+      </div>
+      <div class="table-footer">
+        <div class="table-pagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="pagesize"
+            :page-size="limit"
+            layout="prev, pager, next, sizes"
+            :total="tabletotal">
+          </el-pagination>
+        </div>
+      </div>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -115,8 +118,7 @@ export default {
         create_user: '',
         content: ''
       },
-      workticketlist_btn_add: false,
-      workticketlist_btn_edit: false
+      workticketlist_btn_add: false
     }
   },
 
@@ -129,8 +131,7 @@ export default {
 
   created() {
     this.fetchData()
-    this.workticketlist_btn_add = this.elements['workticketlist:btn_add']
-    this.workticketlist_btn_edit = this.elements['workticketlist:btn_edit']
+    this.workticketlist_btn_add = this.elements['工单列表-新建工单按钮']
   },
 
   methods: {
@@ -170,22 +171,22 @@ export default {
 </script>
 
 <style lang='scss'>
-    .head-lavel {
-        padding-bottom: 50px;
-    }
+  .head-lavel {
+    padding-bottom: 50px;
+  }
 
-    .table-button {
-        padding: 10px 0;
-        float: left;
-    }
+  .table-button {
+    padding: 10px 0;
+    float: left;
+  }
 
-    .table-search {
-        float: right;
-        padding: 10px 0;
-    }
+  .table-search {
+    float: right;
+    padding: 10px 0;
+  }
 
-    .table-pagination {
-        padding: 10px 0;
-        float: right;
-    }
+  .table-pagination {
+    padding: 10px 0;
+    float: right;
+  }
 </style>

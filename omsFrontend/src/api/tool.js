@@ -3,6 +3,7 @@ import apiURL from '@/config'
 
 // upload
 export function postUpload(data) {
+  console.log(data)
   return request({
     url: apiURL.uploads,
     method: 'post',
