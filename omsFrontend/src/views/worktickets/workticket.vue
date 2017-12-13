@@ -6,7 +6,7 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
             <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
           </router-link>
-          <el-button type="success" @click="showMyTicket">我的工单</el-button>
+          <el-button type="success" @click="showMyTicket()">我的工单</el-button>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
@@ -27,7 +27,7 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" v-loading="loading">
+        <el-table :data="tableData" border style="width: 100%">
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
@@ -87,7 +87,6 @@ export default {
   components: { addWorkticket },
   data() {
     return {
-      loading: true,
       radio: '',
       tableData: [],
       tabletotal: 0,
@@ -149,7 +148,6 @@ export default {
       getWorkticket(id, parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
-        this.loading = false
       })
     },
     searchClick() {
@@ -168,7 +166,7 @@ export default {
       this.fetchData()
     },
     showMyTicket() {
-      this.create_user__username = sessionStorage.getItem('username')
+      this.listQuery.create_user = sessionStorage.getItem('username')
       this.fetchData()
     }
   }
