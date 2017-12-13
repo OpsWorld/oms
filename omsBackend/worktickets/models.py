@@ -30,7 +30,7 @@ class WorkTicket(models.Model):
     follower = models.ManyToManyField(User, null=True, blank=True, related_name='follower',verbose_name=u'跟踪人')
     create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单分组')
     level = models.CharField(max_length=3, choices=TicketLevel.items(), default=5, verbose_name=u'工单等级')
-    ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'工单状态')
+    ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, null=True, blank=True, verbose_name=u'工单状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
     action_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单接收时间')
     end_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单结束时间')
@@ -47,6 +47,7 @@ class WorkTicket(models.Model):
         import datetime
         now = datetime.datetime.now()
         self.ticketid = now.strftime("%Y%m%d%H%M%S")
+        print(self.ticketid)
         super(WorkTicket, self).save(*args, **kwargs)
 
 
