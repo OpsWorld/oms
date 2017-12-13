@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from rest_framework.response import Response
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework import status
 from cmd.models import Cmdrun
 from cmd.serializers import CmdrunSerializer
 from cmd.cmdrun import run
-from rest_framework import status
+
 import io
 
 class CmdrunViewSet(viewsets.ModelViewSet):
