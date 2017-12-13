@@ -264,13 +264,6 @@ export default {
       this.change_action = false
       this.ticketData.action_user = this.rowdata.action_user
       this.getEmail(this.ticketData.action_user)
-      const mailForm = {
-        to: this.to_list,
-        cc: '',
-        sub: '【' + this.ticketData.title + '】指派人被改变',
-        content: '【' + this.ticketData.title + '】指派人被改变'
-      }
-      postSendmail(mailForm)
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()
@@ -342,6 +335,18 @@ export default {
       getUser(to_list_parms).then(response => {
         const data = response.data[0]
         this.to_list = data.email
+        const mailForm = {
+          to: this.to_list,
+          cc: '',
+          sub: '【' + this.ticketData.title + '】指派人被改变',
+          content: '【' + this.ticketData.title + '】指派人被改变'
+        }
+        postSendmail(mailForm).then(response => {
+          this.$message({
+            type: response.code,
+            message: response.msg
+          })
+        })
       })
     }
   }

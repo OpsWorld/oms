@@ -27,8 +27,9 @@ class SendmailViewSet(viewsets.ModelViewSet):
         content = request.data["content"]
         cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to, cc, sub, content)
         results = run(cmd).stdout
+        print(cmd)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
