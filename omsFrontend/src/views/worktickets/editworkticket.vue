@@ -107,7 +107,7 @@
         </div>
       </div>
     </el-card>
-    <el-tooltip placement="top" content="带你装逼带你飞">
+    <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
@@ -145,13 +145,13 @@ export default {
       apiurl: apiUrl,
       commentForm: {
         ticket: '',
-        create_user: this.username,
+        create_user: sessionStorage.getItem('username'),
         content: '',
         create_group: ''
       },
       enclosureForm: {
         ticket: '',
-        create_user: this.username,
+        create_user: sessionStorage.getItem('username'),
         file: '',
         create_group: ''
       },
@@ -190,7 +190,7 @@ export default {
         height: '40px',
         'border-radius': '4px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
-        background: '#f5152d'// 按钮的背景颜色
+        background: '#a2fdff'// 按钮的背景颜色
       },
       workticketlist_btn_edit: false,
       uploadurl: uploadurl
@@ -200,14 +200,13 @@ export default {
   computed: {
     ...mapGetters([
       'role',
-      'elements',
-      'username'
+      'elements'
     ])
   },
 
   created() {
     this.ticket_id = this.route_path[this.route_path.length - 1]
-    this.workticketlist_btn_edit = this.elements['工单列表-编辑工单按钮']
+    this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.CommentData()
     this.EnclosureData()
