@@ -8,6 +8,7 @@ from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnc
 from tools.views import UploadViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
+from cmd.views import CmdrunViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -23,3 +24,4 @@ router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)
 router.register(r'menumetas', ElementViewSet)
 router.register(r'usermenuperms', UserMenuPermsViewSet)
+router.register(r'cmdrun', CmdrunViewSet)

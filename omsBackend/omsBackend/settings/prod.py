@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'users',
     'menus',
     'perms',
+    'cmd',
 ]
 
 DATABASES = {

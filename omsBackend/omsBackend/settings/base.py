@@ -199,9 +199,6 @@ LOGGING = {
     },
 }
 
-# sendmail
-SEND_MAIL_CMD = 'python utils/sendmail.py '
-
 # Redis
 REDIS_OPTIONS = {
     'HOST': '127.0.0.1',

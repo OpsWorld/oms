@@ -3,9 +3,8 @@
 
 import json
 import os
-from crontab.cmdrun import run
+from cmd.cmdrun import run
 # from salts.models import SaltCmdrun   #命令记录
-from omsBackend.settings import SEND_MAIL_CMD
 from users.models import Group
 
 salt_log = '/tmp/salt/'
@@ -22,19 +21,6 @@ def cmdrun_receive(message):
     # 命令记录
     # cmdrun = SaltCmdrun(user=user, hosts=hosts, cmd=cmd)
     # cmdrun.save()
-
-    results = run(cmd).stdout
-    for result in results:
-        message.reply_channel.send({'text':result.decode('utf-8')}, True)
-
-def sendmail_receive(message):
-    text = message.content['text']
-    request = json.loads(text)
-    to_list = request['to_list']
-    email = Group.objects.get(name=to_list).email
-    sub = request['sub']
-    context = request['context']
-    cmd = '{} {} {} {}'.format(SEND_MAIL_CMD,email,sub,context)
 
     results = run(cmd).stdout
     for result in results:
