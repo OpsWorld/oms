@@ -29,8 +29,6 @@ const url = CONFIG.apiUrl
 module.exports = {
   apiUrl: CONFIG.apiUrl,
   ws_url: CONFIG.wsurl,
-  py_cmd: '/root/.pyenv/versions/envoms/bin/python',
-  sendmail: '/data/projects/oms/omsBackend/utils/sendmail.py',
 
   // 超级管理组
   super_group: CONFIG.super_group,
@@ -74,5 +72,6 @@ module.exports = {
   menumetas: `${url}/api/menumetas/`,
 
   // cmdrun
-  cmdrun: `${url}/api/cmdrun/`
+  cmdrun: `${url}/api/cmdrun/`,
+  sendmail: `${url}/api/sendmail/`
 }

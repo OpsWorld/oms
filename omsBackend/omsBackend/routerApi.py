@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, RoleViewSet, GroupViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet, \
     TicketWikiViewSet
-from tools.views import UploadViewSet
+from tools.views import UploadViewSet, SendmailViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
 from cmd.views import CmdrunViewSet
@@ -20,6 +20,7 @@ router.register(r'ticketenclosures', TicketEnclosureViewSet)
 router.register(r'tickettypes', TicketTypeViewSet)
 router.register(r'ticketwikis', TicketWikiViewSet)
 router.register(r'upload', UploadViewSet)
+router.register(r'sendmail', SendmailViewSet)
 router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)
 router.register(r'menumetas', ElementViewSet)

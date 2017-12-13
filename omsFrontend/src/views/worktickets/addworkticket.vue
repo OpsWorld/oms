@@ -56,11 +56,10 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure } from 'api/workticket'
-import { postCmdrun } from 'api/cmdrun'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
-import { uploadurl, py_cmd, sendmail } from '@/config'
+import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -157,11 +156,6 @@ export default {
             //              sub: this.ruleForm.title,
             //              context: this.ruleForm.content
             //            }
-            const cmdFrom = {
-              cmd: py_cmd + ' ' + sendmail + ' ' + this.to_list + ' ' + this.cc_list + ' ' + this.ruleForm.title + '' + this.ruleForm.content,
-              user: sessionStorage.getItem('username')
-            }
-            postCmdrun(cmdFrom)
             this.$router.push('/worktickets/workticket')
           })
         } else {

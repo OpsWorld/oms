@@ -29,3 +29,14 @@ class Upload(models.Model):
     class Meta:
         verbose_name = u'文件上传'
         verbose_name_plural = u'文件上传'
+
+class Sendmail(models.Model):
+    to = models.EmailField(max_length=20, verbose_name=u'收件人')
+    cc = models.EmailField(max_length=20, null=True, blank=True, verbose_name=u'抄送人')
+    sub = models.CharField(max_length=101, default=u'其他', verbose_name=u'邮件主题')
+    content = models.TextField(null=True, blank=True, verbose_name=u'邮件内容')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'邮件创建时间')
+
+    class Meta:
+        verbose_name = u'发送邮件'
+        verbose_name_plural = u'发送邮件'

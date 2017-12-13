@@ -1,21 +1,20 @@
 <template>
   <el-card style="width: 500px;margin: 20px;padding: 20px">
     收件人:
-    <el-input v-model="mailForm.to_list" placeholder="请输入收件人"></el-input>
+    <el-input v-model="mailForm.to" placeholder="请输入收件人"></el-input>
     抄送者:
-    <el-input v-model="mailForm.cc_list" placeholder="请输入抄送者" disabled></el-input>
+    <el-input v-model="mailForm.cc" placeholder="请输入抄送者" disabled></el-input>
     主 题:
     <el-input v-model="mailForm.sub" placeholder="请输入主题" disabled></el-input>
     邮件内容:
-    <el-input v-model="mailForm.context" placeholder="请输入邮件内容" disabled></el-input>
+    <el-input v-model="mailForm.content" placeholder="请输入邮件内容" disabled></el-input>
     <el-button type="success" plain @click="sendMail">发送测试邮件</el-button>
   </el-card>
 </template>
 <script>
-import { py_cmd, sendmail } from '@/config'
 import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/card/src/main'
 import ElInput from '../../../../../omsFrontend/node_modules/element-ui/packages/input/src/input'
-import { postCmdrun } from 'api/cmdrun'
+import { postSendmail } from 'api/tool'
 
 export default {
   components: {
@@ -25,10 +24,10 @@ export default {
   data() {
     return {
       mailForm: {
-        to_list: 'kiven@tb-gaming.com',
-        cc_list: 'kiven@tb-gaming.com',
+        to: 'kiven@tb-gaming.com',
+        cc: 'kiven@tb-gaming.com',
         sub: 'test',
-        context: '我是一只小小鸟'
+        content: '我是一只小小鸟'
       }
     }
   },
@@ -36,11 +35,7 @@ export default {
   },
   methods: {
     sendMail() {
-      const cmdFrom = {
-        cmd: py_cmd + ' ' + sendmail + ' ' + this.mailForm.to_list + ' ' + this.mailForm.cc_list + ' ' + this.mailForm.sub + '' + this.mailForm.content,
-        user: sessionStorage.getItem('username')
-      }
-      postCmdrun(cmdFrom)
+      postSendmail(this.mailForm)
     }
     //    wsInit() {
     //      const self = this

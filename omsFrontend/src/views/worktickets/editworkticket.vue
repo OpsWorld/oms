@@ -124,10 +124,9 @@ import { postUpload } from 'api/tool'
 import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
-import { uploadurl, py_cmd, sendmail } from '@/config'
+import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
-import { postCmdrun } from 'api/cmdrun'
 
 export default {
   components: { VueMarkdown, BackToTop },
@@ -265,11 +264,6 @@ export default {
       this.change_action = false
       this.ticketData.action_user = this.rowdata.action_user
       this.getEmail(this.ticketData.action_user)
-      const cmdFrom = {
-        cmd: py_cmd + ' ' + sendmail + ' ' + this.to_list + ' ' + this.cc_list + ' ' + this.ruleForm.title + '' + this.ruleForm.content,
-        user: sessionStorage.getItem('username')
-      }
-      postCmdrun(cmdFrom)
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()

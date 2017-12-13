@@ -6,10 +6,6 @@ webpackJsonp([39],{
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
-// EXTERNAL MODULE: ./src/config.js
-var config = __webpack_require__("QmSG");
-var config_default = /*#__PURE__*/__webpack_require__.n(config);
-
 // CONCATENATED MODULE: ..Frontend/node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!..Frontend/node_modules/element-ui/packages/card/src/main.vue
 
 
@@ -515,11 +511,10 @@ var input_Component = input_normalizeComponent(
 
 /* harmony default export */ var input_src_input = (input_Component.exports);
 
-// EXTERNAL MODULE: ./src/api/cmdrun.js
-var cmdrun = __webpack_require__("7CDK");
+// EXTERNAL MODULE: ./src/api/tool.js
+var tool = __webpack_require__("nSkA");
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/views/tools/test.vue
-
 
 
 
@@ -534,10 +529,10 @@ var cmdrun = __webpack_require__("7CDK");
   data: function data() {
     return {
       mailForm: {
-        to_list: 'kiven@tb-gaming.com',
-        cc_list: 'kiven@tb-gaming.com',
+        to: 'kiven@tb-gaming.com',
+        cc: 'kiven@tb-gaming.com',
         sub: 'test',
-        context: '我是一只小小鸟'
+        content: '我是一只小小鸟'
       }
     };
   },
@@ -545,16 +540,12 @@ var cmdrun = __webpack_require__("7CDK");
 
   methods: {
     sendMail: function sendMail() {
-      var cmdFrom = {
-        cmd: config["py_cmd"] + ' ' + config["sendmail"] + ' ' + this.mailForm.to_list + ' ' + this.mailForm.cc_list + ' ' + this.mailForm.sub + '' + this.mailForm.content,
-        user: sessionStorage.getItem('username')
-      };
-      Object(cmdrun["a" /* postCmdrun */])(cmdFrom);
+      Object(tool["c" /* postSendmail */])(this.mailForm);
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-ca7878b0","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/tools/test.vue
-var test_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-card',{staticStyle:{"width":"500px","margin":"20px","padding":"20px"}},[_vm._v("\n  收件人:\n  "),_c('el-input',{attrs:{"placeholder":"请输入收件人"},model:{value:(_vm.mailForm.to_list),callback:function ($$v) {_vm.$set(_vm.mailForm, "to_list", $$v)},expression:"mailForm.to_list"}}),_vm._v("\n  抄送者:\n  "),_c('el-input',{attrs:{"placeholder":"请输入抄送者","disabled":""},model:{value:(_vm.mailForm.cc_list),callback:function ($$v) {_vm.$set(_vm.mailForm, "cc_list", $$v)},expression:"mailForm.cc_list"}}),_vm._v("\n  主 题:\n  "),_c('el-input',{attrs:{"placeholder":"请输入主题","disabled":""},model:{value:(_vm.mailForm.sub),callback:function ($$v) {_vm.$set(_vm.mailForm, "sub", $$v)},expression:"mailForm.sub"}}),_vm._v("\n  邮件内容:\n  "),_c('el-input',{attrs:{"placeholder":"请输入邮件内容","disabled":""},model:{value:(_vm.mailForm.context),callback:function ($$v) {_vm.$set(_vm.mailForm, "context", $$v)},expression:"mailForm.context"}}),_vm._v(" "),_c('el-button',{attrs:{"type":"success","plain":""},on:{"click":_vm.sendMail}},[_vm._v("发送测试邮件")])],1)}
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-f152c9fc","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/tools/test.vue
+var test_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-card',{staticStyle:{"width":"500px","margin":"20px","padding":"20px"}},[_vm._v("\n  收件人:\n  "),_c('el-input',{attrs:{"placeholder":"请输入收件人"},model:{value:(_vm.mailForm.to),callback:function ($$v) {_vm.$set(_vm.mailForm, "to", $$v)},expression:"mailForm.to"}}),_vm._v("\n  抄送者:\n  "),_c('el-input',{attrs:{"placeholder":"请输入抄送者","disabled":""},model:{value:(_vm.mailForm.cc),callback:function ($$v) {_vm.$set(_vm.mailForm, "cc", $$v)},expression:"mailForm.cc"}}),_vm._v("\n  主 题:\n  "),_c('el-input',{attrs:{"placeholder":"请输入主题","disabled":""},model:{value:(_vm.mailForm.sub),callback:function ($$v) {_vm.$set(_vm.mailForm, "sub", $$v)},expression:"mailForm.sub"}}),_vm._v("\n  邮件内容:\n  "),_c('el-input',{attrs:{"placeholder":"请输入邮件内容","disabled":""},model:{value:(_vm.mailForm.content),callback:function ($$v) {_vm.$set(_vm.mailForm, "content", $$v)},expression:"mailForm.content"}}),_vm._v(" "),_c('el-button',{attrs:{"type":"success","plain":""},on:{"click":_vm.sendMail}},[_vm._v("发送测试邮件")])],1)}
 var test_staticRenderFns = []
 var test_esExports = { render: test_render, staticRenderFns: test_staticRenderFns }
 /* harmony default export */ var tools_test = (test_esExports);
