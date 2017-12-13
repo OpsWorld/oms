@@ -284,7 +284,7 @@ export default {
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
       formData.append('create_time', this.afterFileUpload(fileList))
-      formData.append('type', fileList.raw.type)
+      formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         this.enclosureForm.file = response.data.filepath
@@ -304,7 +304,7 @@ export default {
       })
     },
     afterFileUpload(fileList) {
-      const date = new Date(fileList.row.uid)
+      const date = new Date(fileList.uid)
       const Y = date.getFullYear().toString()
       const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
       const D = date.getDate()

@@ -4,7 +4,7 @@ import store from '@/store'
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-// axios.defaults.withCredentials = true;   //使用session
+// axios.defaults.withCredentials = true
 
 // 创建axios实例
 const service = axios.create({

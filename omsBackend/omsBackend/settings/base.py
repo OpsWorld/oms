@@ -92,7 +92,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "../omsFrontend/dist/static"),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../upload')
 MEDIA_URL = '/upload/'
 
 REST_USE_JWT = True
