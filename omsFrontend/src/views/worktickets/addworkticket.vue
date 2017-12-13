@@ -72,7 +72,7 @@ export default {
         title: '',
         type: '',
         content: '',
-        create_user: this.username,
+        create_user: sessionStorage.getItem('username'),
         level: 2,
         action_user: '',
         follower: '',
