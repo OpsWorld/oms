@@ -15,8 +15,8 @@ def send_mail(to_list, cc_list, sub, context):
     msg = MIMEText(context)
     msg['Subject'] = sub
     msg['From'] = me
-    msg['To'] = ";".join(to_list)
-    msg['Cc'] = ";".join(cc_list)
+    msg['To'] = to_list + ';'
+    msg['Cc'] = cc_list + ';'
     list = to_list + cc_list
     print(list)
     try:
@@ -39,8 +39,8 @@ mail_user = "oms@tb-gaming.com"
 mail_pass = "u62En68D9d"  # 隐藏输入密码
 mail_postfix = "tb-gaming.com"
 # mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
-to_list = sys.argv[1]  # 收件人列表
-cc_list = sys.argv[2]  # 抄送人列表
+to_list = sys.argv[1]  # 收件人列表   '111@126.com'
+cc_list = sys.argv[2]  # 抄送人列表   '111@126.com;222@126.com'
 sub = sys.argv[3]
 context = sys.argv[4]
 
