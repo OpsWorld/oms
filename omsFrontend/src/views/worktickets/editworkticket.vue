@@ -25,13 +25,11 @@
         </el-card>
       </div>
 
-      <div v-if="ticketData.ticket_status!=2&&workticketlist_btn_edit||role==='super'">
-
+      <div v-if="ticketData.ticket_status!=2">
         <el-form :model="commentForm"
                  :rules="rules" ref="ruleForm"
                  label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
-          <div v-if="ticketData.ticket_status==1">
             <el-form-item label="问题处理" prop="content">
               <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
                             v-model="commentForm.content"
@@ -42,7 +40,6 @@
               <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
               </el-button>
             </el-form-item>
-          </div>
           <hr class="heng"/>
         </el-form>
         <el-upload
@@ -91,13 +88,13 @@
       <div v-if="ticketData.ticket_status!=2">
         <hr class="heng"/>
         工单操作：
-        <el-button type="success" @click="changeTicketStatus(1)"
-                   :disabled="ticketData.ticket_status==0?false:true">接收
-        </el-button>
+        <!--<el-button type="success" @click="changeTicketStatus(1)"-->
+                   <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
+        <!--</el-button>-->
         <el-button type="danger" @click="changeTicketStatus(2)"
                    :disabled="ticketData.ticket_status!=2?false:true">关闭
         </el-button>
-        <el-button type="warning" plain @click="change_action=true" v-if="ticketData.ticket_status!=2">更改指派者
+        <el-button type="warning" plain @click="change_action=!change_action" v-if="ticketData.ticket_status!=2">更改指派者
         </el-button>
         <div v-if="change_action==true" style="display:inline;">
           <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
