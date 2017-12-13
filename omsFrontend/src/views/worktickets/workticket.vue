@@ -6,8 +6,9 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
             <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
           </router-link>
-          <el-button v-if="showme" type="success" @click="showMeTicket">我的工单</el-button>
-          <el-button v-else type="danger" @click="showAllTicket">全部</el-button>
+          <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
+          <el-button type="success" plain size="small" @click="showMeCreate">我创建的工单</el-button>
+          <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
@@ -116,10 +117,10 @@ export default {
       listQuery: {
         ticketid: '',
         create_user: '',
+        action_user: '',
         content: ''
       },
-      workticketlist_btn_add: false,
-      showme: true
+      workticketlist_btn_add: false
     }
   },
 
@@ -144,7 +145,8 @@ export default {
         content__contains: this.listQuery.content,
         ticket_status: this.ticket_status,
         ticketid: this.listQuery.ticketid,
-        create_user__username: this.listQuery.create_user
+        create_user__username: this.listQuery.create_user,
+        action_user__username: this.listQuery.action_user
       }
       getWorkticket(id, parms).then(response => {
         this.tableData = response.data.results
@@ -166,15 +168,18 @@ export default {
       this.ticket_status = val
       this.fetchData()
     },
-    showMeTicket() {
+    showMeCreate() {
       this.listQuery.create_user = sessionStorage.getItem('username')
-      this.showme = false
+      this.fetchData()
+    },
+    showMeAction() {
+      this.listQuery.action_user = sessionStorage.getItem('username')
       this.fetchData()
     },
     showAllTicket() {
       this.listQuery.create_user = ''
+      this.listQuery.action_user = ''
       this.ticket_status = ''
-      this.showme = true
       this.fetchData()
     }
   }
