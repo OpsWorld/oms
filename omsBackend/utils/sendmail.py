@@ -33,9 +33,10 @@ def send_mail(to_list, cc_list, sub, context):
 
         send_smtp.sendmail(me, list, msg.as_string())
         send_smtp.close()
-        return True
+        return {"code":'success',"msg":"通知邮件发送成功"}
     except Exception as e:
-        return False
+        print(e)
+        return {"code":'error',"msg":"通知邮件发送失败"}
 
 if __name__ == '__main__':
     to_list = sys.argv[1]  # 收件人列表   '111@126.com'
