@@ -33,8 +33,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
                     cc_list = cc_list + c_email + ','
                 except Exception as e:
                     cc_list = cc_list
-        print(cc_list)
-        if len(cc_list.split()):
+        if not cc_list.isspace():
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
