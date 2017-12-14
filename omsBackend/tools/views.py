@@ -34,7 +34,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
                     cc_list = cc_list + c_email + ','
                 except Exception as e:
                     cc_list = cc_list
-        else:
+        if cc_list:
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
