@@ -269,7 +269,15 @@ export default {
         sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
         content: window.location.href
       }
-      postSendmail(mailForm)
+      postSendmail(mailForm).then(response => {
+        this.$message({
+          type: 'success',
+          message: '通知邮件发送成功'
+        })
+      }).catch(error => {
+        this.$message.error('通知邮件发送失败')
+        console.log(error)
+      })
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()
