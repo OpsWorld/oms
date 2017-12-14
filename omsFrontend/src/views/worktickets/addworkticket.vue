@@ -6,9 +6,10 @@
           <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
-          <el-select v-model="ruleForm.action_user" placeholder="请选择指派人">
+          <el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
+          <a style="color:rgba(250,17,255,0.49);font-size: 18px">如果不指派默认把工单指派给ipsport</a>
         </el-form-item>
         <el-form-item label="跟踪者" prop="follower">
           <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
@@ -74,19 +75,13 @@ export default {
         content: '',
         create_user: sessionStorage.getItem('username'),
         level: 2,
-        action_user: '',
+        action_user: 'itsupport',
         follower: '',
         create_group: ''
       },
       rules: {
         title: [
           { required: true, message: '请输入工单标题', trigger: 'blur' }
-        ],
-        action_user: [
-          { required: true, message: '请选择指派者', trigger: 'change' }
-        ],
-        follower: [
-          { required: true, type: 'array', message: '请选择工单跟踪者', trigger: 'change' }
         ],
         content: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }

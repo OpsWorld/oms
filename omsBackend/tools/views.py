@@ -27,9 +27,9 @@ class SendmailViewSet(viewsets.ModelViewSet):
         try:
             to_list = User.objects.get(username=to).email
         except Exception as e:
-            to_list = 'kiven@tb-gaming.com'
+            to_list = 'itsupport@tb-gaming.com'
         if not to_list:
-            to_list = 'kiven@tb-gaming.com'
+            to_list = 'itsupport@tb-gaming.com'
 
         cc = request.data["cc"]
         cc_list = ''
@@ -41,7 +41,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
                 except Exception as e:
                     cc_list = cc_list
         if not cc_list.isspace():
-            cc_list = 'kiven@tb-gaming.com'
+            cc_list = 'itsupport@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
         #print('{} {} {} {}'.format(to_list, cc_list, sub, content))
