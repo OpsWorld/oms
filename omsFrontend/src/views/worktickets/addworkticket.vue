@@ -152,8 +152,8 @@ export default {
             const mailForm = {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
-              sub: this.ruleForm.title,
-              content: '<html><a href="' + this.$route.fullPath + '">点我查看工单</a></html>'
+              sub: '【新工单】' + this.ruleForm.title,
+              content: window.location.href
             }
             postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')

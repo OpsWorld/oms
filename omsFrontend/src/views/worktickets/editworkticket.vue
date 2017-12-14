@@ -266,8 +266,8 @@ export default {
       const mailForm = {
         to: this.ticketData.action_user,
         cc: this.ticketData.create_user,
-        sub: '【' + this.ticketData.title + '】指派人被改变',
-        content: '<html><a href="' + this.$route.fullPath + '">点我查看工单</a></html>'
+        sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
+        content: window.location.href
       }
       postSendmail(mailForm)
     },

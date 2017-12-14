@@ -4,6 +4,7 @@
 import sys
 import smtplib
 from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 # 设置服务器名称、用户名、密码以及邮件后缀
 mail_host = "mail.tb-gaming.com"
@@ -13,18 +14,32 @@ mail_postfix = "tb-gaming.com"
 # mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
 
 # 发送邮件函数
-def send_mail(to_list, cc_list, sub, context):
+def send_mail(to_list, cc_list, sub, content):
     me = mail_user + "<" + mail_user + "@" + mail_postfix + ">"
     # f = open(context)
     # msg = MIMEText(f.read(),_charset="utf-8")
     # f.close()
     #msg = MIMEText(context)
-    msg = MIMEText(context, _subtype='html', _charset='utf-8')
+    msg = MIMEMultipart()
     msg['Subject'] = sub
     msg['From'] = me
     msg['To'] = to_list + ';'
     msg['Cc'] = cc_list
     list = msg['To']  + msg['Cc']
+    #构造html
+    html = """
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>萌店AB环境</title>
+    <body>
+    <div id="container">
+    <a href='""" + content + """>点我查看工单</a>
+    </div>
+    </body>
+    </html>"""
+    context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
+    msg.attach(context)
     try:
         send_smtp = smtplib.SMTP()
         send_smtp.connect(mail_host, 587)
