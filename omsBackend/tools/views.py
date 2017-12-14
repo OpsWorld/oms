@@ -38,12 +38,12 @@ class SendmailViewSet(viewsets.ModelViewSet):
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
-        send_mail(to_list, cc_list, sub, content)
+        results = send_mail(to_list, cc_list, sub, content)
         #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
         #print(cmd)
         #results = run(cmd).stdout
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(results, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            return Response(results, status=status.HTTP_400_BAD_REQUEST)
