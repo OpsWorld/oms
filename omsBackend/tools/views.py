@@ -29,10 +29,11 @@ class SendmailViewSet(viewsets.ModelViewSet):
         cc_list = ''
         if cc:
             for c in cc.split(','):
-                if c:
+                try:
                     c_email = User.objects.get(username=c).email
-                    print(c_email)
                     cc_list = cc_list + c_email + ','
+                except Exception as e:
+                    cc_list = cc_list
         else:
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
