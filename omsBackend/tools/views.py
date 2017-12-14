@@ -8,7 +8,7 @@ from tools.models import Upload, Sendmail
 from tools.serializers import UploadSerializer, SendmailSerializer
 from tools.filters import UploadFilter
 from users.models import User
-from cmd.cmdrun import run
+from utils.sendmail import send_mail
 
 class UploadViewSet(viewsets.ModelViewSet):
     queryset = Upload.objects.all()
@@ -37,9 +37,10 @@ class SendmailViewSet(viewsets.ModelViewSet):
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
-        cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
-        print(cmd)
-        results = run(cmd).stdout
+        send_mail(to_list, cc_list, sub, content)
+        print('{} {} {} {}'.format(to_list, cc_list, sub, content))
+        #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
+        #results = run(cmd).stdout
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
