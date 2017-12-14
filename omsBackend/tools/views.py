@@ -29,9 +29,9 @@ class SendmailViewSet(viewsets.ModelViewSet):
         if cc:
             for c in cc.split(','):
                 if c:
-                    cc_list = cc_list + User.objects.get(username=c).email + ';'
+                    cc_list = cc_list + User.objects.get(username=c).email + ','
         else:
-            cc_list = 'kiven@tb-gaming.com;'
+            cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
         cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
