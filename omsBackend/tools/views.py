@@ -25,11 +25,14 @@ class SendmailViewSet(viewsets.ModelViewSet):
         to = request.data["to"]
         to_list = User.objects.get(username=to).email
         cc = request.data["cc"]
+        print(to,cc)
         cc_list = ''
         if cc:
             for c in cc.split(','):
                 if c:
-                    cc_list = cc_list + User.objects.get(username=c).email + ','
+                    c_email = User.objects.get(username=c).email
+                    print(c_email)
+                    cc_list = cc_list + c_email + ','
         else:
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
