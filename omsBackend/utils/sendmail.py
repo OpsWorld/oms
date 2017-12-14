@@ -33,7 +33,11 @@ def send_mail(to_list, cc_list, sub, content):
     <title>工单通知邮件</title>
     <body>
     <div id="container">
-    <a href='""" + content + """'></a>"""
+    <a href='""" + content + """'></a>
+    </div>
+    </body>
+    </html>"""
+    print(html)
     context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
     try:
