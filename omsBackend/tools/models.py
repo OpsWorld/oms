@@ -31,8 +31,8 @@ class Upload(models.Model):
         verbose_name_plural = u'文件上传'
 
 class Sendmail(models.Model):
-    to = models.EmailField(max_length=20, verbose_name=u'收件人')
-    cc = models.EmailField(max_length=20, null=True, blank=True, verbose_name=u'抄送人')
+    to = models.CharField(max_length=30, verbose_name=u'收件人')
+    cc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'抄送人')
     sub = models.CharField(max_length=101, default=u'其他', verbose_name=u'邮件主题')
     content = models.TextField(null=True, blank=True, verbose_name=u'邮件内容')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'邮件创建时间')

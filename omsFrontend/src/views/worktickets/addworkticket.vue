@@ -149,10 +149,9 @@ export default {
               this.enclosureForm.ticket = response.data.id
               postTicketenclosure(this.enclosureForm)
             }
-            this.getEmail(this.ruleForm.action_user, this.ruleForm.follower)
             const mailForm = {
-              to: this.to_list,
-              cc: this.cc_list,
+              to: this.ruleForm.action_user,
+              cc: this.ruleForm.follower.join(),
               sub: this.ruleForm.title,
               content: this.ruleForm.content
             }
@@ -229,26 +228,7 @@ export default {
       const s = date.getSeconds()
       const ctime = Y + M + D + h + m + s
       return ctime
-    },
-    getEmail(to_list, cc_list) {
-      const to_list_parms = {
-        username: to_list
-      }
-      getUser(to_list_parms).then(response => {
-        const data = response.data[0]
-        this.to_list = data.email
-      })
-      for (const cc of cc_list) {
-        const cc_list_parms = {
-          username: cc
-        }
-        getUser(cc_list_parms).then(response => {
-          const data = response.data[0]
-          this.cc_list = this.cc_list + data.email + ';'
-        })
-      }
     }
-
     //    wsInit() {
     //      const self = this
     //      self.ws = new WebSocket(ws_url + self.ws_stream)

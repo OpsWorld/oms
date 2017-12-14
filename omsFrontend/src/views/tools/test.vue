@@ -24,8 +24,8 @@ export default {
   data() {
     return {
       mailForm: {
-        to: 'kiven@tb-gaming.com',
-        cc: 'kiven@tb-gaming.com',
+        to: 'kiven',
+        cc: 'kiven',
         sub: 'test',
         content: '我是一只小小鸟'
       }

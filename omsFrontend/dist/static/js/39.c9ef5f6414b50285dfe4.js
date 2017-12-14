@@ -529,8 +529,8 @@ var tool = __webpack_require__("nSkA");
   data: function data() {
     return {
       mailForm: {
-        to: 'kiven@tb-gaming.com',
-        cc: 'kiven@tb-gaming.com',
+        to: 'kiven',
+        cc: 'kiven',
         sub: 'test',
         content: '我是一只小小鸟'
       }
@@ -544,7 +544,7 @@ var tool = __webpack_require__("nSkA");
     }
   }
 });
-// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-f152c9fc","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/tools/test.vue
+// CONCATENATED MODULE: ./node_modules/vue-loader/lib/template-compiler?{"id":"data-v-4a28233c","hasScoped":false,"buble":{"transforms":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./src/views/tools/test.vue
 var test_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('el-card',{staticStyle:{"width":"500px","margin":"20px","padding":"20px"}},[_vm._v("\n  收件人:\n  "),_c('el-input',{attrs:{"placeholder":"请输入收件人"},model:{value:(_vm.mailForm.to),callback:function ($$v) {_vm.$set(_vm.mailForm, "to", $$v)},expression:"mailForm.to"}}),_vm._v("\n  抄送者:\n  "),_c('el-input',{attrs:{"placeholder":"请输入抄送者","disabled":""},model:{value:(_vm.mailForm.cc),callback:function ($$v) {_vm.$set(_vm.mailForm, "cc", $$v)},expression:"mailForm.cc"}}),_vm._v("\n  主 题:\n  "),_c('el-input',{attrs:{"placeholder":"请输入主题","disabled":""},model:{value:(_vm.mailForm.sub),callback:function ($$v) {_vm.$set(_vm.mailForm, "sub", $$v)},expression:"mailForm.sub"}}),_vm._v("\n  邮件内容:\n  "),_c('el-input',{attrs:{"placeholder":"请输入邮件内容","disabled":""},model:{value:(_vm.mailForm.content),callback:function ($$v) {_vm.$set(_vm.mailForm, "content", $$v)},expression:"mailForm.content"}}),_vm._v(" "),_c('el-button',{attrs:{"type":"success","plain":""},on:{"click":_vm.sendMail}},[_vm._v("发送测试邮件")])],1)}
 var test_staticRenderFns = []
 var test_esExports = { render: test_render, staticRenderFns: test_staticRenderFns }
