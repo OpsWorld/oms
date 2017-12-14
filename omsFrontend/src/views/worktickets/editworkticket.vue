@@ -267,7 +267,7 @@ export default {
         to: this.ticketData.action_user,
         cc: this.ticketData.create_user,
         sub: '【' + this.ticketData.title + '】指派人被改变',
-        content: '【' + this.ticketData.title + '】指派人被改变'
+        content: '<html><a href="' + this.$route.fullPath + '">点我查看工单</a></html>'
       }
       postSendmail(mailForm)
     },

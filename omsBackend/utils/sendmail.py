@@ -12,7 +12,8 @@ def send_mail(to_list, cc_list, sub, context):
     # f = open(context)
     # msg = MIMEText(f.read(),_charset="utf-8")
     # f.close()
-    msg = MIMEText(context)
+    #msg = MIMEText(context)
+    msg = MIMEText(context, _subtype='html', _charset='utf-8')
     msg['Subject'] = sub
     msg['From'] = me
     msg['To'] = to_list + ';'
