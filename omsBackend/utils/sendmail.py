@@ -11,10 +11,6 @@ mail_user = "oms@tb-gaming.com"
 mail_pass = "u62En68D9d"  # 隐藏输入密码
 mail_postfix = "tb-gaming.com"
 # mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
-to_list = sys.argv[1]  # 收件人列表   '111@126.com'
-cc_list = sys.argv[2].replace(',',';')  # 抄送人列表   '111@126.com;222@126.com;'
-sub = sys.argv[3]
-context = sys.argv[4]
 
 # 发送邮件函数
 def send_mail(to_list, cc_list, sub, context):
@@ -41,7 +37,12 @@ def send_mail(to_list, cc_list, sub, context):
     except Exception as e:
         return False
 
-if send_mail(to_list, cc_list, sub, context):
-    print({"code":'success',"msg":"通知邮件发送成功"})
-else:
-    print({"code":'error',"msg":"通知邮件发送失败"})
+if __name__ == '__main__':
+    to_list = sys.argv[1]  # 收件人列表   '111@126.com'
+    cc_list = sys.argv[2].replace(',', ';')  # 抄送人列表   '111@126.com;222@126.com;'
+    sub = sys.argv[3]
+    context = sys.argv[4]
+    if send_mail(to_list, cc_list, sub, context):
+        print({"code":'success',"msg":"通知邮件发送成功"})
+    else:
+        print({"code":'error',"msg":"通知邮件发送失败"})
