@@ -25,12 +25,16 @@ class SendmailViewSet(viewsets.ModelViewSet):
         to = request.data["to"]
         to_list = User.objects.get(username=to).email
         cc = request.data["cc"]
-        cc_list = ''
-        for c in cc:
-            cc_list = cc_list + User.objects.get(username=c).email + ';'
+        if cc:
+            cc_list = ''
+            for c in cc:
+                cc_list = cc_list + User.objects.get(username=c).email + ';'
+        else:
+            cc_list = 'kiven@tb-gaming.com;'
         sub = request.data["sub"]
         content = request.data["content"]
         cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
+        print(cmd)
         results = run(cmd).stdout
         if serializer.is_valid():
             serializer.save()
