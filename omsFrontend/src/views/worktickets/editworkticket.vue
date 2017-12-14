@@ -265,7 +265,7 @@ export default {
       this.ticketData.action_user = this.rowdata.action_user
       const mailForm = {
         to: this.ticketData.action_user,
-        cc: '',
+        cc: this.ticketData.create_user,
         sub: '【' + this.ticketData.title + '】指派人被改变',
         content: '【' + this.ticketData.title + '】指派人被改变'
       }
