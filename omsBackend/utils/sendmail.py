@@ -38,6 +38,7 @@ def send_mail(to_list, cc_list, sub, content):
     </div>
     </body>
     </html>"""
+    print(me, list)
     print(html)
     context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
