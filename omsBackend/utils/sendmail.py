@@ -45,6 +45,7 @@ def send_mail(to_list, cc_list, sub, content):
         send_smtp.connect(mail_host, 587)
         send_smtp.starttls()
         send_smtp.login(mail_user, mail_pass)
+        print(msg.as_string())
 
         send_smtp.sendmail(me, list, msg.as_string())
         send_smtp.close()
