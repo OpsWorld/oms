@@ -26,18 +26,14 @@ def send_mail(to_list, cc_list, sub, content):
     msg['To'] = to_list + ';'
     msg['Cc'] = cc_list
     list = msg['To']  + msg['Cc']
-    #构造html
     html = """
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>萌店AB环境</title>
+    <title>工单通知邮件</title>
     <body>
     <div id="container">
-    <a href='""" + content + """>点我查看工单</a>
-    </div>
-    </body>
-    </html>"""
+    <a href='""" + content + """'></a>"""
     context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
     try:
