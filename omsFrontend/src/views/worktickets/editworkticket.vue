@@ -31,10 +31,8 @@
                  label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
           <el-form-item label="问题处理" prop="content">
-            <mavon-editor style="z-index: 1" :default_open="ticketData.ticket_status==1?'edit':'preview'"
-                          v-model="commentForm.content"
-                          code_style="monokai" :toolbars="toolbars" @imgAdd="imgAdd"
-                          ref="md"></mavon-editor>
+            <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
+                          @imgAdd="imgAdd" ref="md"></mavon-editor>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
