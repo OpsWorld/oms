@@ -25,7 +25,6 @@ class SendmailViewSet(viewsets.ModelViewSet):
         to = request.data["to"]
         to_list = User.objects.get(username=to).email
         cc = request.data["cc"]
-        print(to,cc)
         cc_list = ''
         if cc:
             for c in cc.split(','):
