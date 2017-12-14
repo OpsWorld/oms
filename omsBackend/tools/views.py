@@ -24,7 +24,13 @@ class SendmailViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = SendmailSerializer(data=request.data, context={'request': request})
         to = request.data["to"]
-        to_list = User.objects.get(username=to).email
+        try:
+            to_list = User.objects.get(username=to).email
+        except Exception as e:
+            to_list = 'kiven@tb-gaming.com'
+        if not to_list:
+            to_list = 'kiven@tb-gaming.com'
+
         cc = request.data["cc"]
         cc_list = ''
         if cc:
@@ -38,6 +44,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
+        #print('{} {} {} {}'.format(to_list, cc_list, sub, content))
         results = send_mail(to_list, cc_list, sub, content)
         print(results)
         #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
