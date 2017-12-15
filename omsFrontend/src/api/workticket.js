@@ -10,9 +10,9 @@ export function postWorkticket(data) {
   })
 }
 
-export function getWorkticket(id, query) {
+export function getWorkticket(query) {
   return request({
-    url: id ? apiURL.worktickers + id + '/' : apiURL.worktickers,
+    url: apiURL.worktickers,
     method: 'get',
     params: query
   })
@@ -36,7 +36,7 @@ export function patchWorkticket(id, data) {
 
 export function deleteWorkticket(id) {
   return request({
-    url: apiURL.worktickers + id,
+    url: apiURL.worktickers + id + '/',
     method: 'delete'
   })
 }
@@ -68,7 +68,7 @@ export function putTickettype(id, data) {
 
 export function deleteTickettype(id) {
   return request({
-    url: apiURL.tickettypes + id,
+    url: apiURL.tickettypes + id + '/',
     method: 'delete'
   })
 }
@@ -100,7 +100,7 @@ export function putTicketcomment(id, data) {
 
 export function deleteTicketcomment(id) {
   return request({
-    url: apiURL.ticketcomments + id,
+    url: apiURL.ticketcomments + id + '/',
     method: 'delete'
   })
 }
@@ -124,7 +124,7 @@ export function getTicketenclosure(query) {
 
 export function deleteTicketenclosure(id) {
   return request({
-    url: apiURL.ticketenclosures + id,
+    url: apiURL.ticketenclosures + id + '/',
     method: 'delete'
   })
 }

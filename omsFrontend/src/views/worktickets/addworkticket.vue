@@ -132,7 +132,6 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.ruleForm)
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === 'ok') {
               this.$message({
@@ -149,7 +148,7 @@ export default {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
               sub: '【新工单】' + this.ruleForm.title,
-              content: window.location.href
+              content: window.location.host + '/worktickets/editworkticket/?ticketid=' + this.ctime
             }
             postSendmail(mailForm).then(response => {
               this.$message({
@@ -179,9 +178,10 @@ export default {
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()
+      this.afterFileUpload(fileList)
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', this.afterFileUpload(fileList))
+      formData.append('create_time', this.ctime)
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -207,8 +207,7 @@ export default {
       const h = date.getHours()
       const m = date.getMinutes()
       const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
+      this.ctime = Y + M + D + h + m + s
     },
     imgAdd(pos, file) {
       var md = this.$refs.md

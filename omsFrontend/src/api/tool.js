@@ -32,7 +32,7 @@ export function putUpload(id, data) {
 
 export function deleteUpload(id) {
   return request({
-    url: apiURL.uploads + id,
+    url: apiURL.uploads + id + '/',
     method: 'delete'
   })
 }

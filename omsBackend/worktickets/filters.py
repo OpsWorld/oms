@@ -8,7 +8,6 @@ class WorkTicketFilter(filters.FilterSet):
     class Meta:
         model = WorkTicket
         fields = {
-            'id': ['exact'],
             'ticketid': ['exact'],
             'title': ['exact', 'contains'],
             'content': ['contains'],

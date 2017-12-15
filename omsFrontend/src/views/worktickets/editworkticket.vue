@@ -138,8 +138,7 @@ export default {
 
   data() {
     return {
-      route_path: this.$route.path.split('/'),
-      ticket_id: '',
+      ticket_id: this.$route.params.ticketid,
       ticketData: {},
       ticket__title: '',
       commentData: {},
@@ -205,7 +204,6 @@ export default {
   },
 
   created() {
-    this.ticket_id = this.route_path[this.route_path.length - 1]
     this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.CommentData()
@@ -214,8 +212,12 @@ export default {
   },
   methods: {
     fetchData() {
-      getWorkticket(this.ticket_id).then(response => {
-        this.ticketData = response.data
+      const parms = {
+        ticketid: this.ticket_id
+      }
+      getWorkticket(parms).then(response => {
+        console.log(this.ticket_id)
+        this.ticketData = response.data[0]
       })
     },
     CommentData() {
@@ -374,8 +376,8 @@ export default {
   }
 
   /*.action {*/
-    /*font-size: 16px;*/
-    /*margin-left: 5px;*/
+  /*font-size: 16px;*/
+  /*margin-left: 5px;*/
   /*}*/
 
   .content {

@@ -35,7 +35,7 @@
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
-                <router-link :to="'editworkticket/'+scope.row.id">
+                <router-link :to="{name:'editworkticket',params:{ticketid:scope.row.ticketid}}">
                   {{scope.row.ticketid}}
                 </router-link>
               </div>
@@ -141,7 +141,6 @@ export default {
 
   methods: {
     fetchData() {
-      const id = null
       const parms = {
         limit: this.limit,
         offset: this.offset,
@@ -151,7 +150,7 @@ export default {
         create_user__username: this.listQuery.create_user,
         action_user__username: this.listQuery.action_user
       }
-      getWorkticket(id, parms).then(response => {
+      getWorkticket(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
