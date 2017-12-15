@@ -9,7 +9,7 @@
           <el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
-          <a class="tips"> Tip：当前工单指派人，默认是指派给ITSupport群组</a>
+          <a class="tips"> Tip：当前工单处理人，默认是指派给ITSupport群组</a>
         </el-form-item>
         <el-form-item label="跟踪者" prop="follower">
           <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
