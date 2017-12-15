@@ -74,7 +74,7 @@ export default {
         title: '',
         type: '',
         content: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: localStorage.getItem('username'),
         level: 2,
         action_user: 'itsupport',
         follower: '',
@@ -97,7 +97,7 @@ export default {
       enclosureFile: null,
       enclosureForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: localStorage.getItem('username'),
         file: '',
         create_group: ''
       },
@@ -150,6 +150,7 @@ export default {
               sub: '【新工单】' + this.ruleForm.title,
               content: window.location.host + '/worktickets/editworkticket/?ticketid=' + this.ctime
             }
+            console.log(mailForm.content)
             postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')
           })

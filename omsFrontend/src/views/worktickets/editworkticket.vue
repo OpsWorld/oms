@@ -146,13 +146,13 @@ export default {
       apiurl: apiUrl,
       commentForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: localStorage.getItem('username'),
         content: '',
         create_group: ''
       },
       enclosureForm: {
         ticket: '',
-        create_user: sessionStorage.getItem('username'),
+        create_user: localStorage.getItem('username'),
         file: '',
         create_group: ''
       },
