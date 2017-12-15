@@ -5,6 +5,8 @@
         <el-card>
           <div slot="header" class="clearfix">
             <a class="title">{{ticketData.title}}</a>
+            <hr class="heng"/>
+
             <div class="appendInfo">
               <a class="ticketinfo create_user"><span class="han">
                                 工单创建时间：</span>{{ticketData.create_time | parseDate}}</a>
@@ -20,6 +22,25 @@
                 {{item}}
               </el-tag>
             </div>
+            <div class="appendInfo" v-if="ticketData.ticket_status!=2">
+              <span class="han">工单操作：</span>
+              <!--<el-button type="success" @click="changeTicketStatus(1)"-->
+              <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
+              <!--</el-button>-->
+              <el-button type="danger" size="small" @click="changeTicketStatus(2)"
+                         :disabled="ticketData.ticket_status!=2?false:true">关闭
+              </el-button>
+              <el-button type="warning" plain size="small" @click="change_action=!change_action"
+                         v-if="ticketData.ticket_status!=2">
+                更改指派者
+              </el-button>
+              <div v-if="change_action==true" style="display:inline;">
+                <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
+                  <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                </el-select>
+                <el-button type="primary" plain size="small" @click="changeActionForm">提交</el-button>
+              </div>
+            </div>
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
         </el-card>
@@ -34,38 +55,42 @@
             <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')" style="float: right">提交
-            </el-button>
-          </el-form-item>
+
           <hr class="heng"/>
-        </el-form>
-        <el-upload
-          class="upload-demo"
-          ref="upload"
-          :action="uploadurl"
-          :on-success="handleSuccess"
-          :show-file-list="false"
-          :disabled="count>2?true:false">
-          <el-button slot="trigger" size="small" type="primary" icon="upload2" :disabled="count>2?true:false">
-            上传文件
-          </el-button>
-          <div slot="tip" class="el-upload__tip">
-            <p>上传文件不超过500kb，<a style="color: red">最多只能上传3个文件</a></p>
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            :action="uploadurl"
+            :on-success="handleSuccess"
+            :show-file-list="false"
+            :disabled="count>2?true:false">
+            <el-button slot="trigger" size="mini" type="danger" plain icon="upload2" :disabled="count>2?true:false">
+              上传文件
+            </el-button>
+            <div slot="tip" class="el-upload__tip">
+              <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
+            </div>
+          </el-upload>
+
+          <hr class="heng"/>
+          <div v-if='enclosureData.length>0' class="ticketenclosure">
+            <ul>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
+                <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
+                <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+              </li>
+            </ul>
           </div>
-        </el-upload>
-        <hr class="heng"/>
+          <hr class="heng"/>
+
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        </el-form>
       </div>
-      <div v-if='enclosureData.length>0' class="ticketenclosure">
-        <ul>
-          <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
-            <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
-            <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
-          </li>
-        </ul>
-      </div>
+
+      <hr class="heng"/>
+      处理过程：
+
       <div class="ticketcomment" v-for="item in commentData" :key="item.id">
-        处理过程：
         <hr class="heng"/>
         <el-row>
           <el-col :span="1">
@@ -82,24 +107,6 @@
             </div>
           </el-col>
         </el-row>
-      </div>
-      <div v-if="ticketData.ticket_status!=2">
-        <hr class="heng"/>
-        工单操作：
-        <!--<el-button type="success" @click="changeTicketStatus(1)"-->
-        <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
-        <!--</el-button>-->
-        <el-button type="danger" @click="changeTicketStatus(2)"
-                   :disabled="ticketData.ticket_status!=2?false:true">关闭
-        </el-button>
-        <el-button type="warning" plain @click="change_action=!change_action" v-if="ticketData.ticket_status!=2">更改指派者
-        </el-button>
-        <div v-if="change_action==true" style="display:inline;">
-          <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-          <el-button type="primary" plain @click="changeActionForm">提交</el-button>
-        </div>
       </div>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
@@ -351,20 +358,25 @@ export default {
   }
 
   .title {
-    color: #f10df5;
-    font-size: 30px;
+    font-size: 28px;
+    font-weight: 700;
     padding-left: 10px;
   }
 
   .appendInfo {
     padding: 5px;
+    margin: 5px;
   }
 
   .han {
-    color: rgba(43, 200, 13, 0.6);
     font-size: 16px;
     margin-left: 5px;
   }
+
+  /*.action {*/
+    /*font-size: 16px;*/
+    /*margin-left: 5px;*/
+  /*}*/
 
   .content {
     margin: 20px 5px;

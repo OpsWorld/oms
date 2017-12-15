@@ -9,12 +9,13 @@
           <el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
-          <a style="color:rgba(250,17,255,0.49);font-size: 18px">如果不指派默认把工单指派给ipsport</a>
+          <a class="tips"> Tip：当前工单指派人，默认是指派给ITSupport群组</a>
         </el-form-item>
         <el-form-item label="跟踪者" prop="follower">
           <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
+          <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
         </el-form-item>
         <el-form-item label="工单内容" prop="content">
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
@@ -35,13 +36,13 @@
               :action="uploadurl"
               :on-success="handleSuccess"
               :file-list="fileList"
-              :disabled="count>0?true:false">
+              :disabled="count>2?true:false">
               <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
                 上传文件
               </el-button>
               (可以不用上传)
               <div slot="tip" class="el-upload__tip">
-                <p>上传文件不超过500kb，<a style="color: red">添加工单页面只能上传1个文件</a></p>
+                <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
               </div>
             </el-upload>
             <hr class="heng"/>
@@ -260,5 +261,9 @@ export default {
   .addticket {
     margin: 50px;
     width: 80%;
+  }
+
+  .tips {
+color: rgba(128, 128, 128, 0.65);
   }
 </style>
