@@ -150,15 +150,7 @@ export default {
               sub: '【新工单】' + this.ruleForm.title,
               content: window.location.host + '/worktickets/editworkticket/?ticketid=' + this.ctime
             }
-            postSendmail(mailForm).then(response => {
-              this.$message({
-                type: 'success',
-                message: '通知邮件发送成功'
-              })
-            }).catch(error => {
-              this.$message.error('通知邮件发送失败')
-              console.log(error)
-            })
+            postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')
           })
         } else {

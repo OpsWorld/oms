@@ -138,7 +138,7 @@ export default {
 
   data() {
     return {
-      ticket_id: this.$route.params.ticketid,
+      ticket_id: '',
       ticketData: {},
       ticket__title: '',
       commentData: {},
@@ -213,11 +213,11 @@ export default {
   methods: {
     fetchData() {
       const parms = {
-        ticketid: this.ticket_id
+        ticketid: this.$route.params.ticketid
       }
       getWorkticket(parms).then(response => {
-        console.log(this.ticket_id)
         this.ticketData = response.data[0]
+        this.ticket_id = this.ticketData.id
       })
     },
     CommentData() {
@@ -276,15 +276,7 @@ export default {
         sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
         content: window.location.href
       }
-      postSendmail(mailForm).then(response => {
-        this.$message({
-          type: 'success',
-          message: '通知邮件发送成功'
-        })
-      }).catch(error => {
-        this.$message.error('通知邮件发送失败')
-        console.log(error)
-      })
+      postSendmail(mailForm)
     },
     handleSuccess(file, fileList) {
       const formData = new FormData()
