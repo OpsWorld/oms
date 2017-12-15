@@ -234,6 +234,7 @@ export default {
       const parms = {
         ticket__id: this.ticket_id
       }
+      console.log(this.ticket_id)
       getTicketenclosure(parms).then(response => {
         this.enclosureData = response.data
         this.count = response.data.length

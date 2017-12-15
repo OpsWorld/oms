@@ -14,9 +14,8 @@ function hasPermission(groups, permissionGroups) {
 const whiteList = ['/login']// 不重定向白名单
 
 router.beforeEach((to, from, next) => {
-  console.log(sessionStorage.getItem('token'))
   NProgress.start() // 开启Progress
-  if (store.getters.token) { // 判断是否有token
+  if (localStorage.getItem('token')) { // 判断是否有token
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！

@@ -4,8 +4,8 @@ import { super_group } from '@/config'
 
 const user = {
   state: {
-    token: sessionStorage.getItem('token'),
-    username: sessionStorage.getItem('username'),
+    token: localStorage.getItem('token'),
+    username: localStorage.getItem('username'),
     groups: [],
     menus: undefined,
     eleemnts: undefined,
@@ -44,8 +44,8 @@ const user = {
         login(userInfo).then(response => {
           commit('SET_TOKEN', response.data.token)
           commit('SET_USERNAME', userInfo.username)
-          sessionStorage.setItem('username', userInfo.username)
-          sessionStorage.setItem('token', response.data.token)
+          localStorage.setItem('username', userInfo.username)
+          localStorage.setItem('token', response.data.token)
           commit('SET_MENUS', undefined)
           commit('SET_ELEMENTS', undefined)
           resolve()
@@ -89,8 +89,7 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_GROUPS', [])
-          sessionStorage.removeItem('token')
-          sessionStorage.removeItem('groups')
+          localStorage.removeItem('token')
           commit('SET_MENUS', undefined)
           commit('SET_ELEMENTS', undefined)
           commit('SET_PERMISSION_MENUS', undefined)
@@ -105,7 +104,7 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
-        sessionStorage.removeItem('token')
+        localStorage.removeItem('token')
         commit('SET_MENUS', undefined)
         commit('SET_ELEMENTS', undefined)
         commit('SET_PERMISSION_MENUS', undefined)
@@ -117,7 +116,7 @@ const user = {
     ChangeRole({ commit, state }, groups) {
       return new Promise(resolve => {
         commit('SET_TOKEN', groups)
-        sessionStorage.setItem('groups', groups)
+        localStorage.setItem('groups', groups)
         getUserInfo(state.username).then(response => {
           const data = response.data.results[0]
           commit('SET_GROUPS', data.groups)
