@@ -76,7 +76,7 @@
           <div v-if='enclosureData.length>0' class="ticketenclosure">
             <ul>
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
-                <a :href="apiurl + '/upload/' +item.file" download="item.id">{{item.file}}</a>
+                <a :href="apiurl + '/upload/' +item.file" :download="item.file">{{item.file}}</a>
                 <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
               </li>
             </ul>

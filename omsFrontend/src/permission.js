@@ -14,6 +14,7 @@ function hasPermission(groups, permissionGroups) {
 const whiteList = ['/login']// 不重定向白名单
 
 router.beforeEach((to, from, next) => {
+  console.log(sessionStorage.getItem('token'))
   NProgress.start() // 开启Progress
   if (store.getters.token) { // 判断是否有token
     if (to.path === '/login') {
@@ -48,6 +49,7 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
+    console.log("haven't token")
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
     } else {
