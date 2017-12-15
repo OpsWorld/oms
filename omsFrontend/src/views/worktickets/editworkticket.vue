@@ -138,6 +138,7 @@ export default {
 
   data() {
     return {
+      route_path: this.$route.path.split('/'),
       ticket_id: '',
       ticketData: {},
       ticket__title: '',
@@ -279,11 +280,22 @@ export default {
       }
       postSendmail(mailForm)
     },
+    afterFileUpload(time) {
+      const date = new Date(time)
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', this.afterFileUpload(fileList))
+      formData.append('create_time', this.afterFileUpload(fileList.uid))
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -303,39 +315,17 @@ export default {
         console.log(error)
       })
     },
-    afterFileUpload(fileList) {
-      const date = new Date(fileList.uid)
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
-    },
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
       formData.append('username', this.username)
       formData.append('file', file)
-      formData.append('create_time', this.afterUpload(file))
+      formData.append('create_time', this.afterFileUpload(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
-    },
-    afterUpload(file) {
-      const date = new Date(file.lastModified)
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
     },
     getTicketUsers() {
       getUser().then(response => {

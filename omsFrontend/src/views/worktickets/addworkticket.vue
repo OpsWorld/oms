@@ -78,7 +78,8 @@ export default {
         level: 2,
         action_user: 'itsupport',
         follower: '',
-        create_group: ''
+        create_group: '',
+        ticketid: ''
       },
       rules: {
         title: [
@@ -132,6 +133,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.ticketid = this.afterFileUpload()
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === 'ok') {
               this.$message({
@@ -148,9 +150,8 @@ export default {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
               sub: '【新工单】' + this.ruleForm.title,
-              content: window.location.host + '/worktickets/editworkticket/?ticketid=' + this.ctime
+              content: window.location.host + '/#/worktickets/editworkticket/' + this.ruleForm.ticketid
             }
-            console.log(mailForm.content)
             postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')
           })
@@ -169,12 +170,28 @@ export default {
         this.users = response.data
       })
     },
+
+    afterFileUpload(time) {
+      let date
+      if (time) {
+        date = new Date(time)
+      } else {
+        date = new Date()
+      }
+      const Y = date.getFullYear().toString()
+      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+      const D = date.getDate()
+      const h = date.getHours()
+      const m = date.getMinutes()
+      const s = date.getSeconds()
+      const ctime = Y + M + D + h + m + s
+      return ctime
+    },
     handleSuccess(file, fileList) {
       const formData = new FormData()
-      this.afterFileUpload(fileList)
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', this.ctime)
+      formData.append('create_time', this.afterFileUpload(fileList.uid))
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -192,38 +209,17 @@ export default {
         console.log(error)
       })
     },
-    afterFileUpload(fileList) {
-      const date = new Date(fileList.uid)
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      this.ctime = Y + M + D + h + m + s
-    },
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', file)
-      formData.append('create_time', this.afterUpload(file))
+      formData.append('create_time', this.afterFileUpload(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
-    },
-    afterUpload(file) {
-      const date = new Date(file.lastModified)
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
     }
     //    wsInit() {
     //      const self = this
@@ -256,6 +252,6 @@ export default {
   }
 
   .tips {
-color: rgba(128, 128, 128, 0.65);
+    color: rgba(128, 128, 128, 0.65);
   }
 </style>
