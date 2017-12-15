@@ -3,10 +3,18 @@
 
 from rest_framework import viewsets
 from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
-from worktickets.serializers import WorkTicketSerializer, TicketCommentSerializer, TicketEnclosureSerializer, \
-    TicketTypeSerializer, TicketWikiSerializer
+from worktickets.serializers import (WorkTicketSerializer,
+                                     TicketCommentSerializer,
+                                     TicketEnclosureSerializer,
+                                     TicketTypeSerializer,
+                                     TicketWikiSerializer)
 from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
 
+from worktickets.models import Platform, Merchant, ThreePayEnclosure
+from worktickets.serializers import (PlatformSerializer,
+                                     MerchantSerializer,
+                                     ThreePayEnclosureSerializer,)
+from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
@@ -34,3 +42,16 @@ class TicketTypeViewSet(viewsets.ModelViewSet):
 class TicketWikiViewSet(viewsets.ModelViewSet):
     queryset = TicketWiki.objects.all()
     serializer_class = TicketWikiSerializer
+
+
+class PlatformViewSet(viewsets.ModelViewSet):
+    queryset = Platform.objects.all()
+    serializer_class = PlatformSerializer
+
+class MerchantViewSet(viewsets.ModelViewSet):
+    queryset = Merchant.objects.all()
+    serializer_class = MerchantSerializer
+
+class ThreePayEnclosureViewSet(viewsets.ModelViewSet):
+    queryset = ThreePayEnclosure.objects.all()
+    serializer_class = ThreePayEnclosureSerializer

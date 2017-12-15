@@ -2,6 +2,7 @@
 # author: kiven
 
 from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
+from worktickets.models import Platform, Merchant, ThreePayEnclosure
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -54,3 +55,24 @@ class TicketWikiSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketWiki
         fields = ('url', 'id', 'title', 'type', 'content', 'create_user', 'create_group', 'create_time')
+
+
+class PlatformSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Platform
+        fields = ('url', 'id', 'name')
+
+
+class MerchantSerializer(serializers.ModelSerializer):
+    platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='username')
+    class Meta:
+        model = Merchant
+        fields = ('url', 'id', 'platform', 'name', 'm_backurl', 'm_id', 'm_channel', 'm_md5key', 'm_public_key', 'm_private_key', 'p_public_key','three')
+
+class ThreePayEnclosureSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
+
+    class Meta:
+        model = TicketEnclosure
+        fields = ('url', 'id', 'ticket', 'file', 'create_user', 'create_time')
