@@ -38,6 +38,7 @@
             </div>
         </el-card>
         <el-dialog :visible.sync="addForm">
+
         </el-dialog>
         <el-dialog :visible.sync="editForm">
         </el-dialog>

@@ -27,7 +27,7 @@ const app = {
       state.visitedViews.push({
         name: view.name,
         path: view.path,
-        title: view.meta.title || 'no-name'
+        hidden: view.hidden
       })
       if (!view.meta.noCache) {
         state.cachedViews.push(view.name)
