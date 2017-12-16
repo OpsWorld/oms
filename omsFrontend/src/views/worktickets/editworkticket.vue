@@ -57,7 +57,7 @@
         </el-card>
       </div>
 
-      <div v-if="ticketData.ticket_status!=2&&workticketlist_btn_edit">
+      <div v-if="ticketData.ticket_status!=2&&(workticketlist_btn_edi||role==='super')">
         <el-form :model="commentForm"
                  :rules="rules" ref="ruleForm"
                  label-width="80px" class="demo-ruleForm">
