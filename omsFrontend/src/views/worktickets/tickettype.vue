@@ -86,8 +86,8 @@ export default {
         name__contains: this.searchdata
       }
       getTickettype(tick_id, parms).then(response => {
-        this.tableData = response.data.results
-        this.tabletotal = response.data.count
+        this.tableData = response.data
+        this.tabletotal = response.data.length
       })
     },
     getDialogStatus(data) {

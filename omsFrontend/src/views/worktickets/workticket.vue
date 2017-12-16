@@ -8,9 +8,9 @@
           </router-link>
 
           <el-button-group>
-          <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
-          <el-button type="success" plain size="small" @click="showMeCreate">我创建的工单</el-button>
-          <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
+            <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
+            <el-button type="success" plain size="small" @click="showMeCreate">我创建的工单</el-button>
+            <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
           </el-button-group>
 
           <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
@@ -42,7 +42,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
-          <el-table-column prop='create_user' label='工单创建人'></el-table-column>
+          <el-table-column prop='type' label='工单类型' sortable></el-table-column>
           <el-table-column prop='level' label='工单等级' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center">
@@ -61,6 +61,7 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='create_user' label='工单创建人'></el-table-column>
           <el-table-column prop='action_user' label='当前处理人'></el-table-column>
         </el-table>
       </div>

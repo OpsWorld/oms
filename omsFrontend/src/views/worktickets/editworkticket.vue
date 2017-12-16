@@ -10,8 +10,10 @@
             <div class="appendInfo">
               <a class="ticketinfo create_user"><span class="han">
                                 工单创建时间：</span>{{ticketData.create_time | parseDate}}</a>
+              <a class="shu"></a>
               <a class="ticketinfo create_user"><span class="han">
                                 工单发起人：</span>{{ticketData.create_user}}</a>
+              <a class="shu"></a>
               <a class="ticketinfo action_user"><span class="han">
                                 当前处理人：</span>{{ticketData.action_user}}</a>
             </div>
@@ -21,6 +23,10 @@
                 {{item}}
               </a>
               <a class="han" v-if="showfollower">未设置</a>
+              <a class="shu"></a>
+              <span class="han">工单类型：</span>
+              <a>{{ticketData.type}}</a>
+              <a class="shu"></a>
               <span class="han">工单当前状态：</span>
               <el-tag>
                 {{TICKET_STATUS[ticketData.ticket_status]}}
@@ -370,6 +376,11 @@ export default {
     margin-left: 5px;
   }
 
+  .shu {
+    height:100px;
+    width:1px;
+    border-left:1px rgba(52, 52, 52, 0.38) solid
+  }
   /*.action {*/
   /*font-size: 16px;*/
   /*margin-left: 5px;*/

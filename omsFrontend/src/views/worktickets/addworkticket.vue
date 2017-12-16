@@ -17,6 +17,11 @@
           </el-select>
           <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
         </el-form-item>
+        <el-form-item label="工单类型" prop="type">
+          <el-select v-model="ruleForm.type" filterable placeholder="请选择工单类型">
+            <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="工单内容" prop="content">
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
@@ -57,7 +62,7 @@
   </div>
 </template>
 <script>
-import { postWorkticket, postTicketenclosure } from 'api/workticket'
+import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
 import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
@@ -89,6 +94,9 @@ export default {
         content: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }
         ],
+        type: [
+          { required: true, message: '请选择工单类型', trigger: 'blur' }
+        ],
         level: [
           { required: true, type: 'number', message: '请确认工单等级', trigger: 'blur' }
         ]
@@ -118,7 +126,8 @@ export default {
       formDataList: [],
       to_list: '',
       cc_list: '',
-      uploadurl: uploadurl
+      uploadurl: uploadurl,
+      types: []
     }
   },
 
@@ -129,6 +138,7 @@ export default {
   },
   created() {
     this.getTicketUsers()
+    this.getTicketType()
   },
   methods: {
     postForm(formName) {
@@ -172,6 +182,11 @@ export default {
       })
     },
 
+    getTicketType() {
+      getTickettype().then(response => {
+        this.types = response.data
+      })
+    },
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
