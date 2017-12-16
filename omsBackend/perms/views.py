@@ -32,13 +32,12 @@ def routers(request,username=None):
         try:
             menuqueryset = UserMenuPerms.objects.get(group=group)
             menuserializer = UserMenuPermsSerializer(menuqueryset, context={'request': request}).data
-            print(menuserializer["firstmenus"])
             menus = menuserializer["firstmenus"] + menuserializer["secondmenus"] + menus
             elements = menuserializer["elements"] + elements
-            menus = set(menus)
-            elements = set(elements)
         except Exception as e:
             pass
+    menus = set(menus)
+    elements = set(elements)
     return Response({"groups": groups, "menus": menus, "elements": elements})
 
 # #根据不同用户生成不同的routers
