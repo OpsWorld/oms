@@ -41,7 +41,7 @@
                          :disabled="ticketData.ticket_status!=2?false:true">关闭
               </el-button>
               <el-button type="warning" plain size="small" @click="change_action=!change_action"
-                         v-if="ticketData.ticket_status!=2">
+                         v-if="ticketData.ticket_status!=2&&showinput">
                 更改指派者
               </el-button>
               <div v-if="change_action==true" style="display:inline;">
