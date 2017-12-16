@@ -20,7 +20,7 @@
               <a style="margin-right: 5px" v-for="item in ticketData.follower" :key="item.id">
                 {{item}}
               </a>
-              <a v-if="showfollower">未设置</a>
+              <a class="han" v-if="showfollower">未设置</a>
               <span class="han">工单当前状态：</span>
               <el-tag>
                 {{TICKET_STATUS[ticketData.ticket_status]}}
@@ -367,7 +367,6 @@ export default {
   }
 
   .han {
-    font-size: 16px;
     margin-left: 5px;
   }
 
