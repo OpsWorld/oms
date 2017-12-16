@@ -14,8 +14,9 @@
               <a class="ticketinfo create_user"><span class="han">
                                 工单发起人：</span>{{ticketData.create_user}}</a>
               <a class="shu"></a>
-              <a class="ticketinfo action_user"><span class="han">
-                                当前处理人：</span>{{ticketData.action_user}}</a>
+              <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0">
+                <span class="han">当前处理人：</span>{{ticketData.action_user}}</a>
+              <a class="han" v-else><span class="han">当前处理人：</span> 未设置</a>
             </div>
             <div class="appendInfo">
               <span class="han">问题跟踪人：</span>
@@ -56,7 +57,7 @@
         </el-card>
       </div>
 
-      <div v-if="ticketData.ticket_status!=2">
+      <div v-if="ticketData.ticket_status!=2&&workticketlist_btn_edit">
         <el-form :model="commentForm"
                  :rules="rules" ref="ruleForm"
                  label-width="80px" class="demo-ruleForm">
@@ -273,13 +274,19 @@ export default {
           // if (this.commentForm.create_user === this.ticketData.create_user) {
           //  this.rowdata.action_user = this.ticketData.action_user
           // }
-          postTicketcomment(this.commentForm)
-          this.patchForm(this.rowdata)
+          postTicketcomment(this.commentForm).then(response => {
+            this.$message({
+              type: 'success',
+              message: '恭喜你，操作成功'
+            })
+          })
+          this.$router.push('/worktickets/workticket')
+          // this.patchForm(this.rowdata)
         } else {
           console.log('error submit!!')
           return false
         }
-        setTimeout(this.CommentData, 1000)
+        // setTimeout(this.CommentData, 1000)
       })
     },
     patchForm(rowdata) {
@@ -290,8 +297,14 @@ export default {
       this.commentForm.ticket = this.ticket_id
       this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '关闭！'
       patchWorkticket(this.ticket_id, this.rowdata)
-      postTicketcomment(this.commentForm)
-      setTimeout(this.CommentData, 1000)
+      postTicketcomment(this.commentForm).then(response => {
+        this.$message({
+          type: 'success',
+          message: '恭喜你，操作成功'
+        })
+      })
+      this.$router.push('/worktickets/workticket')
+      // setTimeout(this.CommentData, 1000)
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
@@ -378,10 +391,11 @@ export default {
 
   .shu {
     margin: 0 5px;
-    height:100px;
-    width:1px;
-    border-left:1px rgba(52, 52, 52, 0.38) solid
+    height: 100px;
+    width: 1px;
+    border-left: 1px rgba(52, 52, 52, 0.38) solid
   }
+
   /*.action {*/
   /*font-size: 16px;*/
   /*margin-left: 5px;*/
