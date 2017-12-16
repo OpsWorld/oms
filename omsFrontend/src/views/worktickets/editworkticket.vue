@@ -377,6 +377,7 @@ export default {
   }
 
   .shu {
+    margin: 0 5px;
     height:100px;
     width:1px;
     border-left:1px rgba(52, 52, 52, 0.38) solid
