@@ -1,6 +1,6 @@
 <template>
   <scroll-pane class='tags-view-container' ref='scrollPane'>
-    <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag.path":key="tag.path" v-if="tag.hidden">
+    <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag.path":key="tag.path">
       {{generateTitle(tag.name)}}
       <span class='el-icon-close' @click='closeViewTags(tag,$event)'></span>
     </router-link>

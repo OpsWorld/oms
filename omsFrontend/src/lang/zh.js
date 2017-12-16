@@ -5,7 +5,7 @@ export default {
     userlist: '用户列表',
     grouplist: '用户组列表',
     rolelist: '角色列表',
-    ticketManager: '工单管理',
+    ticketManager: '工单系统',
     workticketlist: '工单列表',
     tickettypelist: '工单类型',
     toolManager: '工具管理',

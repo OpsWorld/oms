@@ -65,34 +65,66 @@ export function deleteMerchant(id) {
   })
 }
 
-// threepayenclosures
-export function postThreepayEnclosure(data) {
+// platformenclosures
+export function postPlatformEnclosure(data) {
   return request({
-    url: apiURL.threepayenclosures,
+    url: apiURL.platformenclosures,
     method: 'post',
     data
   })
 }
 
-export function getThreepayEnclosure(query) {
+export function getPlatformEnclosure(query) {
   return request({
-    url: apiURL.threepayenclosures,
+    url: apiURL.platformenclosures,
     method: 'get',
     params: query
   })
 }
 
-export function putThreepayEnclosure(id, data) {
+export function putPlatformEnclosure(id, data) {
   return request({
-    url: apiURL.threepayenclosures + id + '/',
+    url: apiURL.platformenclosures + id + '/',
     method: 'put',
     data
   })
 }
 
-export function deleteThreepayEnclosure(id) {
+export function deletePlatformEnclosure(id) {
   return request({
-    url: apiURL.threepayenclosures + id + '/',
+    url: apiURL.platformenclosures + id + '/',
+    method: 'delete'
+  })
+}
+
+// threepaytickets
+export function postThreepayTicket(data) {
+  return request({
+    url: apiURL.threepaytickets,
+    method: 'post',
+    data
+  })
+}
+
+export function getThreepayTicket(query) {
+  return request({
+    url: apiURL.threepaytickets,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putThreepayTicket(id, data) {
+  return request({
+    url: apiURL.threepaytickets + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteThreepayTicket(id) {
+  return request({
+    url: apiURL.threepaytickets + id + '/',
     method: 'delete'
   })
 }

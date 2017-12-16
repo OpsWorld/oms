@@ -26,10 +26,10 @@
                         <!--</template>-->
                     </el-table-column>
                     <el-table-column prop='email' label='邮箱'></el-table-column>
-                    <el-table-column prop='group' label='所在组' sortable>
+                    <el-table-column prop='groups' label='所在组' sortable>
                         <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
-                                <el-tag v-for="item in scope.row.group" :key="item" type="success">{{item}}</el-tag>
+                                <el-tag v-for="item in scope.row.groups" :key="item" type="success">{{item}}</el-tag>
                             </div>
                         </template>
                     </el-table-column>

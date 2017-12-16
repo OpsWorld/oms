@@ -120,7 +120,7 @@ const user = {
         getUserInfo(state.username).then(response => {
           const data = response.data.results[0]
           commit('SET_GROUPS', data.groups)
-          sessionStorage.setItem('groups', data.groups)
+          localStorage.setItem('groups', data.groups)
           resolve()
         })
       })

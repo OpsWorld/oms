@@ -17,9 +17,13 @@
             </div>
             <div class="appendInfo">
               <span class="han">问题跟踪人：</span>
-              <el-tag type="warning" style="margin-right: 5px" v-for="item in ticketData.follower"
-                      :key="item.id">
+              <a style="margin-right: 5px" v-for="item in ticketData.follower" :key="item.id">
                 {{item}}
+              </a>
+              <a v-if="showfollower">未设置</a>
+              <span class="han">工单当前状态：</span>
+              <el-tag>
+                {{TICKET_STATUS[ticketData.ticket_status]}}
               </el-tag>
             </div>
             <div class="appendInfo" v-if="ticketData.ticket_status!=2">
@@ -132,6 +136,7 @@ import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
+import getTime from '@/utils/conversionTime'
 
 export default {
   components: { VueMarkdown, BackToTop },
@@ -139,7 +144,8 @@ export default {
   data() {
     return {
       route_path: this.$route.path.split('/'),
-      ticket_id: this.$route.params.ticketid,
+      ticketid: this.$route.params.ticketid,
+      ticket_id: '',
       ticketData: {},
       ticket__title: '',
       commentData: {},
@@ -193,7 +199,13 @@ export default {
         background: '#a2fdff'// 按钮的背景颜色
       },
       workticketlist_btn_edit: false,
-      uploadurl: uploadurl
+      uploadurl: uploadurl,
+      TICKET_STATUS: {
+        '0': '未接收',
+        '1': '正在处理',
+        '2': '已解决'
+      },
+      showfollower: true
     }
   },
 
@@ -214,16 +226,19 @@ export default {
   methods: {
     fetchData() {
       const parms = {
-        ticketid: this.ticket_id
+        ticketid: this.ticketid
       }
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
         this.ticket_id = this.ticketData.id
+        if (this.ticketData.follower.length > 0) {
+          this.showfollower = false
+        }
       })
     },
     CommentData() {
       const parms = {
-        ticket__ticketid: this.ticket_id
+        ticket__ticketid: this.ticketid
       }
       getTicketcomment(parms).then(response => {
         this.commentData = response.data
@@ -233,7 +248,7 @@ export default {
     },
     EnclosureData() {
       const parms = {
-        ticket__ticketid: this.ticket_id
+        ticket__ticketid: this.ticketid
       }
       getTicketenclosure(parms).then(response => {
         this.enclosureData = response.data
@@ -248,9 +263,9 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.commentForm.ticket = this.ticket_id
-          if (this.commentForm.create_user === this.ticketData.create_user) {
-            this.rowdata.action_user = this.ticketData.action_user
-          }
+          // if (this.commentForm.create_user === this.ticketData.create_user) {
+          //  this.rowdata.action_user = this.ticketData.action_user
+          // }
           postTicketcomment(this.commentForm)
           this.patchForm(this.rowdata)
         } else {
@@ -265,7 +280,11 @@ export default {
     },
     changeTicketStatus(status) {
       this.rowdata.ticket_status = this.ticketData.ticket_status = status
+      this.commentForm.ticket = this.ticket_id
+      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '关闭！'
       patchWorkticket(this.ticket_id, this.rowdata)
+      postTicketcomment(this.commentForm)
+      setTimeout(this.CommentData, 1000)
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
@@ -277,24 +296,18 @@ export default {
         sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
         content: window.location.href
       }
+      this.commentForm.ticket = this.ticket_id
+      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
+      postTicketcomment(this.commentForm)
       postSendmail(mailForm)
+      setTimeout(this.CommentData, 1000)
     },
-    afterFileUpload(time) {
-      const date = new Date(time)
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
-    },
+
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', this.afterFileUpload(fileList.uid))
+      formData.append('create_time', getTime(fileList.uid))
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -319,7 +332,7 @@ export default {
       const formData = new FormData()
       formData.append('username', this.username)
       formData.append('file', file)
-      formData.append('create_time', this.afterFileUpload(file.lastModified))
+      formData.append('create_time', getTime(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {

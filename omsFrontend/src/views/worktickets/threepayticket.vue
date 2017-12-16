@@ -103,7 +103,7 @@ export default {
       addForm: false,
       rowdata: {
         ticket_status: 0,
-        action_user: sessionStorage.getItem('username')
+        action_user: localStorage.getItem('username')
       },
       TICKET_STATUS: {
         '0': { 'text': '未接收', 'type': 'info' },
@@ -171,11 +171,11 @@ export default {
       this.fetchData()
     },
     showMeCreate() {
-      this.listQuery.create_user = sessionStorage.getItem('username')
+      this.listQuery.create_user = localStorage.getItem('username')
       this.fetchData()
     },
     showMeAction() {
-      this.listQuery.action_user = sessionStorage.getItem('username')
+      this.listQuery.action_user = localStorage.getItem('username')
       this.fetchData()
     },
     showAllTicket() {

@@ -63,6 +63,7 @@ import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
+import getTime from '@/utils/conversionTime'
 
 export default {
   components: { ElButton },
@@ -133,7 +134,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.ticketid = this.afterFileUpload()
+          this.ruleForm.ticketid = getTime()
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === 'ok') {
               this.$message({
@@ -171,27 +172,11 @@ export default {
       })
     },
 
-    afterFileUpload(time) {
-      let date
-      if (time) {
-        date = new Date(time)
-      } else {
-        date = new Date()
-      }
-      const Y = date.getFullYear().toString()
-      const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-      const D = date.getDate()
-      const h = date.getHours()
-      const m = date.getMinutes()
-      const s = date.getSeconds()
-      const ctime = Y + M + D + h + m + s
-      return ctime
-    },
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', this.afterFileUpload(fileList.uid))
+      formData.append('create_time', getTime(fileList.uid))
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -214,7 +199,7 @@ export default {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', file)
-      formData.append('create_time', this.afterFileUpload(file.lastModified))
+      formData.append('create_time', getTime(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {

@@ -135,7 +135,6 @@ class ThreePayTicket(models.Model):
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'工单描述')
 
-
     def __str__(self):
         return self.title
 
@@ -175,12 +174,12 @@ class Merchant(models.Model):
         verbose_name_plural = u'商户'
 
 
-class ThreePayEnclosure(models.Model):
-    ticket = models.ForeignKey(ThreePayTicket, verbose_name=u'工单')
+class PlatformEnclosure(models.Model):
+    ticket = models.ForeignKey(ThreePayTicket, verbose_name=u'g')
     file = models.ForeignKey(Upload, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
 
     class Meta:
-        verbose_name = u'三陪附件'
-        verbose_name_plural = u'三陪附件'
+        verbose_name = u'平台附件'
+        verbose_name_plural = u'平台附件'
