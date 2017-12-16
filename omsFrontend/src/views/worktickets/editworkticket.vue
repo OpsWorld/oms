@@ -139,7 +139,7 @@ export default {
   data() {
     return {
       route_path: this.$route.path.split('/'),
-      ticket_id: '',
+      ticket_id: this.$route.params.ticketid,
       ticketData: {},
       ticket__title: '',
       commentData: {},
@@ -214,7 +214,7 @@ export default {
   methods: {
     fetchData() {
       const parms = {
-        ticketid: this.$route.params.ticketid
+        ticketid: this.ticket_id
       }
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
@@ -223,7 +223,7 @@ export default {
     },
     CommentData() {
       const parms = {
-        ticket__id: this.ticket_id
+        ticket__ticketid: this.ticket_id
       }
       getTicketcomment(parms).then(response => {
         this.commentData = response.data
@@ -233,9 +233,8 @@ export default {
     },
     EnclosureData() {
       const parms = {
-        ticket__id: this.ticket_id
+        ticket__ticketid: this.ticket_id
       }
-      console.log(this.ticket_id)
       getTicketenclosure(parms).then(response => {
         this.enclosureData = response.data
         this.count = response.data.length

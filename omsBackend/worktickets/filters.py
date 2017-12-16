@@ -21,12 +21,12 @@ class TicketCommentFilter(filters.FilterSet):
     class Meta:
         model = TicketComment
         fields = {
-            'ticket__id': ['exact'],
+            'ticket__ticketid': ['exact'],
         }
 
 class TicketEnclosureFilter(filters.FilterSet):
     class Meta:
         model = TicketEnclosure
         fields = {
-            'ticket__id': ['exact'],
+            'ticket__ticketid': ['exact'],
         }

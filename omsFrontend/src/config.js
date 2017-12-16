@@ -62,6 +62,11 @@ module.exports = {
   tickettypes: `${url}/api/tickettypes/`,
   ticketwikis: `${url}/api/ticketwikis/`,
 
+  // 第三支付工单
+  platforms: `${url}/api/platforms/`,
+  merchants: `${url}/api/merchants/`,
+  threepayenclosures: `${url}/api/threepayenclosures/`,
+
   // 权限
   usermenuperms: `${url}/api/usermenuperms/`,
   routerinfo: `${url}/api/routers/`,
