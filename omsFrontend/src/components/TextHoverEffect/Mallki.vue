@@ -48,7 +48,7 @@ display: inline-block;
   width: 100%;
   height: 6px;
   margin: -3px 0 0 0;
-  background: #3888fa;
+  background: rgba(157, 189, 52, 0.55);
   position: absolute;
   left: 0;
   top: 50%;
@@ -76,11 +76,11 @@ display: inline-block;
 
 .link--mallki span::before {
   content: attr(data-letters);
-  color: red;
   position: absolute;
   left: 0;
   width: 100%;
-  color: #3888fa;
+  color: #30fa51;
+  font-size: 30px;
   -webkit-transition: -webkit-transform 0.5s;
   transition: transform 0.5s;
 }
