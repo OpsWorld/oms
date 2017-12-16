@@ -91,26 +91,27 @@
         </el-form>
       </div>
 
-      <hr class="heng"/>
-      处理过程：
-
-      <div class="ticketcomment" v-for="item in commentData" :key="item.id">
+      <div class="ticketcomment" v-if="commentData.length>0">
         <hr class="heng"/>
-        <el-row>
-          <el-col :span="1">
-            <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
-          </el-col>
-          <el-col :span="14">
-            <div class="dialog-box">
-              <span class="bot"></span>
-              <span class="top"></span>
-              <div class="comment">
-                <vue-markdown :source="item.content"></vue-markdown>
-                <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
+        处理过程：
+        <div v-for="item in commentData" :key="item.id">
+          <hr class="heng"/>
+          <el-row>
+            <el-col :span="1">
+              <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
+            </el-col>
+            <el-col :span="14">
+              <div class="dialog-box">
+                <span class="bot"></span>
+                <span class="top"></span>
+                <div class="comment">
+                  <vue-markdown :source="item.content"></vue-markdown>
+                  <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
+                </div>
               </div>
-            </div>
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
+        </div>
       </div>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
