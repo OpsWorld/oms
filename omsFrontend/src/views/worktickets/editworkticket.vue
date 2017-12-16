@@ -35,9 +35,8 @@
             </div>
             <div class="appendInfo" v-if="ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <!--<el-button type="success" @click="changeTicketStatus(1)"-->
-              <!--:disabled="ticketData.ticket_status==0?false:true">接收-->
-              <!--</el-button>-->
+              <el-button v-if="workticketlist_btn_edit||role==='super'&&!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
+              <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
               <el-button type="danger" size="small" @click="changeTicketStatus(2)"
                          :disabled="ticketData.ticket_status!=2?false:true">关闭
               </el-button>
@@ -57,7 +56,7 @@
         </el-card>
       </div>
 
-      <div v-if="ticketData.ticket_status!=2&&(workticketlist_btn_edi||role==='super')">
+      <div v-if="ticketData.ticket_status!=2&&showinput">
         <el-form :model="commentForm"
                  :rules="rules" ref="ruleForm"
                  label-width="80px" class="demo-ruleForm">
@@ -213,7 +212,8 @@ export default {
         '1': '正在处理',
         '2': '已解决'
       },
-      showfollower: true
+      showfollower: true,
+      showinput: false
     }
   },
 
