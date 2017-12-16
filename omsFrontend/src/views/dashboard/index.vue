@@ -59,7 +59,7 @@
       </el-col>
       <el-col :span="16">
         <el-card class="welcome">
-          欢迎你，{{username}}
+          欢迎你，{{username}},这是一个由运维开发出来的系统，目的是为了简化和改进目前日常工作中的一些重复和琐碎的事情，希望此系统能给大家带来方便和快捷！
         </el-card>
         <el-row :gutter="20">
           <el-col :span="12">
