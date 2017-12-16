@@ -18,7 +18,7 @@
           <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
         </el-form-item>
         <el-form-item label="工单类型" prop="type">
-          <el-select v-model="ruleForm.type" filterable placeholder="请选择工单类型">
+          <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
             <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
           </el-select>
         </el-form-item>

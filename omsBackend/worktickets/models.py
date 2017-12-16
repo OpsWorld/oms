@@ -71,7 +71,7 @@ class TicketEnclosure(models.Model):
 
 
 class TicketType(models.Model):
-    name = models.CharField(max_length=100, blank=True, verbose_name=u'工单类型')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'工单类型')
     desc = models.TextField(null=True, blank=True, verbose_name=u'工单描述')
 
     class Meta:
