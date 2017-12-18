@@ -282,13 +282,13 @@ export default {
               message: '恭喜你，操作成功'
             })
           })
+          this.CommentData()
           this.patchForm(this.rowdata)
           this.$router.push('/worktickets/workticket')
         } else {
           console.log('error submit!!')
           return false
         }
-        // setTimeout(this.CommentData, 1000)
       })
     },
     patchForm(rowdata) {
@@ -305,8 +305,8 @@ export default {
           message: '恭喜你，操作成功'
         })
       })
+      this.CommentData()
       this.$router.push('/worktickets/workticket')
-      // setTimeout(this.CommentData, 1000)
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
@@ -323,6 +323,7 @@ export default {
       postTicketcomment(this.commentForm)
       postSendmail(mailForm)
       setTimeout(this.CommentData, 1000)
+      setTimeout(this.fetchData, 1000)
     },
 
     handleSuccess(file, fileList) {
@@ -412,7 +413,7 @@ export default {
 
   .ticketcomment {
     margin-top: 20px;
-    background-color: rgba(48, 250, 81, 0.19);
+    background-color: rgba(48, 250, 81, 0.24);
     .dialog-box {
       position: relative;
       left: 100px;
@@ -426,11 +427,10 @@ export default {
         &.bot {
           border-width: 16px;
           border-style: solid dashed dashed;
-          border-color: transparent rgba(48, 250, 81, 0.45) transparent transparent;
+          border-color: transparent #30fa51 transparent transparent;
           top: 10px;
           left: -30px;
         }
-
       }
       .comment {
         border: solid 1px rgba(255, 164, 186, 0.62);
