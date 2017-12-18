@@ -14,7 +14,7 @@
               <a class="ticketinfo create_user"><span class="han">
                                 工单发起人：</span>{{ticketData.create_user}}</a>
               <a class="shu"></a>
-              <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0">
+              <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0||ticketData.action_user">
                 <span class="han">当前处理人：</span>{{ticketData.action_user}}</a>
               <a class="han" v-else><span class="han">当前处理人：</span> 未设置</a>
             </div>
