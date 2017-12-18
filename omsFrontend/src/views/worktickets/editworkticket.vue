@@ -97,9 +97,8 @@
         </el-form>
       </div>
 
-      <div class="ticketcomment" v-if="commentData.length>0">
-        <hr class="heng"/>
-        处理过程：
+      <el-card class="ticketcomment" v-if="commentData.length>0">
+        处理历史记录
         <div v-for="item in commentData" :key="item.id">
           <hr class="heng"/>
           <el-row>
@@ -118,7 +117,7 @@
             </el-col>
           </el-row>
         </div>
-      </div>
+      </el-card>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
@@ -144,9 +143,12 @@ import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
 import getTime from '@/utils/conversionTime'
+import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/card/src/main'
 
 export default {
-  components: { VueMarkdown, BackToTop },
+  components: {
+    ElCard,
+    VueMarkdown, BackToTop },
 
   data() {
     return {
@@ -396,11 +398,6 @@ export default {
     border-left: 1px rgba(52, 52, 52, 0.38) solid
   }
 
-  /*.action {*/
-  /*font-size: 16px;*/
-  /*margin-left: 5px;*/
-  /*}*/
-
   .content {
     margin: 20px 5px;
   }
@@ -414,8 +411,8 @@ export default {
   }
 
   .ticketcomment {
-    .commentuser {
-    }
+    margin-top: 20px;
+    background-color: rgba(48, 250, 81, 0.19);
     .dialog-box {
       position: relative;
       left: 100px;
@@ -429,18 +426,11 @@ export default {
         &.bot {
           border-width: 16px;
           border-style: solid dashed dashed;
-          border-color: transparent #4cff1e transparent transparent;
+          border-color: transparent rgba(48, 250, 81, 0.45) transparent transparent;
           top: 10px;
           left: -30px;
         }
-        &.top {
-          border-width: 18px;
-          border-style: solid dashed dashed;
-          border-color: transparent #fff transparent transparent;
-          top: 10px;
-          left: -30px;
 
-        }
       }
       .comment {
         border: solid 1px rgba(255, 164, 186, 0.62);
