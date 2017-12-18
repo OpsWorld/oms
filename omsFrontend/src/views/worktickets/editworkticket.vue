@@ -33,12 +33,12 @@
                 {{TICKET_STATUS[ticketData.ticket_status]}}
               </el-tag>
             </div>
-            <div class="appendInfo" v-if="ticketData.ticket_status!=2">
+            <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <el-button v-if="workticketlist_btn_edit||role==='super'&&!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
+              <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
               <el-button type="danger" size="small" @click="changeTicketStatus(2)"
-                         :disabled="ticketData.ticket_status!=2?false:true">关闭
+                         v-if="ticketData.ticket_status!=2&&showinput">关闭
               </el-button>
               <el-button type="warning" plain size="small" @click="change_action=!change_action"
                          v-if="ticketData.ticket_status!=2&&showinput">

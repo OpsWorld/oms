@@ -66,7 +66,7 @@ export const asyncRouterMap = [
     component: Layout,
     icon: 'leaf',
     redirect: 'workticket',
-    authority: '工单管理',
+    authority: '工单系统',
     children: [
       { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: '工单列表' },
       { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: '工单类型' },

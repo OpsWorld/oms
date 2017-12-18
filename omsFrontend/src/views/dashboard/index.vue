@@ -15,43 +15,36 @@
 
           <div style="position:relative;">
 
-            <el-card>
+            <el-card class="box-card-card">
               <div slot="header" class="clearfix">
-                <span>后端技术</span>
+                <span>已开发功能</span>
               </div>
               <div class='progress-item'>
-                <span>Django</span>
+                <span>工单系统</span>
+                <el-progress :percentage="99"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>第三支付工单</span>
                 <el-progress :percentage="33"></el-progress>
               </div>
-              <div class='progress-item'>
-                <span>Django Rest Framework</span>
-                <el-progress :percentage="66"></el-progress>
-              </div>
-              <div class='progress-item'>
-                <span>Other</span>
-                <el-progress :percentage="1"></el-progress>
-              </div>
             </el-card>
-            <el-card>
+            <el-card class="box-card-card">
               <div slot="header" class="clearfix">
-                <span>前端技术</span>
+                <span>待开发功能</span>
               </div>
               <div class='progress-item'>
-                <span>Vue</span>
-                <el-progress :percentage="70"></el-progress>
+                <span>工作流系统</span>
+                <el-progress :percentage="0"></el-progress>
               </div>
               <div class='progress-item'>
-                <span>JavaScript</span>
-                <el-progress :percentage="18"></el-progress>
+                <span>cmdb</span>
+                <el-progress :percentage="0"></el-progress>
               </div>
               <div class='progress-item'>
-                <span>Css</span>
-                <el-progress :percentage="12"></el-progress>
+                <span>发布系统</span>
+                <el-progress :percentage="0"></el-progress>
               </div>
-              <div class='progress-item'>
-                <span>ESLint</span>
-                <el-progress :percentage="100" status="success"></el-progress>
-              </div>
+
             </el-card>
 
           </div>
@@ -172,8 +165,12 @@ export default {
         }
       }
     }
-    .welcome {
-      height: 500px;
+    .box-card-card {
+      margin-top: 50px;
+      .clearfix {
+        color: #3a8ee6;
+        font-weight: 600;
+      }
     }
   }
 </style>
