@@ -23,9 +23,10 @@ def send_mail(to_list, cc_list, sub, content):
     msg = MIMEMultipart()
     msg['Subject'] = sub
     msg['From'] = me
-    msg['To'] = to_list + ','
+    msg['To'] = to_list
     msg['Cc'] = cc_list
-    list = msg['To']  + msg['Cc']
+    list = msg['Cc'].split(',')
+    list.append(msg['To'])
     print(list)
     html = """
     <html xmlns="http://www.w3.org/1999/xhtml">

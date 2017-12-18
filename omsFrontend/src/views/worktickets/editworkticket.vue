@@ -239,7 +239,6 @@ export default {
       }
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
-        console.log(this.ticketData)
         this.ticket_id = this.ticketData.id
         if (this.ticketData.follower.length > 0) {
           this.showfollower = false
