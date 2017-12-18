@@ -31,7 +31,8 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+          <el-table-column type="selection"></el-table-column>
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
@@ -66,6 +67,13 @@
         </el-table>
       </div>
       <div class="table-footer">
+        <div class="table-button">
+          <el-button type="danger" size="small"
+                     :disabled="btnstatus"
+                     v-if="workticketlist_btn_change_status||role==='super'"
+                     @click="show_status=true">更改状态
+          </el-button>
+        </div>
         <div class="table-pagination">
           <el-pagination
             @size-change="handleSizeChange"
@@ -79,11 +87,25 @@
         </div>
       </div>
     </el-card>
+
+    <el-dialog
+      title="更改状态"
+      :visible.sync="show_status">
+      <el-radio-group v-model="select_status">
+        <el-radio :label="0">未接收</el-radio>
+        <el-radio :label="1">正在处理</el-radio>
+        <el-radio :label="2">已关闭</el-radio>
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="show_status=false">取 消</el-button>
+    <el-button type="primary" @click="changeForm">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getWorkticket } from 'api/workticket'
+import { getWorkticket, patchWorkticket } from 'api/workticket'
 import { LIMIT } from '@/config'
 import addWorkticket from './addworkticket.vue'
 import { mapGetters } from 'vuex'
@@ -106,6 +128,9 @@ export default {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
       },
+      changedata: {
+        ticket_status: 0
+      },
       TICKET_STATUS: {
         '0': { 'text': '未接收', 'type': 'info' },
         '1': { 'text': '正在处理', 'type': 'success' },
@@ -124,7 +149,11 @@ export default {
         action_user: '',
         content: ''
       },
-      workticketlist_btn_add: false
+      workticketlist_btn_add: false,
+      workticketlist_btn_change_status: false,
+      btnstatus: true,
+      select_status: 1,
+      show_status: false
     }
   },
 
@@ -138,6 +167,7 @@ export default {
   created() {
     this.fetchData()
     this.workticketlist_btn_add = this.elements['工单列表-新建工单按钮']
+    this.workticketlist_btn_change_status = this.elements['工单列表-更改工单状态按钮']
   },
 
   methods: {
@@ -184,6 +214,27 @@ export default {
       this.listQuery.action_user = ''
       this.ticket_status = ''
       this.fetchData()
+    },
+    handleSelectionChange(val) {
+      this.selectId = []
+      for (var i = 0, len = val.length; i < len; i++) {
+        this.selectId.push(val[i].id)
+      }
+      if (this.selectId.length > 0) {
+        this.btnstatus = false
+      } else {
+        this.btnstatus = true
+      }
+    },
+    changeForm() {
+      for (var i = 0, len = this.selectId.length; i < len; i++) {
+        this.changedata.ticket_status = this.select_status
+        patchWorkticket(this.selectId[i], this.changedata).then(response => {
+          delete this.selectId[i]
+        })
+      }
+      setTimeout(this.fetchData, 3000)
+      this.show_status = false
     }
   }
 }

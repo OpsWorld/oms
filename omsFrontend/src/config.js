@@ -15,9 +15,9 @@ if (process.env.NODE_ENV === 'production') {
   }
 } else {
   CONFIG = {
-    apiUrl: 'http://' + rest_url + ':8000',
+    apiUrl: 'http://127.0.0.1:8000',
     super_group: 'admin',
-    wsurl: ws_scheme + '://' + rest_url + ':8000'
+    wsurl: ws_scheme + '://127.0.0.1:8000'
   }
 }
 
