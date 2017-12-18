@@ -24,7 +24,7 @@
                 <el-progress :percentage="99"></el-progress>
               </div>
               <div class='progress-item'>
-                <span>第三支付工单</span>
+                <span>第三方支付</span>
                 <el-progress :percentage="33"></el-progress>
               </div>
             </el-card>
