@@ -32,6 +32,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
             to_list = 'itsupport@tb-gaming.com'
 
         cc = request.data["cc"]
+        print(cc)
         cc_list = ''
         if cc:
             for c in cc.split(','):
@@ -40,11 +41,8 @@ class SendmailViewSet(viewsets.ModelViewSet):
                     cc_list = cc_list + c_email + ','
                 except Exception as e:
                     cc_list = cc_list
-        if not cc_list.isspace():
-            cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
-        print('{} {} {}'.format(to_list, cc_list, sub))
         results = send_mail(to_list, cc_list, sub, content)
         print(results)
         #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)

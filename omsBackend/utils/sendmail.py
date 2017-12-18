@@ -24,8 +24,10 @@ def send_mail(to_list, cc_list, sub, content):
     msg['Subject'] = sub
     msg['From'] = me
     msg['To'] = to_list + ';'
+    print(cc_list.replace(',', ';'))
     msg['Cc'] = cc_list.replace(',', ';')
     list = msg['To']  + msg['Cc']
+    print(list)
     html = """
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -40,7 +42,6 @@ def send_mail(to_list, cc_list, sub, content):
     </html>"""
     context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
-    print(list)
     try:
         send_smtp = smtplib.SMTP()
         send_smtp.connect(mail_host, 587)
