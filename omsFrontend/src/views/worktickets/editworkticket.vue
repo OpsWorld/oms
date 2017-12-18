@@ -283,8 +283,8 @@ export default {
             })
           })
           this.CommentData()
-          this.patchForm(this.rowdata)
-          setTimeout(this.$router.push('/worktickets/workticket'), 1000)
+          setTimeout(this.patchForm(this.rowdata), 500)
+          // this.$router.push('/worktickets/workticket')
         } else {
           console.log('error submit!!')
           return false
@@ -298,7 +298,6 @@ export default {
       this.rowdata.ticket_status = this.ticketData.ticket_status = status
       this.commentForm.ticket = this.ticket_id
       this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '关闭！'
-      patchWorkticket(this.ticket_id, this.rowdata)
       postTicketcomment(this.commentForm).then(response => {
         this.$message({
           type: 'success',
@@ -306,7 +305,8 @@ export default {
         })
       })
       this.CommentData()
-      setTimeout(this.$router.push('/worktickets/workticket'), 1000)
+      setTimeout(this.patchForm(this.rowdata), 500)
+      // this.$router.push('/worktickets/workticket')
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
@@ -322,8 +322,9 @@ export default {
       this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
       postTicketcomment(this.commentForm)
       postSendmail(mailForm)
-      setTimeout(this.CommentData, 1000)
-      setTimeout(this.fetchData, 1000)
+      setTimeout(this.CommentData, 500)
+      setTimeout(this.patchForm(this.rowdata), 500)
+      setTimeout(this.fetchData, 500)
     },
 
     handleSuccess(file, fileList) {
