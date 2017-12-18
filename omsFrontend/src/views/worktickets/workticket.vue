@@ -35,7 +35,7 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
-          <el-table-column type="selection"></el-table-column>
+          <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
