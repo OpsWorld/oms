@@ -14,7 +14,7 @@ mail_postfix = "tb-gaming.com"
 # mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
 
 # 发送邮件函数
-def send_mail(to_list, cc_list, sub, content):
+def send_mail(to_list, cc_list, sub, header, content=None):
     me = mail_user + "<" + mail_user + "@" + mail_postfix + ">"
     # f = open(context)
     # msg = MIMEText(f.read(),_charset="utf-8")
@@ -27,19 +27,34 @@ def send_mail(to_list, cc_list, sub, content):
     msg['Cc'] = cc_list
     list = msg['Cc'].split(',')
     list.append(msg['To'])
-    print(list)
-    html = """
-    <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>工单通知邮件</title>
-    <body>
-    <div id="container">
-    <h1>工单通知邮件</h1>
-    点击工单地址: <a href='""" + content + """'>""" + content + """</a>
-    </div>
-    </body>
-    </html>"""
+    if content:
+        html = """
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>工单通知邮件</title>
+        <body>
+        <div id="container">
+        <h1>工单通知邮件</h1>
+        点击工单地址: <a href='""" + header + """'>""" + header + """</a>
+        <p>邮件详细内容如下</p>
+        <p>""" + content + """</p>
+        </div>
+        </body>
+        </html>"""
+    else:
+        html = """
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>工单通知邮件</title>
+        <body>
+        <div id="container">
+        <h1>工单通知邮件</h1>
+        点击工单地址: <a href='""" + header + """'>""" + header + """</a>
+        </div>
+        </body>
+        </html>"""
     context = MIMEText(html, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
     try:
@@ -59,8 +74,9 @@ if __name__ == '__main__':
     to_list = sys.argv[1]  # 收件人列表   '111@126.com'
     cc_list = sys.argv[2].replace(',', ';')  # 抄送人列表   '111@126.com;222@126.com;'
     sub = sys.argv[3]
-    context = sys.argv[4]
-    if send_mail(to_list, cc_list, sub, context):
+    header = sys.argv[4]
+    context = sys.argv[5]
+    if send_mail(to_list, cc_list, sub, header, context):
         print({"code":'success',"msg":"通知邮件发送成功"})
     else:
         print({"code":'error',"msg":"通知邮件发送失败"})

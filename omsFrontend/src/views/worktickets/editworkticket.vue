@@ -309,15 +309,16 @@ export default {
       patchWorkticket(this.ticket_id, this.rowdata)
       this.change_action = false
       this.ticketData.action_user = this.rowdata.action_user
+      this.commentForm.ticket = this.ticket_id
+      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
+      postTicketcomment(this.commentForm)
       const mailForm = {
         to: this.ticketData.action_user,
         cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
         sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
-        content: window.location.href
+        header: window.location.href,
+        content: this.commentForm.content
       }
-      this.commentForm.ticket = this.ticket_id
-      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
-      postTicketcomment(this.commentForm)
       postSendmail(mailForm)
       setTimeout(this.CommentData, 1000)
     },

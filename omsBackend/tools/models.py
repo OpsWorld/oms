@@ -34,6 +34,7 @@ class Sendmail(models.Model):
     to = models.CharField(max_length=30, verbose_name=u'收件人')
     cc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'抄送人')
     sub = models.CharField(max_length=101, default=u'其他', verbose_name=u'邮件主题')
+    header = models.TextField(null=True, blank=True, verbose_name=u'邮件头部内容')
     content = models.TextField(null=True, blank=True, verbose_name=u'邮件内容')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'邮件创建时间')
 

@@ -168,7 +168,8 @@ export default {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
               sub: '【新工单】' + this.ruleForm.title,
-              content: window.location.host + '/#/worktickets/editworkticket/' + this.ruleForm.ticketid
+              header: window.location.host + '/#/worktickets/editworkticket/' + this.ruleForm.ticketid,
+              content: ''
             }
             postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')
