@@ -44,7 +44,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
             cc_list = 'kiven@tb-gaming.com'
         sub = request.data["sub"]
         content = request.data["content"]
-        #print('{} {} {} {}'.format(to_list, cc_list, sub, content))
+        print('{} {} {}'.format(to_list, cc_list, sub))
         results = send_mail(to_list, cc_list, sub, content)
         print(results)
         #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
