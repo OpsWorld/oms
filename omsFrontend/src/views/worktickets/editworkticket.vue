@@ -284,7 +284,7 @@ export default {
           })
           this.CommentData()
           this.patchForm(this.rowdata)
-          this.$router.push('/worktickets/workticket')
+          setTimeout(this.$router.push('/worktickets/workticket'), 1000)
         } else {
           console.log('error submit!!')
           return false
@@ -306,7 +306,7 @@ export default {
         })
       })
       this.CommentData()
-      this.$router.push('/worktickets/workticket')
+      setTimeout(this.$router.push('/worktickets/workticket'), 1000)
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
