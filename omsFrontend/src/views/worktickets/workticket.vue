@@ -6,7 +6,10 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
             <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
           </router-link>
-
+          <el-button type="danger" :disabled="btnstatus"
+                     v-if="workticketlist_btn_change_status||role==='super'"
+                     @click="show_status=true">更改状态
+          </el-button>
           <el-button-group>
             <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
             <el-button type="success" plain size="small" @click="showMeCreate">我创建的工单</el-button>
@@ -68,10 +71,7 @@
       </div>
       <div class="table-footer">
         <div class="table-button">
-          <el-button type="danger" size="small" :disabled="btnstatus"
-                     v-if="workticketlist_btn_change_status||role==='super'"
-                     @click="show_status=true">更改状态
-          </el-button>
+
         </div>
         <div class="table-pagination">
           <el-pagination
