@@ -53,6 +53,16 @@
             </div>
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
+          <hr class="heng"/>
+
+          <div v-if='enclosureData.length>0' class="ticketenclosure">
+            <ul>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
+                <a :href="apiurl + '/upload/' +item.file" :download="item.file">{{item.file}}</a>
+                <el-button v-if="showinput" type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+              </li>
+            </ul>
+          </div>
         </el-card>
       </div>
 
@@ -81,18 +91,7 @@
               <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
             </div>
           </el-upload>
-
           <hr class="heng"/>
-          <div v-if='enclosureData.length>0' class="ticketenclosure">
-            <ul>
-              <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
-                <a :href="apiurl + '/upload/' +item.file" :download="item.file">{{item.file}}</a>
-                <el-button type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
-              </li>
-            </ul>
-          </div>
-          <hr class="heng"/>
-
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         </el-form>
       </div>
