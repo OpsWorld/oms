@@ -11,10 +11,6 @@ export function postUpload(data) {
 }
 
 export function getUploadList(query, id) {
-  if (query.time_lte === 'NaN-aN-aN' || query.time_lte === '1970-01-01') {
-    delete query.time_gte
-    delete query.time_lte
-  }
   return request({
     url: id ? apiURL.uploads + id + '/' : apiURL.uploads,
     method: 'get',

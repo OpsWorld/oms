@@ -143,11 +143,9 @@ import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
 import getTime from '@/utils/conversionTime'
-import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/card/src/main'
 
 export default {
   components: {
-    ElCard,
     VueMarkdown, BackToTop
   },
 
@@ -327,16 +325,16 @@ export default {
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
-      formData.append('file', fileList.raw)
+      formData.append('file', fileList)
       formData.append('create_time', getTime(fileList.uid))
       formData.append('type', fileList.type)
       formData.append('archive', this.route_path[1])
-      postUpload(formData).then(response => {
+      postUpload(fileList).then(response => {
         this.enclosureForm.file = response.data.filepath
         this.enclosureForm.ticket = this.ticket_id
         postTicketenclosure(this.enclosureForm)
         setTimeout(this.EnclosureData, 1000)
-        if (response.statusText === 'ok') {
+        if (response.statusText === 'Created') {
           this.$message({
             type: 'success',
             message: '恭喜你，上传成功'

@@ -143,6 +143,7 @@ export default {
     },
     handleCurrentChange(val) {
       this.offset = val - 1
+      // this.offset = (val - 1) * this.limit
       this.fetchData()
     },
     deleteForm() {

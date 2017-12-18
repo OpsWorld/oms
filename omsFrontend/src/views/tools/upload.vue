@@ -80,12 +80,10 @@ export default {
       selectId: [],
       butstatus: true,
       listQuery: {
-        offset: 0,
+        offset: null,
         limit: LIMIT,
         username__contains: '',
-        type: '',
-        date_lte: '',
-        date_gte: ''
+        type: ''
       },
       datefilter: [],
       photo: '',
@@ -133,7 +131,8 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.listQuery.offset = val - 1
+      this.listQuery.offset = (val - 1) * this.listQuery.limit
+      console.log(this.listQuery.offset)
       this.fetchData()
     },
     deleteForm() {

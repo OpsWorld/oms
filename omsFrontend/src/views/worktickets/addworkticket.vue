@@ -40,9 +40,9 @@
               ref="upload"
               :action="uploadurl"
               :on-success="handleSuccess"
-              :file-list="fileList"
-              :disabled="count>2?true:false">
-              <el-button slot="trigger" size="small" type="primary" :disabled="count>0?true:false">
+              :on-remove="handleRemove"
+              :file-list="fileList">
+              <el-button slot="trigger" size="small" type="primary" :disabled="count>2?true:false">
                 上传文件
               </el-button>
               (可以不用上传)
@@ -70,7 +70,7 @@ import { mapGetters } from 'vuex'
 import getTime from '@/utils/conversionTime'
 
 export default {
-  components: { },
+  components: {},
 
   data() {
     return {
@@ -103,7 +103,7 @@ export default {
       users: [],
       fileList: [],
       count: 0,
-      enclosureFile: null,
+      enclosureFile: [],
       enclosureForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
@@ -145,16 +145,24 @@ export default {
         if (valid) {
           this.ruleForm.ticketid = getTime()
           postWorkticket(this.ruleForm).then(response => {
-            if (response.statusText === 'ok') {
+            if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
                 message: '恭喜你，新建成功'
               })
             }
-            if (this.enclosureFile) {
-              this.enclosureForm.file = this.enclosureFile
-              this.enclosureForm.ticket = response.data.id
-              postTicketenclosure(this.enclosureForm)
+            for (var fileList of this.fileList) {
+              const formData = new FormData()
+              formData.append('username', this.enclosureForm.create_user)
+              formData.append('file', fileList)
+              formData.append('create_time', getTime(fileList.uid))
+              formData.append('type', fileList.type)
+              formData.append('archive', this.route_path[1])
+              postUpload(formData).then(res => {
+                this.enclosureForm.file = res.data.filepath
+                this.enclosureForm.ticket = response.data.id
+                postTicketenclosure(this.enclosureForm)
+              })
             }
             const mailForm = {
               to: this.ruleForm.action_user,
@@ -187,26 +195,12 @@ export default {
       })
     },
     handleSuccess(file, fileList) {
-      const formData = new FormData()
-      formData.append('username', this.enclosureForm.create_user)
-      formData.append('file', fileList.raw)
-      formData.append('create_time', getTime(fileList.uid))
-      formData.append('type', fileList.type)
-      formData.append('archive', this.route_path[1])
-      postUpload(formData).then(response => {
-        this.enclosureFile = response.data.filepath
-        if (response.statusText === 'ok') {
-          this.count += 1
-          this.$message({
-            type: 'success',
-            message: '恭喜你，上传成功'
-          })
-        }
-      }).catch(error => {
-        this.$message.error('上传失败')
-        this.$refs.upload.clearFiles()
-        console.log(error)
-      })
+      this.fileList.push(fileList.raw)
+      this.count += 1
+    },
+    handleRemove(file, fileList) {
+      this.fileList.remove(file)
+      this.count -= 1
     },
     imgAdd(pos, file) {
       var md = this.$refs.md
