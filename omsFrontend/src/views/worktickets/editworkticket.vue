@@ -324,7 +324,6 @@ export default {
       postSendmail(mailForm)
       setTimeout(this.CommentData, 500)
       setTimeout(this.patchForm(this.rowdata), 500)
-      setTimeout(this.fetchData, 500)
     },
 
     handleSuccess(file, fileList) {
