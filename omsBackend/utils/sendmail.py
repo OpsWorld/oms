@@ -36,7 +36,7 @@ def send_mail(to_list, cc_list, sub, content):
     <body>
     <div id="container">
     <h1>工单通知邮件</h1>
-    点击工单地址: <a href='""" + content + """'>""" + content + """"</a>
+    点击工单地址: <a href='""" + content + """'>""" + content + """</a>
     </div>
     </body>
     </html>"""
