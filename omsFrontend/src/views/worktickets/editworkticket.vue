@@ -57,8 +57,9 @@
 
           <div v-if='enclosureData.length>0' class="ticketenclosure">
             <ul>
-              <li v-for="item in enclosureData" :key="item.id" v-if="item.file">
-                <a :href="apiurl + '/upload/' +item.file" :download="item.file">{{item.file}}</a>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                <i class="fa fa-paperclip"></i>
+                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
                 <el-button v-if="showinput" type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
               </li>
             </ul>
@@ -238,6 +239,7 @@ export default {
       }
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
+        console.log(this.ticketData)
         this.ticket_id = this.ticketData.id
         if (this.ticketData.follower.length > 0) {
           this.showfollower = false

@@ -19,6 +19,7 @@ Vue.use(Element, {
 import 'vue-awesome/icons'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('icon', Icon)
+import 'font-awesome/css/font-awesome.min.css'
 
 /* markdown */
 import mavonEditor from 'mavon-editor'
