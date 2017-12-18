@@ -3,44 +3,44 @@
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class='card-panel' @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+          <a class="wenzi">T</a>
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">New Visits</div>
-          <count-to class="card-panel-num" :startVal="0" :endVal="102400" :duration="3600"></count-to>
+          <div class="card-panel-text">One</div>
+          <count-to class="card-panel-num" :startVal="0" :endVal="1024" :duration="3600"></count-to>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('messages')">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+          <a class="wenzi">B</a>
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Messages</div>
-          <count-to class="card-panel-num" :startVal="0" :endVal="81212" :duration="4000"></count-to>
+          <div class="card-panel-text">Two</div>
+          <count-to class="card-panel-num" :startVal="1024" :endVal="2048" :duration="4000"></count-to>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('purchases')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+          <a class="wenzi">O</a>
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Purchases</div>
-          <count-to class="card-panel-num" :startVal="0" :endVal="9280" :duration="4000"></count-to>
+          <div class="card-panel-text">Three</div>
+          <count-to class="card-panel-num" :startVal="2048" :endVal="4096" :duration="4000"></count-to>
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('shoppings')">
         <div class="card-panel-icon-wrapper icon-shoppingCard">
-          <svg-icon icon-class="shoppingCard" class-name="card-panel-icon" />
+          <a class="wenzi">P</a>
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">Shoppings</div>
-          <count-to class="card-panel-num" :startVal="0" :endVal="13600" :duration="4600"></count-to>
+          <div class="card-panel-text">Four</div>
+          <count-to class="card-panel-num" :startVal="4096" :endVal="8192" :duration="4600"></count-to>
         </div>
       </div>
     </el-col>
@@ -114,9 +114,8 @@ export default {
       transition: all 0.38s ease-out;
       border-radius: 6px;
     }
-    .card-panel-icon {
-      float: left;
-      font-size: 48px;
+    .wenzi {
+      font-size: 64px;
     }
     .card-panel-description {
       float: right;

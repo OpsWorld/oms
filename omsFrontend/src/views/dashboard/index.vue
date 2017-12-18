@@ -51,21 +51,30 @@
         </el-card>
       </el-col>
       <el-col :span="16">
-        <el-card class="welcome">
-          欢迎你，{{username}},这是一个由运维开发出来的系统，目的是为了简化和改进目前日常工作中的一些重复和琐碎的事情，希望此系统能给大家带来方便和快捷！
+        <el-card>
+          <div>
+            <p style="font-size: 36px">欢迎你，{{username}}!</p>
+            <p style="font-size: 24px">本系统目的是为了简化和改进目前日常工作中的一些重复和琐碎的事情，希望此系统能给大家带来方便和快捷！</p>
+            <p style="font-size: 24px">本系统还有很多功能和地方需要完善，希望大家多提提意见，下面会将是一些系统数据的展示，目前是测试数据。</p>
+          </div>
         </el-card>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="chart-wrapper">
-              <raddar-chart></raddar-chart>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="chart-wrapper">
-              <pie-chart></pie-chart>
-            </div>
-          </el-col>
+        <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
+
+        <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+          <line-chart :chart-data="lineChartData"></line-chart>
         </el-row>
+        <!--<el-row :gutter="20">-->
+        <!--<el-col :span="12">-->
+        <!--<div class="chart-wrapper">-->
+        <!--<raddar-chart></raddar-chart>-->
+        <!--</div>-->
+        <!--</el-col>-->
+        <!--<el-col :span="12">-->
+        <!--<div class="chart-wrapper">-->
+        <!--<pie-chart></pie-chart>-->
+        <!--</div>-->
+        <!--</el-col>-->
+        <!--</el-row>-->
       </el-col>
     </el-row>
   </div>
@@ -75,17 +84,34 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Mallki from '@/components/TextHoverEffect/Mallki'
-import ElRow from 'element-ui/packages/row/src/row'
-import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/card/src/main'
 import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
+import PanelGroup from './components/PanelGroup'
+import LineChart from './components/LineChart'
+
+const lineChartData = {
+  newVisitis: {
+    expectedData: [90, 130, 90, 130, 90, 130, 90],
+    actualData: [60, 100, 60, 100, 60, 100, 60]
+  },
+  messages: {
+    expectedData: [90, 150, 90, 60, 90, 150, 90],
+    actualData: [90, 60, 90, 150, 90, 60, 90]
+  },
+  purchases: {
+    expectedData: [0, 30, 60, 90, 120, 150, 180],
+    actualData: [180, 150, 120, 90, 60, 30, 0]
+  },
+  shoppings: {
+    expectedData: [180, 130, 80, 30, 80, 130, 180],
+    actualData: [0, 50, 100, 200, 100, 50, 0]
+  }
+}
 
 export default {
   components: {
-    ElCard,
-    ElRow, PanThumb, Mallki,
-    RaddarChart, PieChart, BarChart
+    PanThumb, Mallki, RaddarChart, PieChart, BarChart, PanelGroup, LineChart
   },
 
   data() {
@@ -94,7 +120,8 @@ export default {
       statisticsData: {
         article_count: 1024,
         pageviews_count: 1024
-      }
+      },
+      lineChartData: lineChartData.newVisitis
     }
   },
   computed: {
@@ -103,13 +130,9 @@ export default {
       'groups'
     ])
   },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        success: 'success',
-        pending: 'danger'
-      }
-      return statusMap[status]
+  methods: {
+    handleSetLineChartData(type) {
+      this.lineChartData = lineChartData[type]
     }
   }
 }
@@ -117,7 +140,7 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .box-card-component {
-    height: 800px;
+    height: 100%;
     .box-card-header {
       position: relative;
       height: 220px;
@@ -169,8 +192,12 @@ export default {
       margin-top: 50px;
       .clearfix {
         color: #3a8ee6;
+        font-size: 24px;
         font-weight: 600;
       }
+    }
+    .welcome {
+      font-size: 36px;
     }
   }
 </style>
