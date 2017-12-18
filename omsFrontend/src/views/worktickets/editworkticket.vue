@@ -100,7 +100,7 @@
       <el-card class="ticketcomment" v-if="commentData.length>0">
         处理历史记录
         <div v-for="item in commentData" :key="item.id">
-          <hr class="heng"/>
+          <hr class="heng2"/>
           <el-row>
             <el-col :span="1">
               <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
@@ -148,7 +148,8 @@ import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/
 export default {
   components: {
     ElCard,
-    VueMarkdown, BackToTop },
+    VueMarkdown, BackToTop
+  },
 
   data() {
     return {
@@ -273,18 +274,15 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.commentForm.ticket = this.ticket_id
-          // if (this.commentForm.create_user === this.ticketData.create_user) {
-          //  this.rowdata.action_user = this.ticketData.action_user
-          // }
           postTicketcomment(this.commentForm).then(response => {
             this.$message({
               type: 'success',
               message: '恭喜你，操作成功'
             })
           })
-          this.CommentData()
-          setTimeout(this.patchForm(this.rowdata), 500)
-          // this.$router.push('/worktickets/workticket')
+          this.rowdata.action_user = this.commentForm.create_user
+          this.patchForm(this.rowdata)
+          this.$router.push('/worktickets/workticket')
         } else {
           console.log('error submit!!')
           return false
@@ -298,15 +296,16 @@ export default {
       this.rowdata.ticket_status = this.ticketData.ticket_status = status
       this.commentForm.ticket = this.ticket_id
       this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '关闭！'
+      patchWorkticket(this.ticket_id, this.rowdata)
       postTicketcomment(this.commentForm).then(response => {
         this.$message({
           type: 'success',
           message: '恭喜你，操作成功'
         })
       })
-      this.CommentData()
-      setTimeout(this.patchForm(this.rowdata), 500)
-      // this.$router.push('/worktickets/workticket')
+      this.rowdata.action_user = this.commentForm.create_user
+      this.patchForm(this.rowdata)
+      this.$router.push('/worktickets/workticket')
     },
     changeActionForm() {
       patchWorkticket(this.ticket_id, this.rowdata)
@@ -322,8 +321,7 @@ export default {
       this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
       postTicketcomment(this.commentForm)
       postSendmail(mailForm)
-      setTimeout(this.CommentData, 500)
-      setTimeout(this.patchForm(this.rowdata), 500)
+      setTimeout(this.CommentData, 1000)
     },
 
     handleSuccess(file, fileList) {
@@ -413,7 +411,7 @@ export default {
 
   .ticketcomment {
     margin-top: 20px;
-    background-color: rgba(48, 250, 81, 0.24);
+    background-color: rgba(48, 250, 81, 0.17);
     .dialog-box {
       position: relative;
       left: 100px;
@@ -427,7 +425,7 @@ export default {
         &.bot {
           border-width: 16px;
           border-style: solid dashed dashed;
-          border-color: transparent #30fa51 transparent transparent;
+          border-color: transparent rgba(48, 250, 81, 0.38) transparent transparent;
           top: 10px;
           left: -30px;
         }
