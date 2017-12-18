@@ -102,17 +102,10 @@
 import { getFirstmenus, getSecondmenus, getMenumetas } from '@/api/menu'
 import { getMenuPerm, postMenuPerm, putMenuPerm } from '@/api/perm'
 import { getGroup } from '@/api/user'
-import ElButton from '../../../node_modules/element-ui/packages/button/src/button.vue'
 import { LIMIT } from '@/config'
-import ElDialog from '../../../node_modules/element-ui/packages/dialog/src/component.vue'
-import ElCol from 'element-ui/packages/col/src/col'
 
 export default {
-  components: {
-    ElCol,
-    ElDialog,
-    ElButton
-  },
+  components: { },
   data() {
     return {
       firstData: [],

@@ -12,14 +12,10 @@
   </el-card>
 </template>
 <script>
-import ElCard from '../../../../../omsFrontend/node_modules/element-ui/packages/card/src/main'
-import ElInput from '../../../../../omsFrontend/node_modules/element-ui/packages/input/src/input'
 import { postSendmail } from 'api/tool'
 
 export default {
   components: {
-    ElInput,
-    ElCard
   },
   data() {
     return {

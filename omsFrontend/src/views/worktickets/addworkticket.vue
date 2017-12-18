@@ -63,7 +63,6 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
-import ElButton from '../../../node_modules/element-ui/packages/button/src/button'
 import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
@@ -71,7 +70,7 @@ import { mapGetters } from 'vuex'
 import getTime from '@/utils/conversionTime'
 
 export default {
-  components: { ElButton },
+  components: { },
 
   data() {
     return {
