@@ -68,8 +68,7 @@
       </div>
       <div class="table-footer">
         <div class="table-button">
-          <el-button type="danger" size="small"
-                     :disabled="btnstatus"
+          <el-button type="danger" size="small" :disabled="btnstatus"
                      v-if="workticketlist_btn_change_status||role==='super'"
                      @click="show_status=true">更改状态
           </el-button>
