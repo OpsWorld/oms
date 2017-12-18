@@ -280,8 +280,8 @@ export default {
               message: '恭喜你，操作成功'
             })
           })
+          this.patchForm(this.rowdata)
           this.$router.push('/worktickets/workticket')
-          // this.patchForm(this.rowdata)
         } else {
           console.log('error submit!!')
           return false

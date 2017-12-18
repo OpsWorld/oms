@@ -209,7 +209,7 @@ export default {
         }
       } else {
         this.menuform.secondmenus.remove(data.title)
-        this.menuform.firstmenus.remove(data.title)
+        // this.menuform.firstmenus.remove(data.title)
       }
       this.menuform.secondmenus = [...new Set(this.menuform.secondmenus)]
     },
