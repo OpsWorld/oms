@@ -164,12 +164,21 @@ export default {
                 postTicketenclosure(this.enclosureForm)
               })
             }
+            const create_time = getTime()
             const mailForm = {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
               sub: '【新工单】' + this.ruleForm.title,
-              header: window.location.host + '/#/worktickets/editworkticket/' + this.ruleForm.ticketid,
-              content: ''
+              content: `
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                    <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>工单通知邮件</title></head>
+                    <body><div id="container">
+                    <p>工单提交人： ${this.ruleForm.create_user}</p>
+                    <p>工单提交时间：${create_time} </p>
+                    <p>点击工单地址: <a href='${window.location.host} + "/#/worktickets/editworkticket/" + ${this.ruleForm.ticketid}'>${window.location.host} + "/#/worktickets/editworkticket/" + ${this.ruleForm.ticketid}</a></p>
+                    <p>工单详细内容：</p>
+                    <p>${this.ruleForm.content}</p>
+                    </div></body></html>`
             }
             postSendmail(mailForm)
             this.$router.push('/worktickets/workticket')

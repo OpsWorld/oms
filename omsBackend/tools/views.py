@@ -42,9 +42,8 @@ class SendmailViewSet(viewsets.ModelViewSet):
                 except Exception as e:
                     cc_list = cc_list
         sub = request.data["sub"]
-        header = request.data["header"]
         content = request.data["content"]
-        results = send_mail(to_list, cc_list, sub, header, content)
+        results = send_mail(to_list, cc_list, sub, content)
         print(results)
         #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
         #print(cmd)

@@ -302,12 +302,21 @@ export default {
             postTicketcomment(this.commentForm).then(response => {
               this.patchForm(this.rowdata)
               if (this.radio_status !== '0') {
+                const create_time = getTime()
                 const mailForm = {
                   to: this.ticketData.action_user,
                   cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
                   sub: '【工单状态变化】' + this.ticketData.title,
-                  header: window.location.href,
-                  content: this.commentForm.content
+                  content: `
+                    <html xmlns="http://www.w3.org/1999/xhtml">
+                    <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>工单通知邮件</title></head>
+                    <body><div id="container">
+                    <p>工单提交人： ${this.commentForm.create_user} </p>
+                    <p>工单提交时间：${create_time} </p>
+                    <p>点击工单地址: <a href='${window.location.href}'>${window.location.href}</a></p>
+                    <p>工单详细内容：</p>
+                    <p>${this.commentForm.content}</p>
+                    </div></body></html>`
                 }
                 postSendmail(mailForm)
               }
