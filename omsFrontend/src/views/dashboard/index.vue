@@ -9,7 +9,7 @@
               <pan-thumb class="panThumb" :image="img">
                 <span style="color: #f10df5;font-weight: 600">TB</span>
               </pan-thumb>
-              <mallki className='mallki-text' text='OMS运维系统'></mallki>
+              <mallki className='mallki-text' text='OMS运维管理系统'></mallki>
             </div>
           </div>
 
