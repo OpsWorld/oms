@@ -164,7 +164,7 @@ export default {
                 postTicketenclosure(this.enclosureForm)
               })
             }
-            const create_time = getTime()
+            const create_time = new Date()
             const mailForm = {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),

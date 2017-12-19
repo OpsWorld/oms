@@ -302,7 +302,7 @@ export default {
             postTicketcomment(this.commentForm).then(response => {
               this.patchForm(this.rowdata)
               if (this.radio_status !== '0') {
-                const create_time = getTime()
+                const create_time = new Date()
                 const mailForm = {
                   to: this.ticketData.action_user,
                   cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
