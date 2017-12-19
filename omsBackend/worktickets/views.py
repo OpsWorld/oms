@@ -16,12 +16,19 @@ from worktickets.serializers import (PlatformSerializer,
                                      PlatformEnclosureSerializer,
                                      ThreePayTicketSerializer)
 from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
-
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
     serializer_class = WorkTicketSerializer
+    # filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    # filter_fields = ('ticketid', 'create_user__username', 'action_user__username', 'level','ticket_status')
+    # search_fields = ('title', 'content', 'type__name')
+    # ordering_fields = ('id', 'create_time')
     filter_class = WorkTicketFilter
+    filter_backends = (DjangoFilterBackend, SearchFilter,)
+    search_fields = ('title', 'content', 'type__name')
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):

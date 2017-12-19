@@ -28,8 +28,8 @@
                     v-model="listQuery.create_user"></el-input>
           <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick"
                     v-model="listQuery.ticketid"></el-input>
-          <el-input style="width: 160px;" class="filter-item" placeholder="工单内容" @keyup.enter.native="searchClick"
-                    v-model="listQuery.content"></el-input>
+          <el-input style="width: 180px;" class="filter-item" placeholder="工单标题、内容或类型" @keyup.enter.native="searchClick"
+                    v-model="listQuery.search"></el-input>
           <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default {
         ticketid: '',
         create_user: '',
         action_user: '',
-        content: ''
+        search: ''
       },
       workticketlist_btn_add: false,
       workticketlist_btn_change_status: false,
@@ -174,7 +174,7 @@ export default {
       const parms = {
         limit: this.limit,
         offset: this.offset,
-        content__contains: this.listQuery.content,
+        search: this.listQuery.search,
         ticket_status: this.ticket_status,
         ticketid: this.listQuery.ticketid,
         create_user__username: this.listQuery.create_user,
@@ -202,10 +202,12 @@ export default {
     },
     showMeCreate() {
       this.listQuery.create_user = localStorage.getItem('username')
+      this.listQuery.action_user = ''
       this.fetchData()
     },
     showMeAction() {
       this.listQuery.action_user = localStorage.getItem('username')
+      this.listQuery.create_user = ''
       this.fetchData()
     },
     showAllTicket() {
