@@ -71,7 +71,7 @@ def send_mail(to_list, cc_list, sub, header, content=None):
 
 if __name__ == '__main__':
     to_list = sys.argv[1]  # 收件人列表   '111@126.com'
-    cc_list = sys.argv[2].replace(',', ';')  # 抄送人列表   '111@126.com;222@126.com;'
+    cc_list = sys.argv[2]  # 抄送人列表   '111@126.com;222@126.com;'
     sub = sys.argv[3]
     header = sys.argv[4]
     context = sys.argv[5]

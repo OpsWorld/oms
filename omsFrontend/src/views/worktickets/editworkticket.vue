@@ -293,6 +293,7 @@ export default {
               this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
               this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.commentForm.content
             } else {
+              this.rowdata.action_user = this.commentForm.create_user
               this.commentForm.content = '【问题处理】' + this.commentForm.content
             }
             postTicketcomment(this.commentForm).then(response => {
