@@ -280,7 +280,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$confirm('你的操作即将提交，提交完成后会立即调到工单列表页面!', '提示', {
+          this.$confirm('你的操作即将提交，提交完成后会立即跳转到工单列表页面!', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
