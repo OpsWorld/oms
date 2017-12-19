@@ -275,8 +275,8 @@ export default {
       setTimeout(this.EnclosureData, 1000)
     },
     changeComment() {
-      if (this.radio_status === '2') {
-        this.commentForm.content = '关闭原因：'
+      if (this.radio_status !== '0') {
+        this.commentForm.content = '原因：'
       }
       this.showaction = false
     },
@@ -290,7 +290,7 @@ export default {
           }).then(response => {
             this.commentForm.ticket = this.ticket_id
             if (this.radio_status === '1') {
-              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
+              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.commentForm.content
             } else if (this.radio_status === '2') {
               this.rowdata.action_user = this.commentForm.create_user
               this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
