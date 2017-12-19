@@ -37,19 +37,7 @@
               <span class="han">工单操作：</span>
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-              <el-button type="danger" size="small" @click="changeTicketStatus(2)"
-                         v-if="ticketData.ticket_status!=2&&showinput">关闭
-              </el-button>
-              <el-button type="warning" plain size="small" @click="change_action=!change_action"
-                         v-if="ticketData.ticket_status!=2&&showinput">
-                更改指派者
-              </el-button>
-              <div v-if="change_action==true" style="display:inline;">
-                <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
-                  <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                </el-select>
-                <el-button type="primary" plain size="small" @click="changeActionForm">提交</el-button>
-              </div>
+              <el-button type="primary" size="small" @click="showaction=true" v-if="showinput">选择指令</el-button>
             </div>
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
@@ -68,9 +56,7 @@
       </div>
 
       <div v-if="ticketData.ticket_status!=2&&showinput">
-        <el-form :model="commentForm"
-                 :rules="rules" ref="ruleForm"
-                 label-width="80px" class="demo-ruleForm">
+        <el-form :model="commentForm" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
           <el-form-item label="问题处理" prop="content">
             <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
@@ -123,6 +109,31 @@
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
+
+    <el-dialog
+      title="指令"
+      :visible.sync="showaction"
+      width="30%">
+      <div style="margin-left: 20px">
+        <el-radio-group v-model="radio_status">
+          <el-radio label="0">不操作</el-radio>
+          <el-radio label="1">更改指派人</el-radio>
+          <el-radio label="2">关闭工单</el-radio>
+        </el-radio-group>
+        <div v-if="radio_status==1">
+          <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+          <p style="color: red">点提交后生效</p>
+        </div>
+        <div v-if="radio_status==2">
+          <p style="color: red">请在下方输入关闭原因并提交</p>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+    <el-button type="primary" @click="changeComment">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -155,14 +166,13 @@ export default {
       ticketid: this.$route.params.ticketid,
       ticket_id: '',
       ticketData: {},
-      ticket__title: '',
       commentData: {},
       enclosureData: {},
       apiurl: apiUrl,
       commentForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
-        content: '',
+        content: '【问题处理】',
         create_group: ''
       },
       enclosureForm: {
@@ -170,11 +180,6 @@ export default {
         create_user: localStorage.getItem('username'),
         file: '',
         create_group: ''
-      },
-      rules: {
-        content: [
-          { required: true, message: '赏几个字吧', trigger: 'blur' }
-        ]
       },
       rowdata: {
         ticket_status: 1,
@@ -192,11 +197,7 @@ export default {
         fullscreen: true, // 全屏编辑
         help: true
       },
-      img_file: {},
-      formDataList: [],
       users: [],
-      change_action: false,
-      to_list: '',
       BackToTopStyle: {
         right: '50px',
         bottom: '50px',
@@ -214,7 +215,9 @@ export default {
         '2': '已解决'
       },
       showfollower: true,
-      showinput: false
+      showinput: false,
+      showaction: false,
+      radio_status: '0'
     }
   },
 
@@ -268,19 +271,50 @@ export default {
       deleteTicketenclosure(id)
       setTimeout(this.EnclosureData, 1000)
     },
+    changeComment() {
+      if (this.radio_status === '2') {
+        this.commentForm.content = '关闭原因：'
+      }
+      this.showaction = false
+    },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.commentForm.ticket = this.ticket_id
-          postTicketcomment(this.commentForm).then(response => {
+          this.$confirm('你的操作即将提交，提交完成后会立即调到工单列表页面!', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(response => {
+            this.commentForm.ticket = this.ticket_id
+            if (this.radio_status === '1') {
+              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
+            } else if (this.radio_status === '2') {
+              this.rowdata.action_user = this.commentForm.create_user
+              this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
+              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.commentForm.content
+            } else {
+              this.commentForm.content = '【问题处理】' + this.commentForm.content
+            }
+            postTicketcomment(this.commentForm).then(response => {
+              this.patchForm(this.rowdata)
+              if (this.radio_status !== '0') {
+                const mailForm = {
+                  to: this.ticketData.action_user,
+                  cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
+                  sub: '【工单状态变化】' + this.ticketData.title,
+                  header: window.location.href,
+                  content: this.commentForm.content
+                }
+                postSendmail(mailForm)
+              }
+              this.$router.push('/worktickets/workticket')
+            })
+          }).catch(() => {
             this.$message({
-              type: 'success',
-              message: '恭喜你，操作成功'
+              type: 'error',
+              message: '已取消本次操作'
             })
           })
-          this.rowdata.action_user = this.commentForm.create_user
-          this.patchForm(this.rowdata)
-          this.$router.push('/worktickets/workticket')
         } else {
           console.log('error submit!!')
           return false
@@ -290,39 +324,6 @@ export default {
     patchForm(rowdata) {
       patchWorkticket(this.ticket_id, rowdata)
     },
-    changeTicketStatus(status) {
-      this.rowdata.ticket_status = this.ticketData.ticket_status = status
-      this.commentForm.ticket = this.ticket_id
-      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '关闭！'
-      patchWorkticket(this.ticket_id, this.rowdata)
-      postTicketcomment(this.commentForm).then(response => {
-        this.$message({
-          type: 'success',
-          message: '恭喜你，操作成功'
-        })
-      })
-      this.rowdata.action_user = this.commentForm.create_user
-      this.patchForm(this.rowdata)
-      this.$router.push('/worktickets/workticket')
-    },
-    changeActionForm() {
-      patchWorkticket(this.ticket_id, this.rowdata)
-      this.change_action = false
-      this.ticketData.action_user = this.rowdata.action_user
-      this.commentForm.ticket = this.ticket_id
-      this.commentForm.content = '【工单状态变化】，工单被' + this.commentForm.create_user + '重新指派给' + this.ticketData.action_user
-      postTicketcomment(this.commentForm)
-      const mailForm = {
-        to: this.ticketData.action_user,
-        cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
-        sub: '【工单变化】' + this.ticketData.title + '#指派人被改变#',
-        header: window.location.href,
-        content: this.commentForm.content
-      }
-      postSendmail(mailForm)
-      setTimeout(this.CommentData, 1000)
-    },
-
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
@@ -441,6 +442,5 @@ export default {
         }
       }
     }
-
   }
 </style>
