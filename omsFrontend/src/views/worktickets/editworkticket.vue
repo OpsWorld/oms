@@ -43,6 +43,24 @@
           <vue-markdown :source="ticketData.content"></vue-markdown>
           <hr class="heng"/>
 
+          <div v-if="showinput">
+            <el-upload
+              class="upload"
+              ref="upload"
+              :action="uploadurl"
+              :on-success="handleSuccess"
+              :show-file-list="false"
+              :disabled="count>2?true:false">
+              <el-button slot="trigger" size="mini" type="danger" plain icon="upload2" :disabled="count>2?true:false">
+                上传附件
+              </el-button>
+              <div slot="tip" class="el-upload__tip">
+                <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
+              </div>
+            </el-upload>
+            <hr class="heng"/>
+          </div>
+
           <div v-if='enclosureData.length>0' class="ticketenclosure">
             <ul>
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
@@ -63,21 +81,6 @@
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
           </el-form-item>
 
-          <hr class="heng"/>
-          <el-upload
-            class="upload-demo"
-            ref="upload"
-            :action="uploadurl"
-            :on-success="handleSuccess"
-            :show-file-list="false"
-            :disabled="count>2?true:false">
-            <el-button slot="trigger" size="mini" type="danger" plain icon="upload2" :disabled="count>2?true:false">
-              上传文件
-            </el-button>
-            <div slot="tip" class="el-upload__tip">
-              <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
-            </div>
-          </el-upload>
           <hr class="heng"/>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         </el-form>
@@ -328,11 +331,11 @@ export default {
     handleSuccess(file, fileList) {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
-      formData.append('file', fileList)
+      formData.append('file', fileList.raw)
       formData.append('create_time', getTime(fileList.uid))
-      formData.append('type', fileList.type)
+      formData.append('type', fileList.raw.type)
       formData.append('archive', this.route_path[1])
-      postUpload(fileList).then(response => {
+      postUpload(formData).then(response => {
         this.enclosureForm.file = response.data.filepath
         this.enclosureForm.ticket = this.ticket_id
         postTicketenclosure(this.enclosureForm)
