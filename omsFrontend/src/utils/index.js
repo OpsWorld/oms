@@ -271,3 +271,33 @@ export function getVersion(name) {
   const p = require('../../package')
   return p.dependencies[name]
 }
+
+// get sendmail time
+export function getCreatetime() {
+  const date = new Date()
+  const Y = date.getFullYear().toString()
+  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+  const D = date.getDate()
+  const h = date.getHours()
+  const m = date.getMinutes()
+  const s = date.getSeconds()
+  const ctime = Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s
+  return ctime
+}
+
+export function getConversionTime(datetime) {
+  let date
+  if (datetime) {
+    date = new Date(datetime)
+  } else {
+    date = new Date()
+  }
+  const Y = date.getFullYear().toString()
+  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+  const D = date.getDate()
+  const h = date.getHours()
+  const m = date.getMinutes()
+  const s = date.getSeconds()
+  const ctime = Y + M + D + h + m + s
+  return ctime
+}

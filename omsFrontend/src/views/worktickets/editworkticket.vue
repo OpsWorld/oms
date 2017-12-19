@@ -77,7 +77,7 @@
         <el-form :model="commentForm" ref="ruleForm" label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
           <el-form-item label="问题处理" prop="content">
-            <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
+            <mavon-editor style="z-index: 1" v-model="mailcontent" code_style="monokai" :toolbars="toolbars"
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
           </el-form-item>
 
@@ -156,7 +156,7 @@ import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
-import getTime from '@/utils/conversionTime'
+import { getCreatetime, getConversionTime } from '@/utils'
 
 export default {
   components: {
@@ -220,7 +220,9 @@ export default {
       showfollower: true,
       showinput: false,
       showaction: false,
-      radio_status: '0'
+      radio_status: '0',
+      mailmsg: '',
+      mailcontent: ''
     }
   },
 
@@ -275,9 +277,6 @@ export default {
       setTimeout(this.EnclosureData, 1000)
     },
     changeComment() {
-      if (this.radio_status !== '0') {
-        this.commentForm.content = '原因：'
-      }
       this.showaction = false
     },
     submitForm(formName) {
@@ -290,19 +289,21 @@ export default {
           }).then(response => {
             this.commentForm.ticket = this.ticket_id
             if (this.radio_status === '1') {
-              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.commentForm.content
+              this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
+              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
             } else if (this.radio_status === '2') {
               this.rowdata.action_user = this.commentForm.create_user
               this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
-              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.commentForm.content
+              this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！'
+              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
             } else {
               this.rowdata.action_user = this.commentForm.create_user
-              this.commentForm.content = '【问题处理】' + this.commentForm.content
+              this.commentForm.content = '【问题处理】' + this.mailcontent
             }
             postTicketcomment(this.commentForm).then(response => {
               this.patchForm(this.rowdata)
               if (this.radio_status !== '0') {
-                const create_time = new Date()
+                const create_time = getCreatetime()
                 const mailForm = {
                   to: this.ticketData.action_user,
                   cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
@@ -315,7 +316,8 @@ export default {
                     <p>工单提交时间：${create_time} </p>
                     <p>点击工单地址: <a href='${window.location.href}'>${window.location.href}</a></p>
                     <p>工单详细内容：</p>
-                    <p>${this.commentForm.content}</p>
+                    <p>${this.mailmsg}</p>
+                    <p>【工单处理内容】${this.mailcontent}</p>
                     </div></body></html>`
                 }
                 postSendmail(mailForm)
@@ -341,7 +343,7 @@ export default {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', fileList.raw)
-      formData.append('create_time', getTime(fileList.uid))
+      formData.append('create_time', getConversionTime(fileList.uid))
       formData.append('type', fileList.raw.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
@@ -366,7 +368,7 @@ export default {
       const formData = new FormData()
       formData.append('username', this.username)
       formData.append('file', file)
-      formData.append('create_time', getTime(file.lastModified))
+      formData.append('create_time', getConversionTime(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {

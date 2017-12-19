@@ -67,7 +67,7 @@ import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
-import getTime from '@/utils/conversionTime'
+import { getCreatetime, getConversionTime } from '@/utils'
 
 export default {
   components: {},
@@ -143,7 +143,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.ticketid = getTime()
+          this.ruleForm.ticketid = getConversionTime()
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
@@ -155,7 +155,7 @@ export default {
               const formData = new FormData()
               formData.append('username', this.enclosureForm.create_user)
               formData.append('file', fileList)
-              formData.append('create_time', getTime(fileList.uid))
+              formData.append('create_time', getConversionTime(fileList.uid))
               formData.append('type', fileList.type)
               formData.append('archive', this.route_path[1])
               postUpload(formData).then(res => {
@@ -164,7 +164,7 @@ export default {
                 postTicketenclosure(this.enclosureForm)
               })
             }
-            const create_time = new Date()
+            const create_time = getCreatetime()
             const mailForm = {
               to: this.ruleForm.action_user,
               cc: this.ruleForm.follower.join(),
@@ -218,7 +218,7 @@ export default {
       const formData = new FormData()
       formData.append('username', this.enclosureForm.create_user)
       formData.append('file', file)
-      formData.append('create_time', getTime(file.lastModified))
+      formData.append('create_time', getConversionTime(file.lastModified))
       formData.append('type', file.type)
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
