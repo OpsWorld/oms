@@ -32,7 +32,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="limit"
+          :page-size="listQuery.limit"
           layout="prev, pager, next, sizes"
           :total="tabletotal">
         </el-pagination>
@@ -61,6 +61,11 @@ export default {
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
+      listQuery: {
+        limit: LIMIT,
+        offset: '',
+        name__contains: this.searchdata
+      },
       limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
@@ -76,12 +81,7 @@ export default {
 
   methods: {
     fetchData() {
-      const parms = {
-        limit: this.limit,
-        offset: this.offset,
-        name__contains: this.searchdata
-      }
-      getPlatform(parms).then(response => {
+      getPlatform(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -135,11 +135,11 @@ export default {
       this.fetchData()
     },
     handleSizeChange(val) {
-      this.limit = val
+      this.listQuery.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = val - 1
+      this.listQuery.offset = (val - 1) * this.listQuery.limit
       this.fetchData()
     }
   }

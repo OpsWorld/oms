@@ -66,7 +66,12 @@ export default {
       pagesize: [10, 25, 50, 100],
       addForm: false,
       editForm: false,
-      rowdata: {}
+      rowdata: {},
+      listQuery: {
+        limit: LIMIT,
+        offset: '',
+        name__contains: this.searchdata
+      }
     }
   },
 
@@ -76,12 +81,7 @@ export default {
 
   methods: {
     fetchData() {
-      const parms = {
-        limit: this.limit,
-        offset: this.offset,
-        name__contains: this.searchdata
-      }
-      getPayChannel(parms).then(response => {
+      getPayChannel(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -135,11 +135,11 @@ export default {
       this.fetchData()
     },
     handleSizeChange(val) {
-      this.limit = val
+      this.listQuery.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = val - 1
+      this.listQuery.offset = (val - 1) * this.listQuery.limit
       this.fetchData()
     }
   }

@@ -132,7 +132,6 @@ export default {
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * this.listQuery.limit
-      console.log(this.listQuery.offset)
       this.fetchData()
     },
     deleteForm() {
