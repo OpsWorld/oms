@@ -145,6 +145,7 @@ class ThreePayTicket(models.Model):
 
 class Platform(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'平台名称')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'平台描述')
 
     def __str__(self):
         return self.name

@@ -106,7 +106,7 @@
 <script>
 import { getWorkticket, patchWorkticket } from 'api/workticket'
 import { LIMIT } from '@/config'
-import addWorkticket from './addworkticket.vue'
+import addWorkticket from './components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
 export default {

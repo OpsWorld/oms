@@ -70,7 +70,7 @@ class ThreePayTicketSerializer(serializers.ModelSerializer):
 class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
-        fields = ('url', 'id', 'name')
+        fields = ('url', 'id', 'name', 'desc')
 
 
 class MerchantSerializer(serializers.ModelSerializer):

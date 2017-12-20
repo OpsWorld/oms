@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建工单类型</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
         </div>
         <div class="table-search">
           <el-input
@@ -17,7 +17,15 @@
       <div>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
-          <el-table-column prop='desc' label='描述'></el-table-column>
+          <el-table-column prop='m_backurl' label='回调域名'></el-table-column>
+          <el-table-column prop='m_id' label='商户id'></el-table-column>
+          <el-table-column prop='m_channel' label='开通通道'></el-table-column>
+          <el-table-column prop='m_md5key' label='MD5KEY'></el-table-column>
+          <el-table-column prop='m_public_key' label='公钥'></el-table-column>
+          <el-table-column prop='m_private_key' label='私钥'></el-table-column>
+          <el-table-column prop='p_public_key' label='平台公钥'></el-table-column>
+          <el-table-column prop='platform' label='依附平台'></el-table-column>
+          <el-table-column prop='three' label='业务经理'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
@@ -48,10 +56,9 @@
 </template>
 
 <script>
-import { getTickettype, postTickettype, putTickettype, deleteTickettype } from 'api/workticket'
+import { getMerchant, postPlatform, putPlatform, deletePlatform } from 'api/threeticket'
 import { LIMIT } from '@/config'
 import addGroup from '../components/addgroup.vue'
-// import editGroup from './edittickettype.vue'
 import editGroup from '../components/editgroup.vue'
 
 export default {
@@ -76,28 +83,19 @@ export default {
   },
 
   methods: {
-    /*
-       * 获取数据
-       */
     fetchData() {
-      const tick_id = ''
       const parms = {
         limit: this.limit,
         offset: this.offset,
         name__contains: this.searchdata
       }
-      getTickettype(tick_id, parms).then(response => {
-        this.tableData = response.data
-        this.tabletotal = response.data.length
+      getMerchant(parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
       })
     },
-    getDialogStatus(data) {
-      this.editForm = data
-      this.addForm = data
-      setTimeout(this.fetchData, 1000)
-    },
     addGroupSubmit(formdata) {
-      postTickettype(formdata).then(response => {
+      postPlatform(formdata).then(response => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
@@ -110,7 +108,7 @@ export default {
       })
     },
     editGroupSubmit(formdata) {
-      putTickettype(this.rowdata.id, formdata).then(response => {
+      putPlatform(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
@@ -123,7 +121,7 @@ export default {
       })
     },
     deleteGroup(id) {
-      deleteTickettype(id).then(response => {
+      deletePlatform(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'

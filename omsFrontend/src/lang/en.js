@@ -18,7 +18,7 @@ export default {
     menuperm: 'menuperm',
     deployManager: 'deployManager',
     platform: 'Platform',
-    errorPages: 'Error Pages',
+    merchant: 'Merchant',
     page401: '401',
     page404: '404',
     errorLog: 'Error Log',

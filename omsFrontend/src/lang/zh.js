@@ -18,7 +18,7 @@ export default {
     menuperm: '菜单权限',
     deployManager: '发布管理',
     platform: '第三支付平台',
-    errorPages: '错误页面',
+    merchant: '第三支付商户',
     page401: '401',
     page404: '404',
     errorLog: '错误日志',
