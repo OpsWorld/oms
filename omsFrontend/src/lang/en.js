@@ -19,7 +19,7 @@ export default {
     deployManager: 'deployManager',
     platform: 'Platform',
     merchant: 'Merchant',
-    page401: '401',
+    paychannel: 'Paychannel',
     page404: '404',
     errorLog: 'Error Log',
     clipboard: 'Clipboard',

@@ -2,7 +2,7 @@
 # author: kiven
 
 from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
-from worktickets.models import Platform, Merchant, PlatformEnclosure, ThreePayTicket
+from worktickets.models import Platform, Merchant, PlatformEnclosure, ThreePayTicket,PayChannel
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -73,8 +73,15 @@ class PlatformSerializer(serializers.ModelSerializer):
         fields = ('url', 'id', 'name', 'desc')
 
 
+class PayChannelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PayChannel
+        fields = ('url', 'id', 'name', 'desc')
+
+
 class MerchantSerializer(serializers.ModelSerializer):
-    platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='username')
+    platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')
+    m_channel = serializers.SlugRelatedField(many=True, queryset=PayChannel.objects.all(), slug_field='name')
 
     class Meta:
         model = Merchant

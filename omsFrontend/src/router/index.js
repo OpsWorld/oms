@@ -73,7 +73,8 @@ export const asyncRouterMap = [
       { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: 'addworkticket', authority: '添加工单' },
       { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: 'editworkticket', authority: '编辑工单' },
       { path: 'platform', component: _import('worktickets/platform'), name: 'platform', authority: '第三支付平台' },
-      { path: 'merchant', component: _import('worktickets/merchant'), name: 'merchant', authority: '第三支付商户' }
+      { path: 'merchant', component: _import('worktickets/merchant'), name: 'merchant', authority: '第三支付商户' },
+      { path: 'paychannel', component: _import('worktickets/paychannel'), name: 'paychannel', authority: '第三支付通道' }
     ]
   },
   {

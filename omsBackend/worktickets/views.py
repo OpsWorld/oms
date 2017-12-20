@@ -10,14 +10,16 @@ from worktickets.serializers import (WorkTicketSerializer,
                                      TicketWikiSerializer)
 from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
 
-from worktickets.models import Platform, Merchant, PlatformEnclosure, ThreePayTicket
+from worktickets.models import Platform, Merchant, PlatformEnclosure, ThreePayTicket, PayChannel
 from worktickets.serializers import (PlatformSerializer,
                                      MerchantSerializer,
+                                     PayChannelSerializer,
                                      PlatformEnclosureSerializer,
                                      ThreePayTicketSerializer)
 from worktickets.filters import WorkTicketFilter, TicketCommentFilter, TicketEnclosureFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
@@ -61,6 +63,11 @@ class ThreePayTicketViewSet(viewsets.ModelViewSet):
 class PlatformViewSet(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
+
+
+class PayChannelViewSet(viewsets.ModelViewSet):
+    queryset = PayChannel.objects.all()
+    serializer_class = PayChannelSerializer
 
 
 class MerchantViewSet(viewsets.ModelViewSet):

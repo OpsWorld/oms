@@ -67,6 +67,7 @@ module.exports = {
   merchants: `${url}/api/merchants/`,
   platformenclosures: `${url}/api/platformenclosures/`,
   threepaytickets: `${url}/api/threepaytickets/`,
+  paychannels: `${url}/api/paychannels/`,
 
   // 权限
   usermenuperms: `${url}/api/usermenuperms/`,

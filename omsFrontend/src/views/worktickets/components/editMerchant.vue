@@ -1,62 +1,50 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+  <el-form :model="rowdata" :rules="rules" ref="ruleForm" label-width="100px">
     <el-form-item label="platform" prop="platform">
-      <el-select v-model="ruleForm.platform" placeholder="请选择平台">
+      <el-select v-model="rowdata.platform" placeholder="请选择平台">
         <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
-      <el-input v-model="ruleForm.name"></el-input>
+      <el-input v-model="rowdata.name"></el-input>
     </el-form-item>
     <el-form-item label="回调域名" prop="m_backurl">
-      <el-input v-model="ruleForm.m_backurl"></el-input>
+      <el-input v-model="rowdata.m_backurl"></el-input>
     </el-form-item>
     <el-form-item label="商户id" prop="m_id">
-      <el-input v-model="ruleForm.m_id"></el-input>
+      <el-input v-model="rowdata.m_id"></el-input>
     </el-form-item>
     <el-form-item label="开通通道" prop="m_channel">
-      <el-checkbox-group v-model="ruleForm.m_channel">
+      <el-checkbox-group v-model="rowdata.m_channel">
         <el-checkbox v-for="item in paychannels" :key="item.id" :label="item.name"></el-checkbox>
       </el-checkbox-group>
     </el-form-item>
     <el-form-item label="MD5KEY" prop="m_md5key">
-      <el-input v-model="ruleForm.m_md5key"></el-input>
+      <el-input v-model="rowdata.m_md5key"></el-input>
     </el-form-item>
     <el-form-item label="商户公钥" prop="m_public_key">
-      <el-input v-model="ruleForm.m_public_key"></el-input>
+      <el-input v-model="rowdata.m_public_key"></el-input>
     </el-form-item>
     <el-form-item label="商户私钥" prop="m_private_key">
-      <el-input v-model="ruleForm.m_private_key"></el-input>
+      <el-input v-model="rowdata.m_private_key"></el-input>
     </el-form-item>
     <el-form-item label="平台公钥" prop="p_public_key">
-      <el-input v-model="ruleForm.p_public_key"></el-input>
+      <el-input v-model="rowdata.p_public_key"></el-input>
     </el-form-item>
     <el-form-item label="业务经理" prop="three">
-      <el-input v-model="ruleForm.three"></el-input>
+      <el-input v-model="rowdata.three"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-      <el-button @click="resetForm('ruleForm')">重置</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
 import { getPlatform, getPayChannel } from 'api/threeticket'
 export default {
+  props: ['rowdata'],
   data() {
     return {
-      ruleForm: {
-        platform: '',
-        name: '',
-        m_backurl: '',
-        m_id: '',
-        m_channel: [],
-        m_md5key: '',
-        m_public_key: '',
-        m_private_key: '',
-        p_public_key: '',
-        three: ''
-      },
       rules: {
         platform: [
           { required: true, message: '请选择一个平台', trigger: 'change' }
@@ -98,7 +86,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
+          this.$emit('formdata', this.rowdata)
           this.ruleForm = {
             platform: '',
             name: '',

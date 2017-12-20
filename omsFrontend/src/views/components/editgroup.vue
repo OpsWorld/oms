@@ -7,7 +7,7 @@
       <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 10, maxRows: 30}"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
     </el-form-item>
   </el-form>
 </template>

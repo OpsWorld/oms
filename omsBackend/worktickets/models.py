@@ -72,7 +72,7 @@ class TicketEnclosure(models.Model):
 
 class TicketType(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name=u'工单类型')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'工单描述')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     class Meta:
         verbose_name = u'工单类型'
@@ -144,8 +144,8 @@ class ThreePayTicket(models.Model):
 
 
 class Platform(models.Model):
-    name = models.CharField(max_length=100, blank=True, verbose_name=u'平台名称')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'平台描述')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'平台名称')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
@@ -157,10 +157,10 @@ class Platform(models.Model):
 
 class Merchant(models.Model):
     platform = models.ForeignKey(Platform, verbose_name=u'依附平台')
-    name = models.CharField(max_length=100, blank=True, verbose_name=u'商户名称')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'商户名称')
     m_backurl = models.CharField(max_length=100, blank=True, verbose_name=u'商户回调域名')
     m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户id')
-    m_channel = models.CharField(max_length=100, blank=True, verbose_name=u'商户开通通道')
+    m_channel = models.ManyToManyField('PayChannel', blank=True, verbose_name=u'商户开通通道')
     m_md5key = models.CharField(max_length=100, blank=True, verbose_name=u'商户MD5KEY')
     m_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户公钥')
     m_private_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户私钥')
@@ -173,6 +173,17 @@ class Merchant(models.Model):
     class Meta:
         verbose_name = u'商户'
         verbose_name_plural = u'商户'
+
+class PayChannel(models.Model):
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'通道名称')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'支付通道'
+        verbose_name_plural = u'支付通道'
 
 
 class PlatformEnclosure(models.Model):

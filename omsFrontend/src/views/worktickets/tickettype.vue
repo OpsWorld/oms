@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建工单类型</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
         </div>
         <div class="table-search">
           <el-input
@@ -41,7 +41,7 @@
     <el-dialog :visible.sync="addForm">
       <add-group @formdata="addGroupSubmit"></add-group>
     </el-dialog>
-    <el-dialog :visible.sync="editForm">
+    <el-dialog :visible.sync="editForm" @close="closeEditForm">
       <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
     </el-dialog>
   </div>
@@ -51,7 +51,6 @@
 import { getTickettype, postTickettype, putTickettype, deleteTickettype } from 'api/workticket'
 import { LIMIT } from '@/config'
 import addGroup from '../components/addgroup.vue'
-// import editGroup from './edittickettype.vue'
 import editGroup from '../components/editgroup.vue'
 
 export default {
@@ -91,11 +90,6 @@ export default {
         this.tabletotal = response.data.length
       })
     },
-    getDialogStatus(data) {
-      this.editForm = data
-      this.addForm = data
-      setTimeout(this.fetchData, 1000)
-    },
     addGroupSubmit(formdata) {
       postTickettype(formdata).then(response => {
         this.$message({
@@ -133,6 +127,9 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
+    },
+    closeEditForm() {
+      this.fetchData()
     },
     handleEdit(row) {
       this.editForm = true

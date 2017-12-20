@@ -19,7 +19,7 @@ export default {
     deployManager: '发布管理',
     platform: '第三支付平台',
     merchant: '第三支付商户',
-    page401: '401',
+    paychannel: '第三支付通道',
     page404: '404',
     errorLog: '错误日志',
     i18n: '国际化',

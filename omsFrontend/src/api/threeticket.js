@@ -128,3 +128,35 @@ export function deleteThreepayTicket(id) {
     method: 'delete'
   })
 }
+
+// paychannels
+export function postPayChannel(data) {
+  return request({
+    url: apiURL.paychannels,
+    method: 'post',
+    data
+  })
+}
+
+export function getPayChannel(query) {
+  return request({
+    url: apiURL.paychannels,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putPayChannel(id, data) {
+  return request({
+    url: apiURL.paychannels + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deletePayChannel(id) {
+  return request({
+    url: apiURL.paychannels + id + '/',
+    method: 'delete'
+  })
+}

@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getPlatform, postPlatform, putPlatform, deletePlatform } from 'api/threeticket'
+import { getPayChannel, postPayChannel, putPayChannel, deletePayChannel } from 'api/threeticket'
 import { LIMIT } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import editGroup from '../components/editgroup.vue'
@@ -81,13 +81,13 @@ export default {
         offset: this.offset,
         name__contains: this.searchdata
       }
-      getPlatform(parms).then(response => {
+      getPayChannel(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
     addGroupSubmit(formdata) {
-      postPlatform(formdata).then(response => {
+      postPayChannel(formdata).then(response => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
@@ -100,7 +100,7 @@ export default {
       })
     },
     editGroupSubmit(formdata) {
-      putPlatform(this.rowdata.id, formdata).then(response => {
+      putPayChannel(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
@@ -113,7 +113,7 @@ export default {
       })
     },
     deleteGroup(id) {
-      deletePlatform(id).then(response => {
+      deletePayChannel(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
