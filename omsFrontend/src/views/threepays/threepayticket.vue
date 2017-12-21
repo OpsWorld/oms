@@ -82,9 +82,9 @@
 </template>
 
 <script>
-import { getWorkticket } from 'api/workticket'
+import { getThreepayTicket } from '@/api/threeticket'
 import { LIMIT } from '@/config'
-import addWorkticket from './components/addworkticket.vue'
+import addWorkticket from '../worktickets/components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -150,7 +150,7 @@ export default {
         create_user__username: this.listQuery.create_user,
         action_user__username: this.listQuery.action_user
       }
-      getWorkticket(parms).then(response => {
+      getThreepayTicket(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })

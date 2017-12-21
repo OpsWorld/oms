@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getPlatform, postPlatform, putPlatform, deletePlatform } from 'api/threeticket'
+import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { LIMIT } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import editGroup from '../components/editgroup.vue'
@@ -71,6 +71,8 @@ export default {
       pagesize: [10, 25, 50, 100],
       addForm: false,
       editForm: false,
+      viewForm: false,
+      groupName: '',
       rowdata: {}
     }
   },

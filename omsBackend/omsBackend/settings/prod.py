@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'menus',
     'perms',
     'cmd',
+    'threepay',
 ]
 
 DATABASES = {

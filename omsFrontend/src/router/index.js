@@ -71,10 +71,20 @@ export const asyncRouterMap = [
       { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: '工单列表' },
       { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: '工单类型' },
       { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: 'addworkticket', authority: '添加工单' },
-      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: 'editworkticket', authority: '编辑工单' },
-      { path: 'platform', component: _import('worktickets/platform'), name: 'platform', authority: '第三支付平台' },
-      { path: 'merchant', component: _import('worktickets/merchant'), name: 'merchant', authority: '第三支付商户' },
-      { path: 'paychannel', component: _import('worktickets/paychannel'), name: 'paychannel', authority: '第三支付通道' }
+      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: 'editworkticket', authority: '编辑工单' }
+    ]
+  },
+  {
+    name: 'threepayManager',
+    path: '/threepays',
+    component: Layout,
+    icon: 'strikethrough',
+    redirect: 'threepay',
+    authority: '第三支付对接',
+    children: [
+      { path: 'platform', component: _import('threepays/platform'), name: 'platform', authority: '第三支付平台' },
+      { path: 'merchant', component: _import('threepays/merchant'), name: 'merchant', authority: '第三支付商户' },
+      { path: 'paychannel', component: _import('threepays/paychannel'), name: 'paychannel', authority: '第三支付通道' }
     ]
   },
   {

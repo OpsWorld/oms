@@ -17,6 +17,7 @@ export default {
     menulist: '菜单列表',
     menuperm: '菜单权限',
     deployManager: '发布管理',
+    threepayManager: '第三支付对接',
     platform: '第三支付平台',
     merchant: '第三支付商户',
     paychannel: '第三支付通道',

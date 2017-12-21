@@ -280,35 +280,33 @@ export default {
       this.showaction = false
     },
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$confirm('你的操作即将提交，提交完成后会立即跳转到工单列表页面!', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(response => {
-            this.commentForm.ticket = this.ticket_id
-            if (this.radio_status === '1') {
-              this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
-              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
-            } else if (this.radio_status === '2') {
-              this.rowdata.action_user = this.commentForm.create_user
-              this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
-              this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！'
-              this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
-            } else {
-              this.rowdata.action_user = this.commentForm.create_user
-              this.commentForm.content = '【问题处理】' + this.mailcontent
-            }
-            postTicketcomment(this.commentForm).then(response => {
-              this.patchForm(this.rowdata)
-              if (this.radio_status !== '0') {
-                const create_time = getCreatetime()
-                const mailForm = {
-                  to: this.ticketData.action_user,
-                  cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
-                  sub: '【工单状态变化】' + this.ticketData.title,
-                  content: `
+      this.$confirm('你的操作即将提交，提交完成后会立即跳转到工单列表页面!', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(response => {
+        this.commentForm.ticket = this.ticket_id
+        if (this.radio_status === '1') {
+          this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
+          this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
+        } else if (this.radio_status === '2') {
+          this.rowdata.action_user = this.commentForm.create_user
+          this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
+          this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！'
+          this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
+        } else {
+          this.rowdata.action_user = this.commentForm.create_user
+          this.commentForm.content = '【问题处理】' + this.mailcontent
+        }
+        postTicketcomment(this.commentForm).then(response => {
+          this.patchForm(this.rowdata)
+          if (this.radio_status !== '0') {
+            const create_time = getCreatetime()
+            const mailForm = {
+              to: this.ticketData.action_user,
+              cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
+              sub: '【工单状态变化】' + this.ticketData.title,
+              content: `
                     <html xmlns="http://www.w3.org/1999/xhtml">
                     <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>工单通知邮件</title></head>
                     <body><div id="container">
@@ -319,21 +317,16 @@ export default {
                     <p>${this.mailmsg}</p>
                     <p>【工单处理内容】${this.mailcontent}</p>
                     </div></body></html>`
-                }
-                postSendmail(mailForm)
-              }
-              this.$router.push('/worktickets/workticket')
-            })
-          }).catch(() => {
-            this.$message({
-              type: 'error',
-              message: '已取消本次操作'
-            })
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+            }
+            postSendmail(mailForm)
+          }
+          this.$router.push('/worktickets/workticket')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '已取消本次操作'
+        })
       })
     },
     patchForm(rowdata) {
