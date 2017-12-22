@@ -17,15 +17,6 @@
           </el-select>
           <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
         </el-form-item>
-        <el-form-item label="工单等级" prop="level">
-          <el-rate
-            v-model="ruleForm.level"
-            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-            show-text
-            :texts="['E', 'D', 'C', 'B', 'A']">
-          </el-rate>
-          <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
-        </el-form-item>
         <el-form-item label="平台" prop="platform">
           <el-select v-model="ruleForm.platform" filterable placeholder="请选择平台" @change="showaddmerchant=true">
             <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
@@ -35,11 +26,12 @@
         </el-form-item>
         <el-form-item v-if="showmercant" label="商户列表">
           <el-tag
+            style="margin-right: 5px"
             :key="tag.id"
             v-for="tag in dynamicMerchants"
             closable
             @close="handleClose(tag)">
-            <el-button type="text" size="mini" @click="selectMerchant(tag.name)">{{tag.name}}</el-button>
+            <el-button type="text" size="mini" @click="selectMerchant(tag)">{{tag.name}}</el-button>
           </el-tag>
           <a class="tips"> Tip：点击商户，增加支付通道明细</a>
         </el-form-item>
@@ -49,9 +41,54 @@
             </el-button>
             <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column property="date" label="日期" width="120"></el-table-column>
-              <el-table-column property="name" label="姓名" width="120"></el-table-column>
-              <el-table-column property="address" label="地址"></el-table-column>
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="left" inline class="table-expand">
+                    <el-form-item label="紧急度">
+                      <el-rate
+                        v-model="props.row.level"
+                        :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                        show-text
+                        :texts="['E', 'D', 'C', 'B', 'A']"
+                        :disabled="!editChannelForm">
+                      </el-rate>
+                    </el-form-item>
+                    <el-form-item label="MD5KEY">
+                      <el-input size="small" v-model="props.row.m_md5key" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商户公钥">
+                      <el-input size="small" v-model="props.row.m_public_key" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="商户私钥">
+                      <el-input size="small" v-model="props.row.m_private_key" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="平台公钥">
+                      <el-input size="small" v-model="props.row.p_public_key" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="转发域名">
+                      <el-input size="small" v-model="props.row.m_forwardurl" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="提交域名">
+                      <el-input size="small" v-model="props.row.m_submiturl" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                    <el-form-item label="回调域名">
+                      <el-input size="small" v-model="props.row.m_backurl" :disabled="!editChannelForm"></el-input>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
+              <el-table-column prop='level' label='紧急度'></el-table-column>
+              <el-table-column prop='merchant' label='依附商户'>reww</el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button v-if="!editChannelForm" @click="editChannelForm=true" type="success" size="small">修改
+                  </el-button>
+                  <el-button v-if="editChannelForm" @click="editChannelForm=false" type="primary" size="small">保存
+                  </el-button>
+                  <el-button @click="deleteChannel(scope.row)" type="danger" size="small">删除</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </el-card>
         </el-form-item>
@@ -80,20 +117,32 @@
     <el-dialog :visible.sync="addMerchantForm">
       <add-merchant :rowdata="ruleForm.platform" @formdata="addMerchantTag"></add-merchant>
     </el-dialog>
+
+    <el-dialog :visible.sync="addChannelForm">
+      <add-channel :rowdata="merchant" @formdata="addChannelTable"></add-channel>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { postThreepayTicket, postThreePayEnclosure, getPlatform } from 'api/threeticket'
+import {
+  postThreepayTicket,
+  postThreePayEnclosure,
+  getPlatform,
+  deleteMerchant,
+  deletePayChannel
+} from 'api/threeticket'
 import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
 import { getCreatetime, getConversionTime } from '@/utils'
 import addMerchant from './addMerchant.vue'
+import addChannel from './addPaychannel.vue'
 
 export default {
   components: {
-    addMerchant
+    addMerchant,
+    addChannel
   },
 
   data() {
@@ -102,7 +151,6 @@ export default {
       ruleForm: {
         title: '',
         create_user: localStorage.getItem('username'),
-        level: 2,
         action_user: 'itsupport',
         follower: '',
         create_group: '',
@@ -112,9 +160,6 @@ export default {
       rules: {
         title: [
           { required: true, message: '请输入工单标题', trigger: 'blur' }
-        ],
-        level: [
-          { required: true, type: 'number', message: '请确认工单等级', trigger: 'blur' }
         ]
       },
       users: [],
@@ -136,6 +181,7 @@ export default {
       showchannel: false,
       addMerchantForm: false,
       addChannelForm: false,
+      editChannelForm: false,
       showmercant: false,
       dynamicMerchants: [],
       dynamicChannels: [],
@@ -230,18 +276,54 @@ export default {
       this.showmercant = true
     },
     handleClose(tag) {
-      this.dynamicMerchants.splice(this.dynamicMerchants.indexOf(tag), 1)
-      if (this.dynamicMerchants.length < 1) {
-        this.showmercant = false
-        this.showchannels = false
-      }
+      this.$confirm('你确定要删除这个, 是否继续?', '特朗普提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteMerchant(tag.id)
+        this.dynamicMerchants.splice(this.dynamicMerchants.indexOf(tag), 1)
+        if (this.dynamicMerchants.length < 1) {
+          this.showmercant = false
+          this.showchannels = false
+        }
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    selectMerchant(name) {
+    selectMerchant(merchant) {
       this.showchannels = true
-      this.merchant = name
+      this.merchant = merchant
     },
-    selectChannel(name) {
-      this.showchannel = true
+    addChannelTable(data) {
+      this.addChannelForm = false
+      this.dynamicChannels.push(data)
+    },
+    deleteChannel(row) {
+      this.$confirm('你确定要删除这个, 是否继续?', '特朗普提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePayChannel(row.id)
+        this.dynamicChannels.remove(row)
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
@@ -263,5 +345,18 @@ export default {
 
   .tips {
     color: rgba(128, 128, 128, 0.82);
+  }
+
+  .table-expand {
+    font-size: 0;
+    label {
+      width: 90px;
+      color: #99a9bf;
+    }
+    .el-form-item {
+      margin-right: 0;
+      margin-bottom: 0;
+      width: 50%;
+    }
   }
 </style>

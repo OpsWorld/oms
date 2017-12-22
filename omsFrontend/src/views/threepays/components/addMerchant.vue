@@ -24,7 +24,7 @@
   </el-form>
 </template>
 <script>
-import { getPlatform } from '@/api/threeticket'
+import { getPlatform, postMerchant } from '@/api/threeticket'
 export default {
   props: ['rowdata'],
   data() {
@@ -59,13 +59,10 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          //          this.ruleForm = {
-          //            platform: '',
-          //            name: '',
-          //            m_id: '',
-          //            three: ''
-          //          }
+          postMerchant(this.ruleForm).then(response => {
+            this.$emit('formdata', response.data)
+            this.$refs[formName].resetFields()
+          })
         } else {
           console.log('error submit!!')
           return false

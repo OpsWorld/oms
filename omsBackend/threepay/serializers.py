@@ -37,7 +37,7 @@ class PayChannelNameSerializer(serializers.ModelSerializer):
 
 
 class PayChannelSerializer(serializers.ModelSerializer):
-    merchant = serializers.SlugRelatedField(queryset=Merchant.objects.all(), slug_field='name')
+    # merchant = serializers.SlugRelatedField(queryset=Merchant.objects.all(), slug_field='name')
     name = serializers.SlugRelatedField(queryset=PayChannelName.objects.all(), slug_field='name')
 
     class Meta:

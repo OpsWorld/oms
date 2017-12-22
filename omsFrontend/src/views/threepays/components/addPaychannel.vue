@@ -1,12 +1,12 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-    <el-form-item label="商户" prop="merchant">
-      <el-select v-model="ruleForm.merchant" placeholder="请选择商户">
-        <el-option v-for="item in merchants" :key="item.id" :value="item.name"></el-option>
-      </el-select>
+    <el-form-item label="商户" prop="platform">
+      <el-input v-model="rowdata.name" disabled></el-input>
     </el-form-item>
     <el-form-item label="名称" prop="name">
-      <el-input v-model="ruleForm.name"></el-input>
+      <el-select v-model="ruleForm.name" filterable placeholder="请选择通道名">
+        <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="MD5KEY" prop="m_md5key">
       <el-input v-model="ruleForm.m_md5key"></el-input>
@@ -32,10 +32,10 @@
     <el-form-item label="回调域名" prop="m_backurl">
       <el-input v-model="ruleForm.m_backurl"></el-input>
     </el-form-item>
-    <el-form-item label="转发域名" prop="m_backurl">
+    <el-form-item label="转发域名" prop="m_forwardurl">
       <el-input v-model="ruleForm.m_forwardurl"></el-input>
     </el-form-item>
-    <el-form-item label="提交域名" prop="m_backurl">
+    <el-form-item label="提交域名" prop="m_submiturl">
       <el-input v-model="ruleForm.m_submiturl"></el-input>
     </el-form-item>
     <el-form-item>
@@ -45,19 +45,19 @@
   </el-form>
 </template>
 <script>
-import { getMerchant } from 'api/threeticket'
+import { getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
 export default {
+  props: ['rowdata', 'state'],
   data() {
     return {
       ruleForm: {
         merchant: '',
         name: '',
-        m_id: '',
         m_md5key: '',
         m_public_key: '',
         m_private_key: '',
         p_public_key: '',
-        levle: '',
+        level: 0,
         m_backurl: '',
         m_forwardurl: '',
         m_submiturl: ''
@@ -67,7 +67,7 @@ export default {
           { required: true, message: '请选择一个平台', trigger: 'change' }
         ],
         name: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'change' }
         ],
         m_id: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
@@ -84,7 +84,7 @@ export default {
         p_public_key: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        levle: [
+        level: [
           { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
         ],
         m_backurl: [
@@ -97,30 +97,23 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
-      merchants: []
+      merchants: [],
+      paychannelnames: []
     }
   },
   created() {
-    this.getMerchants()
+    //      this.getMerchants()
+    this.getPayChannelNames()
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          this.ruleForm = {
-            merchant: '',
-            name: '',
-            m_id: '',
-            m_md5key: '',
-            m_public_key: '',
-            m_private_key: '',
-            p_public_key: '',
-            levle: '',
-            m_backurl: '',
-            m_forwardurl: '',
-            m_submiturl: ''
-          }
+          this.ruleForm.merchant = this.rowdata.id
+          postPayChannel(this.ruleForm).then(response => {
+            this.$emit('formdata', response.data)
+            this.$refs[formName].resetFields()
+          })
         } else {
           console.log('error submit!!')
           return false
@@ -133,6 +126,11 @@ export default {
     getMerchants() {
       getMerchant().then(response => {
         this.merchants = response.data
+      })
+    },
+    getPayChannelNames() {
+      getPayChannelName().then(response => {
+        this.paychannelnames = response.data
       })
     }
   }

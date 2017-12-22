@@ -97,6 +97,38 @@ export function deleteMerchant(id) {
   })
 }
 
+// paychannelnames
+export function postPayChannelName(data) {
+  return request({
+    url: apiURL.paychannelnames,
+    method: 'post',
+    data
+  })
+}
+
+export function getPayChannelName(query) {
+  return request({
+    url: apiURL.paychannelnames,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putPayChannelName(id, data) {
+  return request({
+    url: apiURL.paychannelnames + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deletePayChannelName(id) {
+  return request({
+    url: apiURL.paychannelnames + id + '/',
+    method: 'delete'
+  })
+}
+
 // paychannels
 export function postPayChannel(data) {
   return request({
