@@ -17,15 +17,6 @@
           </el-select>
           <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
         </el-form-item>
-        <el-form-item label="工单类型" prop="type">
-          <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
-            <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="工单内容" prop="content">
-          <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
-                        :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
-        </el-form-item>
         <el-form-item label="工单等级" prop="level">
           <el-rate
             v-model="ruleForm.level"
@@ -35,10 +26,38 @@
           </el-rate>
           <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
         </el-form-item>
+        <el-form-item label="平台" prop="platform">
+          <el-select v-model="ruleForm.platform" filterable placeholder="请选择平台" @change="showaddmerchant=true">
+            <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
+          </el-select>
+          <el-button v-if="showaddmerchant" size="small" type="success" plain @click="addMerchantForm=true">添加商户
+          </el-button>
+        </el-form-item>
+        <el-form-item v-if="showmercant" label="商户列表">
+          <el-tag
+            :key="tag.id"
+            v-for="tag in dynamicMerchants"
+            closable
+            @close="handleClose(tag)">
+            <el-button type="text" size="mini" @click="selectMerchant(tag.name)">{{tag.name}}</el-button>
+          </el-tag>
+          <a class="tips"> Tip：点击商户，增加支付通道明细</a>
+        </el-form-item>
+        <el-form-item label="通道列表" v-if="showchannels">
+          <el-card>
+            <el-button size="small" type="success" plain @click="addChannelForm=true">添加通道
+            </el-button>
+            <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%">
+              <el-table-column type="index" width="50"></el-table-column>
+              <el-table-column property="date" label="日期" width="120"></el-table-column>
+              <el-table-column property="name" label="姓名" width="120"></el-table-column>
+              <el-table-column property="address" label="地址"></el-table-column>
+            </el-table>
+          </el-card>
+        </el-form-item>
         <el-form-item>
           <hr class="heng"/>
           <el-upload
-            class="upload-demo"
             ref="upload"
             :action="uploadurl"
             :on-success="handleSuccess"
@@ -47,10 +66,7 @@
             <el-button slot="trigger" size="small" type="primary" :disabled="count>2?true:false">
               上传文件
             </el-button>
-            (可以不用上传)
-            <div slot="tip" class="el-upload__tip">
-              <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
-            </div>
+            <a class="tips"> Tip：上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></a>
           </el-upload>
           <hr class="heng"/>
         </el-form-item>
@@ -60,42 +76,42 @@
         </el-form-item>
       </el-form>
     </el-card>
+
+    <el-dialog :visible.sync="addMerchantForm">
+      <add-merchant :rowdata="ruleForm.platform" @formdata="addMerchantTag"></add-merchant>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
+import { postThreepayTicket, postThreePayEnclosure, getPlatform } from 'api/threeticket'
 import { postUpload, postSendmail } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
 import { getCreatetime, getConversionTime } from '@/utils'
+import addMerchant from './addMerchant.vue'
 
 export default {
-  components: {},
+  components: {
+    addMerchant
+  },
 
   data() {
     return {
       route_path: this.$route.path.split('/'),
       ruleForm: {
         title: '',
-        type: '',
-        content: '',
         create_user: localStorage.getItem('username'),
         level: 2,
         action_user: 'itsupport',
         follower: '',
         create_group: '',
-        ticketid: ''
+        ticketid: '',
+        platform: ''
       },
       rules: {
         title: [
           { required: true, message: '请输入工单标题', trigger: 'blur' }
-        ],
-        content: [
-          { required: true, message: '请输入工单内容', trigger: 'blur' }
-        ],
-        type: [
-          { required: true, message: '请选择工单类型', trigger: 'blur' }
         ],
         level: [
           { required: true, type: 'number', message: '请确认工单等级', trigger: 'blur' }
@@ -108,26 +124,22 @@ export default {
       enclosureForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
-        file: '',
-        create_group: ''
+        file: ''
       },
-      toolbars: {
-        preview: true, // 预览
-        bold: true, // 粗体
-        italic: true, // 斜体
-        header: true, // 标题
-        underline: true, // 下划线
-        strikethrough: true, // 中划线
-        ol: true, // 有序列表
-        fullscreen: true, // 全屏编辑
-        help: true
-      },
-      img_file: {},
       formDataList: [],
       to_list: '',
       cc_list: '',
       uploadurl: uploadurl,
-      types: []
+      platforms: [],
+      showaddmerchant: false,
+      showchannels: false,
+      showchannel: false,
+      addMerchantForm: false,
+      addChannelForm: false,
+      showmercant: false,
+      dynamicMerchants: [],
+      dynamicChannels: [],
+      merchant: ''
     }
   },
 
@@ -138,14 +150,14 @@ export default {
   },
   created() {
     this.getTicketUsers()
-    this.getTicketType()
+    this.getPlatforms()
   },
   methods: {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.ruleForm.ticketid = getConversionTime()
-          postWorkticket(this.ruleForm).then(response => {
+          postThreepayTicket(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
@@ -162,7 +174,7 @@ export default {
               postUpload(formData).then(res => {
                 this.enclosureForm.file = res.data.filepath
                 this.enclosureForm.ticket = response.data.id
-                postTicketenclosure(this.enclosureForm)
+                postThreePayEnclosure(this.enclosureForm)
               })
             }
             const create_time = getCreatetime()
@@ -191,20 +203,8 @@ export default {
         }
       })
     },
-
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    getTicketUsers() {
-      getUser().then(response => {
-        this.users = response.data
-      })
-    },
-
-    getTicketType() {
-      getTickettype().then(response => {
-        this.types = response.data
-      })
     },
     handleSuccess(file, fileList) {
       this.fileList.push(fileList.raw)
@@ -214,30 +214,35 @@ export default {
       this.fileList.remove(file)
       this.count -= 1
     },
-    imgAdd(pos, file) {
-      var md = this.$refs.md
-      const formData = new FormData()
-      formData.append('username', this.enclosureForm.create_user)
-      formData.append('file', file)
-      formData.append('create_time', getConversionTime(file.lastModified))
-      formData.append('type', file.type)
-      formData.append('archive', this.route_path[1])
-      postUpload(formData).then(response => {
-        md.$imglst2Url([[pos, response.data.file]])
+    getTicketUsers() {
+      getUser().then(response => {
+        this.users = response.data
       })
+    },
+    getPlatforms() {
+      getPlatform().then(response => {
+        this.platforms = response.data
+      })
+    },
+    addMerchantTag(data) {
+      this.dynamicMerchants.push(data)
+      this.addMerchantForm = false
+      this.showmercant = true
+    },
+    handleClose(tag) {
+      this.dynamicMerchants.splice(this.dynamicMerchants.indexOf(tag), 1)
+      if (this.dynamicMerchants.length < 1) {
+        this.showmercant = false
+        this.showchannels = false
+      }
+    },
+    selectMerchant(name) {
+      this.showchannels = true
+      this.merchant = name
+    },
+    selectChannel(name) {
+      this.showchannel = true
     }
-    //    wsInit() {
-    //      const self = this
-    //      self.ws = new WebSocket(ws_url + self.ws_stream)
-    //      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
-    //      self.ws.onmessage = (e) => {
-    //        this.$message({
-    //          type: e.code,
-    //          message: e.msg
-    //        })
-    //        // self.results.push(e.data);
-    //      }
-    //    }
   }
 }
 </script>

@@ -3,8 +3,8 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addworkticket'">
-            <el-button type="primary" icon="el-icon-plus">新建工单</el-button>
+          <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addthreepayticket'">
+            <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
 
           <el-button-group>
@@ -84,11 +84,10 @@
 <script>
 import { getThreepayTicket } from '@/api/threeticket'
 import { LIMIT } from '@/config'
-import addWorkticket from '../worktickets/components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  components: { addWorkticket },
+  components: { },
   data() {
     return {
       radio: '',
@@ -100,7 +99,6 @@ export default {
       offset: '',
       ticket_status: '',
       pagesize: [10, 25, 50, 100],
-      addForm: false,
       rowdata: {
         ticket_status: 0,
         action_user: localStorage.getItem('username')

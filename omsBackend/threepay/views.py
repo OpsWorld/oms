@@ -2,11 +2,12 @@
 # author: kiven
 
 from rest_framework import viewsets
-from threepay.models import Platform, Merchant, PlatformEnclosure, ThreePayTicket, PayChannel
+from threepay.models import Platform, Merchant, ThreePayEnclosure, ThreePayTicket, PayChannelName, PayChannel
 from threepay.serializers import (PlatformSerializer,
                                   MerchantSerializer,
+                                  PayChannelNameSerializer,
                                   PayChannelSerializer,
-                                  PlatformEnclosureSerializer,
+                                  ThreePayEnclosureSerializer,
                                   ThreePayTicketSerializer)
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -34,6 +35,11 @@ class MerchantViewSet(viewsets.ModelViewSet):
     filter_fields = ('platform__name', 'name')
 
 
-class PlatformEnclosureViewSet(viewsets.ModelViewSet):
-    queryset = PlatformEnclosure.objects.all()
-    serializer_class = PlatformEnclosureSerializer
+class ThreePayEnclosureViewSet(viewsets.ModelViewSet):
+    queryset = ThreePayEnclosure.objects.all()
+    serializer_class = ThreePayEnclosureSerializer
+
+
+class PayChannelNameViewSet(viewsets.ModelViewSet):
+    queryset = PayChannelName.objects.all()
+    serializer_class = PayChannelNameSerializer

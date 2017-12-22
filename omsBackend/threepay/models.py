@@ -22,7 +22,7 @@ TicketStatus = {
 class ThreePayTicket(models.Model):
     ticketid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
-    platform = models.CharField(max_length=100, blank=True, verbose_name=u'平台名称')
+    platform = models.ForeignKey('Platform', on_delete=models.SET_NULL, null=True, blank=True,  verbose_name=u'平台名称')
     status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, null=True, blank=True,
                               verbose_name=u'工单状态')
     create_user = models.ForeignKey(User, related_name='three_create_user', verbose_name=u'创建者')
@@ -41,7 +41,7 @@ class ThreePayTicket(models.Model):
 
 
 class Platform(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'平台名称')
+    name = models.CharField(max_length=100, verbose_name=u'平台名称')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
@@ -53,9 +53,9 @@ class Platform(models.Model):
 
 
 class Merchant(models.Model):
-    platform = models.ForeignKey(Platform, verbose_name=u'依附平台')
+    platform = models.ForeignKey('Platform',  on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'依附平台')
     m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户号')
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'商户名称')
+    name = models.CharField(max_length=100, verbose_name=u'商户名称')
     three = models.CharField(max_length=100, blank=True, verbose_name=u'第三方业务经理')
 
     def __str__(self):
@@ -65,9 +65,20 @@ class Merchant(models.Model):
         verbose_name = u'商户'
         verbose_name_plural = u'商户'
 
-class PayChannel(models.Model):
-    merchant = models.ForeignKey(Merchant, verbose_name=u'依附商户')
+class PayChannelName(models.Model):
     name = models.CharField(max_length=100, verbose_name=u'通道名称')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'支付通道名称'
+        verbose_name_plural = u'支付通道名称'
+
+class PayChannel(models.Model):
+    merchant = models.ForeignKey('Merchant', on_delete=models.SET_NULL, null=True, blank=True,  verbose_name=u'依附商户')
+    name = models.ForeignKey('PayChannelName', on_delete=models.SET_NULL, null=True, blank=True,  verbose_name=u'通道名称')
     m_md5key = models.CharField(max_length=100, blank=True, verbose_name=u'商户MD5KEY')
     m_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户公钥')
     m_private_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户私钥')
@@ -78,15 +89,15 @@ class PayChannel(models.Model):
     level = models.CharField(max_length=3, choices=PayChannelLevel.items(), default=2, verbose_name=u'紧急度')
 
     def __str__(self):
-        return '{}-{}'.format(self.merchant, self.name)
+        return self.name
 
     class Meta:
         verbose_name = u'支付通道'
         verbose_name_plural = u'支付通道'
 
 
-class PlatformEnclosure(models.Model):
-    paychannel = models.ForeignKey(PayChannel, verbose_name=u'通道文档')
+class ThreePayEnclosure(models.Model):
+    ticket = models.ForeignKey('ThreePayTicket', verbose_name=u'工单')
     file = models.ForeignKey(Upload, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')

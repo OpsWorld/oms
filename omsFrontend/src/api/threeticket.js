@@ -1,6 +1,38 @@
 import request from '@/utils/request'
 import apiURL from '@/config'
 
+// threepaytickets
+export function postThreepayTicket(data) {
+  return request({
+    url: apiURL.threepaytickets,
+    method: 'post',
+    data
+  })
+}
+
+export function getThreepayTicket(query) {
+  return request({
+    url: apiURL.threepaytickets,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putThreepayTicket(id, data) {
+  return request({
+    url: apiURL.threepaytickets + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteThreepayTicket(id) {
+  return request({
+    url: apiURL.threepaytickets + id + '/',
+    method: 'delete'
+  })
+}
+
 // platforms
 export function postPlatform(data) {
   return request({
@@ -65,70 +97,6 @@ export function deleteMerchant(id) {
   })
 }
 
-// platformenclosures
-export function postPlatformEnclosure(data) {
-  return request({
-    url: apiURL.platformenclosures,
-    method: 'post',
-    data
-  })
-}
-
-export function getPlatformEnclosure(query) {
-  return request({
-    url: apiURL.platformenclosures,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putPlatformEnclosure(id, data) {
-  return request({
-    url: apiURL.platformenclosures + id + '/',
-    method: 'put',
-    data
-  })
-}
-
-export function deletePlatformEnclosure(id) {
-  return request({
-    url: apiURL.platformenclosures + id + '/',
-    method: 'delete'
-  })
-}
-
-// threepaytickets
-export function postThreepayTicket(data) {
-  return request({
-    url: apiURL.threepaytickets,
-    method: 'post',
-    data
-  })
-}
-
-export function getThreepayTicket(query) {
-  return request({
-    url: apiURL.threepaytickets,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putThreepayTicket(id, data) {
-  return request({
-    url: apiURL.threepaytickets + id + '/',
-    method: 'put',
-    data
-  })
-}
-
-export function deleteThreepayTicket(id) {
-  return request({
-    url: apiURL.threepaytickets + id + '/',
-    method: 'delete'
-  })
-}
-
 // paychannels
 export function postPayChannel(data) {
   return request({
@@ -157,6 +125,38 @@ export function putPayChannel(id, data) {
 export function deletePayChannel(id) {
   return request({
     url: apiURL.paychannels + id + '/',
+    method: 'delete'
+  })
+}
+
+// threepayenclosures
+export function postThreePayEnclosure(data) {
+  return request({
+    url: apiURL.threepayenclosures,
+    method: 'post',
+    data
+  })
+}
+
+export function getThreePayEnclosure(query) {
+  return request({
+    url: apiURL.threepayenclosures,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putThreePayEnclosure(id, data) {
+  return request({
+    url: apiURL.threepayenclosures + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteThreePayEnclosure(id) {
+  return request({
+    url: apiURL.threepayenclosures + id + '/',
     method: 'delete'
   })
 }

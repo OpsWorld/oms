@@ -122,7 +122,6 @@ export default {
       offset: '',
       ticket_status: '',
       pagesize: [10, 25, 50, 100],
-      addForm: false,
       rowdata: {
         ticket_status: 0,
         action_user: localStorage.getItem('username')

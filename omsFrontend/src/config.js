@@ -65,9 +65,10 @@ module.exports = {
   // 第三支付工单
   platforms: `${url}/api/platforms/`,
   merchants: `${url}/api/merchants/`,
-  platformenclosures: `${url}/api/platformenclosures/`,
+  threepayenclosures: `${url}/api/threepayenclosures/`,
   threepaytickets: `${url}/api/threepaytickets/`,
   paychannels: `${url}/api/paychannels/`,
+  paychannelnames: `${url}/api/paychannelnames/`,
 
   // 权限
   usermenuperms: `${url}/api/usermenuperms/`,
