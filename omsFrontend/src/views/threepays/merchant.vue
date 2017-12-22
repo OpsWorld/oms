@@ -16,35 +16,8 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="支付通道">
-                  <el-tag style="margin: 2px" type="success" v-for="item in props.row.m_channel" :key="item">{{item}}
-                  </el-tag>
-                </el-form-item>
-                <el-form-item label="MD5KEY">
-                  <span>{{ props.row.m_md5key }}</span>
-                </el-form-item>
-                <el-form-item label="商户公钥">
-                  <span>{{ props.row.m_public_key }}</span>
-                </el-form-item>
-                <el-form-item label="商户私钥">
-                  <span>{{ props.row.m_private_key }}</span>
-                </el-form-item>
-                <el-form-item label="平台公钥">
-                  <span>{{ props.row.p_public_key }}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
           <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
-          <el-table-column prop='m_backurl' label='回调域名'></el-table-column>
           <el-table-column prop='m_id' label='商户id'></el-table-column>
-          <!--<el-table-column prop='m_md5key' label='MD5KEY'></el-table-column>-->
-          <!--<el-table-column prop='m_public_key' label='商户公钥'></el-table-column>-->
-          <!--<el-table-column prop='m_private_key' label='商户私钥'></el-table-column>-->
-          <!--<el-table-column prop='p_public_key' label='平台公钥'></el-table-column>-->
           <el-table-column prop='platform' label='依附平台'></el-table-column>
           <el-table-column prop='three' label='业务经理'></el-table-column>
           <el-table-column label="操作">
@@ -188,18 +161,5 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
-  }
-
-  .table-expand {
-    font-size: 0;
-    label {
-      width: 90px;
-      color: #99a9bf;
-    }
-    .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
-    }
   }
 </style>

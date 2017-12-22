@@ -8,28 +8,8 @@
     <el-form-item label="名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
-    <el-form-item label="回调域名" prop="m_backurl">
-      <el-input v-model="ruleForm.m_backurl"></el-input>
-    </el-form-item>
     <el-form-item label="商户id" prop="m_id">
       <el-input v-model="ruleForm.m_id"></el-input>
-    </el-form-item>
-    <el-form-item label="开通通道" prop="m_channel">
-      <el-checkbox-group v-model="ruleForm.m_channel">
-        <el-checkbox v-for="item in paychannels" :key="item.id" :label="item.name"></el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item label="MD5KEY" prop="m_md5key">
-      <el-input v-model="ruleForm.m_md5key"></el-input>
-    </el-form-item>
-    <el-form-item label="商户公钥" prop="m_public_key">
-      <el-input v-model="ruleForm.m_public_key"></el-input>
-    </el-form-item>
-    <el-form-item label="商户私钥" prop="m_private_key">
-      <el-input v-model="ruleForm.m_private_key"></el-input>
-    </el-form-item>
-    <el-form-item label="平台公钥" prop="p_public_key">
-      <el-input v-model="ruleForm.p_public_key"></el-input>
     </el-form-item>
     <el-form-item label="业务经理" prop="three">
       <el-input v-model="ruleForm.three"></el-input>
@@ -41,20 +21,14 @@
   </el-form>
 </template>
 <script>
-import { getPlatform, getPayChannel } from 'api/threeticket'
+import { getPlatform } from '@/api/threeticket'
 export default {
   data() {
     return {
       ruleForm: {
         platform: '',
         name: '',
-        m_backurl: '',
         m_id: '',
-        m_channel: [],
-        m_md5key: '',
-        m_public_key: '',
-        m_private_key: '',
-        p_public_key: '',
         three: ''
       },
       rules: {
@@ -64,22 +38,7 @@ export default {
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        m_backurl: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
         m_id: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_md5key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_public_key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_private_key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        p_public_key: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         three: [
@@ -92,7 +51,6 @@ export default {
   },
   created() {
     this.getPlatforms()
-    this.getPayChannels()
   },
   methods: {
     submitForm(formName) {
@@ -102,13 +60,7 @@ export default {
           this.ruleForm = {
             platform: '',
             name: '',
-            m_backurl: '',
             m_id: '',
-            m_channel: [],
-            m_md5key: '',
-            m_public_key: '',
-            m_private_key: '',
-            p_public_key: '',
             three: ''
           }
         } else {
@@ -123,11 +75,6 @@ export default {
     getPlatforms() {
       getPlatform().then(response => {
         this.platforms = response.data
-      })
-    },
-    getPayChannels() {
-      getPayChannel().then(response => {
-        this.paychannels = response.data
       })
     }
   }

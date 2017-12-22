@@ -5,7 +5,7 @@ from django.db import models
 from users.models import User, Group
 from tools.models import Upload
 
-MerchantLevel = {
+PayChannelLevel = {
     1: 'A',
     2: 'B',
     3: 'C',
@@ -55,16 +55,7 @@ class Platform(models.Model):
 class Merchant(models.Model):
     platform = models.ForeignKey(Platform, verbose_name=u'依附平台')
     m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户号')
-    m_channel = models.ManyToManyField('PayChannel', blank=True, verbose_name=u'商户开通通道')
     name = models.CharField(max_length=100, unique=True, verbose_name=u'商户名称')
-    m_md5key = models.CharField(max_length=100, blank=True, verbose_name=u'商户MD5KEY')
-    m_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户公钥')
-    m_private_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户私钥')
-    p_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'平台公钥')
-    m_forwardurl = models.CharField(max_length=100, blank=True, verbose_name=u'商户回调域名')
-    m_submiturl = models.CharField(max_length=100, blank=True, verbose_name=u'商户回调域名')
-    m_backurl = models.CharField(max_length=100, blank=True, verbose_name=u'商户回调域名')
-    level = models.CharField(max_length=3, choices=MerchantLevel.items(), default=2, verbose_name=u'紧急度')
     three = models.CharField(max_length=100, blank=True, verbose_name=u'第三方业务经理')
 
     def __str__(self):
@@ -75,12 +66,19 @@ class Merchant(models.Model):
         verbose_name_plural = u'商户'
 
 class PayChannel(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'通道名称')
-    level = models.IntegerField(default=0, verbose_name=u'通道优先度')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
+    merchant = models.ForeignKey(Merchant, verbose_name=u'依附商户')
+    name = models.CharField(max_length=100, verbose_name=u'通道名称')
+    m_md5key = models.CharField(max_length=100, blank=True, verbose_name=u'商户MD5KEY')
+    m_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户公钥')
+    m_private_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户私钥')
+    p_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'平台公钥')
+    m_forwardurl = models.CharField(max_length=100, blank=True, verbose_name=u'商户转发域名')
+    m_submiturl = models.CharField(max_length=100, blank=True, verbose_name=u'商户提交域名')
+    m_backurl = models.CharField(max_length=100, blank=True, verbose_name=u'商户回调域名')
+    level = models.CharField(max_length=3, choices=PayChannelLevel.items(), default=2, verbose_name=u'紧急度')
 
     def __str__(self):
-        return self.name
+        return '{}-{}'.format(self.merchant, self.name)
 
     class Meta:
         verbose_name = u'支付通道'
@@ -88,11 +86,11 @@ class PayChannel(models.Model):
 
 
 class PlatformEnclosure(models.Model):
-    ticket = models.ForeignKey(ThreePayTicket, verbose_name=u'第三支付工单')
+    paychannel = models.ForeignKey(PayChannel, verbose_name=u'通道文档')
     file = models.ForeignKey(Upload, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
 
     class Meta:
-        verbose_name = u'平台附件'
-        verbose_name_plural = u'平台附件'
+        verbose_name = u'通道附件'
+        verbose_name_plural = u'通道附件'
