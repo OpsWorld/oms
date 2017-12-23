@@ -120,6 +120,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           putPayChannel(this.rowdata.id, this.rowdata).then(response => {
+            this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
           })
         } else {

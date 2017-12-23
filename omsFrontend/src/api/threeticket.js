@@ -115,7 +115,6 @@ export function getPayChannel(query) {
 }
 
 export function putPayChannel(id, data) {
-  console.log(data)
   return request({
     url: apiURL.paychannels + id + '/',
     method: 'put',

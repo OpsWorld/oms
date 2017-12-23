@@ -1,10 +1,10 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col :span="4">
+      <el-col :span="6">
         <el-card>
           <div slot="header">
-            <span class="card-title">列表</span>
+            <span class="card-title">平台商户列表</span>
             <el-button-group>
               <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" icon="plus"
                          @click="handlerAdd">
@@ -82,7 +82,7 @@
 
         </el-card>
       </el-col>
-      <el-col :span="20" v-if="selecttype&&!clickbtn">
+      <el-col :span="18" v-if="selecttype&&!clickbtn">
         <el-card>
           <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
           </el-button>
@@ -142,7 +142,7 @@
               <template slot-scope="scope">
                 <el-button @click="editPayChannel(scope.row)" type="success" size="small">修改
                 </el-button>
-                <el-button @click="deletePayChannels(scope.row.id)" type="danger" size="small">删除</el-button>
+                <el-button @click="deletePayChannels(scope.row)" type="danger" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -302,7 +302,7 @@ export default {
           message: '恭喜你，添加成功',
           type: 'success'
         })
-        this.fetchMerchantData()
+        this.fetchPlatformData()
       }).catch(error => {
         this.$message.error('添加失败')
         console.log(error)
@@ -314,7 +314,7 @@ export default {
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        this.fetchMerchantData()
+        this.fetchPlatformData()
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)
@@ -327,7 +327,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteMerchant(id)
-        this.fetchMerchantData()
+        this.fetchPlatformData()
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -339,14 +339,15 @@ export default {
         })
       })
     },
-    deletePayChannels(id) {
+    deletePayChannels(row) {
       this.$confirm('你确定要删除这个, 是否继续?', '美丽的妲己提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deletePayChannel(id)
-        this.fetchMerchantData()
+        deletePayChannel(row.id)
+        this.dynamicChannels.remove(row)
+        this.fetchPayChannelData()
         this.$message({
           type: 'success',
           message: '删除成功!'

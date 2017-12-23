@@ -19,7 +19,7 @@ ChannelStatus = {
     2: u'已解决',
 }
 class Platform(models.Model):
-    name = models.CharField(max_length=100, verbose_name=u'平台名称')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'平台名称')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
@@ -33,7 +33,7 @@ class Platform(models.Model):
 class Merchant(models.Model):
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户号')
-    name = models.CharField(max_length=100, verbose_name=u'商户名称')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'商户名称')
     three = models.CharField(max_length=100, blank=True, verbose_name=u'第三方业务经理')
 
     def __str__(self):
