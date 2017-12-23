@@ -99,7 +99,6 @@ export function deletePayChannelName(id) {
 
 // paychannels
 export function postPayChannel(data) {
-  console.log(data)
   return request({
     url: apiURL.paychannels,
     method: 'post',
@@ -116,6 +115,7 @@ export function getPayChannel(query) {
 }
 
 export function putPayChannel(id, data) {
+  console.log(data)
   return request({
     url: apiURL.paychannels + id + '/',
     method: 'put',

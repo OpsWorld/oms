@@ -1,35 +1,35 @@
 <template>
-  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+  <el-form :model="rowdata" :rules="rules" ref="ruleForm" label-width="100px">
     <el-form-item label="平台" prop="platform">
-      <el-select v-model="ruleForm.platform" filterable placeholder="请选择平台" @change="getMerchants">
+      <el-select v-model="rowdata.platform" filterable placeholder="请选择平台" @change="getMerchants">
         <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="商户" prop="merchant">
-      <el-select v-model="ruleForm.merchant" filterable placeholder="请选择商户">
+      <el-select v-model="rowdata.merchant" filterable placeholder="请选择商户">
         <el-option v-for="item in merchants" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="类型" prop="type">
-      <el-select v-model="ruleForm.type" filterable placeholder="请选择通道类型">
+      <el-select v-model="rowdata.type" filterable placeholder="请选择类型">
         <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="MD5KEY" prop="m_md5key">
-      <el-input v-model="ruleForm.m_md5key"></el-input>
+      <el-input v-model="rowdata.m_md5key"></el-input>
     </el-form-item>
     <el-form-item label="商户公钥" prop="m_public_key">
-      <el-input v-model="ruleForm.m_public_key"></el-input>
+      <el-input v-model="rowdata.m_public_key"></el-input>
     </el-form-item>
     <el-form-item label="商户私钥" prop="m_private_key">
-      <el-input v-model="ruleForm.m_private_key"></el-input>
+      <el-input v-model="rowdata.m_private_key"></el-input>
     </el-form-item>
     <el-form-item label="平台公钥" prop="p_public_key">
-      <el-input v-model="ruleForm.p_public_key"></el-input>
+      <el-input v-model="rowdata.p_public_key"></el-input>
     </el-form-item>
     <el-form-item label="紧急度" prop="m_backurl">
       <el-rate
-        v-model="ruleForm.level"
+        v-model="rowdata.level"
         :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
         show-text
         :texts="['E', 'D', 'C', 'B', 'A']">
@@ -37,52 +37,33 @@
       <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
     </el-form-item>
     <el-form-item label="回调域名" prop="m_backurl">
-      <el-input v-model="ruleForm.m_backurl"></el-input>
+      <el-input v-model="rowdata.m_backurl"></el-input>
     </el-form-item>
     <el-form-item label="转发域名" prop="m_forwardurl">
-      <el-input v-model="ruleForm.m_forwardurl"></el-input>
+      <el-input v-model="rowdata.m_forwardurl"></el-input>
     </el-form-item>
     <el-form-item label="提交域名" prop="m_submiturl">
-      <el-input v-model="ruleForm.m_submiturl"></el-input>
+      <el-input v-model="rowdata.m_submiturl"></el-input>
     </el-form-item>
     <el-form-item label="通知人" prop="action_user">
-      <el-select v-model="ruleForm.action_user" filterable placeholder="请选择通知人">
+      <el-select v-model="rowdata.action_user" filterable placeholder="请选择通知人">
         <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
       <el-button @click="resetForm('ruleForm')">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
-import { getPlatform, getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
+import { getPlatform, getMerchant, putPayChannel, getPayChannelName } from 'api/threeticket'
 import { getUser } from 'api/user'
 export default {
+  props: ['rowdata'],
   data() {
     return {
-      ruleForm: {
-        platform: '',
-        merchant: '',
-        type: '',
-        m_md5key: '',
-        m_public_key: '',
-        m_private_key: '',
-        p_public_key: '',
-        level: 0,
-        m_backurl: '',
-        m_forwardurl: '',
-        m_submiturl: '',
-        action_user: ''
-      },
       rules: {
-        platform: [
-          { required: true, message: '请输入正确的内容', trigger: 'change' }
-        ],
-        merchant: [
-          { required: true, message: '请输入正确的内容', trigger: 'change' }
-        ],
         type: [
           { required: true, message: '请输入正确的内容', trigger: 'change' }
         ],
@@ -120,6 +101,11 @@ export default {
       platforms: [],
       merchants: [],
       paychannelnames: [],
+      props: {
+        label: 'name',
+        value: 'name',
+        children: 'merchants'
+      },
       users: []
     }
   },
@@ -127,13 +113,13 @@ export default {
     this.getPlatforms()
     this.getPayChannelNames()
     this.getTicketUsers()
+    this.getMerchants()
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          postPayChannel(this.ruleForm).then(response => {
-            this.$emit('formdata', response.data)
+          putPayChannel(this.rowdata.id, this.rowdata).then(response => {
             this.$refs[formName].resetFields()
           })
         } else {
@@ -152,7 +138,7 @@ export default {
     },
     getMerchants() {
       const parmas = {
-        platform__name: this.ruleForm.platform
+        platform__name: this.rowdata.platform
       }
       getMerchant(parmas).then(response => {
         this.merchants = response.data

@@ -140,9 +140,7 @@
             <el-table-column prop='merchant' label='依附商户'></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button v-if="!editChannelForm" @click="editChannelForm=true" type="success" size="small">修改
-                </el-button>
-                <el-button v-if="editChannelForm" @click="putPayChannels(scope.row)" type="primary" size="small">保存
+                <el-button @click="editPayChannel(scope.row)" type="success" size="small">修改
                 </el-button>
                 <el-button @click="deletePayChannels(scope.row.id)" type="danger" size="small">删除</el-button>
               </template>
@@ -156,19 +154,23 @@
       <add-paychannel @formdata="fetchPayChannelData"></add-paychannel>
     </el-dialog>
 
+    <el-dialog :visible.sync="editChannelForm">
+      <edit-paychannel :rowdata="paychannels" @formdata="fetchPayChannelData"></edit-paychannel>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
-import { getPayChannel, putPayChannel, deletePayChannel } from 'api/threeticket'
+import { getPayChannel, deletePayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
 import { LIMIT } from '@/config'
 import addPaychannel from './components/addPaychannel.vue'
+import editPaychannel from './components/editPaychannel.vue'
 
 export default {
-  components: { addPaychannel },
+  components: { addPaychannel, editPaychannel },
   data() {
     return {
       limit: LIMIT,
@@ -217,7 +219,8 @@ export default {
       listQuery: {
         platform__name: '',
         merchant__name: ''
-      }
+      },
+      paychannels: []
     }
   },
   computed: {
@@ -245,6 +248,7 @@ export default {
     },
     fetchPayChannelData() {
       this.addChannelForm = false
+      this.editChannelForm = false
       getPayChannel(this.listQuery).then(response => {
         this.dynamicChannels = response.data
       })
@@ -335,19 +339,6 @@ export default {
         })
       })
     },
-    putPayChannels(formdata) {
-      putPayChannel(formdata.id, formdata).then(response => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
-        this.editChannelForm = false
-        this.fetchMerchantData()
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
-      })
-    },
     deletePayChannels(id) {
       this.$confirm('你确定要删除这个, 是否继续?', '美丽的妲己提示', {
         confirmButtonText: '确定',
@@ -417,6 +408,10 @@ export default {
         this.listQuery.platform__name = data.name
       }
       this.fetchPayChannelData()
+    },
+    editPayChannel(row) {
+      this.editChannelForm = true
+      this.paychannels = row
     }
   }
 }
