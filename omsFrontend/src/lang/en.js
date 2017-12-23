@@ -21,7 +21,7 @@ export default {
     platform: 'Platform',
     merchant: 'Merchant',
     paychannel: 'Paychannel',
-    threepayticket: 'ThreepayTicket',
+    paychannelname: 'PaychannelName',
     addthreepayticket: 'addthreepayticket',
     i18n: 'I18n',
     components: 'Components',

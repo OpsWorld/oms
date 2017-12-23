@@ -1,12 +1,9 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-    <!--<el-form-item label="platform" prop="platform">-->
-    <!--<el-select v-model="ruleForm.platform" placeholder="请选择平台">-->
-    <!--<el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>-->
-    <!--</el-select>-->
-    <!--</el-form-item>-->
-    <el-form-item label="平台" prop="platform">
-      <el-input v-model="ruleForm.platform" disabled></el-input>
+    <el-form-item label="platform" prop="platform">
+      <el-select v-model="ruleForm.platform" placeholder="请选择平台">
+        <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
@@ -24,21 +21,20 @@
   </el-form>
 </template>
 <script>
-import { getPlatform, postMerchant } from '@/api/threeticket'
+import { getPlatform } from '@/api/threeticket'
 export default {
-  props: ['rowdata'],
   data() {
     return {
       ruleForm: {
-        platform: this.rowdata,
+        platform: '',
         name: '',
         m_id: '',
         three: ''
       },
       rules: {
-        //          platform: [
-        //            {required: true, message: '请选择一个平台', trigger: 'change'}
-        //          ],
+        platform: [
+          { required: true, message: '请选择一个平台', trigger: 'change' }
+        ],
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -53,16 +49,19 @@ export default {
     }
   },
   created() {
-    //    this.getPlatforms()
+    this.getPlatforms()
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          postMerchant(this.ruleForm).then(response => {
-            this.$emit('formdata', response.data)
-            this.$refs[formName].resetFields()
-          })
+          this.$emit('formdata', this.ruleForm)
+          this.ruleForm = {
+            platform: '',
+            name: '',
+            m_id: '',
+            three: ''
+          }
         } else {
           console.log('error submit!!')
           return false

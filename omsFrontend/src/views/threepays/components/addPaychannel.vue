@@ -1,10 +1,14 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-    <el-form-item label="商户" prop="platform">
-      <el-input v-model="rowdata.name" disabled></el-input>
+    <el-form-item label="平台/商户" prop="platform">
+      <el-cascader
+        :options="platforms"
+        :props="props"
+        @change="selectPlatmerchant"
+      ></el-cascader>
     </el-form-item>
     <el-form-item label="名称" prop="name">
-      <el-select v-model="ruleForm.name" filterable placeholder="请选择通道名">
+      <el-select v-model="ruleForm.type" filterable placeholder="请选择通道名">
         <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
@@ -38,6 +42,11 @@
     <el-form-item label="提交域名" prop="m_submiturl">
       <el-input v-model="ruleForm.m_submiturl"></el-input>
     </el-form-item>
+    <el-form-item label="通知人" prop="action_user">
+      <el-select v-model="ruleForm.action_user" filterable placeholder="请选择通知人">
+        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+      </el-select>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
       <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -45,14 +54,15 @@
   </el-form>
 </template>
 <script>
-import { getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
+import { getPlatform, getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
+import { getUser } from 'api/user'
 export default {
-  props: ['rowdata', 'state'],
   data() {
     return {
       ruleForm: {
+        platform: '',
         merchant: '',
-        name: '',
+        type: '',
         m_md5key: '',
         m_public_key: '',
         m_private_key: '',
@@ -60,13 +70,11 @@ export default {
         level: 0,
         m_backurl: '',
         m_forwardurl: '',
-        m_submiturl: ''
+        m_submiturl: '',
+        action_user: ''
       },
       rules: {
-        merchant: [
-          { required: true, message: '请选择一个平台', trigger: 'change' }
-        ],
-        name: [
+        type: [
           { required: true, message: '请输入正确的内容', trigger: 'change' }
         ],
         m_id: [
@@ -95,21 +103,31 @@ export default {
         ],
         m_submiturl: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        action_user: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
+      platforms: [],
       merchants: [],
-      paychannelnames: []
+      paychannelnames: [],
+      props: {
+        label: 'name',
+        value: 'name',
+        children: 'merchants'
+      },
+      users: []
     }
   },
   created() {
-    //      this.getMerchants()
+    this.getPlatforms()
     this.getPayChannelNames()
+    this.getTicketUsers()
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.merchant = this.rowdata.id
           postPayChannel(this.ruleForm).then(response => {
             this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
@@ -123,14 +141,32 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getMerchants() {
-      getMerchant().then(response => {
-        this.merchants = response.data
+    getPlatforms() {
+      getPlatform().then(response => {
+        this.platforms = response.data
+        // 对象map用法
+        this.platforms.map(function(data) {
+          const parmas = {
+            platform__name: data.name
+          }
+          getMerchant(parmas).then(response => {
+            data['merchants'] = response.data
+          })
+        })
       })
     },
     getPayChannelNames() {
       getPayChannelName().then(response => {
         this.paychannelnames = response.data
+      })
+    },
+    selectPlatmerchant(data) {
+      this.ruleForm.platform = data[0]
+      this.ruleForm.merchant = data[1]
+    },
+    getTicketUsers() {
+      getUser().then(response => {
+        this.users = response.data
       })
     }
   }

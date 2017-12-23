@@ -1,195 +1,430 @@
 <template>
   <div class="components-container" style='height:100vh'>
-    <el-card>
-      <div class="head-lavel">
-        <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
-        </div>
-        <div class="table-search">
-          <el-input
-            placeholder="搜索 ..."
-            v-model="searchdata"
-            @keyup.enter.native="searchClick">
-            <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
-          </el-input>
-        </div>
-      </div>
-      <div>
-        <el-table :data='tableData' border style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="MD5KEY">
-                  <span>{{ props.row.m_md5key }}</span>
-                </el-form-item>
-                <el-form-item label="商户公钥">
-                  <span>{{ props.row.m_public_key }}</span>
-                </el-form-item>
-                <el-form-item label="商户私钥">
-                  <span>{{ props.row.m_private_key }}</span>
-                </el-form-item>
-                <el-form-item label="平台公钥">
-                  <span>{{ props.row.p_public_key }}</span>
-                </el-form-item>
-                <el-form-item label="商户转发域名">
-                  <span>{{ props.row.m_forwardurl }}</span>
-                </el-form-item>
-                <el-form-item label="商户提交域名">
-                  <span>{{ props.row.m_submiturl }}</span>
-                </el-form-item>
-                <el-form-item label="商户回调域名">
-                  <span>{{ props.row.m_backurl }}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
-          <el-table-column prop='level' label='紧急度'></el-table-column>
-          <el-table-column prop='merchant' label='依附商户'></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="table-pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="limit"
-          layout="prev, pager, next, sizes"
-          :total="tabletotal">
-        </el-pagination>
-      </div>
-    </el-card>
-    <el-dialog :visible.sync="addForm">
-      <add-group @formdata="addGroupSubmit"></add-group>
+    <el-row :gutter="20">
+      <el-col :span="4">
+        <el-card>
+          <div slot="header">
+            <span class="card-title">列表</span>
+            <el-button-group>
+              <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" icon="plus"
+                         @click="handlerAdd">
+                添加
+              </el-button>
+              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit" icon="edit"
+                         @click="handlerEdit">
+                编辑
+              </el-button>
+            </el-button-group>
+          </div>
+          <el-tree
+            :data="platformData"
+            :props="props"
+            :load="fetchNodeData"
+            accordion
+            lazy
+            @node-click="handleNodeClick">
+          </el-tree>
+        </el-card>
+      </el-col>
+      <el-col :span="6" v-if="clickbtn">
+        <el-card class="box-card">
+          <div slot="header">
+            <el-switch
+              v-model="selecttype"
+              active-text="商户"
+              inactive-text="平台">
+            </el-switch>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="clickbtn=false">关闭</el-button>
+          </div>
+
+          <el-form v-if="!selecttype" :model="platformForm" ref="ruleForm" label-width="100px">
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="platformForm.name" :disabled="formEdit"></el-input>
+            </el-form-item>
+            <el-form-item label="描述" prop="desc">
+              <el-input v-model="platformForm.desc" :disabled="formEdit" type="textarea"
+                        :autosize="{ minRows: 5, maxRows: 20}"></el-input>
+            </el-form-item>
+            <el-form-item v-if="formStatus == 'create'">
+              <el-button type="primary" @click="postPlatformForm('ruleForm')">创建</el-button>
+              <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+            <el-form-item v-if="formStatus == 'update'">
+              <el-button type="success" @click="putPlatformForm(platformForm)">更新</el-button>
+              <el-button type="danger" @click="deletePlatformForm(platformForm.id)">删除</el-button>
+            </el-form-item>
+          </el-form>
+
+          <el-form v-if="selecttype" :model="merchantForm" ref="ruleForm" label-width="100px">
+            <el-form-item label="平台" prop="platform">
+              <el-select v-model="merchantForm.platform" placeholder="请选择平台">
+                <el-option v-for="item in platformData" :key="item.id" :value="item.name"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="名称" prop="name">
+              <el-input v-model="merchantForm.name" :disabled="formEdit"></el-input>
+            </el-form-item>
+            <el-form-item label="商户id" prop="m_id">
+              <el-input v-model="merchantForm.m_id" :disabled="formEdit"></el-input>
+            </el-form-item>
+            <el-form-item label="业务经理" prop="three">
+              <el-input v-model="merchantForm.three" :disabled="formEdit"></el-input>
+            </el-form-item>
+            <el-form-item v-if="formStatus == 'create'">
+              <el-button type="primary" @click="postMerchantForm('ruleForm')">创建</el-button>
+              <el-button @click="resetForm('ruleForm')">重置</el-button>
+            </el-form-item>
+            <el-form-item v-if="formStatus == 'update'">
+              <el-button type="success" @click="putMerchantForm(merchantForm)">更新</el-button>
+              <el-button type="danger" @click="deleteMerchantForm(merchantForm.id)">删除</el-button>
+            </el-form-item>
+          </el-form>
+
+        </el-card>
+      </el-col>
+      <el-col :span="20" v-if="selecttype&&!clickbtn">
+        <el-card>
+          <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
+          </el-button>
+          <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%">
+            <el-table-column type="index" width="50"></el-table-column>
+            <el-table-column label='查看明细' type="expand" width="100">
+              <template slot-scope="props">
+                <el-form label-position="left" inline class="table-expand">
+                  <el-form-item label="紧急度">
+                    <el-rate
+                      v-model="props.row.level"
+                      :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                      show-text
+                      :texts="['E', 'D', 'C', 'B', 'A']"
+                      :disabled="!editChannelForm">
+                    </el-rate>
+                  </el-form-item>
+                  <el-form-item label="MD5KEY">
+                    <el-input size="small" v-model="props.row.m_md5key" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="商户公钥">
+                    <el-input size="small" v-model="props.row.m_public_key" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="商户私钥">
+                    <el-input size="small" v-model="props.row.m_private_key" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="平台公钥">
+                    <el-input size="small" v-model="props.row.p_public_key" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="转发域名">
+                    <el-input size="small" v-model="props.row.m_forwardurl" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="提交域名">
+                    <el-input size="small" v-model="props.row.m_submiturl" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                  <el-form-item label="回调域名">
+                    <el-input size="small" v-model="props.row.m_backurl" :disabled="!editChannelForm"></el-input>
+                  </el-form-item>
+                </el-form>
+              </template>
+            </el-table-column>
+            <el-table-column prop='type' label='通道类型'></el-table-column>
+            <el-table-column prop='level' label='紧急度'>
+              <template slot-scope="scope">
+                <el-rate
+                  v-model="scope.row.level"
+                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                  show-text
+                  :texts="['E', 'D', 'C', 'B', 'A']"
+                  disabled>
+                </el-rate>
+              </template>
+            </el-table-column>
+            <el-table-column prop='platform' label='依附平台'></el-table-column>
+            <el-table-column prop='merchant' label='依附商户'></el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button v-if="!editChannelForm" @click="editChannelForm=true" type="success" size="small">修改
+                </el-button>
+                <el-button v-if="editChannelForm" @click="putPayChannels(scope.row)" type="primary" size="small">保存
+                </el-button>
+                <el-button @click="deletePayChannels(scope.row.id)" type="danger" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-dialog :visible.sync="addChannelForm">
+      <add-paychannel @formdata="fetchPayChannelData"></add-paychannel>
     </el-dialog>
-    <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
-    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getPayChannel, postPayChannel, putPayChannel, deletePayChannel } from 'api/threeticket'
+import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
+import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
+import { getPayChannel, putPayChannel, deletePayChannel } from 'api/threeticket'
+import { mapGetters } from 'vuex'
 import { LIMIT } from '@/config'
-import addGroup from './components/addPaythree.vue'
-import editGroup from './components/editPaythree.vue'
+import addPaychannel from './components/addPaychannel.vue'
 
 export default {
-  components: { addGroup, editGroup },
+  components: { addPaychannel },
   data() {
     return {
-      tableData: [],
-      tabletotal: 0,
-      searchdata: '',
-      currentPage: 1,
       limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
-      addForm: false,
-      editForm: false,
-      rowdata: {},
+      platformData: [],
+      merchantData: [],
+      clickbtn: false,
+      selecttype: false,
+      formEdit: true,
+      formAdd: true,
+      formStatus: '',
+      paychannelManager_btn_add: true,
+      paychannelManager_btn_edit: true,
+      platformForm: {
+        name: '',
+        desc: ''
+      },
+      platformRules: {
+        name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ]
+      },
+      merchantForm: {
+        platform: '',
+        name: '',
+        m_id: '',
+        three: ''
+      },
+      merchantRules: {
+        name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        m_id: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        three: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ]
+      },
+      props: {
+        label: 'name',
+        children: ''
+      },
+      addChannelForm: false,
+      editChannelForm: false,
+      dynamicChannels: [],
       listQuery: {
-        limit: LIMIT,
-        offset: '',
-        name__contains: this.searchdata
+        platform__name: '',
+        merchant__name: ''
       }
     }
   },
-
-  created() {
-    this.fetchData()
+  computed: {
+    ...mapGetters([
+      'elements'
+    ])
   },
-
+  created() {
+    this.fetchPlatformData()
+    this.fetchMerchantData()
+    this.fetchPayChannelData()
+    //    this.paychannelManager_btn_add = this.elements['paychannelManager:btn_add']
+    //    this.paychannelManager_btn_edit = this.elements['paychannelManager:btn_edit']
+  },
   methods: {
-    fetchData() {
-      getPayChannel(this.listQuery).then(response => {
-        this.tableData = response.data.results
-        this.tabletotal = response.data.count
+    fetchPlatformData() {
+      getPlatform().then(response => {
+        this.platformData = response.data
       })
     },
-    addGroupSubmit(formdata) {
-      postPayChannel(formdata).then(response => {
+    fetchMerchantData() {
+      getMerchant().then(response => {
+        this.merchantData = response.data
+      })
+    },
+    fetchPayChannelData() {
+      this.addChannelForm = false
+      getPayChannel(this.listQuery).then(response => {
+        this.dynamicChannels = response.data
+      })
+    },
+    postPlatformForm() {
+      postPlatform(this.platformForm).then(response => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
         })
-        this.fetchData()
-        this.addForm = false
+        this.fetchPlatformData()
       }).catch(error => {
         this.$message.error('添加失败')
         console.log(error)
       })
     },
-    editGroupSubmit(formdata) {
-      putPayChannel(this.rowdata.id, formdata).then(response => {
+    putPlatformForm(formdata) {
+      putPlatform(formdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        this.fetchData()
-        this.editForm = false
+        this.fetchPlatformData()
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)
       })
     },
-    deleteGroup(id) {
-      deletePayChannel(id).then(response => {
+    deletePlatformForm(id) {
+      this.$confirm('你确定要删除这个, 是否继续?', '美丽的妲己提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePlatform(id)
+        this.fetchPlatformData()
         this.$message({
-          message: '恭喜你，删除成功',
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    postMerchantForm() {
+      postMerchant(this.merchantForm).then(response => {
+        this.$message({
+          message: '恭喜你，添加成功',
           type: 'success'
         })
-        this.fetchData()
+        this.fetchMerchantData()
       }).catch(error => {
-        this.$message.error('删除失败')
+        this.$message.error('添加失败')
         console.log(error)
       })
     },
-    closeEditForm() {
-      this.fetchData()
+    putMerchantForm(formdata) {
+      putMerchant(formdata.id, formdata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.fetchMerchantData()
+      }).catch(error => {
+        this.$message.error('更新失败')
+        console.log(error)
+      })
     },
-    handleEdit(row) {
-      this.editForm = true
-      this.rowdata = row
+    deleteMerchantForm(id) {
+      this.$confirm('你确定要删除这个, 是否继续?', '美丽的妲己提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteMerchant(id)
+        this.fetchMerchantData()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    searchClick() {
-      this.fetchData()
+    putPayChannels(formdata) {
+      putPayChannel(formdata.id, formdata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.editChannelForm = false
+        this.fetchMerchantData()
+      }).catch(error => {
+        this.$message.error('更新失败')
+        console.log(error)
+      })
     },
-    handleSizeChange(val) {
-      this.listQuery.limit = val
-      this.fetchData()
+    deletePayChannels(id) {
+      this.$confirm('你确定要删除这个, 是否继续?', '美丽的妲己提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deletePayChannel(id)
+        this.fetchMerchantData()
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
-    handleCurrentChange(val) {
-      this.listQuery.offset = (val - 1) * this.listQuery.limit
-      this.fetchData()
+    handlerAdd() {
+      this.clickbtn = true
+      this.formEdit = false
+      this.formStatus = 'create'
+      this.resetForm()
+    },
+    handlerEdit() {
+      this.clickbtn = true
+      this.formEdit = false
+      this.formStatus = 'update'
+    },
+    resetForm() {
+      this.platformForm = {
+        name: '',
+        desc: ''
+      }
+      this.merchantForm = {
+        platform: '',
+        name: '',
+        m_id: '',
+        three: ''
+      }
+    },
+    fetchNodeData(node, resolve) {
+      if (node.level === 0) {
+        return resolve([{ name: 'region' }])
+      }
+      if (node.level > 1) return resolve([])
+
+      const parmas = {
+        platform__name: node.data.name
+      }
+      getMerchant(parmas).then(response => {
+        const data = response.data
+        setTimeout(() => {
+          resolve(data)
+        }, 500)
+      })
+    },
+    handleNodeClick(data, res) {
+      this.selecttype = res.isLeaf
+      this.formEdit = true
+      if (this.selecttype) {
+        this.merchantForm = data
+        this.listQuery.merchant__name = data.name
+      } else {
+        this.platformForm = data
+        this.listQuery.platform__name = data.name
+      }
+      this.fetchPayChannelData()
     }
   }
 }
 </script>
 
 <style lang='scss'>
-  .head-lavel {
-    padding-bottom: 50px;
-  }
-
-  .table-button {
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
+  .card-title {
+    padding-right: 30px;
   }
 
   .table-expand {

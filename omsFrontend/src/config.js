@@ -66,7 +66,6 @@ module.exports = {
   platforms: `${url}/api/platforms/`,
   merchants: `${url}/api/merchants/`,
   threepayenclosures: `${url}/api/threepayenclosures/`,
-  threepaytickets: `${url}/api/threepaytickets/`,
   paychannels: `${url}/api/paychannels/`,
   paychannelnames: `${url}/api/paychannelnames/`,
 

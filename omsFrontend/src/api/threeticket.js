@@ -1,38 +1,6 @@
 import request from '@/utils/request'
 import apiURL from '@/config'
 
-// threepaytickets
-export function postThreepayTicket(data) {
-  return request({
-    url: apiURL.threepaytickets,
-    method: 'post',
-    data
-  })
-}
-
-export function getThreepayTicket(query) {
-  return request({
-    url: apiURL.threepaytickets,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putThreepayTicket(id, data) {
-  return request({
-    url: apiURL.threepaytickets + id + '/',
-    method: 'put',
-    data
-  })
-}
-
-export function deleteThreepayTicket(id) {
-  return request({
-    url: apiURL.threepaytickets + id + '/',
-    method: 'delete'
-  })
-}
-
 // platforms
 export function postPlatform(data) {
   return request({
@@ -131,6 +99,7 @@ export function deletePayChannelName(id) {
 
 // paychannels
 export function postPayChannel(data) {
+  console.log(data)
   return request({
     url: apiURL.paychannels,
     method: 'post',
