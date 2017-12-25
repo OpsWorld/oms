@@ -1,7 +1,8 @@
 [Unit]
 Description=Daphne Interface Server
 [Service]
-ExecStart=/usr/bin/bash -c '/data/projects/oms/omsBackend/daphnew'
+ExecStartPre=/usr/bin/bash -c 'cd /data/projects/oms/omsBackend'
+ExecStart=/usr/bin/bash -c '/root/.pyenv/shims/python manage.py runworker --threads 5 --only-channels=websocket.*'
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
