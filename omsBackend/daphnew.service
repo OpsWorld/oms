@@ -4,7 +4,8 @@ Description=Daphne Interface Server
 ExecStart=/usr/bin/bash -c '/data/projects/oms/omsBackend/daphnew'
 Restart=always
 KillSignal=SIGQUIT
-Type=simple
+Type=notify
 NotifyAccess=all
+
 [Install]
 WantedBy=multi-user.target
