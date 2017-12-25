@@ -5,9 +5,8 @@ Description=Daphne Interface Server
 ExecStartPre=/bin/bash -c 'cd /data/projects/oms/omsBackend'
 ExecStart=/bin/bash -c 'cd /data/projects/oms/omsBackend && /root/.pyenv/shims/daphne -b 0.0.0.0 -p 8001 -v2 omsBackend.asgi:channel_layer --access-log=/data/logs/oms/daphnei.log'
 Restart=always
-KillSignal=SIGQUIT
-Type=simple
-NotifyAccess=all
+NonBlocking=true
+WorkingDirectory='/data/projects/oms/omsBackend'
 
 [Install]
 WantedBy=multi-user.target
