@@ -1,7 +1,7 @@
 [Unit]
 Description=Daphne Interface Server
 [Service]
-ExecStart=/data/projects/oms/omsBackend/daphnew
+ExecStart=/bin/bash/ -c "/data/projects/oms/omsBackend/daphnew"
 Restart=always
 KillSignal=SIGQUIT
 Type=simple
