@@ -2,7 +2,7 @@
 Description=Daphne Interface Server
 
 [Service]
-ExecStart=/bin/bash -c '/root/.pyenv/shims/daphne -b 0.0.0.0 -p 8001 -v2 omsBackend.asgi:channel_layer --access-log=/data/logs/oms/daphnei.log'
+ExecStart=/bin/bash -c 'cd /data/projects/oms/omsBackend && daphne -b 0.0.0.0 -p 8001 -v2 omsBackend.asgi:channel_layer --access-log=/data/logs/oms/daphnei.log'
 NonBlocking=true
 
 [Install]
