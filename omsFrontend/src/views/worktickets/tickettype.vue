@@ -142,6 +142,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
+      console.log(val)
       this.offset = (val - 1) * LIMIT
       this.fetchData()
     }
