@@ -22,7 +22,7 @@ export default {
     merchant: 'Merchant',
     paychannel: 'Paychannel',
     paychannelname: 'PaychannelName',
-    addthreepayticket: 'addthreepayticket',
+    sendmessage: 'sendMessage',
     i18n: 'I18n',
     components: 'Components',
     componentIndex: 'Introduction',

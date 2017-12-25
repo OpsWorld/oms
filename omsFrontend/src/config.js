@@ -80,5 +80,6 @@ module.exports = {
 
   // cmdrun
   cmdrun: `${url}/api/cmdrun/`,
-  sendmail: `${url}/api/sendmail/`
+  sendmail: `${url}/api/sendmail/`,
+  sendmessage: `${url}/api/sendmessage/`
 }

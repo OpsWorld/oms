@@ -43,10 +43,6 @@ export function postSendmail(data) {
 }
 
 export function getSendmail(query, id) {
-  if (query.time_lte === 'NaN-aN-aN' || query.time_lte === '1970-01-01') {
-    delete query.time_gte
-    delete query.time_lte
-  }
   return request({
     url: id ? apiURL.sendmail + id + '/' : apiURL.sendmail,
     method: 'get',
@@ -64,8 +60,31 @@ export function putSendmail(id, data) {
 
 export function deleteSendmail(id) {
   return request({
-    url: apiURL.sendmail + id,
+    url: apiURL.sendmail + id + '/',
     method: 'delete'
   })
 }
 
+// sendmessage
+export function postSendmessage(data) {
+  return request({
+    url: apiURL.sendmessage,
+    method: 'post',
+    data
+  })
+}
+
+export function getSendmessage(query, id) {
+  return request({
+    url: id ? apiURL.sendmessage + id + '/' : apiURL.sendmessage,
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteSendmessage(id) {
+  return request({
+    url: apiURL.sendmessage + id + '/',
+    method: 'delete'
+  })
+}

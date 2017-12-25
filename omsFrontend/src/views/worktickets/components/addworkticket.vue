@@ -25,6 +25,7 @@
         <el-form-item label="工单内容" prop="content">
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
+          <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到工单内容里面</a>
         </el-form-item>
         <el-form-item label="工单等级" prop="level">
           <el-rate
@@ -64,7 +65,7 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
-import { postUpload, postSendmail } from 'api/tool'
+import { postUpload, postSendmail, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
@@ -183,6 +184,14 @@ export default {
                     </div></body></html>`
             }
             postSendmail(mailForm)
+            const messageForm = {
+              user: this.ruleForm.action_user,
+              title: '您有新的工单',
+              message: `工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`,
+              is_html: true,
+              duration: 0
+            }
+            postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
           })
         } else {

@@ -97,6 +97,7 @@ export const asyncRouterMap = [
     authority: '工具管理',
     children: [
       { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
+      { path: 'sendmessage', component: _import('tools/sendmessage'), name: 'sendmessage', authority: '消息列表' },
       { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
     ]
   },

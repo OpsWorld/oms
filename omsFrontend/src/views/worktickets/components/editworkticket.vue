@@ -41,6 +41,7 @@
             </div>
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
+
           <hr class="heng"/>
 
           <div v-if="showinput">
@@ -79,6 +80,7 @@
           <el-form-item label="问题处理" prop="content">
             <mavon-editor style="z-index: 1" v-model="mailcontent" code_style="monokai" :toolbars="toolbars"
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
+            <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
           </el-form-item>
 
           <hr class="heng"/>
@@ -149,7 +151,7 @@ import {
   getTicketenclosure,
   deleteTicketenclosure
 } from 'api/workticket'
-import { postUpload, postSendmail } from 'api/tool'
+import { postUpload, postSendmail, postSendmessage } from 'api/tool'
 import { apiUrl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
@@ -320,6 +322,14 @@ export default {
             }
             postSendmail(mailForm)
           }
+          const messageForm = {
+            user: this.commentForm.create_user,
+            title: '您的工单有新回复',
+            message: `工单地址: http://${window.location.href}`,
+            is_html: true,
+            duration: 0
+          }
+          postSendmessage(messageForm)
           this.$router.push('/worktickets/workticket')
         })
       }).catch(() => {

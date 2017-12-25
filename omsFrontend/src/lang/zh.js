@@ -22,7 +22,7 @@ export default {
     merchant: '第三支付商户',
     paychannel: '支付通道列表',
     paychannelname: '通道类型',
-    addthreepayticket: '添加第三支付工单',
+    sendmessage: '消息列表',
     i18n: '国际化',
     clipboard: 'clipboard',
     components: '组件',
