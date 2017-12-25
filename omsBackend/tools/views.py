@@ -57,14 +57,14 @@ class SendmailViewSet(viewsets.ModelViewSet):
 class SendmessageViewSet(viewsets.ModelViewSet):
     queryset = Sendmessage.objects.all()
     serializer_class = SendmessageSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = SendmessageSerializer(data=request.data, context={'request': request})
-        to_user = request.data["user"]
-        content = request.data["title"] + '\n' + request.data["message"]
-        skype_bot(to_user,content)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+    #
+    # def create(self, request, *args, **kwargs):
+    #     serializer = SendmessageSerializer(data=request.data, context={'request': request})
+    #     to_user = request.data["user"]
+    #     content = request.data["title"] + '\n' + request.data["message"]
+    #     skype_bot(to_user,content)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
