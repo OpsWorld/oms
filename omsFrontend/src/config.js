@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'production') {
   CONFIG = {
     apiUrl: '',
     super_group: 'OMS_Super_Admin',
-    wsurl: rest_url + '/ws'
+    wsurl: ws_scheme + rest_url + '/ws'
   }
 } else {
   CONFIG = {

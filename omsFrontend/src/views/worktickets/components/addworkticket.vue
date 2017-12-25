@@ -131,7 +131,7 @@ export default {
       uploadurl: uploadurl,
       types: [],
       ws: '',
-      ws_stream: '/salt/sendmessage/'
+      ws_stream: '/sendmessage/'
     }
   },
 
