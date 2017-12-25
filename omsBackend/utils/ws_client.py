@@ -3,7 +3,7 @@
 
 from websocket import create_connection
 
-ws = create_connection("ws://192.168.6.99:8000/salt/cmdrun/")
+ws = create_connection("ws://192.168.6.99/ws/cmdrun/")
 print("Sending 'Hello, World'...")
 ws.send("Hello, World")
 print("Sent")
