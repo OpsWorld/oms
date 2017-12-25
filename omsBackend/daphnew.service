@@ -3,7 +3,9 @@ Description=Daphne Interface new Server
 
 [Service]
 ExecStart=/data/projects/oms/omsBackend/daphnew
-NonBlocking=true
+Type=simple
+KillSignal=SIGQUIT
+NotifyAccess=all
 
 [Install]
 WantedBy=multi-user.target
