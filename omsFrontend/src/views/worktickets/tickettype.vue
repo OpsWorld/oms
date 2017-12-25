@@ -79,15 +79,14 @@ export default {
        * 获取数据
        */
     fetchData() {
-      const tick_id = ''
       const parms = {
         limit: this.limit,
         offset: this.offset,
         name__contains: this.searchdata
       }
-      getTickettype(tick_id, parms).then(response => {
-        this.tableData = response.data
-        this.tabletotal = response.data.length
+      getTickettype(parms).then(response => {
+        this.tableData = response.data.results
+        this.tabletotal = response.data.count
       })
     },
     addGroupSubmit(formdata) {
@@ -143,7 +142,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = val - 1
+      this.offset = (val - 1) * LIMIT
       this.fetchData()
     }
   }

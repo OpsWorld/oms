@@ -208,7 +208,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = val - 1
+      this.offset = (val - 1) * LIMIT
       this.fetchData()
     },
     statusChange(val) {

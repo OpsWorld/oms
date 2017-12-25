@@ -141,7 +141,7 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.listQuery.offset = (val - 1) * this.listQuery.limit
+      this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     }
   }
