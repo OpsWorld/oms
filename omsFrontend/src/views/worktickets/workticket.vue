@@ -69,6 +69,20 @@
           </el-table-column>
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
           <el-table-column prop='action_user' label='当前处理人'></el-table-column>
+          <el-table-column prop='create_time' label='工单创建时间'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{scope.row.create_time | parseDate}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='update_time' label='工单更新时间'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{scope.row.update_time | parseDate}}</span>
+              </div>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <div class="table-footer">

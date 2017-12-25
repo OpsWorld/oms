@@ -34,6 +34,7 @@ class WorkTicket(models.Model):
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, null=True, blank=True,
                                      verbose_name=u'工单状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name=u'工单更新时间')
     action_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单接收时间')
     end_time = models.CharField(max_length=100, blank=True, verbose_name=u'工单结束时间')
     cost_time = models.CharField(max_length=20, blank=True, verbose_name=u'工单花费时间')
