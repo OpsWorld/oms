@@ -10,7 +10,7 @@ const user = {
     menus: undefined,
     eleemnts: undefined,
     permissionMenus: undefined,
-    role: 'user'
+    role: ''
   },
 
   mutations: {
@@ -64,6 +64,8 @@ const user = {
           commit('SET_GROUPS', groups)
           if (groups.indexOf(super_group) >= 0) {
             commit('SET_ROLE', 'super')
+          } else {
+            commit('SET_ROLE', 'user')
           }
           const menus = {}
           for (const i of data.menus) {
@@ -91,6 +93,7 @@ const user = {
           commit('SET_GROUPS', [])
           localStorage.removeItem('token')
           commit('SET_MENUS', undefined)
+          commit('SET_ROLE', '')
           commit('SET_ELEMENTS', undefined)
           commit('SET_PERMISSION_MENUS', undefined)
           resolve()
@@ -106,6 +109,7 @@ const user = {
         commit('SET_TOKEN', '')
         localStorage.removeItem('token')
         commit('SET_MENUS', undefined)
+        commit('SET_ROLE', '')
         commit('SET_ELEMENTS', undefined)
         commit('SET_PERMISSION_MENUS', undefined)
         resolve()
