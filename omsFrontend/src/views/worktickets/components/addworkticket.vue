@@ -65,7 +65,7 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
-import { postUpload, postSendmail } from 'api/tool'
+import { postUpload, postSendmail, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
@@ -195,7 +195,7 @@ export default {
               is_html: true,
               duration: 0
             }
-            this.ws.send(JSON.stringify(messageForm))
+            postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
           })
         } else {
