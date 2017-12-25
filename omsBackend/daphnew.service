@@ -3,7 +3,6 @@ Description=Daphne Interface new Server
 
 [Service]
 ExecStart=/bin/bash -c '/root/.pyenv/shims/python manage.py runworker --threads 5 --only-channels=websocket.*'
-Restart=always
 NonBlocking=true
 WorkingDirectory='/data/projects/oms/omsBackend'
 
