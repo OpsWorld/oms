@@ -312,7 +312,7 @@ export default {
                     <body><div id="container">
                     <p>工单提交人： ${this.commentForm.create_user} </p>
                     <p>工单提交时间：${create_time} </p>
-                    <p>点击工单地址: <a href='${window.location.href}'>${window.location.href}</a></p>
+                    <p>点击工单地址: <a href='http://${window.location.href}'>http://${window.location.href}</a></p>
                     <p>工单详细内容：</p>
                     <p>${this.mailmsg}</p>
                     <p>【工单处理内容】${this.mailcontent}</p>

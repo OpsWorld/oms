@@ -49,10 +49,12 @@
           <el-table-column prop='type' label='工单类型' sortable></el-table-column>
           <el-table-column prop='level' label='工单等级' sortable>
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center">
-                <el-tag :type="LEVEL[scope.row.level].type">
-                  {{LEVEL[scope.row.level].text}}
-                </el-tag>
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-rate
+                  v-model="scope.row.level"
+                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                  disabled>
+                </el-rate>
               </div>
             </template>
           </el-table-column>

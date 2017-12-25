@@ -126,15 +126,15 @@
             </el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
             <el-table-column prop='level' label='紧急度'>
-              <template slot-scope="scope">
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-rate
                   v-model="scope.row.level"
                   :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                  show-text
-                  :texts="['E', 'D', 'C', 'B', 'A']"
                   disabled>
                 </el-rate>
-              </template>
+              </div>
+            </template>
             </el-table-column>
             <el-table-column prop='platform' label='依附平台'></el-table-column>
             <el-table-column prop='merchant' label='依附商户'></el-table-column>

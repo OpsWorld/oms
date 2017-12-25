@@ -176,8 +176,8 @@ export default {
                     <body><div id="container">
                     <p>工单提交人： ${this.ruleForm.create_user}</p>
                     <p>工单提交时间：${create_time} </p>
-                    <p>点击工单地址: <a href='${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}'>
-                    ${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}</a></p>
+                    <p>点击工单地址: <a href='http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}'>
+                    http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}</a></p>
                     <p>工单详细内容：</p>
                     <p>${this.ruleForm.content}</p>
                     </div></body></html>`
