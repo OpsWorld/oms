@@ -300,6 +300,12 @@ export default {
           this.rowdata.action_user = this.commentForm.create_user
           this.commentForm.content = '【问题处理】' + this.mailcontent
         }
+        const messageForm = {
+          user: this.rowdata.action_user,
+          title: '您的工单有新变化',
+          message: `工单地址: ${window.location.href}`
+        }
+        postSendmessage(messageForm)
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)
           if (this.radio_status !== '0') {
@@ -321,12 +327,6 @@ export default {
                     </div></body></html>`
             }
             postSendmail(mailForm)
-            const messageForm = {
-              user: this.ticketData.action_user,
-              title: '您的工单有新变化',
-              message: `工单地址: ${window.location.href}`
-            }
-            postSendmessage(messageForm)
           }
           this.$router.push('/worktickets/workticket')
         })
