@@ -159,6 +159,7 @@ import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
 import { getCreatetime, getConversionTime } from '@/utils'
+import { ws_url } from '@/config'
 
 export default {
   components: {
@@ -224,7 +225,9 @@ export default {
       showaction: false,
       radio_status: '0',
       mailmsg: '',
-      mailcontent: ''
+      mailcontent: '',
+      ws: '',
+      ws_stream: '/sendmessage/'
     }
   },
 
@@ -241,6 +244,7 @@ export default {
     this.CommentData()
     this.EnclosureData()
     this.getTicketUsers()
+    this.wsInit()
   },
   methods: {
     fetchData() {
@@ -329,6 +333,7 @@ export default {
             is_html: true,
             duration: 0
           }
+          this.ws.send(JSON.stringify(messageForm))
           postSendmessage(messageForm)
           this.$router.push('/worktickets/workticket')
         })
@@ -382,6 +387,15 @@ export default {
       getUser().then(response => {
         this.users = response.data
       })
+    },
+    wsInit() {
+      const self = this
+      self.ws = new WebSocket(ws_url + self.ws_stream)
+      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
+      self.ws.onmessage = (e) => {
+        console.log(e.data)
+        // self.results.push(e.data);
+      }
     }
   }
 }

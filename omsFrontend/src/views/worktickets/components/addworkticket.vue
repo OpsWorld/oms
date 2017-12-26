@@ -196,7 +196,7 @@ export default {
               duration: 0
             }
             this.ws.send(JSON.stringify(messageForm))
-            // postSendmessage(messageForm)
+            postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
           })
         } else {
