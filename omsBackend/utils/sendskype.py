@@ -11,12 +11,15 @@ content = "hello"
 
 sk = Skype(sk_user, sk_pass)
 
+user_dict = {
+    'larry': '8:larry16898',
+    'tbitsupport': '8:tbitsupport01'
+}
 
 def skype_bot(to_user, content):
-    for c in sk.chats.recent():
-        if to_user in c:
-            chat = sk.chats[c]
-            chat.sendMsg(content)
+    chat = sk.chats[user_dict[to_user]]
+    chat.sendMsg(content)
+
 
 if __name__ == '__main__':
     for chatId in sk.chats.recent():

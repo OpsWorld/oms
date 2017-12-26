@@ -32,7 +32,6 @@ def sendmessage_receive(message):
     request = json.loads(text)
     to_user = request["user"]
     content = request["title"] + '\n' + request["message"]
-    print(request)
-    #results = skype_bot(to_user,content).stdout
+    results = skype_bot(to_user,content).stdout
     #for result in results:
-    message.reply_channel.send({'text':'111'}, True)
+    message.reply_channel.send({'text':'success'}, True)
