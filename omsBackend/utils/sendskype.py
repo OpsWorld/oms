@@ -11,14 +11,8 @@ content = "hello"
 
 sk = Skype(sk_user, sk_pass)
 
-chat_dict = {
-    '运维组': '19:1f93a089523f4889843e926106822721@thread.skype',
-    'tbitsupport': '8:tbitsupport01'
-}
-
 def skype_bot(user, content):
-    print(user)
-    chat = sk.chats[chat_dict['运维组']]
+    chat = sk.chats[user]
     chat.sendMsg(content)
 
 if __name__ == '__main__':

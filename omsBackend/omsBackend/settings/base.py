@@ -140,16 +140,11 @@ LDAP_AUTH_OBJECT_CLASS = "user"
 LDAP_AUTH_USER_FIELDS = {
     "username": "sAMAccountName",
     "email": "mail",
-    "groups": "memberOf",
+    "skype": "postOfficeBox",
 }
 
 # A tuple of django model fields used to uniquely identify a user.
 LDAP_AUTH_USER_LOOKUP_FIELDS = ("username",)
-
-LDAP_AUTH_GROUP_FIELDS = {
-    "email": "mail",
-    "desc": "description"
-}
 
 # Path to a callable that takes a dict of {model_field_name: value},
 # returning a dict of clean model data.

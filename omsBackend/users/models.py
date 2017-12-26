@@ -29,6 +29,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     username = models.CharField(max_length=32, unique=True, db_index=True)
     email = models.EmailField(max_length=255, null=True, blank=True)
+    skype = models.CharField(max_length=255, null=True, blank=True)
     groups = models.ManyToManyField('Group', null=True, blank=True, verbose_name=u'部门')
     create_date = models.DateField(auto_now=True, verbose_name=u'创建时间')
     is_active = models.BooleanField(default=True)
@@ -53,7 +54,6 @@ class User(AbstractBaseUser):
 
 class Group(models.Model):
     name = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
-    email = models.EmailField(max_length=255, null=True, blank=True)
     desc = models.CharField(max_length=64, null=True, blank=True)
 
     def __str__(self):
