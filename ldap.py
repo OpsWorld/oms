@@ -116,8 +116,6 @@ class Connection(object):
                 try:
                     django_group, created = Group.objects.update_or_create(
                         name=name,
-                        email=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["email"]][0],
-                        desc=groupinfo[django_settings.LDAP_AUTH_GROUP_FIELDS["desc"]][0]
                     )
                 except Exception as e:
                     django_group, created = Group.objects.update_or_create(name=name,)

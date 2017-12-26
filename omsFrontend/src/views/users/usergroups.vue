@@ -17,7 +17,6 @@
             <div>
                 <el-table :data='tableData' border style="width: 100%">
                     <el-table-column prop='name' label='组名' sortable='custom'></el-table-column>
-                    <el-table-column prop='email' label='邮箱' sortable='custom'></el-table-column>
                     <el-table-column prop='desc' label='描述' sortable='custom'></el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -51,7 +50,7 @@
 <script>
 import { getGroup, postGroup, deleteGroup } from 'api/user'
 import { LIMIT } from '@/config'
-import addGroup from './addgroup.vue'
+import addGroup from '../components/addgroup.vue'
 import viewGroup from './viewgroup.vue'
 
 export default {
@@ -76,9 +75,6 @@ export default {
   },
 
   methods: {
-    /*
-             * 获取数据
-             */
     fetchData() {
       const parms = {
         limit: this.limit,

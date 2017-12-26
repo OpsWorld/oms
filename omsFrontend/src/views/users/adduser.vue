@@ -1,29 +1,32 @@
 <template xmlns="http://www.w3.org/1999/html">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="用户名" prop="username">
-            <el-input v-model="ruleForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="Email" prop="email">
-            <el-input v-model="ruleForm.email"></el-input>
-        </el-form-item>
-        <el-form-item label="用户分组" prop="group">
-            <el-select v-model="ruleForm.group" placeholder="请选择用户分组">
-                <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item label="是否激活" prop="is_active">
-            <el-switch on-text="oo" off-text="xx" v-model="ruleForm.is_active"></el-switch>
-        </el-form-item>
-        <el-form-item label="角色" prop="group">
-            <el-select v-model="ruleForm.roles" placeholder="请选择用户角色">
-                <el-option v-for="item in roles" :key="item.name" :value="item.name"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item>
-            <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-            <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
-        </el-form-item>
-    </el-form>
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form-item label="用户名" prop="username">
+      <el-input v-model="ruleForm.username"></el-input>
+    </el-form-item>
+    <el-form-item label="Email" prop="email">
+      <el-input v-model="ruleForm.email"></el-input>
+    </el-form-item>
+    <el-form-item label="Skype" prop="email">
+      <el-input v-model="ruleForm.skype"></el-input>
+    </el-form-item>
+    <el-form-item label="用户分组" prop="group">
+      <el-select v-model="ruleForm.group" placeholder="请选择用户分组">
+        <el-option v-for="item in groups" :key="item.name" :value="item.name"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="是否激活" prop="is_active">
+      <el-switch on-text="oo" off-text="xx" v-model="ruleForm.is_active"></el-switch>
+    </el-form-item>
+    <el-form-item label="角色" prop="group">
+      <el-select v-model="ruleForm.roles" placeholder="请选择用户角色">
+        <el-option v-for="item in roles" :key="item.name" :value="item.name"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+      <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 <script>
 import { postUser, getGroup, getRole } from 'api/user'
@@ -36,6 +39,7 @@ export default {
       ruleForm: {
         username: '',
         email: '',
+        skype: '',
         is_active: '',
         group: '',
         roles: '',
@@ -47,6 +51,9 @@ export default {
         ],
         email: [
           { required: true, type: 'email', message: '请输入正确的Email地址', trigger: 'blur' }
+        ],
+        skype: [
+          { required: true, message: '请输入正确的Skype地址', trigger: 'blur' }
         ],
         group: [
           { required: true, message: '请选择用户分组', trigger: 'change' }

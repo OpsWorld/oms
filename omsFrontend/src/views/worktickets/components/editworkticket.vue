@@ -324,10 +324,8 @@ export default {
           }
           const messageForm = {
             user: this.commentForm.create_user,
-            title: '您的工单有新回复',
-            message: `工单地址: ${window.location.href}`,
-            is_html: true,
-            duration: 0
+            title: '您的工单有新变化',
+            message: `工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
           this.$router.push('/worktickets/workticket')
