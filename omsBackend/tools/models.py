@@ -47,9 +47,6 @@ class Sendmessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'消息主人')
     title = models.CharField(max_length=30, verbose_name=u'标题')
     message = models.TextField(null=True, blank=True, verbose_name=u'消息')
-    is_html = models.BooleanField(default=False, verbose_name=u'是否html')
-    duration = models.CharField(max_length=10, default=0, blank=True, verbose_name=u'显示时间')
-    state = models.BooleanField(default=False, verbose_name=u'是否已读')
 
     def __str__(self):
         return self.title

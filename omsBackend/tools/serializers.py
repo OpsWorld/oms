@@ -23,4 +23,4 @@ class SendmessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sendmessage
-        fields = ['url', 'id', 'user', 'title', 'message', 'is_html', 'duration', 'state']
+        fields = ['url', 'id', 'user', 'title', 'message']
