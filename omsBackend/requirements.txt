@@ -41,5 +41,4 @@ SkPy==0.8.1
 Twisted==17.9.0
 txaio==2.8.2
 urllib3==1.22
-websocket-client==0.45.0
 zope.interface==4.4.3

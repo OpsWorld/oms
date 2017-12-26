@@ -6,7 +6,7 @@ import os
 from celery import Celery
 from django.conf import settings
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dailyblog.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "omsBackend.settings")
 
 # 创建celery应用
 app = Celery('omsBackend')
