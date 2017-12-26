@@ -12,4 +12,4 @@ def send_to_skype(user,content):
 @celery_app.task
 def send_to_mail(to_list, cc_list, sub, content):
     print(sub)
-    #send_mail(to_list, cc_list, sub, content)
+    send_mail(to_list, cc_list, sub, content)
