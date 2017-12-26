@@ -183,22 +183,6 @@ LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-        },
-    },
-    "loggers": {
-        "django_python3_ldap": {
-            "handlers": ["console"],
-            "level": "INFO",
-        },
-    },
-}
-
 import djcelery
 djcelery.setup_loader()
 # 这是使用了django-celery默认的数据库调度模型,任务执行周期都被存在你指定的orm数据库中
@@ -217,3 +201,35 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 # celery时区设置，使用settings中TIME_ZONE同样的时区
 CELERY_TIMEZONE = TIME_ZONE
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s',
+            'datefmt': '%y %b %d, %H:%M:%S',
+            },
+        },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'celery': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'celery': {
+            'handlers': ['celery', 'console'],
+            'level': 'INFO',
+        },
+    }
+}
+
+from logging.config import dictConfig
+dictConfig(LOGGING)

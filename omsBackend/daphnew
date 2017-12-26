@@ -1,3 +1,0 @@
-#!/bin/bash
-cd /data/projects/oms/omsBackend
-/root/.pyenv/versions/envoms/bin/python manage.py runworker --threads 5 --only-channels=websocket.*

@@ -16,9 +16,9 @@ user_dict = {
     'tbitsupport': '8:tbitsupport01'
 }
 
-def skype_bot(to_user, content):
-    chat = sk.chats[user_dict[to_user]]
-    print(chat)
+def skype_bot(user, content):
+    print(user)
+    chat = sk.chats[ '8:tbitsupport01']
     chat.sendMsg(content)
 
 

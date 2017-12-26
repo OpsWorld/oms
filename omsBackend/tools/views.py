@@ -8,8 +8,8 @@ from tools.models import Upload, Sendmail, Sendmessage
 from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer
 from tools.filters import UploadFilter
 from users.models import User
-from utils.sendmail import send_mail
-from tasks.tasks import send_to_skype
+from tasks.tasks import send_to_skype, send_to_mail
+
 class UploadViewSet(viewsets.ModelViewSet):
     queryset = Upload.objects.all()
     serializer_class = UploadSerializer
@@ -41,8 +41,7 @@ class SendmailViewSet(viewsets.ModelViewSet):
                     cc_list = cc_list
         sub = request.data["sub"]
         content = request.data["content"]
-        results = send_mail(to_list, cc_list, sub, content)
-        print(results)
+        send_to_mail.delay(to_list, cc_list, sub, content)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
