@@ -8,7 +8,6 @@ from threepay.views import PlatformViewSet, MerchantViewSet, ThreePayEnclosureVi
 from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
-from cmd.views import CmdrunViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -26,7 +25,6 @@ router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)
 router.register(r'menumetas', ElementViewSet)
 router.register(r'usermenuperms', UserMenuPermsViewSet)
-router.register(r'cmdrun', CmdrunViewSet)
 router.register(r'platforms', PlatformViewSet)
 router.register(r'merchants', MerchantViewSet)
 router.register(r'threepayenclosures', ThreePayEnclosureViewSet)

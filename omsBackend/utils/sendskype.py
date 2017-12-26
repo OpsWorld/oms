@@ -18,6 +18,7 @@ user_dict = {
 
 def skype_bot(to_user, content):
     chat = sk.chats[user_dict[to_user]]
+    print(chat)
     chat.sendMsg(content)
 
 

@@ -70,7 +70,6 @@ import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
 import { getCreatetime, getConversionTime } from '@/utils'
-import { ws_url } from '@/config'
 
 export default {
   components: {},
@@ -129,9 +128,7 @@ export default {
       to_list: '',
       cc_list: '',
       uploadurl: uploadurl,
-      types: [],
-      ws: '',
-      ws_stream: '/sendmessage/'
+      types: []
     }
   },
 
@@ -143,7 +140,6 @@ export default {
   created() {
     this.getTicketUsers()
     this.getTicketType()
-    this.wsInit()
   },
   methods: {
     postForm(formName) {
@@ -195,7 +191,6 @@ export default {
               is_html: true,
               duration: 0
             }
-            this.ws.send(JSON.stringify(messageForm))
             postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
           })
@@ -239,15 +234,6 @@ export default {
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
-    },
-    wsInit() {
-      const self = this
-      self.ws = new WebSocket(ws_url + self.ws_stream)
-      if (self.ws.readyState === WebSocket.OPEN) self.ws.onopen()
-      self.ws.onmessage = (e) => {
-        console.log(e.data)
-        // self.results.push(e.data);
-      }
     }
   }
 }

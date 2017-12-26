@@ -9,8 +9,7 @@ from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageS
 from tools.filters import UploadFilter
 from users.models import User
 from utils.sendmail import send_mail
-from utils.sendskype import skype_bot
-
+from tasks.tasks import send_to_skype
 class UploadViewSet(viewsets.ModelViewSet):
     queryset = Upload.objects.all()
     serializer_class = UploadSerializer
@@ -44,9 +43,6 @@ class SendmailViewSet(viewsets.ModelViewSet):
         content = request.data["content"]
         results = send_mail(to_list, cc_list, sub, content)
         print(results)
-        #cmd = '/root/.pyenv/versions/envoms/bin/python /data/projects/oms/omsBackend/utils/sendmail.py {} {} {} {}'.format(to_list, cc_list, sub, content)
-        #print(cmd)
-        #results = run(cmd).stdout
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -57,14 +53,14 @@ class SendmailViewSet(viewsets.ModelViewSet):
 class SendmessageViewSet(viewsets.ModelViewSet):
     queryset = Sendmessage.objects.all()
     serializer_class = SendmessageSerializer
-    #
-    # def create(self, request, *args, **kwargs):
-    #     serializer = SendmessageSerializer(data=request.data, context={'request': request})
-    #     to_user = request.data["user"]
-    #     content = request.data["title"] + '\n' + request.data["message"]
-    #     skype_bot(to_user,content)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request, *args, **kwargs):
+        serializer = SendmessageSerializer(data=request.data, context={'request': request})
+        user = request.data["user"]
+        content = request.data["title"] + '\n' + request.data["message"]
+        send_to_skype.delay(user,content)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)

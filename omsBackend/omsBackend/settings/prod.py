@@ -17,13 +17,12 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
-    'channels',   #djanog异步通信
+    'djcelery',  # 异步任务
     'worktickets',
     'tools',
     'users',
     'menus',
     'perms',
-    'cmd',
     'threepay',
 ]
 
