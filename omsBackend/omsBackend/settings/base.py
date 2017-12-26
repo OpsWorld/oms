@@ -141,6 +141,7 @@ LDAP_AUTH_USER_FIELDS = {
     "username": "sAMAccountName",
     "email": "mail",
     "skype": "postOfficeBox",
+    "groups": "memberOf",
 }
 
 # A tuple of django model fields used to uniquely identify a user.

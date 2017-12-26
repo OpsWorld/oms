@@ -58,7 +58,7 @@ class SendmessageViewSet(viewsets.ModelViewSet):
         user = request.data["user"]
         to_user = User.objects.get(username=user).skype
         content = request.data["title"] + '\n' + request.data["message"]
-        send_to_skype.delay(to_user,content)
+        send_to_skype.delay('8:' + to_user,content)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
