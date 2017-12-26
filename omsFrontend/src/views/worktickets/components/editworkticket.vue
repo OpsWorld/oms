@@ -321,13 +321,13 @@ export default {
                     </div></body></html>`
             }
             postSendmail(mailForm)
+            const messageForm = {
+              user: this.ticketData.action_user,
+              title: '您的工单有新变化',
+              message: `工单地址: ${window.location.href}`
+            }
+            postSendmessage(messageForm)
           }
-          const messageForm = {
-            user: this.commentForm.create_user,
-            title: '您的工单有新变化',
-            message: `工单地址: ${window.location.href}`
-          }
-          postSendmessage(messageForm)
           this.$router.push('/worktickets/workticket')
         })
       }).catch(() => {
