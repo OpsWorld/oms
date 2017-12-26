@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
-    'djcelery',  # 异步任务
+
     'worktickets',
     'tools',
     'users',
@@ -44,22 +44,22 @@ LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
 LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 
-# Redis
-REDIS_OPTIONS = {
-    'HOST': '127.0.0.1',
-    'PORT': 6379,
-    'DB': 0
-}
-USE_REDIS = True
-# Channel settings
-CHANNEL_LAYERS = {
-    "default": {
-        # 'BACKEND': 'asgiref.inmemory.ChannelLayer',    #如果使用这个，消息变多时，会读不出来
-         "BACKEND": "asgi_redis.RedisChannelLayer",
-         "CONFIG": {
-             "hosts": ['redis://{}:{}'.format(REDIS_OPTIONS['HOST'],
-                                              REDIS_OPTIONS['PORT'])]
-         },
-        "ROUTING": "omsBackend.routing.channel_routing"
-    }
-}
+# # Redis
+# REDIS_OPTIONS = {
+#     'HOST': '127.0.0.1',
+#     'PORT': 6379,
+#     'DB': 0
+# }
+# USE_REDIS = True
+# # Channel settings
+# CHANNEL_LAYERS = {
+#     "default": {
+#         # 'BACKEND': 'asgiref.inmemory.ChannelLayer',    #如果使用这个，消息变多时，会读不出来
+#          "BACKEND": "asgi_redis.RedisChannelLayer",
+#          "CONFIG": {
+#              "hosts": ['redis://{}:{}'.format(REDIS_OPTIONS['HOST'],
+#                                               REDIS_OPTIONS['PORT'])]
+#          },
+#         "ROUTING": "omsBackend.routing.channel_routing"
+#     }
+# }
