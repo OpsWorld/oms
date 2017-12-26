@@ -29,7 +29,6 @@ def send_mail(to_list, cc_list, sub, content):
     list.append(msg['To'])
     context = MIMEText(content, _subtype='html', _charset='utf-8')  # 解决乱码
     msg.attach(context)
-    print("msg: %s" % msg)
     try:
         send_smtp = smtplib.SMTP()
         send_smtp.connect(mail_host, 587)
@@ -37,7 +36,6 @@ def send_mail(to_list, cc_list, sub, content):
         send_smtp.login(mail_user, mail_pass)
 
         send_smtp.sendmail(me, list, msg.as_string())
-        print("send_smtp: %s" % send_smtp)
         send_smtp.close()
         return {"code":'success',"msg":"通知邮件发送成功"}
     except Exception as e:
