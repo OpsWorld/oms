@@ -12,7 +12,9 @@ content = "hello"
 sk = Skype(sk_user, sk_pass)
 
 def skype_bot(user, content):
-    chat = sk.chats[user]
+    #chat = sk.chats[user]
+    print(content)
+    chat = sk.chats['8:live:tbkiven']
     chat.sendMsg(content)
 
 if __name__ == '__main__':
