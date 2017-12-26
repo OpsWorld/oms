@@ -7,6 +7,7 @@ from utils.sendmail import send_mail
 
 @celery_app.task
 def send_to_skype(user,content):
+    print(content)
     skype_bot(user, content)
 
 @celery_app.task
