@@ -126,7 +126,7 @@
           <el-radio label="2">关闭工单</el-radio>
         </el-radio-group>
         <div v-if="radio_status==1">
-          <el-select v-model="rowdata.action_user" placeholder="请选择指派人">
+          <el-select v-model="rowdata.action_user" filterable placeholder="请选择指派人">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
           <p style="color: red">点提交后生效</p>
