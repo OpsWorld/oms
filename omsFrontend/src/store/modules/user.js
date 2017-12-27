@@ -5,7 +5,7 @@ import { super_group } from '@/config'
 const user = {
   state: {
     token: localStorage.getItem('token'),
-    username: '',
+    username: localStorage.getItem('username'),
     groups: [],
     menus: undefined,
     eleemnts: undefined,

@@ -40,7 +40,7 @@ router.beforeEach((to, from, next) => {
         if (hasPermission(store.getters.groups, to.meta.group)) {
           next()//
         } else {
-          next({ path: '/401', query: { noGoBack: true }})
+          next({ path: '/403', query: { noGoBack: true }})
           NProgress.done() // router在hash模式下 手动改变hash 重定向回来 不会触发afterEach 暂时hack方案 ps：history模式下无问题，可删除该行！
         }
         // 可删 ↑

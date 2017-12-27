@@ -5,6 +5,7 @@ from django.db import models
 from users.models import User, Group
 from tools.models import Upload
 
+
 TicketLevel = {
     1: 'A',
     2: 'B',
@@ -19,6 +20,7 @@ TicketStatus = {
     2: u'已解决',
 }
 
+admin_groups = ['admin',u'技术部IM','OMS_Super_Admin']
 
 class WorkTicket(models.Model):
     ticketid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
@@ -45,6 +47,38 @@ class WorkTicket(models.Model):
     class Meta:
         verbose_name = u'工单'
         verbose_name_plural = u'工单'
+
+    @staticmethod
+    def has_read_permission(request):
+        return True
+
+    def has_object_read_permission(self, request):
+        groups = User.objects.get(username=request.user).groups.all()
+        create_groups = self.create_group.all()
+        admin_list = [group.name for group in groups]
+
+        # 求交集
+        is_admin = [i for i in admin_list if i in admin_groups]
+        c_list = groups & create_groups
+        if len(is_admin) > 0 or len(c_list)>0:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def has_write_permission(request):
+        return True
+
+    def has_object_write_permission(self, request):
+        return True
+
+    @staticmethod
+    def has_update_permission(request):
+        return True
+
+    def has_object_update_permission(self, request):
+        return True
+
 
     def save(self, *args, **kwargs):
         groups = User.objects.get(username=self.create_user).groups.all()

@@ -12,6 +12,7 @@ from worktickets.filters import WorkTicketFilter, WorkTicketFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from users.models import User
+from dry_rest_permissions.generics import DRYPermissions
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
@@ -19,6 +20,7 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
     filter_class = WorkTicketFilter
     filter_backends = (DjangoFilterBackend, SearchFilter,WorkTicketFilterBackend)
     search_fields = ('title', 'content', 'type__name')
+    permission_classes = (DRYPermissions,)
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):

@@ -2,9 +2,11 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from worktickets.models import WorkTicket
+from worktickets.models import WorkTicket, admin_groups
 from users.models import User
 from dry_rest_permissions.generics import DRYPermissionFiltersBase
+from rest_framework.response import Response
+from rest_framework import status
 
 class WorkTicketFilter(filters.FilterSet):
     class Meta:
@@ -19,7 +21,6 @@ class WorkTicketFilter(filters.FilterSet):
             'ticket_status': ['exact'],
         }
 
-admin_groups = ['admin']
 
 class WorkTicketFilterBackend(DRYPermissionFiltersBase):
     def filter_list_queryset(self, request, queryset, view):
@@ -35,4 +36,4 @@ class WorkTicketFilterBackend(DRYPermissionFiltersBase):
         if len(is_admin) > 0:
             return queryset
         else:
-            return queryset.filter(create_group__in=groups)
+            return queryset.filter(create_group__in=groups).distinct()   # .distinct()去重
