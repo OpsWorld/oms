@@ -34,7 +34,7 @@ DATABASES = {
 }
 
 # 使用ldap认证
-AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
