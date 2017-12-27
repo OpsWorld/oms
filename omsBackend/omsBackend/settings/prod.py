@@ -63,3 +63,17 @@ LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 #         "ROUTING": "omsBackend.routing.channel_routing"
 #     }
 # }
+
+# skype账号
+SK_ACOUNT = {
+    'sk_user': 'oms@tb-gaming.com',
+    'sk_pass': 'tengfa@918'
+}
+
+# enail账号
+MAIL_ACOUNT = {
+    "mail_host": "mail.tb-gaming.com",
+    "mail_user": "oms@tb-gaming.com",
+    "mail_pass": "u62En68D9d",
+    "mail_postfix": "tb-gaming.com",
+}

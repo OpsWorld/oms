@@ -5,7 +5,7 @@ import { super_group } from '@/config'
 const user = {
   state: {
     token: localStorage.getItem('token'),
-    username: localStorage.getItem('username'),
+    username: '',
     groups: [],
     menus: undefined,
     eleemnts: undefined,
@@ -62,6 +62,7 @@ const user = {
           const data = response.data
           const groups = data.groups
           commit('SET_GROUPS', groups)
+          localStorage.setItem('groups', groups)
           if (groups.indexOf(super_group) >= 0) {
             commit('SET_ROLE', 'super')
           } else {
@@ -90,8 +91,9 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
-          commit('SET_GROUPS', [])
           localStorage.removeItem('token')
+          commit('SET_GROUPS', [])
+          localStorage.setItem('groups', [])
           commit('SET_MENUS', undefined)
           commit('SET_ROLE', '')
           commit('SET_ELEMENTS', undefined)
@@ -108,6 +110,8 @@ const user = {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         localStorage.removeItem('token')
+        commit('SET_GROUPS', [])
+        localStorage.setItem('groups', [])
         commit('SET_MENUS', undefined)
         commit('SET_ROLE', '')
         commit('SET_ELEMENTS', undefined)

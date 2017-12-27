@@ -2,7 +2,9 @@
 # author: kiven
 
 from django_filters import rest_framework as filters
-from worktickets.models import WorkTicket, TicketComment, TicketEnclosure
+from worktickets.models import WorkTicket
+from users.models import User
+from dry_rest_permissions.generics import DRYPermissionFiltersBase
 
 class WorkTicketFilter(filters.FilterSet):
     class Meta:
@@ -17,16 +19,20 @@ class WorkTicketFilter(filters.FilterSet):
             'ticket_status': ['exact'],
         }
 
-class TicketCommentFilter(filters.FilterSet):
-    class Meta:
-        model = TicketComment
-        fields = {
-            'ticket__ticketid': ['exact'],
-        }
+admin_groups = ['admin']
 
-class TicketEnclosureFilter(filters.FilterSet):
-    class Meta:
-        model = TicketEnclosure
-        fields = {
-            'ticket__ticketid': ['exact'],
-        }
+class WorkTicketFilterBackend(DRYPermissionFiltersBase):
+    def filter_list_queryset(self, request, queryset, view):
+        """
+        Limits all list requests to only be seen by the create_groups.
+        admin groups can get all().
+        """
+        groups = User.objects.get(username=request.user).groups.all()
+        admin_list = [group.name for group in groups]
+
+        #求交集
+        is_admin = [i for i in admin_list if i in admin_groups]
+        if len(is_admin) > 0:
+            return queryset
+        else:
+            return queryset.filter(create_group__in=groups)

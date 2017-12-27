@@ -17,7 +17,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
-    'djcelery',  #异步任务
+    'djcelery',  # 异步任务
     'worktickets',
     'tools',
     'users',
@@ -34,8 +34,22 @@ DATABASES = {
 }
 
 # 使用ldap认证
-#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+# AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
 LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
+
+# skype账号
+SK_ACOUNT = {
+    "sk_user": "tbkiven@outlook.com",
+    "sk_pass": "tengfa9188"
+}
+
+# enail账号
+MAIL_ACOUNT = {
+    "mail_host": "mail.tb-gaming.com",
+    "mail_user": "kiven@tb-gaming.com",
+    "mail_pass": "ZfaEWFbcW5",
+    "mail_postfix": "tb-gaming.com",
+}

@@ -29,7 +29,7 @@ class WorkTicket(models.Model):
     action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='action_user',
                                     verbose_name=u'指派人')
     follower = models.ManyToManyField(User, null=True, blank=True, related_name='follower', verbose_name=u'跟踪人')
-    create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单分组')
+    create_group = models.ManyToManyField(Group, null=True, blank=True, verbose_name=u'部门')
     level = models.CharField(max_length=3, choices=TicketLevel.items(), default=2, verbose_name=u'工单等级')
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, null=True, blank=True,
                                      verbose_name=u'工单状态')
@@ -46,12 +46,16 @@ class WorkTicket(models.Model):
         verbose_name = u'工单'
         verbose_name_plural = u'工单'
 
+    def save(self, *args, **kwargs):
+        groups = User.objects.get(username=self.create_user).groups.all()
+        self.create_group = groups
+        super(WorkTicket, self).save(*args, **kwargs)
+
 
 class TicketComment(models.Model):
     ticket = models.ForeignKey(WorkTicket, verbose_name=u'工单')
     content = models.TextField(verbose_name=u'工单回复内容')
     create_user = models.ForeignKey(User, verbose_name=u'回复人')
-    create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单回复时间')
 
     class Meta:
@@ -63,7 +67,6 @@ class TicketEnclosure(models.Model):
     ticket = models.ForeignKey(WorkTicket, verbose_name=u'工单')
     file = models.ForeignKey(Upload, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
-    create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
 
     class Meta:
@@ -75,6 +78,9 @@ class TicketType(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name=u'工单类型')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = u'工单类型'
         verbose_name_plural = u'工单类型'
@@ -85,7 +91,6 @@ class TicketWiki(models.Model):
     type = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'问题类型')
     content = models.TextField(verbose_name=u'问题内容')
     create_user = models.ForeignKey(User, verbose_name=u'创建者')
-    create_group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'所在部门')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     def __str__(self):

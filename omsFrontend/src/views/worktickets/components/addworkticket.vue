@@ -85,7 +85,7 @@ export default {
         level: 2,
         action_user: 'itsupport',
         follower: '',
-        create_group: '',
+        create_group: [],
         ticketid: ''
       },
       rules: {
@@ -109,8 +109,7 @@ export default {
       enclosureForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
-        file: '',
-        create_group: ''
+        file: ''
       },
       toolbars: {
         preview: true, // 预览
@@ -134,7 +133,8 @@ export default {
 
   computed: {
     ...mapGetters([
-      'username'
+      'username',
+      'groups'
     ])
   },
   created() {
@@ -146,6 +146,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.ruleForm.ticketid = getConversionTime()
+          this.ruleForm.create_group = this.groups
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({

@@ -177,14 +177,12 @@ export default {
       commentForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
-        content: '【问题处理】',
-        create_group: ''
+        content: '【问题处理】'
       },
       enclosureForm: {
         ticket: '',
         create_user: localStorage.getItem('username'),
-        file: '',
-        create_group: ''
+        file: ''
       },
       rowdata: {
         ticket_status: 1,

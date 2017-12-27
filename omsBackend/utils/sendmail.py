@@ -5,13 +5,13 @@ import sys
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from omsBackend.settings import MAIL_ACOUNT
 
 # 设置服务器名称、用户名、密码以及邮件后缀
-mail_host = "mail.tb-gaming.com"
-mail_user = "oms@tb-gaming.com"
-mail_pass = "u62En68D9d"  # 隐藏输入密码
-mail_postfix = "tb-gaming.com"
-# mailto_list = ["1542141838@qq.com","jjyy@qq.com"]
+mail_host = MAIL_ACOUNT["mail_host"]
+mail_user = MAIL_ACOUNT["mail_user"]
+mail_pass = MAIL_ACOUNT["mail_pass"]
+mail_postfix = MAIL_ACOUNT["mail_postfix"]
 
 # 发送邮件函数
 def send_mail(to_list, cc_list, sub, content):
