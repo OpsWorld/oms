@@ -140,7 +140,7 @@ LDAP_AUTH_OBJECT_CLASS = "user"
 LDAP_AUTH_USER_FIELDS = {
     "username": "sAMAccountName",
     "email": "mail",
-    "skype": "postOfficeBox",
+    "skype": "streetAddress",
     "groups": "memberOf",
 }
 

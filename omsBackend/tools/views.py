@@ -61,8 +61,8 @@ class SendmessageViewSet(viewsets.ModelViewSet):
         to_action_user = User.objects.get(username=action_user).skype
         content = request.data["title"] + '\n' + request.data["message"]
         print(content)
-        send_to_skype.delay('8:' + str(to_create_user),content)
-        send_to_skype.delay('8:' + str(to_action_user),content)
+        send_to_skype.delay(to_create_user,content)
+        send_to_skype.delay(to_action_user,content)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
