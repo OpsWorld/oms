@@ -46,7 +46,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
-          <el-table-column prop='type' label='工单类型' sortable></el-table-column>
+          <el-table-column prop='type' label='标题'></el-table-column>
           <el-table-column prop='level' label='工单等级' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -150,13 +150,6 @@ export default {
         '1': { 'text': '正在处理', 'type': 'success' },
         '2': { 'text': '已解决', 'type': 'danger' }
       },
-      LEVEL: {
-        '1': { 'text': 'A', 'type': 'danger' },
-        '2': { 'text': 'B', 'type': 'warning' },
-        '3': { 'text': 'C', 'type': 'success' },
-        '4': { 'text': 'D', 'type': 'info' },
-        '5': { 'text': 'E', 'type': '' }
-      },
       listQuery: {
         ticketid: '',
         create_user: '',
@@ -198,7 +191,6 @@ export default {
       getWorkticket(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
-        console.log(this.tableData)
       })
     },
     searchClick() {

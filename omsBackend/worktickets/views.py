@@ -26,11 +26,15 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
 class TicketCommentViewSet(viewsets.ModelViewSet):
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ['ticket__ticketid']
 
 
 class TicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = TicketEnclosure.objects.all()
     serializer_class = TicketEnclosureSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ['ticket__ticketid']
 
 
 class TicketTypeViewSet(viewsets.ModelViewSet):
