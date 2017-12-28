@@ -82,7 +82,7 @@ class WorkTicket(models.Model):
 
     def save(self, *args, **kwargs):
         groups = User.objects.get(username=self.create_user).groups.all()
-        self.create_group = groups
+        # self.create_group = groups
         super(WorkTicket, self).save(*args, **kwargs)
 
 

@@ -13,8 +13,7 @@ class WorkTicketSerializer(serializers.ModelSerializer):
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', allow_null=True)
     follower = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username',
                                             allow_null=True)
-    create_group = serializers.SlugRelatedField(many=True, queryset=Group.objects.all(), slug_field='name',
-                                                allow_null=True)
+    create_group = serializers.SlugRelatedField(many=True, queryset=Group.objects.all(), slug_field='name',allow_null=True)
 
     class Meta:
         model = WorkTicket

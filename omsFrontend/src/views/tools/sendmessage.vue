@@ -18,7 +18,7 @@
           <el-table-column type="selection"></el-table-column>
           <el-table-column prop='user' label='收件人' sortable></el-table-column>
           <el-table-column prop='title' label='标题' sortable></el-table-column>
-          <el-table-column prop='msg' label='消息内容' sortable></el-table-column>
+          <el-table-column prop='message' label='消息内容' sortable></el-table-column>
           <!--<el-table-column prop='is_html' label='是否html' sortable></el-table-column>-->
           <!--<el-table-column prop='duration' label='显示时间'></el-table-column>-->
           <!--<el-table-column prop='state' label='已读' sortable></el-table-column>-->
