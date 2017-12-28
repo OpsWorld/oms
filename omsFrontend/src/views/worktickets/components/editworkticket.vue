@@ -302,7 +302,7 @@ export default {
         const messageForm = {
           user: this.ticketData.action_user,
           title: '【工单状态变化】' + this.ticketData.title,
-          message: `工单提交人: ${this.commentForm.create_user}\n工单提交时间: ${create_time}\n工单地址: ${window.location.href}\n工单内容: ${this.commentForm.content}`
+          message: `工单提交人: ${this.commentForm.create_user}\n工单地址: ${window.location.href}`
         }
         postSendmessage(messageForm)
         postTicketcomment(this.commentForm).then(response => {

@@ -188,7 +188,7 @@ export default {
             const messageForm = {
               user: this.ruleForm.action_user,
               title: '【新工单】' + this.ruleForm.title,
-              message: `工单提交人: ${this.ruleForm.create_user}\n工单提交时间: ${create_time}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}\n工单内容: ${this.ruleForm.content}`
+              message: `工单提交人: ${this.ruleForm.create_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`
             }
             postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
