@@ -295,16 +295,18 @@ export default {
           this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
           this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！'
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
+
+          const messageForm = {
+            create_user: this.ticketData.create_user,
+            action_user: this.ticketData.action_user,
+            title: '【工单处理完成】' + this.ticketData.title,
+            message: `工单提交人: ${this.commentForm.create_user}\n工单处理人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
         } else {
           this.rowdata.action_user = this.commentForm.create_user
           this.commentForm.content = '【问题处理】' + this.mailcontent
         }
-        const messageForm = {
-          user: this.ticketData.action_user,
-          title: '【工单状态变化】' + this.ticketData.title,
-          message: `工单提交人: ${this.commentForm.create_user}\n工单地址: ${window.location.href}`
-        }
-        postSendmessage(messageForm)
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)
           if (this.radio_status !== '0') {

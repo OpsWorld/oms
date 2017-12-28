@@ -64,12 +64,6 @@ LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 #     }
 # }
 
-# skype账号
-SK_ACOUNT = {
-    'sk_user': 'oms@tb-gaming.com',
-    'sk_pass': 'tengfa@918'
-}
-
 # enail账号
 MAIL_ACOUNT = {
     "mail_host": "mail.tb-gaming.com",
@@ -77,3 +71,12 @@ MAIL_ACOUNT = {
     "mail_pass": "u62En68D9d",
     "mail_postfix": "tb-gaming.com",
 }
+
+#登录skype
+from skpy import Skype
+# skype账号
+SK_ACOUNT = {
+    'sk_user': 'oms@tb-gaming.com',
+    'sk_pass': 'tengfa@918'
+}
+SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])

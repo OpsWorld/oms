@@ -203,7 +203,7 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s %(message)s',
+            'format': '%(levelname)s %(asctime)s %(message)s',
             'datefmt': '%y %b %d, %H:%M:%S',
             },
         },

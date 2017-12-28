@@ -44,7 +44,8 @@ class Sendmail(models.Model):
 
 
 class Sendmessage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'消息主人')
+    create_user = models.ForeignKey(User, related_name='sk_create_user', verbose_name=u'创建者')
+    action_user = models.ForeignKey(User, related_name='sk_action_user',verbose_name=u'指派人')
     title = models.CharField(max_length=30, verbose_name=u'标题')
     message = models.TextField(null=True, blank=True, verbose_name=u'消息')
 

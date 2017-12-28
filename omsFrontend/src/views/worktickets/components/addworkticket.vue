@@ -186,9 +186,10 @@ export default {
             }
             postSendmail(mailForm)
             const messageForm = {
-              user: this.ruleForm.action_user,
+              create_user: this.ruleForm.create_user,
+              action_user: this.ruleForm.action_user,
               title: '【新工单】' + this.ruleForm.title,
-              message: `工单提交人: ${this.ruleForm.create_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`
+              message: `工单提交人: ${this.ruleForm.create_user}\n工单处理人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`
             }
             postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
