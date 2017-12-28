@@ -220,6 +220,10 @@ LOGGING = {
         },
     },
     'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
         'celery': {
             'handlers': ['celery', 'console'],
             'level': 'INFO',

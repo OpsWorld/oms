@@ -285,6 +285,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(response => {
+        const create_time = getCreatetime()
         this.commentForm.ticket = this.ticket_id
         if (this.radio_status === '1') {
           this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
@@ -299,15 +300,14 @@ export default {
           this.commentForm.content = '【问题处理】' + this.mailcontent
         }
         const messageForm = {
-          user: this.rowdata.action_user,
-          title: '您的工单有新变化',
-          message: `工单地址: ${window.location.href}`
+          user: this.ticketData.action_user,
+          title: '【工单状态变化】' + this.ticketData.title,
+          message: `工单提交人: ${this.commentForm.create_user}\n工单提交时间: ${create_time}\n工单地址: ${window.location.href}\n工单内容: ${this.commentForm.content}`
         }
         postSendmessage(messageForm)
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)
           if (this.radio_status !== '0') {
-            const create_time = getCreatetime()
             const mailForm = {
               to: this.ticketData.action_user,
               cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
