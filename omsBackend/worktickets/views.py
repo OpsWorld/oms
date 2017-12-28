@@ -18,9 +18,9 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
     serializer_class = WorkTicketSerializer
     filter_class = WorkTicketFilter
-    filter_backends = (DjangoFilterBackend, SearchFilter,WorkTicketFilterBackend)
+    filter_backends = (DjangoFilterBackend, SearchFilter)
     search_fields = ('title', 'content', 'type__name')
-    permission_classes = (DRYPermissions,)
+    #permission_classes = (DRYPermissions,)
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):

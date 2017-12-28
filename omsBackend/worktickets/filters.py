@@ -34,6 +34,7 @@ class WorkTicketFilterBackend(DRYPermissionFiltersBase):
         #求交集
         is_admin = [i for i in admin_list if i in admin_groups]
         if len(is_admin) > 0:
+            print(queryset)
             return queryset
         else:
             return queryset.filter(create_group__in=groups).distinct()   # .distinct()去重

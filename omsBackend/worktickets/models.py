@@ -60,6 +60,7 @@ class WorkTicket(models.Model):
         # 求交集
         is_admin = [i for i in admin_list if i in admin_groups]
         c_list = groups & create_groups
+        print(is_admin)
         if len(is_admin) > 0 or len(c_list)>0:
             return True
         else:
@@ -82,7 +83,7 @@ class WorkTicket(models.Model):
 
     def save(self, *args, **kwargs):
         groups = User.objects.get(username=self.create_user).groups.all()
-        # self.create_group = groups
+        self.create_group = groups
         super(WorkTicket, self).save(*args, **kwargs)
 
 

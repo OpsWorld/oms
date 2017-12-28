@@ -198,6 +198,7 @@ export default {
       getWorkticket(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+        console.log(this.tableData)
       })
     },
     searchClick() {
