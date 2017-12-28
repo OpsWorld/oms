@@ -81,12 +81,6 @@ class WorkTicket(models.Model):
         return True
 
 
-    def save(self, *args, **kwargs):
-        groups = User.objects.get(username=self.create_user).groups.all()
-        #self.create_group = groups
-        super(WorkTicket, self).save(*args, **kwargs)
-
-
 class TicketComment(models.Model):
     ticket = models.ForeignKey(WorkTicket, verbose_name=u'工单')
     content = models.TextField(verbose_name=u'工单回复内容')
