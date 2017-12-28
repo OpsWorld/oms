@@ -80,3 +80,4 @@ SK_ACOUNT = {
     'sk_pass': 'tengfa@918'
 }
 SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
+#SK = 'skype'
