@@ -9,7 +9,6 @@ from threepay.serializers import (PlatformSerializer,
                                   PayChannelSerializer,
                                   ThreePayEnclosureSerializer,
                                   ThreePayCommentSerializer)
-from django_filters.rest_framework import DjangoFilterBackend
 
 class PlatformViewSet(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
@@ -19,7 +18,6 @@ class PlatformViewSet(viewsets.ModelViewSet):
 class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['platform__name', 'name']
 
 
@@ -30,18 +28,15 @@ class PayChannelNameViewSet(viewsets.ModelViewSet):
 class PayChannelViewSet(viewsets.ModelViewSet):
     queryset = PayChannel.objects.all()
     serializer_class = PayChannelSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields =['platform__name', 'merchant__name', 'type__name']
 
 
 class ThreePayEnclosureViewSet(viewsets.ModelViewSet):
     queryset = ThreePayEnclosure.objects.all()
     serializer_class = ThreePayEnclosureSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['ticket__name']
 
 class ThreePayCommentViewSet(viewsets.ModelViewSet):
-    queryset = ThreePayComment.objects.all().order_by('-create_time')
+    queryset = ThreePayComment.objects.all().order_by('-id')
     serializer_class = ThreePayCommentSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['ticket__id']

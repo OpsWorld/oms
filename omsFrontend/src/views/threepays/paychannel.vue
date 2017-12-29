@@ -251,8 +251,8 @@ import { mapGetters } from 'vuex'
 import addPaychannel from './components/addPaychannel.vue'
 import editPaychannel from './components/editPaychannel.vue'
 import { LIMIT, apiUrl, uploadurl } from '@/config'
-import { getConversionTime } from '@/utils'
-import { postUpload } from 'api/tool'
+import { getCreatetime, getConversionTime } from '@/utils'
+import { postUpload, postSendmessage } from 'api/tool'
 
 export default {
   components: {
@@ -323,6 +323,7 @@ export default {
       showenclosure: false,
       activeName: 'upload',
       complete: 0,
+      channel_create_user: '',
       CommentForm: {
         ticket: '',
         merchant: '',
@@ -486,6 +487,7 @@ export default {
       this.completeForm = true
       this.complete = row.complete
       this.CommentForm.ticket = row.id
+      this.channel_create_user = row.create_user
     },
     changePayChannel() {
       this.completeForm = false
@@ -493,11 +495,22 @@ export default {
       const parmas = {
         complete: this.complete
       }
-      patchPayChannel(this.CommentForm.ticket, parmas).then(() => {
+      patchPayChannel(this.CommentForm.ticket, parmas).then(response => {
         this.$message({
           type: 'success',
           message: '更新成功!'
         })
+        const create_time = getCreatetime()
+        const messageForm = {
+          create_user: `${this.channel_create_user}`,
+          action_user: 'xx',
+          title: '【支付通道测试】',
+          message: `商户号: ${this.CommentForm.merchant}\n测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
+        }
+        postSendmessage(messageForm)
+        this.fetchPayChannelData()
+        this.fetchPayChannelData()
+        this.clickPayChannel({ id: this.CommentForm.ticket })
       }).catch(() => {
         this.$message({
           type: 'info',

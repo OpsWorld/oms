@@ -25,7 +25,7 @@
               </div>
               <div class='progress-item'>
                 <span>第三方支付</span>
-                <el-progress :percentage="33"></el-progress>
+                <el-progress :percentage="53"></el-progress>
               </div>
             </el-card>
             <el-card class="box-card-card">

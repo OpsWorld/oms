@@ -9,7 +9,6 @@ from worktickets.serializers import (WorkTicketSerializer,
                                      TicketTypeSerializer,
                                      TicketWikiSerializer)
 from worktickets.filters import WorkTicketFilter, WorkTicketFilterBackend
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from dry_rest_permissions.generics import DRYPermissions
 
@@ -17,22 +16,20 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('-create_time')
     serializer_class = WorkTicketSerializer
     filter_class = WorkTicketFilter
-    filter_backends = (DjangoFilterBackend, SearchFilter,WorkTicketFilterBackend)
-    search_fields = ('title', 'content', 'type__name')
+    filter_backends = (SearchFilter,WorkTicketFilterBackend)
+    search_fields = ['title', 'content', 'type__name']
     permission_classes = (DRYPermissions,)
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):
     queryset = TicketComment.objects.all()
     serializer_class = TicketCommentSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['ticket__ticketid']
 
 
 class TicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = TicketEnclosure.objects.all()
     serializer_class = TicketEnclosureSerializer
-    filter_backends = (DjangoFilterBackend,)
     filter_fields = ['ticket__ticketid']
 
 

@@ -55,16 +55,20 @@ class SendmessageViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         serializer = SendmessageSerializer(data=request.data, context={'request': request})
-        create_user = request.data["create_user"]
-        action_user = request.data["action_user"]
-        to_create_user = User.objects.get(username=create_user).skype
-        to_action_user = User.objects.get(username=action_user).skype
         content = request.data["title"] + '\n' + request.data["message"]
         print(content)
-        send_to_skype.delay(to_create_user,content)
-        send_to_skype.delay(to_action_user,content)
+        try:
+            create_user = request.data["create_user"]
+            to_create_user = User.objects.get(username=create_user).skype
+            send_to_skype.delay(to_create_user,content)
+            action_user = request.data["action_user"]
+            to_action_user = User.objects.get(username=action_user).skype
+            send_to_skype.delay(to_action_user, content)
+        except Exception as e:
+            print(e)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":"xxoo"}, status=status.HTTP_201_CREATED)
