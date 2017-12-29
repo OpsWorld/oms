@@ -4,7 +4,7 @@
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, RoleViewSet, GroupViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet, TicketWikiViewSet
-from threepay.views import PlatformViewSet, MerchantViewSet, ThreePayEnclosureViewSet, PayChannelViewSet, PayChannelNameViewSet
+from threepay.views import PlatformViewSet, MerchantViewSet, ThreePayEnclosureViewSet, PayChannelViewSet, PayChannelNameViewSet,ThreePayCommentViewSet
 from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
@@ -30,3 +30,4 @@ router.register(r'merchants', MerchantViewSet)
 router.register(r'threepayenclosures', ThreePayEnclosureViewSet)
 router.register(r'paychannels', PayChannelViewSet)
 router.register(r'paychannelnames', PayChannelNameViewSet)
+router.register(r'threepaycomments', ThreePayCommentViewSet)

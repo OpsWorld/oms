@@ -36,9 +36,6 @@
       </el-rate>
       <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
     </el-form-item>
-    <el-form-item label="回调域名" prop="m_backurl">
-      <el-input v-model="ruleForm.m_backurl"></el-input>
-    </el-form-item>
     <el-form-item label="转发域名" prop="m_forwardurl">
       <el-input v-model="ruleForm.m_forwardurl"></el-input>
     </el-form-item>
@@ -73,7 +70,6 @@ export default {
         m_private_key: '',
         p_public_key: '',
         level: 0,
-        m_backurl: '',
         m_forwardurl: '',
         m_submiturl: '',
         create_user: localStorage.getItem('username'),
@@ -107,9 +103,6 @@ export default {
         level: [
           { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
         ],
-        m_backurl: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
         m_forwardurl: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -140,7 +133,7 @@ export default {
               create_user: this.ruleForm.create_user,
               action_user: this.ruleForm.action_user,
               title: '【添加新支付通道】',
-              message: `提交人: ${this.ruleForm.create_user}\n处理人: ${this.ruleForm.action_user}\n平台: ${this.ruleForm.platform},商户: ${this.ruleForm.merchant},通道: ${this.ruleForm.type}`
+              message: `提交人: ${this.ruleForm.create_user}\n处理人: ${this.ruleForm.action_user}\n平台: ${this.ruleForm.platform}     商户: ${this.ruleForm.merchant}     通道: ${this.ruleForm.type}`
             }
             postSendmessage(messageForm)
             this.$emit('formdata', response.data)

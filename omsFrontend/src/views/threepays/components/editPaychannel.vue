@@ -36,9 +36,6 @@
       </el-rate>
       <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
     </el-form-item>
-    <el-form-item label="回调域名" prop="m_backurl">
-      <el-input v-model="rowdata.m_backurl"></el-input>
-    </el-form-item>
     <el-form-item label="转发域名" prop="m_forwardurl">
       <el-input v-model="rowdata.m_forwardurl"></el-input>
     </el-form-item>
@@ -88,9 +85,6 @@ export default {
         level: [
           { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
         ],
-        m_backurl: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
         m_forwardurl: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -127,7 +121,7 @@ export default {
               create_user: this.rowdata.create_user,
               action_user: this.rowdata.action_user,
               title: '【支付通道修改】',
-              message: `修改人: ${this.create_user}\n处理人: ${this.rowdata.action_user}\n平台: ${this.rowdata.platform},商户: ${this.rowdata.merchant},通道: ${this.rowdata.type}`
+              message: `修改人: ${this.create_user}\n处理人: ${this.rowdata.action_user}\n平台: ${this.rowdata.platform}     商户: ${this.rowdata.merchant}     通道: ${this.rowdata.type}`
             }
             postSendmessage(messageForm)
             this.$emit('formdata', response.data)

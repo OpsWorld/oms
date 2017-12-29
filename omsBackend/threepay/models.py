@@ -32,9 +32,10 @@ class Platform(models.Model):
 
 class Merchant(models.Model):
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
-    m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户号')
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'商户名称')
-    three = models.CharField(max_length=100, blank=True, verbose_name=u'第三方业务经理')
+    m_id = models.CharField(max_length=100, blank=True, verbose_name=u'商户名称')
+    name = models.CharField(max_length=100, unique=True, verbose_name=u'商户号')
+    domain = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'绑定域名')
+    three = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'第三方业务经理')
 
     def __str__(self):
         return self.name
@@ -64,11 +65,11 @@ class PayChannel(models.Model):
     p_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'平台公钥')
     m_forwardurl = models.CharField(max_length=100, blank=True, verbose_name=u'转发域名')
     m_submiturl = models.CharField(max_length=100, blank=True, verbose_name=u'提交域名')
-    m_backurl = models.CharField(max_length=100, blank=True, verbose_name=u'回调域名')
     level = models.CharField(max_length=2, choices=ChannelLevel.items(), default=2, verbose_name=u'紧急度')
     status = models.CharField(max_length=3, choices=ChannelStatus.items(), default=0, null=True, blank=True,verbose_name=u'状态')
     create_user = models.ForeignKey(User, related_name='pay_create_user', verbose_name=u'创建者')
     action_user = models.ForeignKey(User, related_name='pay_action_user',verbose_name=u'指派人')
+    complete = models.IntegerField(default=0, blank=True, verbose_name=u'进度')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     class Meta:
@@ -85,3 +86,14 @@ class ThreePayEnclosure(models.Model):
     class Meta:
         verbose_name = u'通道附件'
         verbose_name_plural = u'通道附件'
+
+class ThreePayComment(models.Model):
+    ticket = models.ForeignKey(PayChannel, verbose_name=u'通道')
+    merchant = models.ForeignKey('Merchant', verbose_name=u'依附商户')
+    content = models.TextField(verbose_name=u'回复内容')
+    create_user = models.ForeignKey(User, verbose_name=u'回复人')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'回复时间')
+
+    class Meta:
+        verbose_name = u'通道测试'
+        verbose_name_plural = u'通道测试'

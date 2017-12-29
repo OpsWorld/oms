@@ -122,6 +122,14 @@ export function putPayChannel(id, data) {
   })
 }
 
+export function patchPayChannel(id, data) {
+  return request({
+    url: apiURL.paychannels + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
 export function deletePayChannel(id) {
   return request({
     url: apiURL.paychannels + id + '/',
@@ -158,5 +166,22 @@ export function deleteThreePayEnclosure(id) {
   return request({
     url: apiURL.threepayenclosures + id + '/',
     method: 'delete'
+  })
+}
+
+// threepaycomments
+export function postThreePayComment(data) {
+  return request({
+    url: apiURL.threepaycomments,
+    method: 'post',
+    data
+  })
+}
+
+export function getThreePayComment(query) {
+  return request({
+    url: apiURL.threepaycomments,
+    method: 'get',
+    params: query
   })
 }

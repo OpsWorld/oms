@@ -53,3 +53,4 @@ class TicketWikiSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketWiki
         fields = ('url', 'id', 'title', 'type', 'content', 'create_user', 'create_time')
+

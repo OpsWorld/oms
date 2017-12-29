@@ -9,7 +9,8 @@
               <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" @click="handlerAdd">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit&&showbtn" @click="handlerEdit">
+              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit&&showbtn"
+                         @click="handlerEdit">
                 编辑
               </el-button>
             </el-button-group>
@@ -25,33 +26,51 @@
         </el-card>
 
         <el-card v-if="showenclosure" class="card-box">
-          <div slot="header">
-            <el-upload
-              ref="upload"
-              :action="uploadurl"
-              :on-success="handleSuccess"
-              :show-file-list="false"
-              :disabled="count>10?true:false">
-              <el-button slot="trigger" size="mini" type="danger" plain icon="upload2" :disabled="count>10?true:false">
-                上传附件
-              </el-button>
-              <div slot="tip" class="el-upload__tip">
-                <p>上传文件不超过10m，<a style="color: red">最多只能上传10个文件</a></p>
+          <el-tabs v-model="activeName" type="card">
+            <el-tab-pane label="上传附件" name="upload">
+              <div slot="header">
+                <el-upload
+                  ref="upload"
+                  :action="uploadurl"
+                  :on-success="handleSuccess"
+                  :show-file-list="false"
+                  :disabled="count>10?true:false">
+                  <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
+                             :disabled="count>10?true:false">
+                    上传
+                  </el-button>
+                  <div slot="tip" class="el-upload__tip">
+                    <p>上传文件不超过10m，<a style="color: red">最多只能上传10个文件</a></p>
+                  </div>
+                </el-upload>
               </div>
-            </el-upload>
-          </div>
 
-          <div v-if='enclosureData.length>0' class="ticketenclosure">
-            <ul>
-              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                <i class="fa fa-paperclip"></i>
-                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
-                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
-                </el-tooltip>
-              </li>
-            </ul>
-          </div>
+              <div v-if='enclosureData.length>0' class="ticketenclosure">
+                <ul>
+                  <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                    <i class="fa fa-paperclip"></i>
+                    <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                    <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
+                      <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                    </el-tooltip>
+                  </li>
+                </ul>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="通道测试" name="testpay">
+              <el-table :data="comments" border style="width: 100%">
+                <el-table-column prop="create_user" label="测试人" width="100"></el-table-column>
+                <el-table-column prop="content" label="测试金额" width="100"></el-table-column>
+                <el-table-column prop="create_time" label="测试时间">
+                  <template slot-scope="scope">
+                    <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                      <span>{{scope.row.create_time | parseDate}}</span>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
         </el-card>
       </el-col>
 
@@ -90,10 +109,10 @@
                 <el-option v-for="item in platformData" :key="item.id" :value="item.name"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="名称" prop="name">
+            <el-form-item label="商户号" prop="name">
               <el-input v-model="merchantForm.name" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
-            <el-form-item label="商户id" prop="m_id">
+            <el-form-item label="公司名" prop="m_id">
               <el-input v-model="merchantForm.m_id" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item label="业务经理" prop="three">
@@ -108,16 +127,19 @@
               <el-button type="danger" @click="deleteMerchantForm(merchantForm.id)">删除</el-button>
             </el-form-item>
           </el-form>
-
         </el-card>
-
       </el-col>
 
       <el-col :span="18" v-if="selecttype&&!clickbtn">
         <el-card>
-          <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
-          </el-button>
-          <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%">
+          <div slot="header">
+            <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
+            </el-button>
+            <a style="margin-left: 20px;color: #fa11ff">商户号：{{listQuery.merchant__name}}</a>
+          </div>
+
+          <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%"
+                    @row-click="clickPayChannel">
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label='查看明细' type="expand" width="100">
               <template slot-scope="props">
@@ -149,10 +171,10 @@
                   <el-form-item label="提交域名">
                     <el-input size="small" v-model="props.row.m_submiturl" :disabled="!editChannelForm"></el-input>
                   </el-form-item>
-                  <el-form-item label="回调域名">
-                    <el-input size="small" v-model="props.row.m_backurl" :disabled="!editChannelForm"></el-input>
-                  </el-form-item>
                 </el-form>
+                <el-button @click="EditComplete(props.row)" type="primary" size="mini" style="float: right">
+                  更新进度
+                </el-button>
               </template>
             </el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
@@ -169,11 +191,22 @@
             </el-table-column>
             <el-table-column prop='platform' label='依附平台'></el-table-column>
             <el-table-column prop='merchant' label='依附商户'></el-table-column>
+            <el-table-column prop='complete' label='完成百分比'>
+              <template slot-scope="scope">
+                <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
+              </template>
+            </el-table-column>
+            <el-table-column prop='create_time' label='创建时间'>
+              <template slot-scope="scope">
+                <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                  <span>{{scope.row.create_time | parseDate}}</span>
+                </div>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button @click="editPayChannel(scope.row)" type="success" size="small">修改
-                </el-button>
-                <el-button @click="deletePayChannels(scope.row)" type="danger" size="small">删除</el-button>
+                <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
+                <el-button @click="deletePayChannels(scope.row)" type="danger" size="mini">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -188,6 +221,23 @@
     <el-dialog :visible.sync="editChannelForm">
       <edit-paychannel :rowdata="paychannels" @formdata="fetchPayChannelData"></edit-paychannel>
     </el-dialog>
+
+    <el-dialog :visible.sync="completeForm" width="30%">
+      <el-form :model="CommentForm" label-width="100px">
+        <el-form-item label="测试金额" props="content">
+          <el-input v-model="CommentForm.content"></el-input>
+        </el-form-item>
+        <el-form-item label="完成百分比">
+          <el-slider
+            v-model="complete"
+            :step="10">
+          </el-slider>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changePayChannel" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -195,7 +245,8 @@
 import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
 import { getThreePayEnclosure, postThreePayEnclosure, deleteThreePayEnclosure } from 'api/threeticket'
-import { getPayChannel, deletePayChannel } from 'api/threeticket'
+import { postThreePayComment, getThreePayComment } from 'api/threeticket'
+import { getPayChannel, deletePayChannel, patchPayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
 import addPaychannel from './components/addPaychannel.vue'
 import editPaychannel from './components/editPaychannel.vue'
@@ -220,6 +271,7 @@ export default {
       formEdit: false,
       formAdd: true,
       formStatus: '',
+      completeForm: false,
       paychannelManager_btn_add: true,
       paychannelManager_btn_edit: true,
       platformForm: {
@@ -268,7 +320,16 @@ export default {
         file: ''
       },
       uploadurl: uploadurl,
-      showenclosure: false
+      showenclosure: false,
+      activeName: 'upload',
+      complete: 0,
+      CommentForm: {
+        ticket: '',
+        merchant: '',
+        content: '一个亿',
+        create_user: localStorage.getItem('username')
+      },
+      comments: []
     }
   },
   computed: {
@@ -421,6 +482,29 @@ export default {
       this.formEdit = true
       this.showbtn = false
     },
+    EditComplete(row) {
+      this.completeForm = true
+      this.complete = row.complete
+      this.CommentForm.ticket = row.id
+    },
+    changePayChannel() {
+      this.completeForm = false
+      postThreePayComment(this.CommentForm)
+      const parmas = {
+        complete: this.complete
+      }
+      patchPayChannel(this.CommentForm.ticket, parmas).then(() => {
+        this.$message({
+          type: 'success',
+          message: '更新成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '更新失败'
+        })
+      })
+    },
     resetForm() {
       this.platformForm = {
         name: '',
@@ -456,9 +540,10 @@ export default {
       this.formEdit = true
       if (this.selecttype) {
         this.merchantForm = data
-        this.enclosureForm.ticket = this.listQuery.merchant__name = data.name
+        this.CommentForm.merchant = this.enclosureForm.ticket = this.listQuery.merchant__name = data.name
         this.EnclosureData()
         this.showenclosure = true
+        this.activeName = 'upload'
       } else {
         this.showenclosure = false
         this.platformForm = data
@@ -469,6 +554,15 @@ export default {
     editPayChannel(row) {
       this.editChannelForm = true
       this.paychannels = row
+    },
+    clickPayChannel(row) {
+      this.activeName = 'testpay'
+      const parmas = {
+        ticket__id: row.id
+      }
+      getThreePayComment(parmas).then(response => {
+        this.comments = response.data
+      })
     },
     EnclosureData() {
       const parms = {
