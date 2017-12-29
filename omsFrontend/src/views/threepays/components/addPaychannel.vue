@@ -58,7 +58,9 @@
 </template>
 <script>
 import { getPlatform, getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
+import { postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
+
 export default {
   data() {
     return {
@@ -74,7 +76,8 @@ export default {
         m_backurl: '',
         m_forwardurl: '',
         m_submiturl: '',
-        action_user: ''
+        create_user: localStorage.getItem('username'),
+        action_user: 'itsupport'
       },
       rules: {
         platform: [
@@ -133,6 +136,13 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           postPayChannel(this.ruleForm).then(response => {
+            const messageForm = {
+              create_user: this.ruleForm.create_user,
+              action_user: this.ruleForm.action_user,
+              title: '【添加新支付通道】',
+              message: `提交人: ${this.ruleForm.create_user}\n处理人: ${this.ruleForm.action_user}\n平台: ${this.ruleForm.platform},商户: ${this.ruleForm.merchant},通道: ${this.ruleForm.type}`
+            }
+            postSendmessage(messageForm)
             this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
           })

@@ -32,15 +32,18 @@ class PayChannelSerializer(serializers.ModelSerializer):
     platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')
     merchant = serializers.SlugRelatedField(queryset=Merchant.objects.all(), slug_field='name')
     type = serializers.SlugRelatedField(queryset=PayChannelName.objects.all(), slug_field='name')
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
     class Meta:
         model = PayChannel
         fields = (
             'url', 'id', 'platform', 'merchant', 'type', 'm_md5key', 'm_public_key', 'm_private_key', 'p_public_key',
-            'm_forwardurl', 'm_submiturl', 'm_backurl', 'level','status','action_user','create_time')
+            'm_forwardurl', 'm_submiturl', 'm_backurl', 'level', 'status', 'create_user', 'action_user', 'create_time')
 
 
 class ThreePayEnclosureSerializer(serializers.ModelSerializer):
+    ticket = serializers.SlugRelatedField(queryset=Merchant.objects.all(), slug_field='name')
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
 

@@ -67,7 +67,7 @@
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
                 <i class="fa fa-paperclip"></i>
                 <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-button v-if="showinput" type="text" size="small" @click="deleteEnclosure(item.id)">删除</el-button>
+                <el-button  v-if="showinput" type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
               </li>
             </ul>
           </div>
@@ -152,10 +152,9 @@ import {
   deleteTicketenclosure
 } from 'api/workticket'
 import { postUpload, postSendmail, postSendmessage } from 'api/tool'
-import { apiUrl } from '@/config'
+import { apiUrl, uploadurl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getUser } from 'api/user'
-import { uploadurl } from '@/config'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
 import { getCreatetime, getConversionTime } from '@/utils'

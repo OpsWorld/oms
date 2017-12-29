@@ -6,12 +6,10 @@
           <div slot="header">
             <span class="card-title">平台商户列表</span>
             <el-button-group>
-              <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" icon="plus"
-                         @click="handlerAdd">
+              <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" @click="handlerAdd">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit" icon="edit"
-                         @click="handlerEdit">
+              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit&&showbtn" @click="handlerEdit">
                 编辑
               </el-button>
             </el-button-group>
@@ -25,24 +23,55 @@
             @node-click="handleNodeClick">
           </el-tree>
         </el-card>
+
+        <el-card v-if="showenclosure" class="card-box">
+          <div slot="header">
+            <el-upload
+              ref="upload"
+              :action="uploadurl"
+              :on-success="handleSuccess"
+              :show-file-list="false"
+              :disabled="count>10?true:false">
+              <el-button slot="trigger" size="mini" type="danger" plain icon="upload2" :disabled="count>10?true:false">
+                上传附件
+              </el-button>
+              <div slot="tip" class="el-upload__tip">
+                <p>上传文件不超过10m，<a style="color: red">最多只能上传10个文件</a></p>
+              </div>
+            </el-upload>
+          </div>
+
+          <div v-if='enclosureData.length>0' class="ticketenclosure">
+            <ul>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                <i class="fa fa-paperclip"></i>
+                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
+                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                </el-tooltip>
+              </li>
+            </ul>
+          </div>
+        </el-card>
       </el-col>
+
       <el-col :span="6" v-if="clickbtn">
-        <el-card class="box-card">
+        <el-card>
           <div slot="header">
             <el-switch
               v-model="selecttype"
               active-text="商户"
               inactive-text="平台">
             </el-switch>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="clickbtn=false">关闭</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="handlerClosed">关闭</el-button>
           </div>
 
           <el-form v-if="!selecttype" :model="platformForm" ref="ruleForm" label-width="100px">
             <el-form-item label="名称" prop="name">
-              <el-input v-model="platformForm.name" :disabled="formEdit"></el-input>
+              <el-input v-model="platformForm.name" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item label="描述" prop="desc">
-              <el-input v-model="platformForm.desc" :disabled="formEdit" type="textarea"
+              <el-input v-model="platformForm.desc" :disabled="formStatus === 'view'" type="textarea"
                         :autosize="{ minRows: 5, maxRows: 20}"></el-input>
             </el-form-item>
             <el-form-item v-if="formStatus == 'create'">
@@ -62,13 +91,13 @@
               </el-select>
             </el-form-item>
             <el-form-item label="名称" prop="name">
-              <el-input v-model="merchantForm.name" :disabled="formEdit"></el-input>
+              <el-input v-model="merchantForm.name" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item label="商户id" prop="m_id">
-              <el-input v-model="merchantForm.m_id" :disabled="formEdit"></el-input>
+              <el-input v-model="merchantForm.m_id" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item label="业务经理" prop="three">
-              <el-input v-model="merchantForm.three" :disabled="formEdit"></el-input>
+              <el-input v-model="merchantForm.three" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item v-if="formStatus == 'create'">
               <el-button type="primary" @click="postMerchantForm('ruleForm')">创建</el-button>
@@ -81,7 +110,9 @@
           </el-form>
 
         </el-card>
+
       </el-col>
+
       <el-col :span="18" v-if="selecttype&&!clickbtn">
         <el-card>
           <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
@@ -126,15 +157,15 @@
             </el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
             <el-table-column prop='level' label='紧急度'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-rate
-                  v-model="scope.row.level"
-                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                  disabled>
-                </el-rate>
-              </div>
-            </template>
+              <template slot-scope="scope">
+                <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                  <el-rate
+                    v-model="scope.row.level"
+                    :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                    disabled>
+                  </el-rate>
+                </div>
+              </template>
             </el-table-column>
             <el-table-column prop='platform' label='依附平台'></el-table-column>
             <el-table-column prop='merchant' label='依附商户'></el-table-column>
@@ -163,22 +194,30 @@
 <script>
 import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
+import { getThreePayEnclosure, postThreePayEnclosure, deleteThreePayEnclosure } from 'api/threeticket'
 import { getPayChannel, deletePayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
-import { LIMIT } from '@/config'
 import addPaychannel from './components/addPaychannel.vue'
 import editPaychannel from './components/editPaychannel.vue'
+import { LIMIT, apiUrl, uploadurl } from '@/config'
+import { getConversionTime } from '@/utils'
+import { postUpload } from 'api/tool'
 
 export default {
-  components: { addPaychannel, editPaychannel },
+  components: {
+    addPaychannel, editPaychannel
+  },
   data() {
     return {
+      route_path: this.$route.path.split('/'),
+      apiurl: apiUrl,
       limit: LIMIT,
       platformData: [],
       merchantData: [],
       clickbtn: false,
+      showbtn: false,
       selecttype: false,
-      formEdit: true,
+      formEdit: false,
       formAdd: true,
       formStatus: '',
       paychannelManager_btn_add: true,
@@ -220,7 +259,16 @@ export default {
         platform__name: '',
         merchant__name: ''
       },
-      paychannels: []
+      paychannels: [],
+      enclosureData: [],
+      count: 0,
+      enclosureForm: {
+        ticket: '',
+        create_user: localStorage.getItem('username'),
+        file: ''
+      },
+      uploadurl: uploadurl,
+      showenclosure: false
     }
   },
   computed: {
@@ -232,8 +280,6 @@ export default {
     this.fetchPlatformData()
     this.fetchMerchantData()
     this.fetchPayChannelData()
-    //    this.paychannelManager_btn_add = this.elements['paychannelManager:btn_add']
-    //    this.paychannelManager_btn_edit = this.elements['paychannelManager:btn_edit']
   },
   methods: {
     fetchPlatformData() {
@@ -361,14 +407,19 @@ export default {
     },
     handlerAdd() {
       this.clickbtn = true
-      this.formEdit = false
+      this.formEdit = true
       this.formStatus = 'create'
       this.resetForm()
     },
     handlerEdit() {
       this.clickbtn = true
-      this.formEdit = false
+      this.formEdit = true
       this.formStatus = 'update'
+    },
+    handlerClosed() {
+      this.clickbtn = false
+      this.formEdit = true
+      this.showbtn = false
     },
     resetForm() {
       this.platformForm = {
@@ -400,11 +451,16 @@ export default {
     },
     handleNodeClick(data, res) {
       this.selecttype = res.isLeaf
+      this.showbtn = true
+      this.formStatus = 'view'
       this.formEdit = true
       if (this.selecttype) {
         this.merchantForm = data
-        this.listQuery.merchant__name = data.name
+        this.enclosureForm.ticket = this.listQuery.merchant__name = data.name
+        this.EnclosureData()
+        this.showenclosure = true
       } else {
+        this.showenclosure = false
         this.platformForm = data
         this.listQuery.platform__name = data.name
       }
@@ -413,6 +469,42 @@ export default {
     editPayChannel(row) {
       this.editChannelForm = true
       this.paychannels = row
+    },
+    EnclosureData() {
+      const parms = {
+        ticket__name: this.enclosureForm.ticket
+      }
+      getThreePayEnclosure(parms).then(response => {
+        this.enclosureData = response.data
+        this.count = response.data.length
+      })
+    },
+    deleteEnclosure(id) {
+      deleteThreePayEnclosure(id)
+      setTimeout(this.EnclosureData, 1000)
+    },
+    handleSuccess(file, fileList) {
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', fileList.raw)
+      formData.append('create_time', getConversionTime(fileList.uid))
+      formData.append('type', fileList.raw.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        this.enclosureForm.file = response.data.filepath
+        postThreePayEnclosure(this.enclosureForm)
+        setTimeout(this.EnclosureData, 1000)
+        if (response.statusText === 'Created') {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
     }
   }
 }
@@ -434,5 +526,9 @@ export default {
       margin-bottom: 0;
       width: 50%;
     }
+  }
+
+  .card-box {
+    margin-top: 20px;
   }
 </style>

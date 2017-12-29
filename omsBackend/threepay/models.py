@@ -67,7 +67,8 @@ class PayChannel(models.Model):
     m_backurl = models.CharField(max_length=100, blank=True, verbose_name=u'回调域名')
     level = models.CharField(max_length=2, choices=ChannelLevel.items(), default=2, verbose_name=u'紧急度')
     status = models.CharField(max_length=3, choices=ChannelStatus.items(), default=0, null=True, blank=True,verbose_name=u'状态')
-    action_user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'指派人')
+    create_user = models.ForeignKey(User, related_name='pay_create_user', verbose_name=u'创建者')
+    action_user = models.ForeignKey(User, related_name='pay_action_user',verbose_name=u'指派人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     class Meta:
@@ -76,7 +77,7 @@ class PayChannel(models.Model):
 
 
 class ThreePayEnclosure(models.Model):
-    ticket = models.ForeignKey('PayChannel', verbose_name=u'通道')
+    ticket = models.ForeignKey('Merchant', verbose_name=u'商户')
     file = models.ForeignKey(Upload, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
