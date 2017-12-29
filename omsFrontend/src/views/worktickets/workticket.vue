@@ -142,9 +142,6 @@ export default {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
       },
-      changedata: {
-        ticket_status: 0
-      },
       TICKET_STATUS: {
         '0': { 'text': '未接收', 'type': 'info' },
         '1': { 'text': '正在处理', 'type': 'success' },
@@ -237,8 +234,8 @@ export default {
     },
     changeForm() {
       for (var i = 0, len = this.selectId.length; i < len; i++) {
-        this.changedata.ticket_status = this.select_status
-        patchWorkticket(this.selectId[i], this.changedata).then(response => {
+        this.rowdata.ticket_status = this.select_status
+        patchWorkticket(this.selectId[i], this.rowdata).then(response => {
           delete this.selectId[i]
         })
       }
