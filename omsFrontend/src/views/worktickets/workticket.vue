@@ -59,9 +59,9 @@
           <el-table-column prop='ticket_status' label='工单状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-tag :type="TICKET_STATUS[scope.row.ticket_status].type">
-                  {{TICKET_STATUS[scope.row.ticket_status].text}}
-                </el-tag>
+              <el-tag :type="TICKET_STATUS_TYPE[ticketData.ticket_status]">
+                {{TICKET_STATUS_TEXT[ticketData.ticket_status]}}
+              </el-tag>
               </div>
             </template>
           </el-table-column>
@@ -141,11 +141,8 @@ export default {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
       },
-      TICKET_STATUS: {
-        '0': { 'text': '未接收', 'type': 'danger' },
-        '1': { 'text': '正在处理', 'type': 'success' },
-        '2': { 'text': '已解决', 'type': 'info' }
-      },
+      TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
+      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       listQuery: {
         ticketid: '',
         create_user: '',

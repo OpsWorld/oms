@@ -141,7 +141,7 @@
             <a style="margin-left: 20px;color: #fa11ff">商户号：{{listQuery.merchant__name}}</a>
           </div>
 
-          <el-table ref="channelsTable" :data="dynamicChannels" highlight-current-row style="width: 100%"
+          <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
                     @row-click="clickPayChannel">
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label='查看明细' type="expand" width="100">
@@ -175,9 +175,6 @@
                     <el-input size="small" v-model="props.row.m_submiturl" :disabled="!editChannelForm"></el-input>
                   </el-form-item>
                 </el-form>
-                <el-button @click="EditComplete(props.row)" type="primary" size="mini" style="float: right">
-                  更新进度
-                </el-button>
               </template>
             </el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
@@ -192,11 +189,12 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop='platform' label='依附平台'></el-table-column>
-            <el-table-column prop='merchant' label='依附商户'></el-table-column>
             <el-table-column prop='complete' label='完成百分比'>
               <template slot-scope="scope">
                 <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
+                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
+                    <el-button @click="EditComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit" class="modifychange"></el-button>
+                </el-tooltip>
               </template>
             </el-table-column>
             <el-table-column prop='create_time' label='创建时间'>
@@ -640,5 +638,10 @@ export default {
 
   .card-box {
     margin-top: 20px;
+  }
+
+  .modifychange {
+    position: absolute;
+    margin: 5px 20px;
   }
 </style>
