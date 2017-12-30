@@ -31,8 +31,8 @@
               <a>{{ticketData.type}}</a>
               <a class="shu"></a>
               <span class="han">工单当前状态：</span>
-              <el-tag>
-                {{TICKET_STATUS[ticketData.ticket_status]}}
+              <el-tag :type="TICKET_STATUS_TYPE[ticketData.ticket_status]">
+                {{TICKET_STATUS_TEXT[ticketData.ticket_status]}}
               </el-tag>
             </div>
             <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
@@ -215,11 +215,8 @@ export default {
       },
       workticketlist_btn_edit: false,
       uploadurl: uploadurl,
-      TICKET_STATUS: {
-        '0': '未接收',
-        '1': '正在处理',
-        '2': '已解决'
-      },
+      TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
+      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'success' },
       showfollower: true,
       showinput: false,
       showaction: false,

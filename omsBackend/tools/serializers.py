@@ -19,8 +19,6 @@ class SendmailSerializer(serializers.ModelSerializer):
 
 
 class SendmessageSerializer(serializers.ModelSerializer):
-    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
-
     class Meta:
         model = Sendmessage
         fields = ['url', 'id', 'action_user', 'title', 'message']

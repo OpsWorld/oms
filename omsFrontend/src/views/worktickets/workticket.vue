@@ -38,11 +38,9 @@
           <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
-              <div slot="reference" style="text-align: center; color: rgb(52,91,225)">
-                <router-link :to="{name:'editworkticket',params:{ticketid:scope.row.ticketid}}">
-                  {{scope.row.ticketid}}
-                </router-link>
-              </div>
+              <router-link :to="{name:'editworkticket',params:{ticketid:scope.row.ticketid}}">
+                <a style="color: #257cff">{{scope.row.ticketid}}</a>
+              </router-link>
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
@@ -144,9 +142,9 @@ export default {
         action_user: localStorage.getItem('username')
       },
       TICKET_STATUS: {
-        '0': { 'text': '未接收', 'type': 'info' },
+        '0': { 'text': '未接收', 'type': 'danger' },
         '1': { 'text': '正在处理', 'type': 'success' },
-        '2': { 'text': '已解决', 'type': 'danger' }
+        '2': { 'text': '已解决', 'type': 'info' }
       },
       listQuery: {
         ticketid: '',
