@@ -62,8 +62,11 @@ class SendmessageViewSet(viewsets.ModelViewSet):
             to_create_user = User.objects.get(username=create_user).skype
             send_to_skype.delay(to_create_user,content)
             action_user = request.data["action_user"]
-            to_action_user = User.objects.get(username=action_user).skype
-            send_to_skype.delay(to_action_user, content)
+            if create_user == action_user:
+                print("create_user and action_user is same!")
+            else:
+                to_action_user = User.objects.get(username=action_user).skype
+                send_to_skype.delay(to_action_user, content)
         except Exception as e:
             print(e)
 

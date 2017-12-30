@@ -115,6 +115,9 @@
             <el-form-item label="公司名" prop="m_id">
               <el-input v-model="merchantForm.m_id" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
+            <el-form-item label="绑定域名" prop="domain">
+              <el-input v-model="merchantForm.domain" :disabled="formStatus === 'view'"></el-input>
+            </el-form-item>
             <el-form-item label="业务经理" prop="three">
               <el-input v-model="merchantForm.three" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
@@ -287,6 +290,7 @@ export default {
         platform: '',
         name: '',
         m_id: '',
+        domain: '',
         three: ''
       },
       merchantRules: {
