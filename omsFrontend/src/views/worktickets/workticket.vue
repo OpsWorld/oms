@@ -59,8 +59,8 @@
           <el-table-column prop='ticket_status' label='工单状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-              <el-tag :type="TICKET_STATUS_TYPE[ticketData.ticket_status]">
-                {{TICKET_STATUS_TEXT[ticketData.ticket_status]}}
+              <el-tag :type="TICKET_STATUS_TYPE[scope.row.ticket_status]">
+                {{TICKET_STATUS_TEXT[scope.row.ticket_status]}}
               </el-tag>
               </div>
             </template>
