@@ -216,7 +216,7 @@ export default {
       workticketlist_btn_edit: false,
       uploadurl: uploadurl,
       TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
-      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'success' },
+      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       showfollower: true,
       showinput: false,
       showaction: false,
