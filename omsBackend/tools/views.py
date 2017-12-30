@@ -30,15 +30,15 @@ class SendmailViewSet(viewsets.ModelViewSet):
         if not to_list:
             to_list = 'itsupport@tb-gaming.com'
 
-        cc = request.data["cc"]
+        cc = set(request.data["cc"].split(','))
         cc_list = ''
-        if cc:
-            for c in cc.split(','):
-                try:
+        try:
+            for c in cc:
+                if c:
                     c_email = User.objects.get(username=c).email
                     cc_list = cc_list + c_email + ','
-                except Exception as e:
-                    cc_list = cc_list
+        except Exception as e:
+                cc_list = cc_list
         sub = request.data["sub"]
         content = request.data["content"]
         send_to_mail.delay(to_list, cc_list, sub, content)
@@ -56,17 +56,14 @@ class SendmessageViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = SendmessageSerializer(data=request.data, context={'request': request})
         content = request.data["title"] + '\n' + request.data["message"]
-        print(content)
+        action_users = set(request.data["action_user"].split(','))
+        print(action_users)
         try:
-            create_user = request.data["create_user"]
-            to_create_user = User.objects.get(username=create_user).skype
-            send_to_skype.delay(to_create_user,content)
-            action_user = request.data["action_user"]
-            if create_user == action_user:
-                print("create_user and action_user is same!")
-            else:
-                to_action_user = User.objects.get(username=action_user).skype
-                send_to_skype.delay(to_action_user, content)
+            for action_user in action_users:
+                if action_user:
+                    to_action_user = User.objects.get(username=action_user).skype
+                    print(to_action_user)
+                    send_to_skype.delay(to_action_user, content)
         except Exception as e:
             print(e)
 
@@ -74,4 +71,4 @@ class SendmessageViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response({"error":"xxoo"}, status=status.HTTP_201_CREATED)
+            return Response({"error":"1024"}, status=status.HTTP_201_CREATED)

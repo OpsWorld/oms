@@ -130,7 +130,6 @@ export default {
         if (valid) {
           postPayChannel(this.ruleForm).then(response => {
             const messageForm = {
-              create_user: this.ruleForm.create_user,
               action_user: this.ruleForm.action_user,
               title: '【添加新支付通道】',
               message: `提交人: ${this.ruleForm.create_user}\n处理人: ${this.ruleForm.action_user}\n平台: ${this.ruleForm.platform}     商户: ${this.ruleForm.merchant}     通道: ${this.ruleForm.type}`

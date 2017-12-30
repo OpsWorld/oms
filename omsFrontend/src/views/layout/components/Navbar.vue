@@ -19,10 +19,6 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-tooltip effect="dark" content="换肤" placement="bottom">
-        <theme-picker class="theme-switch right-menu-item"></theme-picker>
-      </el-tooltip>
-
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
           <el-button type="success" round size="mini">{{username}}</el-button>
@@ -47,14 +43,12 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ThemePicker from '@/components/ThemePicker'
 import Screenfull from '@/components/Screenfull'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ThemePicker,
     Screenfull
   },
   data() {

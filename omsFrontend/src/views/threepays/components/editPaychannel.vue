@@ -118,7 +118,6 @@ export default {
         if (valid) {
           putPayChannel(this.rowdata.id, this.rowdata).then(response => {
             const messageForm = {
-              create_user: this.rowdata.create_user,
               action_user: this.rowdata.action_user,
               title: '【支付通道修改】',
               message: `修改人: ${this.create_user}\n处理人: ${this.rowdata.action_user}\n平台: ${this.rowdata.platform}     商户: ${this.rowdata.merchant}     通道: ${this.rowdata.type}`

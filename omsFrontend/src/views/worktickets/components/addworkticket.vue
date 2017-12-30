@@ -84,6 +84,7 @@ export default {
         create_user: localStorage.getItem('username'),
         level: 2,
         action_user: 'itsupport',
+        edit_user: '',
         follower: '',
         create_group: [],
         ticketid: ''
@@ -186,7 +187,6 @@ export default {
             }
             postSendmail(mailForm)
             const messageForm = {
-              create_user: this.ruleForm.create_user,
               action_user: this.ruleForm.action_user,
               title: '【新工单】' + this.ruleForm.title,
               message: `工单提交人: ${this.ruleForm.create_user}\n工单处理人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`

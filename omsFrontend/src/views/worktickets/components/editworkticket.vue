@@ -10,13 +10,15 @@
             <div class="appendInfo">
               <a class="ticketinfo create_user"><span class="han">
                                 工单创建时间：</span>{{ticketData.create_time | parseDate}}</a>
-              <a class="shu"></a>
               <a class="ticketinfo create_user"><span class="han">
+                              <a class="shu"></a>
                                 工单发起人：</span>{{ticketData.create_user}}</a>
-              <a class="shu"></a>
-              <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0||ticketData.action_user">
-                <span class="han">当前处理人：</span>{{ticketData.action_user}}</a>
-              <a class="han" v-else><span class="han">当前处理人：</span> 未设置</a>
+              <a class="ticketinfo action_user"><span class="han">
+                              <a class="shu"></a>
+                               工单指派者：</span>{{ticketData.action_user}}</a>
+              <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0">
+                <a class="shu"></a>
+                <span class="han">最新回复人：</span>{{ticketData.edit_user}}</a>
             </div>
             <div class="appendInfo">
               <span class="han">问题跟踪人：</span>
@@ -67,7 +69,8 @@
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
                 <i class="fa fa-paperclip"></i>
                 <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-button  v-if="showinput" type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                <el-button v-if="showinput" type="text" icon="el-icon-delete"
+                           @click="deleteEnclosure(item.id)"></el-button>
               </li>
             </ul>
           </div>
@@ -185,7 +188,8 @@ export default {
       },
       rowdata: {
         ticket_status: 1,
-        action_user: ''
+        action_user: '',
+        edit_user: ''
       },
       count: 0,
       toolbars: {
@@ -247,6 +251,8 @@ export default {
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
         this.ticket_id = this.ticketData.id
+        this.rowdata.action_user = this.ticketData.action_user
+        this.rowdata.edit_user = this.ticketData.edit_user
         if (this.ticketData.follower.length > 0) {
           this.showfollower = false
         }
@@ -258,7 +264,6 @@ export default {
       }
       getTicketcomment(parms).then(response => {
         this.commentData = response.data
-        this.rowdata.action_user = this.commentData.length === 0 ? null : this.commentData[this.commentData.length - 1].create_user
       })
       this.commentForm.content = ''
     },
@@ -286,24 +291,28 @@ export default {
       }).then(response => {
         const create_time = getCreatetime()
         this.commentForm.ticket = this.ticket_id
+        this.rowdata.edit_user = this.commentForm.create_user
         if (this.radio_status === '1') {
           this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
+          const messageForm = {
+            action_user: this.rowdata.action_user + ',' + this.ticketData.follower.join(),
+            title: '【新工单】' + this.ticketData.title,
+            message: `提交人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
         } else if (this.radio_status === '2') {
-          this.rowdata.action_user = this.commentForm.create_user
           this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
-          this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！'
+          this.mailmsg = '【工单处理完成】工单被' + this.commentForm.create_user + '关闭！'
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
 
           const messageForm = {
-            create_user: this.ticketData.create_user,
-            action_user: this.ticketData.action_user,
+            action_user: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
             title: '【工单处理完成】' + this.ticketData.title,
-            message: `工单提交人: ${this.commentForm.create_user}\n工单处理人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            message: `提交人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else {
-          this.rowdata.action_user = this.commentForm.create_user
           this.commentForm.content = '【问题处理】' + this.mailcontent
         }
         postTicketcomment(this.commentForm).then(response => {

@@ -506,8 +506,7 @@ export default {
         })
         const create_time = getCreatetime()
         const messageForm = {
-          create_user: `${this.channel_create_user}`,
-          action_user: 'xx',
+          action_user: `${this.channel_create_user}`,
           title: '【支付通道测试】',
           message: `商户号: ${this.CommentForm.merchant}\n测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
         }

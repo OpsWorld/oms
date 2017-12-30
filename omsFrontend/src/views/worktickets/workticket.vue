@@ -46,7 +46,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
-          <el-table-column prop='type' label='标题'></el-table-column>
+          <el-table-column prop='type' label='工单类型'></el-table-column>
           <el-table-column prop='level' label='工单等级' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -68,7 +68,8 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
-          <el-table-column prop='action_user' label='当前处理人'></el-table-column>
+          <el-table-column prop='action_user' label='工单指派者'></el-table-column>
+          <el-table-column prop='edit_user' label='最新回复人'></el-table-column>
           <el-table-column prop='create_time' label='工单创建时间'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
