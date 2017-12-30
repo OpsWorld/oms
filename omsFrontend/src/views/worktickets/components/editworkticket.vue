@@ -294,8 +294,8 @@ export default {
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
           const messageForm = {
             action_user: this.rowdata.action_user + ',' + this.ticketData.follower.join(),
-            title: '【新工单】' + this.ticketData.title,
-            message: `提交人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            title: '【工单更换指派人】' + this.ticketData.title,
+            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.rowdata.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else if (this.radio_status === '2') {
@@ -306,7 +306,7 @@ export default {
           const messageForm = {
             action_user: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
             title: '【工单处理完成】' + this.ticketData.title,
-            message: `提交人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else {
