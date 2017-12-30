@@ -16,7 +16,7 @@
       <div>
         <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
           <el-table-column type="selection"></el-table-column>
-          <el-table-column prop='user' label='收件人' sortable></el-table-column>
+          <el-table-column prop='action_user' label='收件人' sortable></el-table-column>
           <el-table-column prop='title' label='标题' sortable></el-table-column>
           <el-table-column prop='message' label='消息内容' sortable></el-table-column>
           <!--<el-table-column prop='is_html' label='是否html' sortable></el-table-column>-->
