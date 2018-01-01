@@ -75,8 +75,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'Asia/Shanghai'
-
 USE_I18N = True
 
 USE_L10N = True
@@ -178,25 +176,6 @@ LDAP_AUTH_ACTIVE_DIRECTORY_DOMAIN = None
 # Set connection/receive timeouts (in seconds) on the underlying `ldap3` library.
 LDAP_AUTH_CONNECT_TIMEOUT = None
 LDAP_AUTH_RECEIVE_TIMEOUT = None
-
-import djcelery
-djcelery.setup_loader()
-# 这是使用了django-celery默认的数据库调度模型,任务执行周期都被存在你指定的orm数据库中
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-
-# celery settings
-# celery中间人 redis://redis服务所在的ip地址:端口/数据库号
-BROKER_URL = 'redis://192.168.6.110:6379/0'
-# celery结果返回，可用于跟踪结果
-CELERY_RESULT_BACKEND = 'redis://192.168.6.110:6379/0'
-
-# celery内容等消息的格式设置
-CELERY_ACCEPT_CONTENT = ['application/json', ]
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-
-# celery时区设置，使用settings中TIME_ZONE同样的时区
-CELERY_TIMEZONE = TIME_ZONE
 
 LOGGING = {
     'version': 1,
