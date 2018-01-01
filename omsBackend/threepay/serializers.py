@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from threepay.models import Platform, Merchant, ThreePayEnclosure, PayChannelName, PayChannel,ThreePayComment
+from threepay.models import Platform, Merchant, ThreePayEnclosure, PayChannelName, PayChannel, ThreePayComment
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -10,7 +10,7 @@ from tools.models import Upload
 class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
-        fields = ('url', 'id', 'name', 'desc')
+        fields = ('url', 'id', 'name', 'ipaddr', 'desc')
 
 
 class MerchantSerializer(serializers.ModelSerializer):
@@ -38,8 +38,8 @@ class PayChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayChannel
         fields = (
-            'url', 'id', 'platform', 'merchant', 'type', 'm_md5key', 'm_public_key', 'm_private_key', 'p_public_key',
-            'm_forwardurl', 'm_submiturl', 'complete', 'level', 'status', 'create_user', 'action_user', 'create_time')
+        'url', 'id', 'platform', 'merchant', 'type', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
+        'status', 'create_user', 'action_user', 'create_time')
 
 
 class ThreePayEnclosureSerializer(serializers.ModelSerializer):

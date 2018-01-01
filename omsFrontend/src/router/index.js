@@ -81,10 +81,8 @@ export const asyncRouterMap = [
     redirect: 'threepay',
     authority: '第三支付对接',
     children: [
-      // { path: 'platform', component: _import('threepays/platform'), name: 'platform', authority: '第三支付平台' },
-      // { path: 'merchant', component: _import('threepays/merchant'), name: 'merchant', authority: '第三支付商户' },
-      { path: 'paychannelname', component: _import('threepays/paychannelname'), name: 'paychannelname', authority: '通道类型' },
-      { path: 'paychannel', component: _import('threepays/paychannel'), name: 'paychannel', authority: '支付通道列表' }
+      { path: 'paychannel', component: _import('threepays/paychannel'), name: 'paychannel', authority: '支付通道列表' },
+      { path: 'paychannelname', component: _import('threepays/paychannelname'), name: 'paychannelname', authority: '通道类型' }
     ]
   },
   {

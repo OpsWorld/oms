@@ -60,7 +60,7 @@
             <el-tab-pane label="通道测试" name="testpay">
               <el-table :data="comments" border style="width: 100%">
                 <el-table-column prop="create_user" label="测试人" width="100"></el-table-column>
-                <el-table-column prop="content" label="测试金额" width="100"></el-table-column>
+                <el-table-column prop="content" label="代付测试金额" width="100"></el-table-column>
                 <el-table-column prop="create_time" label="测试时间">
                   <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -89,9 +89,12 @@
             <el-form-item label="名称" prop="name">
               <el-input v-model="platformForm.name" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
+            <el-form-item label="ip地址" prop="ipaddr">
+              <el-input v-model="platformForm.ipaddr" :disabled="formStatus === 'view'" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+            </el-form-item>
             <el-form-item label="描述" prop="desc">
               <el-input v-model="platformForm.desc" :disabled="formStatus === 'view'" type="textarea"
-                        :autosize="{ minRows: 5, maxRows: 20}"></el-input>
+                        :autosize="{ minRows: 5, maxRows: 10}"></el-input>
             </el-form-item>
             <el-form-item v-if="formStatus == 'create'">
               <el-button type="primary" @click="postPlatformForm('ruleForm')">创建</el-button>
@@ -147,26 +150,8 @@
             <el-table-column label='查看明细' type="expand" width="100">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
-                  <el-form-item label="紧急度">
-                    <el-rate
-                      v-model="props.row.level"
-                      :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                      show-text
-                      :texts="['E', 'D', 'C', 'B', 'A']"
-                      :disabled="!editChannelForm">
-                    </el-rate>
-                  </el-form-item>
-                  <el-form-item label="MD5KEY">
-                    <el-input size="small" v-model="props.row.m_md5key" :disabled="!editChannelForm"></el-input>
-                  </el-form-item>
-                  <el-form-item label="商户公钥">
-                    <el-input size="small" v-model="props.row.m_public_key" :disabled="!editChannelForm"></el-input>
-                  </el-form-item>
-                  <el-form-item label="商户私钥">
-                    <el-input size="small" v-model="props.row.m_private_key" :disabled="!editChannelForm"></el-input>
-                  </el-form-item>
-                  <el-form-item label="平台公钥">
-                    <el-input size="small" v-model="props.row.p_public_key" :disabled="!editChannelForm"></el-input>
+                  <el-form-item label="key信息" prop="keyinfo">
+                    <el-input v-model="props.row.keyinfo" type="textarea" :disabled="!editChannelForm" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
                   </el-form-item>
                   <el-form-item label="转发域名">
                     <el-input size="small" v-model="props.row.m_forwardurl" :disabled="!editChannelForm"></el-input>
@@ -225,7 +210,7 @@
 
     <el-dialog :visible.sync="completeForm" width="30%">
       <el-form :model="CommentForm" label-width="100px">
-        <el-form-item label="测试金额" props="content">
+        <el-form-item label="代付测试金额" props="content">
           <el-input v-model="CommentForm.content"></el-input>
         </el-form-item>
         <el-form-item label="完成百分比">
@@ -277,10 +262,14 @@ export default {
       paychannelManager_btn_edit: true,
       platformForm: {
         name: '',
+        ipaddr: '',
         desc: ''
       },
       platformRules: {
         name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        ipaddr: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
@@ -506,7 +495,7 @@ export default {
         const messageForm = {
           action_user: `${this.channel_create_user}`,
           title: '【支付通道测试】',
-          message: `商户号: ${this.CommentForm.merchant}\n测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
+          message: `商户号: ${this.CommentForm.merchant}\n代付测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
         }
         postSendmessage(messageForm)
         this.fetchPayChannelData()
@@ -625,14 +614,17 @@ export default {
 
   .table-expand {
     font-size: 0;
-    label {
-      width: 90px;
-      color: #99a9bf;
-    }
     .el-form-item {
       margin-right: 0;
       margin-bottom: 0;
-      width: 50%;
+      width: 100%;
+      .el-form-item__label {
+        width: 90px;
+        color: #99a9bf;
+      }
+      .el-form-item__content {
+        width: 80%;
+      }
     }
   }
 

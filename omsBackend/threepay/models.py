@@ -20,6 +20,7 @@ ChannelStatus = {
 }
 class Platform(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name=u'平台名称')
+    ipaddr = models.TextField(null=True, blank=True, verbose_name=u'ip地址')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
@@ -59,10 +60,7 @@ class PayChannel(models.Model):
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     merchant = models.ForeignKey('Merchant', verbose_name=u'依附商户')
     type = models.ForeignKey('PayChannelName', verbose_name=u'通道类型')
-    m_md5key = models.CharField(max_length=100, blank=True, verbose_name=u'商户MD5KEY')
-    m_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户公钥')
-    m_private_key = models.CharField(max_length=500, blank=True, verbose_name=u'商户私钥')
-    p_public_key = models.CharField(max_length=500, blank=True, verbose_name=u'平台公钥')
+    keyinfo = models.TextField(max_length=500, blank=True, verbose_name=u'秘钥信息')
     m_forwardurl = models.CharField(max_length=100, blank=True, null=True, verbose_name=u'转发域名')
     m_submiturl = models.CharField(max_length=100, blank=True, null=True, verbose_name=u'提交域名')
     level = models.CharField(max_length=2, choices=ChannelLevel.items(), default=2, verbose_name=u'紧急度')

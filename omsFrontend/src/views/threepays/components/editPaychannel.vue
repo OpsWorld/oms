@@ -15,17 +15,8 @@
         <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="MD5KEY" prop="m_md5key">
-      <el-input v-model="rowdata.m_md5key"></el-input>
-    </el-form-item>
-    <el-form-item label="商户公钥" prop="m_public_key">
-      <el-input v-model="rowdata.m_public_key"></el-input>
-    </el-form-item>
-    <el-form-item label="商户私钥" prop="m_private_key">
-      <el-input v-model="rowdata.m_private_key"></el-input>
-    </el-form-item>
-    <el-form-item label="平台公钥" prop="p_public_key">
-      <el-input v-model="rowdata.p_public_key"></el-input>
+    <el-form-item label="key信息" prop="keyinfo">
+      <el-input v-model="rowdata.keyinfo" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
     <el-form-item label="紧急度" prop="m_backurl">
       <el-rate
@@ -49,7 +40,6 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
-      <el-button @click="resetForm('ruleForm')">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -70,26 +60,11 @@ export default {
         m_id: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        m_md5key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_public_key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_private_key: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        p_public_key: [
+        keyinfo: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         level: [
           { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_forwardurl: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        m_submiturl: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         action_user: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
@@ -131,9 +106,6 @@ export default {
           return false
         }
       })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
     },
     getPlatforms() {
       getPlatform().then(response => {
