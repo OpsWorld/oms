@@ -6,11 +6,10 @@
           <div slot="header">
             <span class="card-title">平台商户列表</span>
             <el-button-group>
-              <el-button type="success" plain size="mini" v-if="paychannelManager_btn_add" @click="handlerAdd">
+              <el-button type="success" plain size="mini" @click="handlerAdd">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="paychannelManager_btn_edit&&showbtn"
-                         @click="handlerEdit">
+              <el-button type="primary" plain size="mini" v-if="showbtn" @click="handlerEdit">
                 编辑
               </el-button>
             </el-button-group>
