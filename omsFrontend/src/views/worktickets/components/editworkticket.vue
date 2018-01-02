@@ -396,31 +396,12 @@ export default {
     margin-left: 20px;
   }
 
-  .tips {
-    color: rgba(128, 128, 128, 0.82);
-  }
-
   .han {
     margin-left: 5px;
   }
 
-  .shu {
-    margin: 0 5px;
-    height: 100px;
-    width: 1px;
-    border-left: 1px rgba(52, 52, 52, 0.38) solid
-  }
-
   .content {
     margin: 20px 5px;
-  }
-
-  .heng {
-    margin: 20px 0;
-    height: 1px;
-    border: 0;
-    background-color: rgba(174, 127, 255, 0.38);
-    color: #29e11c;
   }
 
   .ticketcomment {

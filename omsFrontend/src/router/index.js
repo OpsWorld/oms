@@ -107,13 +107,17 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: 'deployManager',
-    path: '/deploys',
+    name: 'wikiManager',
+    path: '/wikis',
     component: Layout,
     icon: 'flag',
     redirect: 'noredirect',
-    authority: '发布管理',
+    authority: '文档系统',
     children: [
+      { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: 'wikiadmin', authority: '文档管理' },
+      { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: 'addwiki', authority: '添加文档' },
+      { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: 'editwiki', authority: '编辑文档' },
+      { path: 'wikilist', component: _import('wikis/wikilist'), name: 'wikilist', authority: '文档中心' }
     ]
   }
 ]

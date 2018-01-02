@@ -2,12 +2,11 @@
 # author: kiven
 
 from rest_framework import viewsets
-from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType, TicketWiki
+from worktickets.models import WorkTicket, TicketComment, TicketEnclosure, TicketType
 from worktickets.serializers import (WorkTicketSerializer,
                                      TicketCommentSerializer,
                                      TicketEnclosureSerializer,
-                                     TicketTypeSerializer,
-                                     TicketWikiSerializer)
+                                     TicketTypeSerializer)
 from worktickets.filters import WorkTicketFilter, WorkTicketFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
@@ -37,8 +36,3 @@ class TicketEnclosureViewSet(viewsets.ModelViewSet):
 class TicketTypeViewSet(viewsets.ModelViewSet):
     queryset = TicketType.objects.all()
     serializer_class = TicketTypeSerializer
-
-
-class TicketWikiViewSet(viewsets.ModelViewSet):
-    queryset = TicketWiki.objects.all()
-    serializer_class = TicketWikiSerializer

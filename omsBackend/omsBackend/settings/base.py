@@ -9,6 +9,27 @@ SECRET_KEY = 'libti7mq=88d+s!ds$c7lvg8e38jo*pqwywogpqf_=fl#xl8%4'
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'django_filters',  # 过滤
+    'corsheaders',  # 跨域
+    'django_python3_ldap',  # ldap认证
+    'dry_rest_permissions',  # 权限
+    'djcelery',  # 异步任务
+    'worktickets',
+    'tools',
+    'users',
+    'menus',
+    'perms',
+    'threepay',
+    'wikis',
+]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

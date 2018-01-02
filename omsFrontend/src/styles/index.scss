@@ -22,7 +22,7 @@ html {
   box-sizing: border-box;
 }
 
-#app{
+#app {
   height: 100%;
 }
 
@@ -53,9 +53,9 @@ a:hover {
   text-decoration: none;
 }
 
-div:focus{
+div:focus {
   outline: none;
- }
+}
 
 .fr {
   float: right;
@@ -112,14 +112,14 @@ code {
   }
 }
 
-.warn-content{
-  background: rgba(66,185,131,.1);
+.warn-content {
+  background: rgba(66, 185, 131, .1);
   border-radius: 2px;
   padding: 16px;
   padding: 1rem;
   line-height: 1.6rem;
   word-spacing: .05rem;
-  a{
+  a {
     color: #42b983;
     font-weight: 600;
   }
@@ -140,7 +140,7 @@ code {
 }
 
 .editor-container .CodeMirror {
-  height: 100%!important;
+  height: 100% !important;
 }
 
 .text-center {
@@ -193,4 +193,23 @@ code {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+.heng {
+  margin: 20px 0;
+  height: 1px;
+  border: 0px;
+  background-color: rgba(174, 127, 255, 0.38);
+  color: #29e11c;
+}
+
+.shu {
+  margin: 0 5px;
+  height: 100px;
+  width: 1px;
+  border-left: 1px rgba(52, 52, 52, 0.38) solid
+}
+
+.tips {
+  color: rgba(128, 128, 128, 0.82);
 }

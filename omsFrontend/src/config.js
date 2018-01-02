@@ -60,7 +60,6 @@ module.exports = {
   ticketcomments: `${url}/api/ticketcomments/`,
   ticketenclosures: `${url}/api/ticketenclosures/`,
   tickettypes: `${url}/api/tickettypes/`,
-  ticketwikis: `${url}/api/ticketwikis/`,
 
   // 第三支付工单
   platforms: `${url}/api/platforms/`,
@@ -80,7 +79,9 @@ module.exports = {
   menumetas: `${url}/api/menumetas/`,
 
   // cmdrun
-  cmdrun: `${url}/api/cmdrun/`,
   sendmail: `${url}/api/sendmail/`,
-  sendmessage: `${url}/api/sendmessage/`
+  sendmessage: `${url}/api/sendmessage/`,
+
+  // 知识收集平台
+  wikis: `${url}/api/wikis/`
 }

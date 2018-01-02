@@ -113,18 +113,3 @@ class TicketType(models.Model):
     class Meta:
         verbose_name = u'工单类型'
         verbose_name_plural = u'工单类型'
-
-
-class TicketWiki(models.Model):
-    title = models.CharField(max_length=100, blank=True, verbose_name=u'问题标题')
-    type = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'问题类型')
-    content = models.TextField(verbose_name=u'问题内容')
-    create_user = models.ForeignKey(User, verbose_name=u'创建者')
-    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = u'问题wiki'
-        verbose_name_plural = u'问题wiki'

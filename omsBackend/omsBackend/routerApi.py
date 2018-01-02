@@ -3,11 +3,12 @@
 
 from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, RoleViewSet, GroupViewSet
-from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet, TicketWikiViewSet
+from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet
 from threepay.views import PlatformViewSet, MerchantViewSet, ThreePayEnclosureViewSet, PayChannelViewSet, PayChannelNameViewSet,ThreePayCommentViewSet
 from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
+from wikis.views import WikiViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -17,7 +18,6 @@ router.register(r'worktickers', WorkTicketViewSet)
 router.register(r'ticketcomments', TicketCommentViewSet)
 router.register(r'ticketenclosures', TicketEnclosureViewSet)
 router.register(r'tickettypes', TicketTypeViewSet)
-router.register(r'ticketwikis', TicketWikiViewSet)
 router.register(r'upload', UploadViewSet)
 router.register(r'sendmail', SendmailViewSet)
 router.register(r'sendmessage', SendmessageViewSet)
@@ -31,3 +31,4 @@ router.register(r'threepayenclosures', ThreePayEnclosureViewSet)
 router.register(r'paychannels', PayChannelViewSet)
 router.register(r'paychannelnames', PayChannelNameViewSet)
 router.register(r'threepaycomments', ThreePayCommentViewSet)
+router.register(r'wikis', WikiViewSet)

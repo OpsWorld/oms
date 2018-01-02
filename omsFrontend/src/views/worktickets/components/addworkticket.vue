@@ -240,20 +240,8 @@ export default {
 </script>
 
 <style lang='scss'>
-  .heng {
-    margin: 20px 0;
-    height: 1px;
-    border: 0px;
-    background-color: rgba(174, 127, 255, 0.38);
-    color: #29e11c;
-  }
-
   .addticket {
     margin: 50px;
     width: 80%;
-  }
-
-  .tips {
-    color: rgba(128, 128, 128, 0.82);
   }
 </style>
