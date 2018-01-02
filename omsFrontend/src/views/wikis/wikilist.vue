@@ -1,19 +1,17 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card class="wiki">
-      <el-row :gutter="20">
-        <el-col :span="4">
-          <div style="margin: 15px">文档知识库</div>
-        </el-col>
-        <el-col :span="20">
+      <div class="wiki-header">
+        <H2>OMS文档知识库</H2>
+        <div class="wiki-search">
           <el-input placeholder="search . . ." v-model="searchdata" class="input-with-select">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
-        </el-col>
-      </el-row>
-      <hr class="heng"/>
-      <div class="content">
-        <div class="table-data" v-for="item in tableData" :key="item.id">
+        </div>
+        <hr class="heng"/>
+      </div>
+      <div class="wiki-content">
+        <div class="wiki-data" v-for="item in tableData" :key="item.id">
           <p>{{item.title}}</p>
           <p>{{item.type}}</p>
           <p>{{item.content}}</p>
@@ -23,9 +21,8 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
-            :page-sizes="pagesize"
             :page-size="listQuery.limit"
-            layout="prev, pager, next, sizes"
+            layout="prev, pager, next"
             :total="tabletotal">
           </el-pagination>
         </div>
@@ -44,7 +41,6 @@ export default {
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
-      pagesize: [10, 25, 50, 100],
       listQuery: {
         limit: LIMIT,
         offset: '',
@@ -79,11 +75,12 @@ export default {
 
 <style lang='scss'>
   .wiki {
-    margin: 50px;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+    .wiki-search {
+      margin: 0 auto;
+      width: 500px;
+    }
   }
 </style>
