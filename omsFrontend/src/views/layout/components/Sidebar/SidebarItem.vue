@@ -2,7 +2,7 @@
   <div class="menu-wrapper">
     <template v-for="item in routes" v-if="!item.hidden&&item.children.length>0">
 
-      <router-link v-if="item.children.length===1 && !item.children[0].children"
+      <router-link v-if="item.children.length===1 && !item.children[0].children && item.children[0].icon == 'dashboard'"
                    :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
         <el-menu-item :index="item.path+'/'+item.children[0].path" class='submenu-title-noDropdown'>
           <icon v-if='item.children[0].icon' :name="item.children[0].icon" :scale="iconsize" class="wscn-icon"></icon>

@@ -1,6 +1,7 @@
 export default {
   route: {
     dashboard: '首页',
+    Dashboard: 'Dashboard',
     userManager: '用户管理',
     userlist: '用户列表',
     grouplist: '用户组列表',

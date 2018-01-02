@@ -1,6 +1,7 @@
 export default {
   route: {
     dashboard: 'Dashboard',
+    Dashboard: 'Dashboard',
     userManager: 'userManager',
     userlist: 'userlist',
     grouplist: 'grouplist',
