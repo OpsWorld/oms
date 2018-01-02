@@ -75,12 +75,16 @@ export default {
 
 <style lang='scss'>
   .wiki {
-    margin: 0 auto;
     width: 80%;
     text-align: center;
-    .wiki-search {
+    div{
       margin: 0 auto;
+    }
+    .wiki-search {
       width: 500px;
+    }
+    .wiki-content {
+      width: 80%;
     }
   }
 </style>
