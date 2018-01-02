@@ -32,6 +32,20 @@ export const constantRouterMap = [
     redirect: 'dashboard',
     children: [{ path: 'dashboard', component: _import('dashboard/index'), name: 'dashboard', icon: 'dashboard', meta: { noCache: true }
     }]
+  },
+  {
+    name: 'wikiManager',
+    path: '/wikis',
+    component: Layout,
+    icon: 'flag',
+    redirect: 'noredirect',
+    authority: '文档系统',
+    children: [
+      { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: 'wikiadmin', authority: '文档管理' },
+      { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: 'addwiki', authority: '添加文档' },
+      { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: 'editwiki', authority: '编辑文档' },
+      { path: 'wikilist', component: _import('wikis/wikilist'), name: 'wikilist', authority: '文档中心' }
+    ]
   }
 ]
 
@@ -104,20 +118,6 @@ export const asyncRouterMap = [
     children: [
       { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: '菜单列表' },
       { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: '菜单权限' }
-    ]
-  },
-  {
-    name: 'wikiManager',
-    path: '/wikis',
-    component: Layout,
-    icon: 'flag',
-    redirect: 'noredirect',
-    authority: '文档系统',
-    children: [
-      { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: 'wikiadmin', authority: '文档管理' },
-      { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: 'addwiki', authority: '添加文档' },
-      { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: 'editwiki', authority: '编辑文档' },
-      { path: 'wikilist', component: _import('wikis/wikilist'), name: 'wikilist', authority: '文档中心' }
     ]
   }
 ]

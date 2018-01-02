@@ -54,7 +54,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="limit"
+          :page-size="listQuery.limit"
           layout="prev, pager, next, sizes"
           :total="tabletotal">
         </el-pagination>
@@ -66,23 +66,20 @@
 <script>
 import { getWiki, deleteWiki } from 'api/wiki'
 import { LIMIT } from '@/config'
-import editGroup from './components/editwiki.vue'
 
 export default {
-  components: { editGroup },
   data() {
     return {
       tableData: [],
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
       pagesize: [10, 25, 50, 100],
       rowdata: {},
       listQuery: {
         limit: LIMIT,
         offset: '',
+        create_user: localStorage.getItem('username'),
         title__contains: this.searchdata
       }
     }

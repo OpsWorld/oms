@@ -131,7 +131,6 @@ export default {
       radio: '',
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
       limit: LIMIT,
       offset: '',
