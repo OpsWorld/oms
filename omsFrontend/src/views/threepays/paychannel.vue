@@ -190,7 +190,7 @@
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                <el-button @click="deletePayChannels(scope.row)" type="danger" size="mini">删除</el-button>
+                <el-button v-if="paychannel_btn_delete_channel||role==='super'" @click="deletePayChannels(scope.row)" type="danger" size="mini">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -256,8 +256,7 @@ export default {
       formAdd: true,
       formStatus: '',
       completeForm: false,
-      paychannelManager_btn_add: true,
-      paychannelManager_btn_edit: true,
+      paychannel_btn_delete_channel: false,
       platformForm: {
         name: '',
         ipaddr: '',
@@ -324,10 +323,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'elements'
+      'elements',
+      'role'
     ])
   },
   created() {
+    this.paychannel_btn_delete_channel = this.elements['支付通道列表-删除通道']
     this.fetchPlatformData()
     this.fetchMerchantData()
     this.fetchPayChannelData()

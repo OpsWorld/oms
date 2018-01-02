@@ -93,7 +93,7 @@ export function putMenumetas(id, data) {
 
 export function deleteMenumetas(id) {
   return request({
-    url: apiURL.menumetas + id,
+    url: apiURL.menumetas + id + '/',
     method: 'delete'
   })
 }

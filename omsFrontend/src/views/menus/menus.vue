@@ -6,13 +6,13 @@
           <div slot="header">
             <span class="card-title">菜单列表</span>
             <el-button-group>
-              <el-button type="success" plain size="mini" v-if="menuManager_btn_add" icon="plus" @click="handlerAdd">
+              <el-button type="success" plain size="mini" icon="plus" @click="handlerAdd">
                 添加
               </el-button>
-              <el-button type="primary" plain size="mini" v-if="menuManager_btn_edit" icon="edit" @click="handlerEdit">
+              <el-button type="primary" plain size="mini" icon="edit" @click="handlerEdit">
                 编辑
               </el-button>
-              <el-button type="danger" plain size="mini" v-if="menuManager_btn_del" icon="delete" @click="handleDelete"
+              <el-button type="danger" plain size="mini" icon="delete" @click="handleDelete"
                          disabled>
                 删除
               </el-button>
@@ -106,11 +106,9 @@
           <div>
             <el-table :data="elementData" border style="width: 100%">
               <el-table-column prop='name' label='资源名' sortable='custom'></el-table-column>
-              <el-table-column prop='code' label='资源代码'></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button type="success" plain size="mini" icon="el-icon-edit">修改</el-button>
-                  <el-button type="danger" plain size="mini" icon="el-icon-close">删除</el-button>
+                  <el-button type="danger" plain size="mini" icon="el-icon-close" @click="deleteMetaSubmit(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -162,7 +160,8 @@ import {
   postMenumetas,
   putFirstmenus,
   putSecondmenus,
-  putMenumetas
+  putMenumetas,
+  deleteMenumetas
 } from '@/api/menu'
 import { mapGetters } from 'vuex'
 import { LIMIT } from '@/config'
@@ -181,9 +180,6 @@ export default {
       formAdd: true,
       formStatus: '',
       showElement: false,
-      menuManager_btn_add: true,
-      menuManager_btn_edit: true,
-      menuManager_btn_del: true,
       menuform: {
         parent: undefined,
         title: undefined,
@@ -219,9 +215,6 @@ export default {
     this.fetchFirstData()
     this.fetchSecondData()
     this.fetchElementData()
-    //    this.menuManager_btn_add = this.elements['menuManager:btn_add']
-    //    this.menuManager_btn_del = this.elements['menuManager:btn_del']
-    //    this.menuManager_btn_edit = this.elements['menuManager:btn_edit']
   },
   methods: {
     fetchFirstData() {
@@ -382,6 +375,18 @@ export default {
         this.fetchElementData()
       }).catch(error => {
         this.$message.error('更新失败')
+        console.log(error)
+      })
+    },
+    deleteMetaSubmit(id) {
+      deleteMenumetas(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchElementData()
+      }).catch(error => {
+        this.$message.error('删除失败')
         console.log(error)
       })
     },
