@@ -28,7 +28,6 @@
         <el-card v-if="showenclosure" class="card-box">
           <el-tabs v-model="activeName" type="card">
             <el-tab-pane label="上传附件" name="upload">
-              <div slot="header">
                 <el-upload
                   ref="upload"
                   :action="uploadurl"
@@ -43,7 +42,6 @@
                     <p>上传文件不超过10m，<a style="color: red">最多只能上传10个文件</a></p>
                   </div>
                 </el-upload>
-              </div>
 
               <div v-if='enclosureData.length>0' class="ticketenclosure">
                 <ul>
@@ -59,8 +57,8 @@
             </el-tab-pane>
             <el-tab-pane label="通道测试" name="testpay">
               <el-table :data="comments" border style="width: 100%">
-                <el-table-column prop="create_user" label="测试人" width="100"></el-table-column>
-                <el-table-column prop="content" label="代付测试金额" width="100"></el-table-column>
+                <el-table-column prop="create_user" label="测试人" width="80"></el-table-column>
+                <el-table-column prop="content" label="代付测试金额" width="120"></el-table-column>
                 <el-table-column prop="create_time" label="测试时间">
                   <template slot-scope="scope">
                     <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
