@@ -39,7 +39,20 @@
               <span class="han">工单操作：</span>
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-              <el-button type="primary" size="small" @click="showaction=true" v-if="showinput">选择指令</el-button>
+              <div v-if="showinput" class="action">
+                <el-radio-group v-model="radio_status">
+                  <el-radio label="0">不操作</el-radio>
+                  <el-radio label="2">关闭工单</el-radio>
+                  <el-radio label="1">更改指派人</el-radio>
+                </el-radio-group>
+                <div class="action" v-if="radio_status==1">
+                  <el-select v-model="rowdata.action_user" filterable placeholder="请选择指派人">
+                    <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                  </el-select>
+                </div>
+                <a class="tips" style="display: block;margin: 5px 160px -20px"> Tip：请在下方回复内容并提交</a>
+              </div>
+
             </div>
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
@@ -85,16 +98,16 @@
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
             <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
           </el-form-item>
-
-          <hr class="heng"/>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          </el-form-item>
         </el-form>
       </div>
 
       <el-card class="ticketcomment" v-if="commentData.length>0">
         处理历史记录
         <div v-for="item in commentData" :key="item.id">
-          <hr class="heng2"/>
+          <hr class="heng"/>
           <el-row>
             <el-col :span="1">
               <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
@@ -117,31 +130,6 @@
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
-
-    <el-dialog
-      title="指令"
-      :visible.sync="showaction"
-      width="30%">
-      <div style="margin-left: 20px">
-        <el-radio-group v-model="radio_status">
-          <el-radio label="0">不操作</el-radio>
-          <el-radio label="1">更改指派人</el-radio>
-          <el-radio label="2">关闭工单</el-radio>
-        </el-radio-group>
-        <div v-if="radio_status==1">
-          <el-select v-model="rowdata.action_user" filterable placeholder="请选择指派人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-          <p style="color: red">点提交后生效</p>
-        </div>
-        <div v-if="radio_status==2">
-          <p style="color: red">请在下方输入关闭原因并提交</p>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="changeComment">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -219,7 +207,6 @@ export default {
       TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       showfollower: true,
       showinput: false,
-      showaction: false,
       radio_status: '0',
       mailmsg: '',
       mailcontent: ''
@@ -276,9 +263,6 @@ export default {
     deleteEnclosure(id) {
       deleteTicketenclosure(id)
       setTimeout(this.EnclosureData, 1000)
-    },
-    changeComment() {
-      this.showaction = false
     },
     submitForm(formName) {
       this.$confirm('你的操作即将提交，提交完成后会立即跳转到工单列表页面!', '提示', {
@@ -407,6 +391,15 @@ export default {
     margin: 5px;
   }
 
+  .action {
+    display: inline;
+    margin-left: 20px;
+  }
+
+  .tips {
+    color: rgba(128, 128, 128, 0.82);
+  }
+
   .han {
     margin-left: 5px;
   }
@@ -425,7 +418,7 @@ export default {
   .heng {
     margin: 20px 0;
     height: 1px;
-    border: 0px;
+    border: 0;
     background-color: rgba(174, 127, 255, 0.38);
     color: #29e11c;
   }
