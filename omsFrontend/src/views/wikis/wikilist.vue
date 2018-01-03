@@ -30,9 +30,7 @@
             </div>
             <hr class="heng"/>
             <div class="abstract">
-              <p>
-                <vue-markdown :source="item.content.substring(0,200)+ '...'"></vue-markdown>
-              </p>
+                <vue-markdown :source="item.content.substring(0,800)+ '...'"></vue-markdown>
             </div>
           </el-card>
         </div>
