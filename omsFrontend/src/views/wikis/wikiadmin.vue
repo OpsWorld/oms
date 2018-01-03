@@ -9,7 +9,7 @@
         </div>
         <div class="table-search">
           <el-input
-            placeholder="搜索 ..."
+            placeholder="标题或内容"
             v-model="searchdata"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
@@ -66,6 +66,7 @@
 <script>
 import { getWiki, deleteWiki } from 'api/wiki'
 import { LIMIT } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -79,8 +80,8 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        create_user: localStorage.getItem('username'),
-        title__contains: this.searchdata
+        create_user__username: localStorage.getItem('username'),
+        search: this.searchdata
       }
     }
   },
@@ -88,9 +89,16 @@ export default {
   created() {
     this.fetchData()
   },
-
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
+  },
   methods: {
     fetchData() {
+      if (this.role === 'super') {
+        delete this.listQuery.create_user__username
+      }
       getWiki(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count

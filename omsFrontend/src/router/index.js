@@ -44,6 +44,7 @@ export const constantRouterMap = [
       { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: 'wikiadmin', authority: '文档管理' },
       { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: 'addwiki', authority: '添加文档' },
       { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: 'editwiki', authority: '编辑文档' },
+      { path: 'viewwiki/:wikiid', hidden: true, component: _import('wikis/components/viewwiki'), name: 'viewwiki', authority: '查看文档' },
       { path: 'wikilist', component: _import('wikis/wikilist'), name: 'wikilist', authority: '文档中心' }
     ]
   }

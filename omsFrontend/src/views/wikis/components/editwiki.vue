@@ -80,8 +80,7 @@ export default {
               message: '恭喜你，更新成功',
               type: 'success'
             })
-            this.fetchData()
-            this.editForm = false
+            this.$router.push('/wikis/wikiadmin')
           }).catch(error => {
             this.$message.error('更新失败')
             console.log(error)

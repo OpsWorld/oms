@@ -29,7 +29,7 @@ export default {
     wikiadmin: 'wikiadmin',
     addwiki: 'addwiki',
     editwiki: 'editwiki',
-    markdown: 'Markdown',
+    viewwiki: 'viewwiki',
     jsonEditor: 'JSON Editor',
     dndList: 'Dnd List',
     splitPane: 'SplitPane',

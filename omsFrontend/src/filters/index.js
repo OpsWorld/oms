@@ -52,9 +52,8 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
-export function formatTime(time, option) {
-  time = +time * 1000
-  const d = new Date(time)
+export function formatTime(strtime, option) {
+  const d = new Date(strtime)
   const now = Date.now()
 
   const diff = (now - d) / 1000
@@ -69,7 +68,7 @@ export function formatTime(time, option) {
     return '1天前'
   }
   if (option) {
-    return parseTime(time, option)
+    return parseTime(strtime, option)
   } else {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }

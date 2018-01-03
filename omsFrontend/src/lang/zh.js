@@ -29,7 +29,7 @@ export default {
     wikiadmin: '文档管理',
     addwiki: '添加文档',
     editwiki: '编辑文档',
-    tinymce: '富文本编辑器',
+    viewwiki: '查看文档',
     markdown: 'Markdown',
     jsonEditor: 'JSON编辑器',
     dndList: '列表拖拽',
