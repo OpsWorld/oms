@@ -14,24 +14,24 @@
         <hr class="heng"/>
       </div>
       <div class="wiki-content">
-        <div class="wiki-data" v-for="item in tableData" :key="item.id">
-          <el-card>
-          <router-link :to="'viewwiki/' + item.id">
-            <a class="title">{{item.title}}</a>
-          </router-link>
-          <hr class="heng"/>
-          <p class="abstract">
-            <vue-markdown :source="item.content.substring(0,300)+ '...'"></vue-markdown>
-          </p>
-          <div class="meta">
-            <el-button type="danger" plain size="mini">{{item.type}}</el-button>
-            <a class="author">
-              <i class="fa fa-user"></i>{{item.create_user}}
-            </a>
-            <a class="create_time">
-              <i class="fa fa-calendar"></i>{{item.create_time | formatTime}}
-            </a>
-          </div>
+        <div v-for="item in tableData" :key="item.id">
+          <el-card class="wiki-body">
+            <router-link :to="'viewwiki/' + item.id">
+              <a class="title">{{item.title}}</a>
+            </router-link>
+            <div class="meta">
+              <el-button type="danger" plain size="mini">{{item.type}}</el-button>
+              <a class="author">
+                <i class="fa fa-user"></i>{{item.create_user}}
+              </a>
+              <a class="create_time">
+                <i class="fa fa-calendar"></i>{{item.create_time | formatTime}}
+              </a>
+            </div>
+            <hr class="heng"/>
+            <p class="abstract">
+              <vue-markdown :source="item.content.substring(0,200)+ '...'"></vue-markdown>
+            </p>
           </el-card>
         </div>
         <div class="table-pagination">
@@ -53,11 +53,9 @@ import { getWiki } from 'api/wiki'
 import { LIMIT } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端显示
 import { getTickettype } from 'api/workticket'
-import ElCard from '../../../../../vue-element-admin/node_modules/element-ui/packages/card/src/main'
 
 export default {
   components: {
-    ElCard,
     VueMarkdown
   },
   data() {
@@ -145,6 +143,7 @@ export default {
         }
       }
       .meta {
+        margin-top: 5px;
         font-size: 12px;
         font-weight: 400;
         line-height: 20px;
@@ -158,6 +157,10 @@ export default {
             color: rgb(75, 75, 75);
           }
         }
+      }
+      .abstract {
+        max-height: 100px;
+        padding-bottom: 10px;
       }
     }
   }
