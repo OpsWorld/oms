@@ -29,9 +29,11 @@
               </a>
             </div>
             <hr class="heng"/>
-            <p class="abstract">
-              <vue-markdown :source="item.content.substring(0,200)+ '...'"></vue-markdown>
-            </p>
+            <div class="abstract">
+              <p>
+                <vue-markdown :source="item.content.substring(0,200)+ '...'"></vue-markdown>
+              </p>
+            </div>
           </el-card>
         </div>
         <div class="table-pagination">
@@ -160,7 +162,6 @@ export default {
       }
       .abstract {
         max-height: 100px;
-        padding-bottom: 10px;
       }
     }
   }
