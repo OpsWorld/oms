@@ -60,9 +60,6 @@ export default {
         m_id: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        keyinfo: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
         level: [
           { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -133,17 +130,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss'>
-  .heng {
-    margin: 20px 0;
-    height: 1px;
-    border: 0px;
-    background-color: rgba(174, 127, 255, 0.38);
-    color: #29e11c;
-  }
-
-  .tips {
-    color: rgba(128, 128, 128, 0.82);
-  }
-</style>
