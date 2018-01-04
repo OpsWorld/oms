@@ -19,17 +19,17 @@ ASSET_TYPE = {
 
 
 class Host(models.Model):
-    hostname = models.CharField(u"主机名", unique=True, max_length=50)
-    ip = models.GenericIPAddressField(u"主IP", unique=True, max_length=15)
-    other_ip = models.CharField(u"备用IP", max_length=100, null=True, blank=True)
+    hostname = models.CharField(unique=True, max_length=50, verbose_name=u"主机名")
+    ip = models.GenericIPAddressField(unique=True, max_length=15, verbose_name=u"主IP")
+    other_ip = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"备用IP")
     idc = models.ForeignKey('Idc', null=True, blank=True, verbose_name=u"机房")
-    asset_type = models.CharField(u"设备类型", choices=ASSET_TYPE.items(), default='virtual', max_length=30)
-    status = models.CharField(u"设备状态", choices=ASSET_STATUS.items(), default='used', max_length=30)
-    os = models.CharField(u"操作系统", max_length=30, null=True, blank=True)
-    cpu = models.CharField(u"CPU信息", max_length=30, null=True, blank=True)
-    memory = models.CharField(u"内存信息", max_length=30, null=True, blank=True)
-    disk = models.CharField(u"硬盘信息", max_length=30, null=True, blank=True)
-    desc = models.TextField(u"备注", max_length=200, null=True, blank=True)
+    asset_type = models.CharField(choices=ASSET_TYPE.items(), default='virtual', max_length=30, verbose_name=u"设备类型")
+    status = models.CharField(choices=ASSET_STATUS.items(), default='used', max_length=30, verbose_name=u"设备状态")
+    os = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"操作系统")
+    cpu = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"CPU信息")
+    memory = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"内存信息")
+    disk = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"硬盘信息")
+    desc = models.TextField(max_length=200, null=True, blank=True, verbose_name=u"备注")
 
     def __str__(self):
         return self.hostname
@@ -40,10 +40,10 @@ class Host(models.Model):
 
 
 class Idc(models.Model):
-    name = models.CharField(u"名称", max_length=30, unique=True)
-    user = models.CharField(u"联系人", max_length=30, null=True, blank=True)
-    tel = models.CharField(u"联系人电话", max_length=30, null=True, blank=True)
-    desc = models.CharField(u"描述", max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=30, unique=True, verbose_name=u"名称")
+    user = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"联系人")
+    tel = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"联系人电话")
+    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"备注")
 
     def __str__(self):
         return self.name
