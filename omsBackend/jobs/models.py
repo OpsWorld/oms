@@ -3,6 +3,7 @@
 
 from django.db import models
 from hosts.models import Host
+from users.models import User
 
 DEPLOY_STATUS = {
     "noaction": u"未执行",
@@ -14,14 +15,13 @@ DEPLOY_STATUS = {
 
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
-    hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'被发布的主机')
-    code_repo = models.CharField(u"代码仓库", max_length=30, default='svn')
-    code_url = models.CharField(u"代码地址", max_length=100, null=True, blank=True)
-    deploy_script = models.TextField(u'发布脚本', null=True, blank=True)
+    code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
+    code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
+    deploy_script = models.TextField(null=True, blank=True, verbose_name=u'发布脚本')
     deploy_status = models.CharField(u"发布状态", choices=DEPLOY_STATUS.items(), default="noaction", max_length=30)
-    create_time = models.DateTimeField(u'创建时间', auto_now_add=True)
-    update_time = models.DateTimeField(u'最近发布时间', auto_now=True)
-    desc = models.CharField(u"描述", max_length=100, null=True, blank=True)
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
+    update_time = models.DateTimeField(auto_now=True, verbose_name=u'最近发布时间')
+    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
@@ -34,7 +34,31 @@ class Jobs(models.Model):
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
+    hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
     path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
-    desc = models.CharField(u"描述", max_length=100, null=True, blank=True)
+    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'描述')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'发布环境'
+        verbose_name_plural = u'发布环境'
 
 
+class DeployJobs(models.Model):
+    job = models.ForeignKey(Jobs, verbose_name=u'任务')
+    j_id = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'任务ID')
+    hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
+    env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
+    version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
+    action_user = models.ForeignKey(User, verbose_name=u'操作人')
+    result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
+    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布说明')
+
+    def __str__(self):
+        return self.j_id
+
+    class Meta:
+        verbose_name = u'执行发布'
+        verbose_name_plural = u'执行发布'
