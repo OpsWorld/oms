@@ -29,6 +29,8 @@ INSTALLED_APPS = [
     'perms',
     'threepay',
     'wikis',
+    'hosts',
+    'jobs',
 ]
 
 MIDDLEWARE = [

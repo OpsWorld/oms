@@ -4,8 +4,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from tools.models import Upload, Sendmail, Sendmessage
-from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer
+from tools.models import Upload, Sendmail, Sendmessage, SaltApi
+from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer, SaltApiSerializer
 from tools.filters import UploadFilter
 from users.models import User
 from tasks.tasks import send_to_skype, send_to_mail
@@ -72,3 +72,8 @@ class SendmessageViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({"error":"1024"}, status=status.HTTP_201_CREATED)
+
+
+class SaltApiViewSet(viewsets.ModelViewSet):
+    queryset = SaltApi.objects.all()
+    serializer_class = SaltApiSerializer

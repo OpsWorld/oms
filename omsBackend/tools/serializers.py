@@ -2,8 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from tools.models import Upload, Sendmail, Sendmessage
-from users.models import User
+from tools.models import Upload, Sendmail, Sendmessage, SaltApi
 
 
 class UploadSerializer(serializers.ModelSerializer):
@@ -22,3 +21,9 @@ class SendmessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sendmessage
         fields = ['url', 'id', 'action_user', 'title', 'message']
+
+
+class SaltApiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SaltApi
+        fields = ['url', 'id', 'name', 'apiaddr', 'username','password']

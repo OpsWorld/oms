@@ -5,30 +5,46 @@ from rest_framework.routers import DefaultRouter
 from users.views import UserViewSet, RoleViewSet, GroupViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet
 from threepay.views import PlatformViewSet, MerchantViewSet, ThreePayEnclosureViewSet, PayChannelViewSet, PayChannelNameViewSet,ThreePayCommentViewSet
-from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet
+from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet, SaltApiViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
 from wikis.views import WikiViewSet
+from hosts.views import HostViewSet, IdcViewSet
+from jobs.views import JobsViewSet, DeployenvViewSet
 
 router = DefaultRouter()
+
 router.register(r'users', UserViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'roles', RoleViewSet)
+
 router.register(r'worktickers', WorkTicketViewSet)
 router.register(r'ticketcomments', TicketCommentViewSet)
 router.register(r'ticketenclosures', TicketEnclosureViewSet)
 router.register(r'tickettypes', TicketTypeViewSet)
+
 router.register(r'upload', UploadViewSet)
 router.register(r'sendmail', SendmailViewSet)
 router.register(r'sendmessage', SendmessageViewSet)
+router.register(r'saltapi', SaltApiViewSet)
+
 router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)
 router.register(r'menumetas', ElementViewSet)
 router.register(r'usermenuperms', UserMenuPermsViewSet)
+
 router.register(r'platforms', PlatformViewSet)
 router.register(r'merchants', MerchantViewSet)
 router.register(r'threepayenclosures', ThreePayEnclosureViewSet)
 router.register(r'paychannels', PayChannelViewSet)
 router.register(r'paychannelnames', PayChannelNameViewSet)
 router.register(r'threepaycomments', ThreePayCommentViewSet)
+
 router.register(r'wikis', WikiViewSet)
+
+router.register(r'hosts', HostViewSet)
+router.register(r'idcs', IdcViewSet)
+
+router.register(r'jobs', JobsViewSet)
+router.register(r'deployenvs', DeployenvViewSet)
+

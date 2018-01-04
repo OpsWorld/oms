@@ -54,3 +54,16 @@ class Sendmessage(models.Model):
     class Meta:
         verbose_name = u'发送消息提醒'
         verbose_name_plural = u'发送消息提醒'
+
+class SaltApi(models.Model):
+    name = models.CharField(u"名称", max_length=30, unique=True)
+    apiaddr = models.URLField(max_length=20, verbose_name=u'saltAPI地址')
+    username = models.CharField(max_length=20, verbose_name=u'用户名')
+    password = models.CharField(max_length=30, verbose_name=u'密码')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'saltAPI地址'
+        verbose_name_plural = u'saltAPI地址'
