@@ -15,7 +15,6 @@
       </div>
       <div class="wiki-content">
         <div v-for="item in tableData" :key="item.id">
-          <el-card class="wiki-body">
             <router-link :to="'viewwiki/' + item.id">
               <a class="title">{{item.title}}</a>
             </router-link>
@@ -29,10 +28,6 @@
               </a>
             </div>
             <hr class="heng"/>
-            <div class="abstract">
-                <vue-markdown :source="item.content.substring(0,800)+ '...'"></vue-markdown>
-            </div>
-          </el-card>
         </div>
         <div class="table-pagination">
           <el-pagination
@@ -133,13 +128,11 @@ export default {
         margin: -7px 0 4px;
         display: inherit;
         font-size: 18px;
-        font-weight: 700;
         line-height: 1.5;
-        color: #19ddff;
+        color: #000000;
         &:hover {
           text-decoration: underline;
-          color: #99abff;
-          font-size: 19px;
+          color: #2f0aff;
         }
       }
       .meta {

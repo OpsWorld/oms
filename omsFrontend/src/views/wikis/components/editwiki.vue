@@ -99,7 +99,7 @@ export default {
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
-      formData.append('username', this.ruleForm.create_user)
+      formData.append('username', this.rowdata.create_user)
       formData.append('file', file)
       formData.append('create_time', getConversionTime(file.lastModified))
       formData.append('type', file.type)

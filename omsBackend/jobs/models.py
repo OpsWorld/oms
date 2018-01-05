@@ -23,8 +23,7 @@ class Jobs(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'最近发布时间')
     desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'描述')
 
-    def __str__(self):
-        return self.name
+
 
     class Meta:
         verbose_name = u'项目或任务'

@@ -21,11 +21,15 @@
               </div>
               <div class='progress-item'>
                 <span>工单系统</span>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>第三支付对接</span>
                 <el-progress :percentage="99"></el-progress>
               </div>
               <div class='progress-item'>
-                <span>第三方支付</span>
-                <el-progress :percentage="53"></el-progress>
+                <span>文档系统</span>
+                <el-progress :percentage="88"></el-progress>
               </div>
             </el-card>
             <el-card class="box-card-card">
@@ -54,8 +58,9 @@
         <el-card>
           <div>
             <p style="font-size: 36px">欢迎你，{{username}}!</p>
-              <p style="font-size: 20px">&#160;&#160;&#160;&#160;&#160;&#160;本系统目的是为了简化和改进目前日常工作中的一些重复和琐碎的事情，希望此系统能给大家带来方便和快捷！本系统还有很多功能和地方需要完善，希望大家多提提意见;</p>
-              <p style="font-size: 20px">&#160;&#160;&#160;&#160;&#160;&#160;下面会将是一些系统数据的展示，目前是测试数据;分别点击T、B、O、P，图片会发生变化</p>
+            <p style="font-size: 20px">&#160;&#160;&#160;&#160;&#160;&#160;本系统目的是为了简化和改进目前日常工作中的一些重复和琐碎的事情，希望此系统能给大家带来方便和快捷！本系统还有很多功能和地方需要完善，希望大家多提提意见;</p>
+            <p style="font-size: 20px">
+              &#160;&#160;&#160;&#160;&#160;&#160;下面会将是一些系统数据的展示，目前是测试数据;分别点击T、B、O、P，图片会发生变化</p>
           </div>
         </el-card>
         <panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
