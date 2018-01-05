@@ -78,7 +78,7 @@ module.exports = {
   secondmenus: `${url}/api/secondmenus/`,
   menumetas: `${url}/api/menumetas/`,
 
-  // cmdrun
+  // tools
   sendmail: `${url}/api/sendmail/`,
   sendmessage: `${url}/api/sendmessage/`,
 

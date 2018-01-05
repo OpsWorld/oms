@@ -30,9 +30,9 @@
                 <el-upload
                   ref="upload"
                   :action="uploadurl"
-                  :on-success="handleSuccess"
                   :show-file-list="false"
-                  :disabled="count>10?true:false">
+                  :disabled="count>10?true:false"
+                  :before-upload="beforeAvatarUpload">
                   <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
                              :disabled="count>10?true:false">
                     上传
@@ -578,28 +578,35 @@ export default {
       deleteThreePayEnclosure(id)
       setTimeout(this.EnclosureData, 1000)
     },
-    handleSuccess(file, fileList) {
-      const formData = new FormData()
-      formData.append('username', this.enclosureForm.create_user)
-      formData.append('file', fileList.raw)
-      formData.append('create_time', getConversionTime(fileList.uid))
-      formData.append('type', fileList.raw.type)
-      formData.append('archive', this.route_path[1])
-      postUpload(formData).then(response => {
-        this.enclosureForm.file = response.data.filepath
-        postThreePayEnclosure(this.enclosureForm)
-        setTimeout(this.EnclosureData, 1000)
-        if (response.statusText === 'Created') {
-          this.$message({
-            type: 'success',
-            message: '恭喜你，上传成功'
-          })
-        }
-      }).catch(error => {
-        this.$message.error('上传失败')
-        this.$refs.upload.clearFiles()
-        console.log(error)
-      })
+    beforeAvatarUpload(file) {
+      const isLt = file.size / 1024 / 1024 < 10
+      if (!isLt) {
+        this.$message.error('上传文件大小不能超过 10MB!')
+        return false
+      } else {
+        const formData = new FormData()
+        formData.append('username', this.enclosureForm.create_user)
+        formData.append('file', file)
+        formData.append('create_time', getConversionTime(file.lastModified))
+        formData.append('type', file.type)
+        formData.append('archive', this.route_path[1])
+        postUpload(formData).then(response => {
+          this.enclosureForm.file = response.data.filepath
+          postThreePayEnclosure(this.enclosureForm)
+          setTimeout(this.EnclosureData, 1000)
+          if (response.statusText === 'Created') {
+            this.$message({
+              type: 'success',
+              message: '恭喜你，上传成功'
+            })
+          }
+        }).catch(error => {
+          this.$message.error('上传失败')
+          this.$refs.upload.clearFiles()
+          console.log(error)
+        })
+        return true
+      }
     }
   }
 }

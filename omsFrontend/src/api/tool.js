@@ -18,14 +18,6 @@ export function getUploadList(query, id) {
   })
 }
 
-export function putUpload(id, data) {
-  return request({
-    url: apiURL.uploads + id + '/',
-    method: 'put',
-    data
-  })
-}
-
 export function deleteUpload(id) {
   return request({
     url: apiURL.uploads + id + '/',
@@ -39,29 +31,6 @@ export function postSendmail(data) {
     url: apiURL.sendmail,
     method: 'post',
     data
-  })
-}
-
-export function getSendmail(query, id) {
-  return request({
-    url: id ? apiURL.sendmail + id + '/' : apiURL.sendmail,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putSendmail(id, data) {
-  return request({
-    url: apiURL.sendmail + id + '/',
-    method: 'put',
-    data
-  })
-}
-
-export function deleteSendmail(id) {
-  return request({
-    url: apiURL.sendmail + id + '/',
-    method: 'delete'
   })
 }
 

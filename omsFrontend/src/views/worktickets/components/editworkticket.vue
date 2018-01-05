@@ -61,7 +61,6 @@
 
           <div v-if="showinput">
             <el-upload
-              class="upload"
               ref="upload"
               :action="uploadurl"
               :on-success="handleSuccess"

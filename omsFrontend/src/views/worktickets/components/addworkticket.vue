@@ -39,7 +39,6 @@
         <el-form-item>
           <hr class="heng"/>
           <el-upload
-            class="upload-demo"
             ref="upload"
             :action="uploadurl"
             :on-success="handleSuccess"

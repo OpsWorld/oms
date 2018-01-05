@@ -1,44 +1,48 @@
-<template>
-  <el-card style="width: 500px;margin: 20px;padding: 20px">
-<el-cascader
-  :options="options2"
-  @active-item-change="handleItemChange"
-  :props="props"
-></el-cascader>
-  </el-card>
+<template xmlns="http://www.w3.org/1999/html">
+  <div class="components-container" style='height:100vh'>
+    <el-card>
+      <el-upload
+        class="upload-demo"
+        ref="upload"
+        action="1024"
+        :file-list="fileList"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload">
+        <el-button slot="trigger" size="small" type="primary">
+          上传文件
+        </el-button>
+        (可以不用上传)
+        <div slot="tip" class="el-upload__tip">
+          <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
+        </div>
+      </el-upload>
+    </el-card>
+  </div>
 </template>
 <script>
 export default {
   data() {
     return {
-      options2: [{
-        label: '江苏',
-        cities: []
-      }, {
-        label: '浙江',
-        cities: []
-      }],
-      props: {
-        value: 'label',
-        children: 'cities'
-      }
+      fileList: []
     }
   },
 
   methods: {
-    handleItemChange(val) {
-      console.log('active item:', val)
-      setTimeout(_ => {
-        if (val.indexOf('江苏') > -1 && !this.options2[0].cities.length) {
-          this.options2[0].cities = [{
-            label: '南京'
-          }]
-        } else if (val.indexOf('浙江') > -1 && !this.options2[1].cities.length) {
-          this.options2[1].cities = [{
-            label: '杭州'
-          }]
-        }
-      }, 300)
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
+    beforeAvatarUpload(file) {
+      console.log(file)
+      const isJPG = file.type === 'image/jpeg'
+      const isLt2M = file.size / 1024 / 1024 < 2
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+      }
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!')
+      }
+      return false
     }
   }
 }
