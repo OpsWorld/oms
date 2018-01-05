@@ -314,7 +314,7 @@ export default {
       CommentForm: {
         ticket: '',
         merchant: '',
-        content: '一个亿',
+        content: 0,
         create_user: localStorage.getItem('username')
       },
       comments: []
