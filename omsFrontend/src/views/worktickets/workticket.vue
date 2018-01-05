@@ -56,7 +56,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='ticket_status' label='工单状态'>
+          <el-table-column prop='ticket_status' label='工单状态' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
               <el-tag :type="TICKET_STATUS_TYPE[scope.row.ticket_status]">
@@ -68,14 +68,14 @@
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
           <el-table-column prop='action_user' label='工单指派者'></el-table-column>
           <el-table-column prop='edit_user' label='最新回复人'></el-table-column>
-          <el-table-column prop='create_time' label='工单创建时间'>
+          <el-table-column prop='create_time' label='工单创建时间' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='update_time' label='工单更新时间'>
+          <el-table-column prop='update_time' label='工单更新时间' sortable>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.update_time | parseDate}}</span>
@@ -95,7 +95,7 @@
             :current-page.sync="currentPage"
             :page-sizes="pagesize"
             :page-size="limit"
-            layout="prev, pager, next, sizes"
+            layout="total, sizes, prev, pager, next, jumper"
             :total="tabletotal">
           </el-pagination>
         </div>
