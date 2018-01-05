@@ -13,6 +13,12 @@ if (process.env.NODE_ENV === 'production') {
     super_group: 'OMS_Super_Admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
+} else if (process.env.NODE_ENV === 'test') {
+  CONFIG = {
+    apiUrl: '',
+    super_group: 'admin',
+    wsurl: ws_scheme + '://' + rest_url + '/ws'
+  }
 } else {
   CONFIG = {
     apiUrl: 'http://127.0.0.1:8000',
