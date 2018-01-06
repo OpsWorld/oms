@@ -8,7 +8,7 @@ from users.models import User
 DEPLOY_STATUS = {
     "noaction": u"未执行",
     "deploy": u"发布中",
-    "succed": u"发布成功",
+    "success": u"发布成功",
     "failed": u"发布失败"
 }
 
@@ -17,7 +17,7 @@ class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
-    deploy_status = models.CharField(u"发布状态", choices=DEPLOY_STATUS.items(), default="noaction", max_length=30)
+    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="noaction", max_length=30,verbose_name=u'发布状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'最近发布时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -45,7 +45,7 @@ class Deployenv(models.Model):
 
 
 class DeployJobs(models.Model):
-    job = models.ForeignKey(Jobs, verbose_name=u'任务')
+    job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     j_id = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'任务ID')
     hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')

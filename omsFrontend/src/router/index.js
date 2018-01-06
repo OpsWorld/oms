@@ -121,6 +121,17 @@ export const asyncRouterMap = [
     ]
   },
   {
+    name: 'jobManager',
+    path: '/jobs',
+    component: Layout,
+    icon: 'tasks',
+    redirect: 'jobs',
+    authority: '发布管理',
+    children: [
+      { path: 'jobs', component: _import('jobs/jobs'), name: 'jobs', authority: '项目列表' }
+    ]
+  },
+  {
     name: 'toolManager',
     path: '/tools',
     component: Layout,

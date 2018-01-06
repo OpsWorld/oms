@@ -3,11 +3,11 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
+          <el-button type="primary" icon="el-icon-plus">新建</el-button>
         </div>
         <div class="table-search">
           <el-input
-            placeholder="主机名或ip"
+            placeholder="search"
             v-model="searchdata"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
@@ -15,58 +15,21 @@
         </div>
       </div>
       <div>
-        <el-table :data='tableData' border style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="其他ip" prop="other_ip">
-                  <span>{{ props.row.other_ip }}</span>
-                </el-form-item>
-                <el-form-item label="系统" prop="os">
-                  <span>{{ props.row.os }}</span>
-                </el-form-item>
-                <el-form-item label="cpu信息" prop="cpu">
-                  <span>{{ props.row.cpu }}</span>
-                </el-form-item>
-                <el-form-item label="内存信息" prop="memory">
-                  <span>{{ props.row.memory }}</span>
-                </el-form-item>
-                <el-form-item label="磁盘信息" prop="disk">
-                  <span>{{ props.row.disk }}</span>
-                </el-form-item>
-                <el-form-item label="备注" prop="desc">
-                  <span>{{ props.row.desc }}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column prop='hostname' label='主机名' sortable></el-table-column>
-          <el-table-column prop='ip' label='ip' sortable></el-table-column>
-          <el-table-column prop='idc' label='机房'></el-table-column>
-          <el-table-column prop='asset_type' label='类型'>
+        <el-table :data='tableData' style="width: 100%">
+          <el-table-column type="index" width="50"></el-table-column>
+          <el-table-column prop='name' label='名称' sortable></el-table-column>
+          <el-table-column prop='deploy_status' label='发布状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center">
-                <el-tag style="color: #000" :color="ASSET_TYPE[scope.row.asset_type].color">
-                  {{ASSET_TYPE[scope.row.asset_type].type}}
+                <el-tag :type="DEPLOY_STATUS[scope.row.deploy_status].type">
+                  {{DEPLOY_STATUS[scope.row.assedeploy_statust_type].text}}
                 </el-tag>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='status' label='状态'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center">
-                <el-tag :type="ASSET_STATUS[scope.row.status].type">
-                  {{ASSET_STATUS[scope.row.status].status}}
-                </el-tag>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
-            </template>
-          </el-table-column>
+          <el-table-column prop='create_time' label='创建时间'></el-table-column>
+          <el-table-column prop='update_time' label='最近发布时间'></el-table-column>
+          <el-table-column prop='desc' label='描述'></el-table-column>
         </el-table>
       </div>
       <div class="table-pagination">
@@ -81,23 +44,15 @@
         </el-pagination>
       </div>
     </el-card>
-    <el-dialog :visible.sync="addForm">
-      <add-obj @formdata="addGroupSubmit"></add-obj>
-    </el-dialog>
-    <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-obj :rowdata="rowdata" @formdata="editGroupSubmit"></edit-obj>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { postHost, getHost, putHost, deleteHost } from '@/api/host'
+import { getJob, deleteJob } from '@/api/job'
 import { LIMIT } from '@/config'
-import addObj from './components/addhost.vue'
-import editObj from './components/edithost.vue'
 
 export default {
-  components: { addObj, editObj },
+  components: {},
   data() {
     return {
       tableData: [],
@@ -112,22 +67,11 @@ export default {
       limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
-      addForm: false,
-      editForm: false,
-      viewForm: false,
-      groupName: '',
-      rowdata: {},
-      ASSET_TYPE: {
-        'physical': { 'type': '物理机', 'color': '#c0dbff' },
-        'virtual': { 'type': '虚拟机', 'color': '#19ddff' },
-        'container': { 'type': '容器', 'color': '#f06292' },
-        'network': { 'type': '网络设备', 'color': '#e6d664' },
-        'other': { 'type': '其他设备', 'color': '#838383' }
-      },
-      ASSET_STATUS: {
-        'used': { 'status': '使用中', 'type': 'primary' },
-        'noused': { 'status': '未使用', 'type': 'gray' },
-        'broken': { 'status': '故障', 'type': 'danger' }
+      DEPLOY_STATUS: {
+        'noaction': { 'text': '未执行', 'type': 'info' },
+        'deploy': { 'text': '发布中', 'type': 'primary' },
+        'success': { 'text': '发布成功', 'type': 'success' },
+        'failed': { 'text': '发布失败', 'type': 'danger' }
       }
     }
   },
@@ -138,39 +82,13 @@ export default {
 
   methods: {
     fetchData() {
-      getHost(this.listQuery).then(response => {
+      getJob(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postHost(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
-    },
-    editGroupSubmit(formdata) {
-      putHost(this.rowdata.id, formdata).then(response => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.editForm = false
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
-      })
-    },
     deleteGroup(id) {
-      deleteHost(id).then(response => {
+      deleteJob(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
@@ -180,13 +98,6 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
-    },
-    closeEditForm() {
-      this.fetchData()
-    },
-    handleEdit(row) {
-      this.editForm = true
-      this.rowdata = row
     },
     searchClick() {
       this.listQuery.search = this.searchdata
@@ -220,18 +131,5 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
-  }
-
-  .table-expand {
-    font-size: 0;
-    .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
-      .el-form-item__label {
-        width: 90px;
-        color: #99a9bf;
-      }
-    }
   }
 </style>
