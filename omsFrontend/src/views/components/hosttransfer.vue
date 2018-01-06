@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getHostList } from 'api/asset'
+import { getHost } from 'api/host'
 export default {
   props: ['selecthost'],
   data() {
@@ -38,7 +38,7 @@ export default {
       const parms = {
         status: 'used'
       }
-      getHostList(parms).then(response => {
+      getHost(parms).then(response => {
         const results = response.data.results
         for (var i = 0, len = results.length; i < len; i++) {
           this.allhost.push({

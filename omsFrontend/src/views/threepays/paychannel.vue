@@ -148,13 +148,13 @@
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
                   <el-form-item label="key信息" prop="keyinfo">
-                    <el-input v-model="props.row.keyinfo" type="textarea" :disabled="!editChannelForm" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+                    <el-input v-model="props.row.keyinfo" type="textarea" disabled :autosize="{ minRows: 5, maxRows: 10}"></el-input>
                   </el-form-item>
                   <el-form-item label="转发域名">
-                    <el-input size="small" v-model="props.row.m_forwardurl" :disabled="!editChannelForm"></el-input>
+                    <el-input size="small" v-model="props.row.m_forwardurl" disabled></el-input>
                   </el-form-item>
                   <el-form-item label="提交域名">
-                    <el-input size="small" v-model="props.row.m_submiturl" :disabled="!editChannelForm"></el-input>
+                    <el-input size="small" v-model="props.row.m_submiturl" disabled></el-input>
                   </el-form-item>
                 </el-form>
               </template>

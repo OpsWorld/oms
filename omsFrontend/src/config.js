@@ -54,7 +54,7 @@ module.exports = {
 
   // 主机
   hosts: `${url}/api/hosts/`,
-  hostgroups: `${url}/api/hostgroups/`,
+  idcs: `${url}/api/idcs/`,
 
   // 用户
   users: `${url}/api/users/`,

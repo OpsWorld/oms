@@ -7,7 +7,7 @@
         </div>
         <div class="table-search">
           <el-input
-            placeholder="主机名或ip"
+            placeholder="search"
             v-model="searchdata"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
@@ -16,37 +16,14 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="其他ip" prop="other_ip">
-                  <span>{{ props.row.other_ip }}</span>
-                </el-form-item>
-                <el-form-item label="系统" prop="os">
-                  <span>{{ props.row.os }}</span>
-                </el-form-item>
-                <el-form-item label="cpu信息" prop="cpu">
-                  <span>{{ props.row.cpu }}</span>
-                </el-form-item>
-                <el-form-item label="内存信息" prop="memory">
-                  <span>{{ props.row.memory }}</span>
-                </el-form-item>
-                <el-form-item label="磁盘信息" prop="disk">
-                  <span>{{ props.row.disk }}</span>
-                </el-form-item>
-              </el-form>
-            </template>
-          </el-table-column>
-          <el-table-column prop='hostname' label='主机名'></el-table-column>
-          <el-table-column prop='ip' label='ip'></el-table-column>
-          <el-table-column prop='idc' label='机房'></el-table-column>
-          <el-table-column prop='asset_type' label='类型'></el-table-column>
-          <el-table-column prop='status' label='状态'></el-table-column>
+          <el-table-column prop='name' label='名称'></el-table-column>
+          <el-table-column prop='user' label='联系人'></el-table-column>
+          <el-table-column prop='tel' label='联系人电话'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
+              <el-button @click="deleteGroup(scope.row.id)"  type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -73,10 +50,10 @@
 </template>
 
 <script>
-import { postHost, getHost, putHost, deleteHost } from '@/api/host'
+import { postIdc, getIdc, putIdc, deleteIdc } from '@/api/host'
 import { LIMIT } from '@/config'
-import addObj from './components/addhost.vue'
-import editObj from './components/edithost.vue'
+import addObj from './components/addidc.vue'
+import editObj from './components/editidc.vue'
 
 export default {
   components: { addObj, editObj },
@@ -89,7 +66,7 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        search: ''
+        name: this.searchdata
       },
       limit: LIMIT,
       offset: '',
@@ -108,13 +85,13 @@ export default {
 
   methods: {
     fetchData() {
-      getHost(this.listQuery).then(response => {
+      getIdc(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
     addGroupSubmit(formdata) {
-      postHost(formdata).then(response => {
+      postIdc(formdata).then(response => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
@@ -127,7 +104,7 @@ export default {
       })
     },
     editGroupSubmit(formdata) {
-      putHost(this.rowdata.id, formdata).then(response => {
+      putIdc(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
@@ -140,7 +117,7 @@ export default {
       })
     },
     deleteGroup(id) {
-      deleteHost(id).then(response => {
+      deleteIdc(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
@@ -159,7 +136,6 @@ export default {
       this.rowdata = row
     },
     searchClick() {
-      this.listQuery.search = this.searchdata
       this.fetchData()
     },
     handleSizeChange(val) {
@@ -190,18 +166,5 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
-  }
-
-  .table-expand {
-    font-size: 0;
-    .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
-      .el-form-item__label {
-        width: 90px;
-        color: #99a9bf;
-      }
-    }
   }
 </style>

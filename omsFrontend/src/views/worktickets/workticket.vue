@@ -213,6 +213,7 @@ export default {
     showAllTicket() {
       this.listQuery.create_user = ''
       this.listQuery.action_user = ''
+      this.listQuery.search = ''
       this.ticket_status = ''
       this.fetchData()
     },

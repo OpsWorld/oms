@@ -120,6 +120,18 @@ export const asyncRouterMap = [
       { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: '菜单列表' },
       { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: '菜单权限' }
     ]
+  },
+  {
+    name: 'hostManager',
+    path: '/hosts',
+    component: Layout,
+    icon: 'desktop',
+    redirect: 'hosts',
+    authority: '主机管理',
+    children: [
+      { path: 'hosts', component: _import('hosts/hosts'), name: 'hosts', authority: '主机列表' },
+      { path: 'idcs', component: _import('hosts/idcs'), name: 'idcs', authority: '机房列表' }
+    ]
   }
 ]
 

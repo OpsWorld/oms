@@ -7,17 +7,13 @@ from worktickets.serializers import (WorkTicketSerializer,
                                      TicketCommentSerializer,
                                      TicketEnclosureSerializer,
                                      TicketTypeSerializer)
-from worktickets.filters import WorkTicketFilter, WorkTicketFilterBackend
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
 from dry_rest_permissions.generics import DRYPermissions
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('ticket_status')
     serializer_class = WorkTicketSerializer
-    filter_class = WorkTicketFilter
-    filter_backends = (SearchFilter,WorkTicketFilterBackend,DjangoFilterBackend)
     search_fields = ['title', 'content', 'type__name']
+    filter_fields = ['ticket_status','ticketid','create_user__username','action_user__username']
     permission_classes = (DRYPermissions,)
 
 

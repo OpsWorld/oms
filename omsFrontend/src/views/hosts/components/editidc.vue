@@ -1,7 +1,13 @@
 <template>
-  <el-form :model="rowdata" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+  <el-form :model="rowdata" :rules="rules" ref="ruleForm" label-width="100px">
     <el-form-item label="名称" prop="name">
       <el-input v-model="rowdata.name"></el-input>
+    </el-form-item>
+    <el-form-item label="联系人" prop="user">
+      <el-input v-model="rowdata.user"></el-input>
+    </el-form-item>
+    <el-form-item label="联系人电话" prop="tel">
+      <el-input v-model="rowdata.tel"></el-input>
     </el-form-item>
     <el-form-item label="描述" prop="desc">
       <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
@@ -19,9 +25,17 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
+        ],
+        user: [
+          { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
+        ],
+        tel: [
+          { required: true, message: '请输入一个正确的内容', trigger: 'change' }
         ]
       }
     }
+  },
+  created() {
   },
   methods: {
     submitForm(formName) {

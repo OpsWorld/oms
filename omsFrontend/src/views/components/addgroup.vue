@@ -4,7 +4,7 @@
             <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="desc">
-            <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 10, maxRows: 30}"></el-input>
+            <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -22,7 +22,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入一个风骚的名字', trigger: 'blur' }
+          { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
         ]
       }
     }
