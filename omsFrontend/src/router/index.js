@@ -58,19 +58,6 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    name: 'userManager',
-    path: '/users',
-    component: Layout,
-    icon: 'user',
-    redirect: 'users',
-    authority: '用户管理',
-    children: [
-      { path: 'users', component: _import('users/users'), name: 'userlist', authority: '用户列表' },
-      { path: 'usergroups', component: _import('users/usergroups'), name: 'grouplist', authority: '用户组列表' },
-      { path: 'roles', component: _import('users/roles'), name: 'rolelist', authority: '角色列表' }
-    ]
-  },
-  {
     name: 'ticketManager',
     path: '/worktickets',
     component: Layout,
@@ -97,16 +84,16 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: 'toolManager',
-    path: '/tools',
+    name: 'userManager',
+    path: '/users',
     component: Layout,
-    icon: 'cogs',
-    redirect: 'upload',
-    authority: '工具管理',
+    icon: 'user',
+    redirect: 'users',
+    authority: '用户管理',
     children: [
-      { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
-      { path: 'sendmessage', component: _import('tools/sendmessage'), name: 'sendmessage', authority: '消息列表' },
-      { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
+      { path: 'users', component: _import('users/users'), name: 'userlist', authority: '用户列表' },
+      { path: 'usergroups', component: _import('users/usergroups'), name: 'grouplist', authority: '用户组列表' },
+      { path: 'roles', component: _import('users/roles'), name: 'rolelist', authority: '角色列表' }
     ]
   },
   {
@@ -131,6 +118,19 @@ export const asyncRouterMap = [
     children: [
       { path: 'hosts', component: _import('hosts/hosts'), name: 'hosts', authority: '主机列表' },
       { path: 'idcs', component: _import('hosts/idcs'), name: 'idcs', authority: '机房列表' }
+    ]
+  },
+  {
+    name: 'toolManager',
+    path: '/tools',
+    component: Layout,
+    icon: 'cogs',
+    redirect: 'upload',
+    authority: '工具管理',
+    children: [
+      { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
+      { path: 'sendmessage', component: _import('tools/sendmessage'), name: 'sendmessage', authority: '消息列表' },
+      { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
     ]
   }
 ]

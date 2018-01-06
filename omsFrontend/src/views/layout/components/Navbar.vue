@@ -23,11 +23,15 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              首页
+              <i class="fa fa-home"></i>
+              Home
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">退出登录</span>
+            <span @click="logout" style="display:block;">
+              <i class="fa fa-power-off"></i>
+              Logout
+            </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -46,8 +50,7 @@ export default {
     Hamburger
   },
   data() {
-    return {
-    }
+    return {}
   },
   computed: {
     ...mapGetters([

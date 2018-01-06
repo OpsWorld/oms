@@ -2,8 +2,13 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path" v-if='item.name'>
-        <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">{{generateTitle(item.name)}}</span>
-        <router-link v-else :to="item.redirect||item.path">{{generateTitle(item.name)}}</router-link>
+        <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">
+          {{generateTitle(item.name)}}
+        </span>
+        <router-link v-else :to="item.redirect||item.path">
+          <i class="fa fa-home" v-show="item.name == 'dashboard'"></i>
+          {{generateTitle(item.name)}}
+        </router-link>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
