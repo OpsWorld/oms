@@ -34,11 +34,14 @@
                 <el-form-item label="磁盘信息" prop="disk">
                   <span>{{ props.row.disk }}</span>
                 </el-form-item>
+                <el-form-item label="备注" prop="desc">
+                  <span>{{ props.row.desc }}</span>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column prop='hostname' label='主机名'></el-table-column>
-          <el-table-column prop='ip' label='ip'></el-table-column>
+          <el-table-column prop='hostname' label='主机名' sortable></el-table-column>
+          <el-table-column prop='ip' label='ip' sortable></el-table-column>
           <el-table-column prop='idc' label='机房'></el-table-column>
           <el-table-column prop='asset_type' label='类型'>
             <template slot-scope="scope">
@@ -58,7 +61,6 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
