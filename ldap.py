@@ -8,7 +8,6 @@ import logging
 from contextlib import contextmanager
 from django.contrib.auth import get_user_model
 from users.models import Group
-from django.conf import settings as django_settings
 #from django.contrib.auth.models import Group
 from django_python3_ldap.conf import settings
 from django_python3_ldap.utils import import_func, format_search_filter

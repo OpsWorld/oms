@@ -17,24 +17,17 @@
             <div>
                 <el-table :data="tableData" @selection-change="handleSelectionChange" border style="width: 100%">
                     <el-table-column type="selection"></el-table-column>
-                    <el-table-column prop='username' label='用户名' sortable>
-                        <!--<template slot-scope="scope">-->
-                        <!--<div slot="reference" class="name-wrapper" style="text-align: center">-->
-                        <!--<el-button type="text" @click="handleEdit(scope.row)">{{ scope.row.username }}-->
-                        <!--</el-button>-->
-                        <!--</div>-->
-                        <!--</template>-->
-                    </el-table-column>
+                    <el-table-column prop='username' label='用户名' sortable></el-table-column>
                     <el-table-column prop='email' label='Email'></el-table-column>
                     <el-table-column prop='skype' label='Skype'></el-table-column>
-                    <el-table-column prop='groups' label='所在组' sortable>
+                    <el-table-column prop='groups' label='所在组'>
                         <template slot-scope="scope">
                             <div slot="reference" class="name-wrapper" style="text-align: center">
                                 <el-tag v-for="item in scope.row.groups" :key="item" type="success">{{item}}</el-tag>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop='roles' label='角色' sortable></el-table-column>
+                    <el-table-column prop='roles' label='角色'></el-table-column>
                 </el-table>
             </div>
             <div class="table-footer">
@@ -91,7 +84,6 @@ export default {
 
   created() {
     this.fetchData()
-    console.log(this.username)
   },
 
   computed: {
@@ -105,7 +97,7 @@ export default {
         id__gt: 1, // 排除admin用户
         limit: this.limit,
         offset: this.offset,
-        username__contains: this.searchdata
+        search: this.searchdata
       }
       getUser(parms).then(response => {
         this.tableData = response.data.results
