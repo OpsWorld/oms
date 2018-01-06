@@ -68,18 +68,6 @@
         <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
           <line-chart :chart-data="lineChartData"></line-chart>
         </el-row>
-        <!--<el-row :gutter="20">-->
-        <!--<el-col :span="12">-->
-        <!--<div class="chart-wrapper">-->
-        <!--<raddar-chart></raddar-chart>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--<el-col :span="12">-->
-        <!--<div class="chart-wrapper">-->
-        <!--<pie-chart></pie-chart>-->
-        <!--</div>-->
-        <!--</el-col>-->
-        <!--</el-row>-->
       </el-col>
     </el-row>
   </div>
@@ -89,9 +77,6 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Mallki from '@/components/TextHoverEffect/Mallki'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 
@@ -116,7 +101,7 @@ const lineChartData = {
 
 export default {
   components: {
-    PanThumb, Mallki, RaddarChart, PieChart, BarChart, PanelGroup, LineChart
+    PanThumb, Mallki, PanelGroup, LineChart
   },
 
   data() {

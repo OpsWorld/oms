@@ -5,13 +5,9 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <el-tooltip effect="dark" content="全屏" placement="bottom">
-        <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>
-
-      <el-dropdown trigger="click" class='international' @command="handleSetLanguage">
+      <el-dropdown class='international' @command="handleSetLanguage">
         <div>
-          <svg-icon class-name='right-menu-item international-icon' icon-class="language"/>
+          <i class="fa fa-globe fa-2x" style="margin-top: 15px"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="zh" :disabled="language==='zh'">中文</el-dropdown-item>
@@ -43,13 +39,11 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import Screenfull from '@/components/Screenfull'
 
 export default {
   components: {
     Breadcrumb,
-    Hamburger,
-    Screenfull
+    Hamburger
   },
   data() {
     return {
