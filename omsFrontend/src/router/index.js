@@ -37,7 +37,7 @@ export const constantRouterMap = [
     name: 'wikiManager',
     path: '/wikis',
     component: Layout,
-    icon: 'flag',
+    icon: 'paper-plane',
     redirect: 'noredirect',
     authority: '文档系统',
     children: [
@@ -88,7 +88,7 @@ export const asyncRouterMap = [
     name: 'threepayManager',
     path: '/threepays',
     component: Layout,
-    icon: 'strikethrough',
+    icon: 'bitcoin',
     redirect: 'threepay',
     authority: '第三支付对接',
     children: [

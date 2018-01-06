@@ -22,7 +22,7 @@
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button @click="handleEdit(scope.row)" type="primary" size="small">修改</el-button>
+              <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
               <el-button @click="deleteGroup(scope.row.id)"  type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>

@@ -89,5 +89,10 @@ module.exports = {
   sendmessage: `${url}/api/sendmessage/`,
 
   // 知识收集平台
-  wikis: `${url}/api/wikis/`
+  wikis: `${url}/api/wikis/`,
+
+  // 发布
+  jobs: `${url}/api/jobs/`,
+  deployenvs: `${url}/api/deployenvs/`,
+  deployjobs: `${url}/api/deployjobs/`
 }

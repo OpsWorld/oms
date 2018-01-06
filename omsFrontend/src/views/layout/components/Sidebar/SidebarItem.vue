@@ -12,7 +12,6 @@
 
       <el-submenu v-else :index="item.name||item.path" :key="item.name">
         <template slot="title">
-          <!--<svg-icon v-if="item.meta&&item.icon" :icon-class="item.icon"></svg-icon>-->
           <icon v-if='item.icon' :name="item.icon" :scale="iconsize" class="wscn-icon"></icon>
           <span v-if="item&&item.name">{{generateTitle(item.name)}}</span>
         </template>
@@ -58,6 +57,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
   .wscn-icon {
     margin-right: 10px;
+    min-width: 25px;
   }
 
   .child-icon {
