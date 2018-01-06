@@ -9,7 +9,7 @@ from hosts.models import Host
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_script', 'deploy_status', 'create_time',
+        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_status', 'create_time',
                   'update_time', 'desc']
 
 

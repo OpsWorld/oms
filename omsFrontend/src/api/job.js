@@ -1,66 +1,83 @@
 import request from '@/utils/request'
 import apiURL from '@/config'
 
-// hosts
-export function postHost(data) {
+// jobs
+export function postJob(data) {
   return request({
-    url: apiURL.hosts,
+    url: apiURL.jobs,
     method: 'post',
     data
   })
 }
 
-export function getHost(query) {
+export function getJob(query) {
   return request({
-    url: apiURL.hosts,
+    url: apiURL.jobs,
     method: 'get',
     params: query
   })
 }
 
-export function putHost(id, data) {
+export function putJob(id, data) {
   return request({
-    url: apiURL.hosts + id + '/',
+    url: apiURL.jobs + id + '/',
     method: 'put',
     data
   })
 }
 
-export function deleteHost(id) {
+export function deleteJob(id) {
   return request({
-    url: apiURL.hosts + id + '/',
+    url: apiURL.jobs + id + '/',
     method: 'delete'
   })
 }
 
-// idcs
-export function postIdc(data) {
+// deployenvs
+export function postDeployenv(data) {
   return request({
-    url: apiURL.idcs,
+    url: apiURL.deployenvs,
     method: 'post',
     data
   })
 }
 
-export function getIdc(query) {
+export function getDeployenv(query) {
   return request({
-    url: apiURL.idcs,
+    url: apiURL.deployenvs,
     method: 'get',
     params: query
   })
 }
 
-export function putIdc(id, data) {
+export function putDeployenv(id, data) {
   return request({
-    url: apiURL.idcs + id + '/',
+    url: apiURL.deployenvs + id + '/',
     method: 'put',
     data
   })
 }
 
-export function deleteIdc(id) {
+export function deleteDeployenv(id) {
   return request({
-    url: apiURL.idcs + id + '/',
+    url: apiURL.deployenvs + id + '/',
     method: 'delete'
+  })
+}
+
+// deployjobs
+export function postDeployJob(data) {
+  return request({
+    url: apiURL.deployjobs,
+    method: 'post',
+    data
+  })
+}
+
+export function getDeployJob(query) {
+  return request({
+    url: apiURL.deployjobs,
+    method: 'get',
+    params: query
   })
 }

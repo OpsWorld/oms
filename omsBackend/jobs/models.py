@@ -17,11 +17,10 @@ class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
-    deploy_script = models.TextField(null=True, blank=True, verbose_name=u'发布脚本')
     deploy_status = models.CharField(u"发布状态", choices=DEPLOY_STATUS.items(), default="noaction", max_length=30)
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'最近发布时间')
-    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'描述')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
 
 
@@ -35,7 +34,7 @@ class Deployenv(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
     path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
-    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'描述')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
@@ -53,7 +52,7 @@ class DeployJobs(models.Model):
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
-    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布说明')
+    desc = models.TextField(null=True, blank=True, verbose_name=u'发布说明')
 
     def __str__(self):
         return self.j_id

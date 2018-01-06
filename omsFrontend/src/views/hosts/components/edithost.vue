@@ -16,12 +16,12 @@
     </el-form-item>
     <el-form-item label="设备类型" prop="asset_type">
       <el-select v-model="rowdata.asset_type" placeholder="请选择设备类型">
-        <el-option v-for="item in ASSET_TYPE" :key="item.id" :value="item.key">{{item.name}}</el-option>
+        <el-option v-for="item in ASSET_TYPE" :key="item.key" :label="item.name" :value="item.key"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="主机状态" prop="status">
       <el-select v-model="rowdata.status" placeholder="请选择主机状态">
-        <el-option v-for="item in ASSET_STATUS" :key="item.id" :value="item.key">{{item.name}}</el-option>
+        <el-option v-for="item in ASSET_STATUS" :key="item.key" :label="item.name" :value="item.key"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="系统" prop="os">
@@ -71,8 +71,7 @@ export default {
       ASSET_STATUS: [
         { key: 'used', name: '使用中' },
         { key: 'noused', name: '未使用' },
-        { key: 'broken', name: '故障' },
-        { key: 'other', name: '其它' }
+        { key: 'broken', name: '故障' }
       ],
       ASSET_TYPE: [
         { key: 'physical', name: '物理机' },
