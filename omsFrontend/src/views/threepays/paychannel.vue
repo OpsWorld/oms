@@ -579,9 +579,9 @@ export default {
       setTimeout(this.EnclosureData, 1000)
     },
     beforeAvatarUpload(file) {
-      const isLt = file.size / 1024 / 1024 < 10
+      const isLt = file.size / 1024 / 1024 < 20
       if (!isLt) {
-        this.$message.error('上传文件大小不能超过 10MB!')
+        this.$message.error('上传文件大小不能超过 20MB!')
         return false
       } else {
         const formData = new FormData()

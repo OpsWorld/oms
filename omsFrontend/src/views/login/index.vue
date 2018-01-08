@@ -6,20 +6,20 @@
 
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
-          <svg-icon icon-class="user"/>
+          <icon name="user"></icon>
         </span>
         <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="用户名"/>
       </el-form-item>
 
       <el-form-item prop="password">
-        <span class="svg-container"> <svg-icon icon-class="password"/> </span>
+        <span class="svg-container"> <icon name="key"></icon></span>
         <el-input name="password" :type="pwdType" @keyup.enter.native="handleLogin" v-model="loginForm.password"
                   autoComplete="on" placeholder="密码"/>
-        <span class="show-pwd" @click="showPwd"><svg-icon icon-class="eye"/></span>
+        <span class="show-pwd" @click="showPwd"><icon :name="eye"></icon></span>
       </el-form-item>
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading"
-                 @click.native.prevent="handleLogin">登录
+                 @click.native.prevent="handleLogin">Login
       </el-button>
     </el-form>
   </div>
@@ -35,6 +35,7 @@ export default {
         password: ''
       },
       pwdType: 'password',
+      eye: 'eye',
       loading: false,
       showDialog: false
     }
@@ -43,8 +44,10 @@ export default {
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = ''
+        this.eye = 'eye-slash'
       } else {
         this.pwdType = 'password'
+        this.eye = 'eye'
       }
     },
     handleLogin() {

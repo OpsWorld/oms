@@ -22,15 +22,27 @@
           <el-table-column prop='name' label='名称' sortable></el-table-column>
           <el-table-column prop='deploy_status' label='发布状态'>
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center">
+              <div slot="reference">
                 <el-tag :type="DEPLOY_STATUS[scope.row.deploy_status].type">
-                  {{DEPLOY_STATUS[scope.row.assedeploy_statust_type].text}}
+                  {{DEPLOY_STATUS[scope.row.deploy_status].text}}
                 </el-tag>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_time' label='创建时间'></el-table-column>
-          <el-table-column prop='update_time' label='最近发布时间'></el-table-column>
+          <el-table-column prop='create_time' label='创建时间'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                {{scope.row.create_time | formatTime}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='update_time' label='最近发布时间'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                {{scope.row.update_time | formatTime}}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='desc' label='描述'></el-table-column>
         </el-table>
       </div>

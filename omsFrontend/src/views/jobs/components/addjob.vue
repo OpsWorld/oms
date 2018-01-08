@@ -110,7 +110,7 @@ export default {
                 type: 'success',
                 message: '恭喜你，新建成功'
               })
-              this.envForm.job = response.name
+              this.envForm.job = response.data.name
               postDeployenv(this.envForm)
             }
           })
@@ -122,7 +122,6 @@ export default {
     },
 
     resetForm(formName) {
-      console.log(formName)
       this.$refs[formName].resetFields()
     },
     addTab() {
@@ -133,7 +132,6 @@ export default {
         name: newTabName,
         content: this.envForm
       })
-      console.log(this.TabValues)
       this.actionTab = newTabName
       this.envForm = {}
     },
@@ -164,12 +162,14 @@ export default {
   .table-expand {
     font-size: 0;
     .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
+      margin: 0;
       width: 100%;
       .el-form-item__label {
         width: 90px;
         color: #99a9bf;
+      }
+      .el-form-item__content {
+        width: 80%;
       }
     }
   }
