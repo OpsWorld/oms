@@ -67,7 +67,7 @@ export const asyncRouterMap = [
     children: [
       { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: '工单列表' },
       { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: '工单类型' },
-      { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: 'addworkticket', authority: '添加工单', meta: { hidden: true }},
+      { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: 'addworkticket', authority: '添加工单' },
       { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: 'editworkticket', authority: '编辑工单' }
     ]
   },
@@ -128,7 +128,8 @@ export const asyncRouterMap = [
     redirect: 'jobs',
     authority: '发布管理',
     children: [
-      { path: 'jobs', component: _import('jobs/jobs'), name: 'jobs', authority: '项目列表' }
+      { path: 'jobs', component: _import('jobs/jobs'), name: 'jobs', authority: '项目列表' },
+      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: 'addjob', authority: '新建项目' }
     ]
   },
   {
@@ -140,7 +141,6 @@ export const asyncRouterMap = [
     authority: '工具管理',
     children: [
       { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
-      { path: 'sendmessage', component: _import('tools/sendmessage'), name: 'sendmessage', authority: '消息列表' },
       { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
     ]
   }

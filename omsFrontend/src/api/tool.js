@@ -42,18 +42,3 @@ export function postSendmessage(data) {
     data
   })
 }
-
-export function getSendmessage(query, id) {
-  return request({
-    url: id ? apiURL.sendmessage + id + '/' : apiURL.sendmessage,
-    method: 'get',
-    params: query
-  })
-}
-
-export function deleteSendmessage(id) {
-  return request({
-    url: apiURL.sendmessage + id + '/',
-    method: 'delete'
-  })
-}

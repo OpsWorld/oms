@@ -5,7 +5,7 @@
                     v-model="value"
                     filterable
                     :titles="['未选择', '已选择']"
-                    :button-texts="['滚回来', '滚过去']"
+                    :button-texts="['向左走', '向右走']"
                     :footer-format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
                     @change="handleChange"
                     :data="allhost">
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getHost } from 'api/host'
+import { getHost } from '@/api/host'
 export default {
   props: ['selecthost'],
   data() {
@@ -39,7 +39,7 @@ export default {
         status: 'used'
       }
       getHost(parms).then(response => {
-        const results = response.data.results
+        const results = response.data
         for (var i = 0, len = results.length; i < len; i++) {
           this.allhost.push({
             key: results[i].hostname

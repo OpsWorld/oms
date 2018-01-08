@@ -22,7 +22,8 @@ class Jobs(models.Model):
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'最近发布时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
-
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name = u'项目或任务'
@@ -31,7 +32,7 @@ class Jobs(models.Model):
 
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-    name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
+    name = models.CharField(max_length=20, verbose_name=u'名称')
     hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
     path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')

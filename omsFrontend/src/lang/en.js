@@ -35,7 +35,7 @@ export default {
     idcs: 'idcs',
     jobManager: 'jobManager',
     jobs: 'jobs',
-    dropzone: 'Dropzone',
+    addjob: 'addjob',
     sticky: 'Sticky',
     countTo: 'CountTo',
     componentMixin: 'Mixin',

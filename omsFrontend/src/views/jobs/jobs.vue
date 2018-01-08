@@ -3,7 +3,9 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus">新建</el-button>
+          <router-link :to="'addjob'">
+            <el-button type="primary" icon="el-icon-plus">新建</el-button>
+          </router-link>
         </div>
         <div class="table-search">
           <el-input

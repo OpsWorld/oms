@@ -21,7 +21,7 @@
                         :key="child.path"></sidebar-item>
           <router-link v-else :to="item.path+'/'+child.path" :key="child.name">
             <el-menu-item :index="item.path+'/'+child.path">
-              <icon name="dot-circle-o" scale="1" class="child-icon"></icon>
+              <icon name="diamond" scale="1" class="child-icon"></icon>
               <span v-if="child&&child.name">{{generateTitle(child.name)}}</span>
             </el-menu-item>
           </router-link>

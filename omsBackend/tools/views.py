@@ -42,11 +42,8 @@ class SendmailViewSet(viewsets.ModelViewSet):
         sub = request.data["sub"]
         content = request.data["content"]
         send_to_mail.delay(to_list, cc_list, sub, content)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response({"error": "1024"}, status=status.HTTP_201_CREATED)
+
+        return Response({"code":"1024"}, status=status.HTTP_201_CREATED)
 
 
 class SendmessageViewSet(viewsets.ModelViewSet):
@@ -67,8 +64,4 @@ class SendmessageViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response({"error":"1024"}, status=status.HTTP_201_CREATED)
+        return Response({"code":"1024"}, status=status.HTTP_201_CREATED)

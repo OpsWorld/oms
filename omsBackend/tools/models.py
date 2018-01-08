@@ -5,7 +5,6 @@ from django.db import models
 from tools.filesize import convert_size
 from tools.storage import PathAndRename
 import os
-from users.models import User
 
 class Upload(models.Model):
     username = models.CharField(max_length=20, verbose_name=u'上传用户')

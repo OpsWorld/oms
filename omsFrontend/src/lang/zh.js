@@ -35,7 +35,7 @@ export default {
     idcs: '机房列表',
     jobManager: '发布管理',
     jobs: '项目列表',
-    dropzone: 'Dropzone',
+    addjob: '新建项目',
     sticky: 'Sticky',
     countTo: 'CountTo',
     componentMixin: '小组件',
