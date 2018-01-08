@@ -10,9 +10,9 @@ export function postJob(data) {
   })
 }
 
-export function getJob(query) {
+export function getJob(query, id) {
   return request({
-    url: apiURL.jobs,
+    url: id ? apiURL.jobs + id + '/' : apiURL.jobs,
     method: 'get',
     params: query
   })

@@ -1,7 +1,7 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card style="max-width: 800px">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
@@ -34,8 +34,7 @@
           <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -62,7 +61,7 @@
   </div>
 </template>
 <script>
-import { postJob, postDeployenv } from '@/api/job'
+import { getJob, putJob, getDeployenv, putDeployenv } from '@/api/job'
 import sesectHosts from '../../components/hosttransfer.vue'
 
 export default {
@@ -70,28 +69,16 @@ export default {
 
   data() {
     return {
+      route_path: this.$route.path.split('/'),
+      job_id: this.$route.params.job_id,
       ruleForm: {
         name: '',
         code_repo: 'svn',
         code_url: '',
         desc: ''
       },
-      rules: {
-        name: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        code_url: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ]
-      },
       addenvForm: false,
-      envForm: {
-        job: '',
-        name: '',
-        hosts: [],
-        path: '',
-        desc: ''
-      },
+      envForm: {},
       actionTab: '',
       tabIndex: -1,
       TabValues: []
@@ -99,30 +86,30 @@ export default {
   },
 
   created() {
+    this.fetchJobData()
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          postJob(this.ruleForm).then(response => {
-            if (response.statusText === '"Created"') {
-              this.$message({
-                type: 'success',
-                message: '恭喜你，新建成功'
-              })
-              this.envForm.job = response.data.name
-              postDeployenv(this.envForm)
-            }
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+    fetchJobData() {
+      const parms = null
+      getJob(parms, this.job_id).then(response => {
+        this.ruleForm = response.data
+        this.fetchJobenvData(this.ruleForm.name)
       })
     },
-
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    fetchJobenvData(job) {
+      const parms = {
+        job__name: job
+      }
+      getDeployenv(parms).then(response => {
+        for (var i = 0; i < response.data.length; i++) {
+          this.tabIndex = i
+          this.TabValues.push({
+            title: response.data[i].name,
+            name: i + '',
+            content: response.data[i]
+          })
+        }
+      })
     },
     addTab() {
       this.addenvForm = false
@@ -150,6 +137,19 @@ export default {
       }
       this.actionTab = activeName
       this.TabValues = tabs.filter(tab => tab.name !== targetName)
+    },
+    submitForm(formdata) {
+      putJob(this.ruleForm.id, formdata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        putDeployenv(this.ruleForm.id, formdata)
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('更新失败')
+        console.log(error)
+      })
     },
     getHosts(data) {
       this.envForm.hosts = data

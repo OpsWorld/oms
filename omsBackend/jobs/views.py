@@ -13,6 +13,7 @@ class JobsViewSet(viewsets.ModelViewSet):
 class DeployenvViewSet(viewsets.ModelViewSet):
     queryset = Deployenv.objects.all()
     serializer_class = DeployenvSerializer
+    filter_fields = ['job__name']
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):

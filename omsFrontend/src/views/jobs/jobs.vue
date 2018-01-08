@@ -19,8 +19,14 @@
       <div>
         <el-table :data='tableData' style="width: 100%">
           <el-table-column type="index" width="50"></el-table-column>
-          <el-table-column prop='name' label='名称' sortable></el-table-column>
-          <el-table-column prop='deploy_status' label='发布状态'>
+          <el-table-column prop='name' label='名称' sortable>
+            <template slot-scope="scope">
+              <router-link :to="'runjob/' + scope.row.id">
+                <a style="color: #257cff">{{scope.row.name}}</a>
+              </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column prop='deploy_status' label='发布状态' sortable>
             <template slot-scope="scope">
               <div slot="reference">
                 <el-tag :type="DEPLOY_STATUS[scope.row.deploy_status].type">
@@ -29,14 +35,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_time' label='创建时间'>
-            <template slot-scope="scope">
-              <div slot="reference">
-                {{scope.row.create_time | formatTime}}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop='update_time' label='最近发布时间'>
+          <el-table-column prop='update_time' label='最近发布时间' sortable>
             <template slot-scope="scope">
               <div slot="reference">
                 {{scope.row.update_time | formatTime}}
@@ -44,6 +43,14 @@
             </template>
           </el-table-column>
           <el-table-column prop='desc' label='描述'></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <router-link :to="'editjob/' + scope.row.id">
+                <el-button type="success" size="small">修改</el-button>
+              </router-link>
+              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <div class="table-pagination">

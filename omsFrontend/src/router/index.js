@@ -129,7 +129,9 @@ export const asyncRouterMap = [
     authority: '发布管理',
     children: [
       { path: 'jobs', component: _import('jobs/jobs'), name: 'jobs', authority: '项目列表' },
-      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: 'addjob', authority: '新建项目' }
+      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: 'addjob', authority: '新建项目' },
+      { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: 'editjob', authority: '编辑项目' },
+      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: 'runjob', authority: '构建项目' }
     ]
   },
   {
