@@ -1,7 +1,4 @@
 import Vue from 'vue'
-import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import i18n from './lang' // 国际化
 import App from './App'
 import router from './router'
 import store from './store'
@@ -9,9 +6,10 @@ import * as filters from './filters' // 全局filter
 import './permission' // 权限
 import './utils/jsArrayRemove'
 
-Vue.use(Element, {
-  i18n: (key, value) => i18n.t(key, value)
-})
+/* element */
+import Element from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(Element)
 
 /* icon */
 import 'vue-awesome/icons'
@@ -35,7 +33,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  i18n,
   template: '<App/>',
   components: { App }
 })

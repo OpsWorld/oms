@@ -6,14 +6,14 @@
                    :to="item.path+'/'+item.children[0].path" :key="item.children[0].name">
         <el-menu-item :index="item.path+'/'+item.children[0].path" class='submenu-title-noDropdown'>
           <icon v-if='item.children[0].icon' :name="item.children[0].icon" :scale="iconsize" class="wscn-icon"></icon>
-          <span v-if="item.children[0]&&item.children[0].name">{{generateTitle(item.children[0].name)}}</span>
+          <span v-if="item.children[0]&&item.children[0].name">{{item.children[0].name}}</span>
         </el-menu-item>
       </router-link>
 
       <el-submenu v-else :index="item.name||item.path" :key="item.name">
         <template slot="title">
           <icon v-if='item.icon' :name="item.icon" :scale="iconsize" class="wscn-icon"></icon>
-          <span v-if="item&&item.name">{{generateTitle(item.name)}}</span>
+          <span v-if="item&&item.name">{{item.name}}</span>
         </template>
 
         <template v-for="child in item.children" v-if="!child.hidden">
@@ -22,7 +22,7 @@
           <router-link v-else :to="item.path+'/'+child.path" :key="child.name">
             <el-menu-item :index="item.path+'/'+child.path">
               <icon name="diamond" scale="1" class="child-icon"></icon>
-              <span v-if="child&&child.name">{{generateTitle(child.name)}}</span>
+              <span v-if="child&&child.name">{{child.name}}</span>
             </el-menu-item>
           </router-link>
         </template>
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import { generateTitle } from '@/utils/i18n'
-
 export default {
   name: 'SidebarItem',
   props: {
@@ -48,7 +46,6 @@ export default {
     }
   },
   methods: {
-    generateTitle
   }
 }
 </script>

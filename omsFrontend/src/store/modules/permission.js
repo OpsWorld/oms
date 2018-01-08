@@ -1,14 +1,14 @@
 import { asyncRouterMap, constantRouterMap, errorRouterMap } from '@/router'
 
 /**
- * 通过authority判断是否与当前用户权限匹配
+ * 通过name判断是否与当前用户权限匹配
  * @param menus
  * @param route
  */
 function hasPermission(menus, route) {
-  if (route.authority) {
-    if (menus[route.authority] !== undefined) {
-      return menus[route.authority]
+  if (route.name) {
+    if (menus[route.name] !== undefined) {
+      return menus[route.name]
     } else {
       return false
     }

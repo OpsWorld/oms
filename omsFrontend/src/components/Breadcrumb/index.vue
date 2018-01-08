@@ -3,11 +3,11 @@
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index)  in levelList" :key="item.path" v-if='item.name'>
         <span v-if='item.redirect==="noredirect"||index==levelList.length-1' class="no-redirect">
-          {{generateTitle(item.name)}}
+          {{item.name}}
         </span>
         <router-link v-else :to="item.redirect||item.path">
           <i class="fa fa-home" v-show="item.name == 'dashboard'"></i>
-          {{generateTitle(item.name)}}
+          {{item.name}}
         </router-link>
       </el-breadcrumb-item>
     </transition-group>
@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import { generateTitle } from '@/utils/i18n'
-
 export default {
   created() {
     this.getBreadcrumb()
@@ -32,12 +30,11 @@ export default {
     }
   },
   methods: {
-    generateTitle,
     getBreadcrumb() {
       let matched = this.$route.matched.filter(item => item.name)
       const first = matched[0]
-      if (first && first.name !== 'dashboard') {
-        matched = [{ path: '/dashboard', name: 'dashboard' }].concat(matched)
+      if (first && first.name !== '首页') {
+        matched = [{ path: '/dashboard', name: '首页' }].concat(matched)
       }
       this.levelList = matched
     }

@@ -30,22 +30,21 @@ export const constantRouterMap = [
     component: Layout,
     icon: 'dashboard',
     redirect: 'dashboard',
-    children: [{ path: 'dashboard', component: _import('dashboard/index'), name: 'dashboard', icon: 'dashboard', meta: { noCache: true }
+    children: [{ path: 'dashboard', component: _import('dashboard/index'), name: '首页', icon: 'dashboard', meta: { noCache: true }
     }]
   },
   {
-    name: 'wikiManager',
+    name: '文档系统',
     path: '/wikis',
     component: Layout,
     icon: 'paper-plane',
     redirect: 'noredirect',
-    authority: '文档系统',
     children: [
-      { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: 'wikiadmin', authority: '文档管理' },
-      { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: 'addwiki', authority: '添加文档' },
-      { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: 'editwiki', authority: '编辑文档' },
-      { path: 'viewwiki/:wikiid', hidden: true, component: _import('wikis/components/viewwiki'), name: 'viewwiki', authority: '查看文档' },
-      { path: 'wikilist', component: _import('wikis/wikilist'), name: 'wikilist', authority: '文档中心' }
+      { path: 'wikiadmin', component: _import('wikis/wikiadmin'), name: '文档管理' },
+      { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: '添加文档' },
+      { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: '编辑文档' },
+      { path: 'viewwiki/:wikiid', hidden: true, component: _import('wikis/components/viewwiki'), name: '查看文档' },
+      { path: 'wikilist', component: _import('wikis/wikilist'), name: '文档中心' }
     ]
   }
 ]
@@ -58,92 +57,85 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    name: 'ticketManager',
+    name: '工单系统',
     path: '/worktickets',
     component: Layout,
     icon: 'leaf',
     redirect: 'workticket',
-    authority: '工单系统',
     children: [
-      { path: 'workticket', component: _import('worktickets/workticket'), name: 'workticketlist', authority: '工单列表' },
-      { path: 'tickettype', component: _import('worktickets/tickettype'), name: 'tickettypelist', authority: '工单类型' },
-      { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: 'addworkticket', authority: '添加工单' },
-      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: 'editworkticket', authority: '编辑工单' }
+      { path: 'workticket', component: _import('worktickets/workticket'), name: '工单列表' },
+      { path: 'tickettype', component: _import('worktickets/tickettype'), name: '工单类型' },
+      { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: '添加工单' },
+      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: '编辑工单' }
     ]
   },
   {
-    name: 'threepayManager',
+    name: '第三支付对接',
     path: '/threepays',
     component: Layout,
     icon: 'bitcoin',
     redirect: 'threepay',
-    authority: '第三支付对接',
     children: [
-      { path: 'paychannel', component: _import('threepays/paychannel'), name: 'paychannel', authority: '支付通道列表' },
-      { path: 'paychannelname', component: _import('threepays/paychannelname'), name: 'paychannelname', authority: '通道类型' }
+      { path: 'paychannel', component: _import('threepays/paychannel'), name: '支付通道列表' },
+      { path: 'paychannelname', component: _import('threepays/paychannelname'), name: '通道类型' }
     ]
   },
   {
-    name: 'userManager',
+    name: '用户管理',
     path: '/users',
     component: Layout,
     icon: 'user',
     redirect: 'users',
-    authority: '用户管理',
     children: [
-      { path: 'users', component: _import('users/users'), name: 'userlist', authority: '用户列表' },
-      { path: 'usergroups', component: _import('users/usergroups'), name: 'grouplist', authority: '用户组列表' },
-      { path: 'roles', component: _import('users/roles'), name: 'rolelist', authority: '角色列表' }
+      { path: 'users', component: _import('users/users'), name: '用户列表' },
+      { path: 'usergroups', component: _import('users/usergroups'), name: '用户组列表' },
+      { path: 'roles', component: _import('users/roles'), name: '角色列表' }
     ]
   },
   {
-    name: 'menuManager',
+    name: '菜单管理',
     path: '/menus',
     component: Layout,
     icon: 'fire',
     redirect: 'menus',
-    authority: '菜单管理',
     children: [
-      { path: 'menus', component: _import('menus/menus'), name: 'menulist', authority: '菜单列表' },
-      { path: 'menuperm', component: _import('menus/menuperm'), name: 'menuperm', authority: '菜单权限' }
+      { path: 'menus', component: _import('menus/menus'), name: '菜单列表' },
+      { path: 'menuperm', component: _import('menus/menuperm'), name: '菜单权限' }
     ]
   },
   {
-    name: 'hostManager',
+    name: '主机管理',
     path: '/hosts',
     component: Layout,
     icon: 'desktop',
     redirect: 'hosts',
-    authority: '主机管理',
     children: [
-      { path: 'hosts', component: _import('hosts/hosts'), name: 'hosts', authority: '主机列表' },
-      { path: 'idcs', component: _import('hosts/idcs'), name: 'idcs', authority: '机房列表' }
+      { path: 'hosts', component: _import('hosts/hosts'), name: '主机列表' },
+      { path: 'idcs', component: _import('hosts/idcs'), name: '机房列表' }
     ]
   },
   {
-    name: 'jobManager',
+    name: '发布管理',
     path: '/jobs',
     component: Layout,
     icon: 'tasks',
     redirect: 'jobs',
-    authority: '发布管理',
     children: [
-      { path: 'jobs', component: _import('jobs/jobs'), name: 'jobs', authority: '项目列表' },
-      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: 'addjob', authority: '新建项目' },
-      { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: 'editjob', authority: '编辑项目' },
-      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: 'runjob', authority: '构建项目' }
+      { path: 'jobs', component: _import('jobs/jobs'), name: '项目列表' },
+      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: '新建项目' },
+      { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: '编辑项目' },
+      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' }
     ]
   },
   {
-    name: 'toolManager',
+    name: '工具管理',
     path: '/tools',
     component: Layout,
     icon: 'cogs',
     redirect: 'upload',
-    authority: '工具管理',
     children: [
-      { path: 'upload', component: _import('tools/upload'), name: 'upload', authority: '上传列表' },
-      { path: 'test', component: _import('tools/test'), name: 'test', authority: '测试页面' }
+      { path: 'upload', component: _import('tools/upload'), name: '上传列表' },
+      { path: 'test', component: _import('tools/test'), name: '测试页面' }
     ]
   }
 ]

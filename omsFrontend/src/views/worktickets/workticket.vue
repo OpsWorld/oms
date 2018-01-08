@@ -38,7 +38,7 @@
           <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
-              <router-link :to="{name:'editworkticket',params:{ticketid:scope.row.ticketid}}">
+              <router-link :to="'editworkticket/' + scope.row.ticketid">
                 <a style="color: #257cff">{{scope.row.ticketid}}</a>
               </router-link>
             </template>
