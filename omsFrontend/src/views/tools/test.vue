@@ -1,8 +1,14 @@
 <template>
   <div>
-    <full-calendar :events="events" first-day='1' locale="cn" @dayClick="dayClick">
+    <full-calendar :events="events" first-day='1' locale="zh" @eventClick="eventClick">
+      <template slot="fc-header-left">
+        <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件</el-button>
+      </template>
+      <template slot="fc-body-card">
+        <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件</el-button>
+      </template>
     </full-calendar>
-    <el-dialog :visible.sync="addDayEvent">
+    <el-dialog :visible.sync="addEvent">
       <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title"></el-input>
@@ -53,9 +59,10 @@
 
 <script>
 export default {
+  components: {},
   data() {
     return {
-      addDayEvent: false,
+      addEvent: false,
       ruleForm: {
         title: '',
         start: '',
@@ -81,9 +88,8 @@ export default {
     }
   },
   methods: {
-    dayClick(day, jsEvent) {
-      this.addDayEvent = true
-      console.log(day)
+    eventClick(event, jsEvent, pos) {
+      console.log('eventClick', event, jsEvent, pos)
     },
     addGroupSubmit(formName) {
       console.log(formName)

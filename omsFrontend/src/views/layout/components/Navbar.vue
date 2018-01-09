@@ -5,15 +5,6 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <el-dropdown class='international' @command="handleSetLanguage">
-        <div>
-          <i class="fa fa-globe fa-2x" style="margin-top: 15px"></i>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="zh" :disabled="language==='zh'">中文</el-dropdown-item>
-          <el-dropdown-item command="en" :disabled="language==='en'">English</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
 
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
@@ -55,21 +46,12 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'username',
-      'language'
+      'username'
     ])
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('toggleSideBar')
-    },
-    handleSetLanguage(lang) {
-      this.$i18n.locale = lang
-      this.$store.dispatch('setLanguage', lang)
-      this.$message({
-        message: 'switch language success',
-        type: 'success'
-      })
     },
     logout() {
       this.$store.dispatch('LogOut').then(() => {
@@ -107,17 +89,6 @@ export default {
       .right-menu-item {
         display: inline-block;
         margin: 0 8px;
-      }
-      .screenfull {
-        height: 20px;
-      }
-      .international {
-        vertical-align: top;
-        .international-icon {
-          font-size: 20px;
-          cursor: pointer;
-          vertical-align: -5px;
-        }
       }
       .theme-switch {
         vertical-align: 15px;

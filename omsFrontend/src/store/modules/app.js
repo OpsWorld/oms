@@ -5,7 +5,6 @@ const app = {
     sidebar: {
       opened: !+Cookies.get('sidebarStatus')
     },
-    language: Cookies.get('language') || 'zh',
     visitedViews: [],
     cachedViews: []
   },
@@ -17,10 +16,6 @@ const app = {
         Cookies.set('sidebarStatus', 0)
       }
       state.sidebar.opened = !state.sidebar.opened
-    },
-    SET_LANGUAGE: (state, language) => {
-      state.language = language
-      Cookies.set('language', language)
     },
     ADD_VISITED_VIEWS: (state, view) => {
       if (state.visitedViews.some(v => v.path === view.path)) return
@@ -52,9 +47,6 @@ const app = {
   actions: {
     toggleSideBar({ commit }) {
       commit('TOGGLE_SIDEBAR')
-    },
-    setLanguage({ commit }, language) {
-      commit('SET_LANGUAGE', language)
     },
     addVisitedViews({ commit }, view) {
       commit('ADD_VISITED_VIEWS', view)

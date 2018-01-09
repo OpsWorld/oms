@@ -7,6 +7,7 @@ from worktickets.serializers import (WorkTicketSerializer,
                                      TicketCommentSerializer,
                                      TicketEnclosureSerializer,
                                      TicketTypeSerializer)
+from worktickets.filters import WorkTicketFilterBackend
 from dry_rest_permissions.generics import DRYPermissions
 
 class WorkTicketViewSet(viewsets.ModelViewSet):
@@ -14,6 +15,7 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
     serializer_class = WorkTicketSerializer
     search_fields = ['title', 'content', 'type__name']
     filter_fields = ['ticket_status','ticketid','create_user__username','action_user__username']
+    filter_backends = (WorkTicketFilterBackend,)
     permission_classes = (DRYPermissions,)
 
 
