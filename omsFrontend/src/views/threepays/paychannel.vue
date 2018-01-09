@@ -587,7 +587,7 @@ export default {
         const formData = new FormData()
         formData.append('username', this.enclosureForm.create_user)
         formData.append('file', file)
-        formData.append('create_time', getConversionTime(file.lastModified))
+        formData.append('create_time', getConversionTime())
         formData.append('type', file.type)
         formData.append('archive', this.route_path[1])
         postUpload(formData).then(response => {

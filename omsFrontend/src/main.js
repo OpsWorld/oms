@@ -22,6 +22,10 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
+/* calendar */
+import fullCalendar from 'vue-fullcalendar'
+Vue.component('full-calendar', fullCalendar)
+
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

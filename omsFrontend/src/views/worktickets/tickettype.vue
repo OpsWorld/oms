@@ -75,9 +75,6 @@ export default {
   },
 
   methods: {
-    /*
-       * 获取数据
-       */
     fetchData() {
       const parms = {
         limit: this.limit,
