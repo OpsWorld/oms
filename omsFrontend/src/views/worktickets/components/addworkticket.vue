@@ -1,7 +1,7 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
         </el-form-item>

@@ -50,6 +50,12 @@ export default {
     handleChange(value, direction, movedKeys) {
       this.$emit('gethosts', value)
     }
+  },
+  watch: {
+    // 监控rowdata值的变化，有变化立即刷新数据
+    selecthost() {
+      this.hostData()
+    }
   }
 }
 </script>

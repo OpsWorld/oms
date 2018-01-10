@@ -53,15 +53,3 @@ class Sendmessage(models.Model):
     class Meta:
         verbose_name = u'发送消息提醒'
         verbose_name_plural = u'发送消息提醒'
-
-class Sendmessage(models.Model):
-    action_user = models.CharField(max_length=100, verbose_name=u'收件人')
-    title = models.CharField(max_length=30, verbose_name=u'消息标题')
-    message = models.TextField(null=True, blank=True, verbose_name=u'消息')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = u'发送消息提醒'
-        verbose_name_plural = u'发送消息提醒'

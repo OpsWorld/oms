@@ -105,14 +105,18 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           postJob(this.ruleForm).then(response => {
-            if (response.statusText === '"Created"') {
+            if (response.statusText === 'Created') {
               this.$message({
                 type: 'success',
                 message: '恭喜你，新建成功'
               })
-              this.envForm.job = response.data.name
-              postDeployenv(this.envForm)
+              for (const env of this.TabValues) {
+                const envsForm = env.content
+                envsForm.job = response.data.name
+                postDeployenv(envsForm)
+              }
             }
+            this.$router.push('/jobs/jobs')
           })
         } else {
           console.log('error submit!!')

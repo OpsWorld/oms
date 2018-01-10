@@ -34,7 +34,7 @@
           <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
+          <el-button type="primary" @click="submitForm(ruleForm)">更新</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-import { getJob, putJob, getDeployenv, postDeployenv } from '@/api/job'
+import { getJob, putJob, getDeployenv, postDeployenv, deleteDeployenv } from '@/api/job'
 import sesectHosts from '../../components/hosttransfer.vue'
 
 export default {
@@ -82,7 +82,7 @@ export default {
       actionTab: '',
       tabIndex: -1,
       TabValues: [],
-      deletedenvs: []
+      removeenvs: []
     }
   },
 
@@ -110,7 +110,6 @@ export default {
             content: response.data[i]
           })
         }
-        console.log(this.TabValues)
       })
     },
     addTab() {
@@ -122,10 +121,11 @@ export default {
         content: this.envForm
       })
       this.actionTab = newTabName
+      this.envForm.job = this.ruleForm.name
+      postDeployenv(this.envForm)
       this.envForm = {}
     },
     removeTab(targetName) {
-      console.log(targetName)
       const tabs = this.TabValues
       let activeName = this.actionTab
       if (activeName === targetName) {
@@ -141,7 +141,7 @@ export default {
       this.actionTab = activeName
       this.TabValues = tabs.filter(tab => tab.name !== targetName)
       const remove_id = tabs.filter(tab => tab.name === targetName)[0].content.id
-      this.deletedenvs.push(remove_id)
+      this.removeenvs.push(remove_id)
     },
     submitForm(formdata) {
       putJob(this.ruleForm.id, formdata).then(response => {
@@ -149,8 +149,10 @@ export default {
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        postDeployenv(this.ruleForm.id, formdata)
-        this.fetchData()
+        for (const id of this.removeenvs) {
+          deleteDeployenv(id)
+        }
+        this.$router.push('/jobs/jobs')
       }).catch(error => {
         this.$message.error('更新失败')
         console.log(error)

@@ -26,15 +26,6 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column prop='deploy_status' label='发布状态' sortable>
-            <template slot-scope="scope">
-              <div slot="reference">
-                <el-tag :type="DEPLOY_STATUS[scope.row.deploy_status].type">
-                  {{DEPLOY_STATUS[scope.row.deploy_status].text}}
-                </el-tag>
-              </div>
-            </template>
-          </el-table-column>
           <el-table-column prop='update_time' label='最近发布时间' sortable>
             <template slot-scope="scope">
               <div slot="reference">
@@ -46,9 +37,9 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <router-link :to="'editjob/' + scope.row.id">
-                <el-button type="success" size="small">修改</el-button>
+                <el-button type="success" size="small" icon="el-icon-setting">配置</el-button>
               </router-link>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
+              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small" icon="el-icon-delete">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -85,15 +76,7 @@ export default {
         offset: '',
         search: ''
       },
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
-      DEPLOY_STATUS: {
-        'noaction': { 'text': '未执行', 'type': 'info' },
-        'deploy': { 'text': '发布中', 'type': 'primary' },
-        'success': { 'text': '发布成功', 'type': 'success' },
-        'failed': { 'text': '发布失败', 'type': 'danger' }
-      }
+      pagesize: [10, 25, 50, 100]
     }
   },
 
