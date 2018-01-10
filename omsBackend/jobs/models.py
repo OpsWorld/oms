@@ -6,7 +6,6 @@ from hosts.models import Host
 from users.models import User
 
 DEPLOY_STATUS = {
-    "noaction": u"未执行",
     "deploy": u"发布中",
     "success": u"发布成功",
     "failed": u"发布失败"
@@ -47,10 +46,11 @@ class Deployenv(models.Model):
 class DeployJobs(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     j_id = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'任务ID')
-    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="noaction", max_length=30,verbose_name=u'发布状态')
+    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=30,verbose_name=u'发布状态')
     hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
+    deploy_path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')

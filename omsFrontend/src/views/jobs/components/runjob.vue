@@ -21,15 +21,17 @@
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
             <el-form-item label="发布版本" prop="version">
-              <el-select v-model="ruleForm.version" placeholder="请选择发布版本">
-                <el-option v-for="item in versions" :key="item.id" :value="item"></el-option>
-              </el-select>
+              <el-input v-model="ruleForm.version"></el-input>
+              <!--<el-select v-model="ruleForm.version" placeholder="请选择发布版本">-->
+              <!--<el-option v-for="item in versions" :key="item.id" :value="item"></el-option>-->
+              <!--</el-select>-->
+              <a class="tips">Tip：HEAD 代表最新版本号，若要发布其他版本，请改为其他版本号</a>
             </el-form-item>
-            <el-form-item label="发布路径">
-              <el-input v-model="deploy_path" disabled></el-input>
+            <el-form-item label="发布路径" prop="deploy_path">
+              <el-input v-model="ruleForm.deploy_path" disabled></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">开始构建</el-button>
+              <el-button type="primary" @click="submitForm(ruleForm)">开始构建</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -38,19 +40,20 @@
         <el-card>
           <div slot="header">
             <a class="jobname">发布记录</a>
+            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh">刷新
+            </el-button>
           </div>
           <div>
             <el-table :data='tableData' style="width: 100%">
-              <el-table-column type="index" width="50"></el-table-column>
               <el-table-column prop='j_id' label='任务id'></el-table-column>
               <el-table-column prop='env' label='发布环境'></el-table-column>
               <el-table-column prop='version' label='发布版本'></el-table-column>
               <el-table-column prop='deploy_status' label='发布状态' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-tag :type="DEPLOY_STATUS[scope.row.deploy_status].type">
+                    <el-button plain size="mini" :type="DEPLOY_STATUS[scope.row.deploy_status].type" :icon="DEPLOY_STATUS[scope.row.deploy_status].icon">
                       {{DEPLOY_STATUS[scope.row.deploy_status].text}}
-                    </el-tag>
+                    </el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -81,11 +84,11 @@
   </div>
 </template>
 <script>
-import { getJob, getDeployenv, getDeployJob } from '@/api/job'
+import { getJob, getDeployenv, getDeployJob, postDeployJob } from '@/api/job'
 import { LIMIT } from '@/config'
 
 export default {
-  components: {},
+  components: { },
 
   data() {
     return {
@@ -96,6 +99,7 @@ export default {
         env: '',
         hosts: [],
         version: 'HEAD',
+        deploy_path: '',
         action_user: localStorage.getItem('username')
       },
       envs: [],
@@ -103,7 +107,6 @@ export default {
       hosts: [],
       versions: [],
       jobs: {},
-      deploy_path: '',
       currentPage: 1,
       listQuery: {
         limit: LIMIT,
@@ -114,22 +117,23 @@ export default {
       tableData: [],
       tabletotal: 0,
       DEPLOY_STATUS: {
-        'noaction': { 'text': '未执行', 'type': 'info' },
-        'deploy': { 'text': '发布中', 'type': 'primary' },
-        'success': { 'text': '发布成功', 'type': 'success' },
-        'failed': { 'text': '发布失败', 'type': 'danger' }
+        deploy: { text: '发布中', type: 'primary', icon: 'el-icon-loading' },
+        success: { text: '发布成功', type: 'success', icon: 'el-icon-success' },
+        failed: { text: '发布失败', type: 'danger', icon: 'el-icon-error' }
       }
     }
   },
 
   created() {
     this.fetchJobData()
+    this.fetchDeployJobData()
   },
   methods: {
     fetchJobData() {
       const parms = null
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
+        this.ruleForm.job = this.jobs.name
         this.fetchJobenvData(this.jobs.name)
       })
     },
@@ -144,12 +148,33 @@ export default {
     selectEnv(env) {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
       this.hosts = selectenv.hosts
-      this.deploy_path = selectenv.path
+      this.ruleForm.deploy_path = selectenv.path
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+      })
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.offset = (val - 1) * LIMIT
+      this.fetchData()
+    },
+    submitForm(formdata) {
+      this.ruleForm.hosts = this.ruleForm.hosts.join()
+      postDeployJob(formdata).then(response => {
+        this.$message({
+          message: '恭喜你，构建成功',
+          type: 'success'
+        })
+        this.fetchDeployJobData()
+      }).catch(error => {
+        this.$message.error('构建失败')
+        console.log(error)
       })
     }
   }

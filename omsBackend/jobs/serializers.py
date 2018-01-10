@@ -4,6 +4,7 @@
 from rest_framework import serializers
 from jobs.models import Jobs, Deployenv, DeployJobs
 from hosts.models import Host
+from users.models import User
 
 
 class JobsSerializer(serializers.ModelSerializer):
@@ -23,9 +24,9 @@ class DeployenvSerializer(serializers.ModelSerializer):
 
 class DeployJobsSerializer(serializers.ModelSerializer):
     job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
-    action_user = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='username')
+    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
     class Meta:
         model = DeployJobs
-        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'hosts', 'env', 'version', 'action_user', 'result',
-                  'create_time']
+        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'hosts', 'env', 'version', 'deploy_path', 'action_user',
+                  'result', 'create_time']

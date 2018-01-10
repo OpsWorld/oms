@@ -4,6 +4,7 @@
 from rest_framework import viewsets
 from jobs.models import Jobs, Deployenv, DeployJobs
 from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSerializer
+from celery.result import AsyncResult
 
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
@@ -17,5 +18,5 @@ class DeployenvViewSet(viewsets.ModelViewSet):
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
-    queryset = DeployJobs.objects.all()
+    queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
