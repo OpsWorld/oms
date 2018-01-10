@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-import { getJob, putJob, getDeployenv, putDeployenv } from '@/api/job'
+import { getJob, putJob, getDeployenv, postDeployenv } from '@/api/job'
 import sesectHosts from '../../components/hosttransfer.vue'
 
 export default {
@@ -81,7 +81,8 @@ export default {
       envForm: {},
       actionTab: '',
       tabIndex: -1,
-      TabValues: []
+      TabValues: [],
+      deletedenvs: []
     }
   },
 
@@ -109,6 +110,7 @@ export default {
             content: response.data[i]
           })
         }
+        console.log(this.TabValues)
       })
     },
     addTab() {
@@ -123,6 +125,7 @@ export default {
       this.envForm = {}
     },
     removeTab(targetName) {
+      console.log(targetName)
       const tabs = this.TabValues
       let activeName = this.actionTab
       if (activeName === targetName) {
@@ -137,6 +140,8 @@ export default {
       }
       this.actionTab = activeName
       this.TabValues = tabs.filter(tab => tab.name !== targetName)
+      const remove_id = tabs.filter(tab => tab.name === targetName)[0].content.id
+      this.deletedenvs.push(remove_id)
     },
     submitForm(formdata) {
       putJob(this.ruleForm.id, formdata).then(response => {
@@ -144,7 +149,7 @@ export default {
           message: '恭喜你，更新成功',
           type: 'success'
         })
-        putDeployenv(this.ruleForm.id, formdata)
+        postDeployenv(this.ruleForm.id, formdata)
         this.fetchData()
       }).catch(error => {
         this.$message.error('更新失败')
