@@ -34,9 +34,9 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
                 try:
                     result = job.get(timeout=1)
                     print(result)
-                    if job.state in ['PENDING ','STARTED ']:
+                    if job.status in ['PENDING ','STARTED ']:
                         j.deploy_status = 'deploy'
-                    elif job.state == 'SUCCESS':
+                    elif job.status == 'SUCCESS':
                         j.state = 'success'
                     else:
                         j.deploy_status = 'failed'
