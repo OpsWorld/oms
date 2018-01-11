@@ -4,7 +4,6 @@
 from rest_framework import viewsets
 from jobs.models import Jobs, Deployenv, DeployJobs
 from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSerializer
-from celery.result import AsyncResult
 
 
 class JobsViewSet(viewsets.ModelViewSet):
@@ -21,3 +20,10 @@ class DeployenvViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
+
+    # def list(self, request, *args, **kwargs):
+    #     serializer = DeployJobsSerializer(data=request.data, context={'request': request})
+    #     # works = DeployJobs.objects.all().filter(deploy_status='deploy')
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -6,10 +6,6 @@ from perms.models import UserMenuPerms
 from perms.serializers import UserMenuPermsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
-from menus.models import Firstmenu, Secondmenu, Element
-from menus.serializers import FirstmenuSerializer, SecondmenuSerializer, ElementSerializer
-from django.forms.models import model_to_dict
 from users.models import User, Group
 from users.serializers import UserSerializer, RoleSerializer, GroupSerializer
 from perms.filters import UserMenuPermsFilter
