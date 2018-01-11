@@ -153,31 +153,34 @@ export default {
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {
-        this.tableData = response.data.results
-        this.tabletotal = response.data.count
+        this.tableData = response.data
+        this.tabletotal = response.data.length
       })
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
-      this.fetchData()
+      this.fetchDeployJobData()
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
-      this.fetchData()
+      this.fetchDeployJobData()
     },
     submitForm(formdata) {
       this.ruleForm.hosts = this.ruleForm.hosts.join()
       postDeployJob(formdata).then(response => {
-        console.log(response)
         this.$message({
           message: '恭喜你，构建成功',
           type: 'success'
         })
-        // window.location.reload()
+        this.resetForm('ruleForm')
+        this.fetchDeployJobData()
       }).catch(error => {
         this.$message.error('构建失败')
         console.log(error)
       })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     }
   }
 }

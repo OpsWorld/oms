@@ -7,7 +7,6 @@ from hosts.models import Host
 from users.models import User
 
 from tasks.tasks import salt_run_cmd
-from celery.result import AsyncResult
 
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -43,7 +42,3 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()
         return deployjob
-
-    def get(self, validated_data):
-        works = DeployJobs.objects.all().filter(deploy_status='deploy')
-        print(works)

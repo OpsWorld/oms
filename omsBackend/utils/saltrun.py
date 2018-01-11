@@ -3,4 +3,4 @@
 
 
 def salt_run(hosts,cmd,deploy_path):
-    print(hosts,cmd,deploy_path)
+    return {'hosts': hosts}

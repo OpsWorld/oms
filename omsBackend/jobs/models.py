@@ -45,7 +45,7 @@ class Deployenv(models.Model):
 
 class DeployJobs(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-    j_id = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'任务ID')
+    j_id = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'任务ID')
     deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=30,verbose_name=u'发布状态')
     hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
