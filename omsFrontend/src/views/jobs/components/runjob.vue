@@ -172,12 +172,12 @@ export default {
           message: '恭喜你，构建成功',
           type: 'success'
         })
-        this.resetForm('ruleForm')
         this.fetchDeployJobData()
       }).catch(error => {
         this.$message.error('构建失败')
         console.log(error)
       })
+      this.resetForm('ruleForm')
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
