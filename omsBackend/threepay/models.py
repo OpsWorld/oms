@@ -76,7 +76,7 @@ class PayChannel(models.Model):
 
 
 class ThreePayEnclosure(models.Model):
-    ticket = models.ForeignKey('Merchant', verbose_name=u'商户')
+    ticket = models.ForeignKey('Platform', verbose_name=u'平台')
     file = models.ForeignKey(Upload, verbose_name=u'附件')
     create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')

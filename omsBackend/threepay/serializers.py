@@ -43,7 +43,7 @@ class PayChannelSerializer(serializers.ModelSerializer):
 
 
 class ThreePayEnclosureSerializer(serializers.ModelSerializer):
-    ticket = serializers.SlugRelatedField(queryset=Merchant.objects.all(), slug_field='name')
+    ticket = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
 

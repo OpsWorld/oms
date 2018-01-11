@@ -570,14 +570,14 @@ export default {
       this.formEdit = true
       if (this.selecttype) {
         this.merchantForm = data
-        this.CommentForm.merchant = this.enclosureForm.ticket = this.listQuery.merchant__name = data.name
-        this.EnclosureData()
-        this.showenclosure = true
+        this.CommentForm.merchant = this.listQuery.merchant__name = data.name
         this.activeName = 'upload'
       } else {
-        this.showenclosure = false
+        this.enclosureForm.ticket = data.name
+        this.showenclosure = true
         this.platformForm = data
         this.listQuery.platform__name = data.name
+        this.EnclosureData()
       }
       this.fetchPayChannelData()
     },
