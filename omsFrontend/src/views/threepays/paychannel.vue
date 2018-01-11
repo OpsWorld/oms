@@ -577,6 +577,7 @@ export default {
         this.showenclosure = true
         this.platformForm = data
         this.listQuery.platform__name = data.name
+        this.listQuery.merchant__name = ''
         this.EnclosureData()
       }
       this.fetchPayChannelData()
