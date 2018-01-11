@@ -40,7 +40,7 @@
         <el-card>
           <div slot="header">
             <a class="jobname">发布记录</a>
-            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh">刷新
+            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh">刷新状态
             </el-button>
           </div>
           <div>
@@ -120,7 +120,8 @@ export default {
         deploy: { text: '发布中', type: 'primary', icon: 'el-icon-loading' },
         success: { text: '发布成功', type: 'success', icon: 'el-icon-success' },
         failed: { text: '发布失败', type: 'danger', icon: 'el-icon-error' }
-      }
+      },
+      jids: []
     }
   },
 

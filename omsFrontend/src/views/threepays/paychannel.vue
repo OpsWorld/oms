@@ -140,6 +140,8 @@
             <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
             </el-button>
             <a style="margin-left: 20px;color: #fa11ff">商户号：{{listQuery.merchant__name}}</a>
+            <el-button size="small" type="success" plain style="float: right" @click="showAllPaychannel">显示全部
+            </el-button>
           </div>
 
           <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
@@ -641,6 +643,15 @@ export default {
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
+      this.fetchPayChannelData()
+    },
+    showAllPaychannel() {
+      this.listQuery = {
+        limit: LIMIT,
+        offset: '',
+        platform__name: '',
+        merchant__name: ''
+      }
       this.fetchPayChannelData()
     }
   }
