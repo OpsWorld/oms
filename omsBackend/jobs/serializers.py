@@ -6,6 +6,7 @@ from jobs.models import Jobs, Deployenv, DeployJobs
 from hosts.models import Host
 from users.models import User
 
+from tasks.tasks import salt_run_cmd
 
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,3 +31,14 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         model = DeployJobs
         fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'hosts', 'env', 'version', 'deploy_path', 'action_user',
                   'result', 'create_time']
+
+    def create(self, validated_data):
+        hosts = validated_data["hosts"]
+        version = validated_data["version"]
+        cmd = 'svn up -r %s' % version
+        deploy_path = validated_data["deploy_path"]
+        work = salt_run_cmd.delay(hosts, cmd, deploy_path)
+        validated_data["j_id"] = work.id
+        deployjob = DeployJobs.objects.create(**validated_data)
+        deployjob.save()
+        return deployjob

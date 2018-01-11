@@ -133,7 +133,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="18" v-if="selecttype&&!clickbtn">
+      <el-col :span="18" v-if="!clickbtn">
         <el-card>
           <div slot="header">
             <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
@@ -147,6 +147,12 @@
             <el-table-column label='查看明细' type="expand" width="100">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
+                  <el-form-item label="平台">
+                    <el-input size="small" v-model="props.row.platform" disabled></el-input>
+                  </el-form-item>
+                  <el-form-item label="商户">
+                    <el-input size="small" v-model="props.row.merchant" disabled></el-input>
+                  </el-form-item>
                   <el-form-item label="key信息" prop="keyinfo">
                     <el-input v-model="props.row.keyinfo" type="textarea" disabled :autosize="{ minRows: 5, maxRows: 10}"></el-input>
                   </el-form-item>
@@ -160,7 +166,7 @@
               </template>
             </el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
-            <el-table-column prop='level' label='紧急度'>
+            <el-table-column prop='level' label='紧急度' sortable>
               <template slot-scope="scope">
                 <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                   <el-rate
@@ -179,7 +185,7 @@
                 </el-tooltip>
               </template>
             </el-table-column>
-            <el-table-column prop='create_time' label='创建时间'>
+            <el-table-column prop='create_time' label='创建时间' sortable>
               <template slot-scope="scope">
                 <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                   <span>{{scope.row.create_time | parseDate}}</span>

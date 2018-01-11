@@ -45,7 +45,7 @@
           </div>
           <div>
             <el-table :data='tableData' style="width: 100%">
-              <el-table-column prop='j_id' label='任务id'></el-table-column>
+              <el-table-column prop='id' label='id'></el-table-column>
               <el-table-column prop='env' label='发布环境'></el-table-column>
               <el-table-column prop='version' label='发布版本'></el-table-column>
               <el-table-column prop='deploy_status' label='发布状态' sortable>
@@ -167,11 +167,12 @@ export default {
     submitForm(formdata) {
       this.ruleForm.hosts = this.ruleForm.hosts.join()
       postDeployJob(formdata).then(response => {
+        console.log(response)
         this.$message({
           message: '恭喜你，构建成功',
           type: 'success'
         })
-        this.fetchDeployJobData()
+        // window.location.reload()
       }).catch(error => {
         this.$message.error('构建失败')
         console.log(error)

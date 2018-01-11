@@ -26,7 +26,7 @@ class PayChannelNameViewSet(viewsets.ModelViewSet):
     serializer_class = PayChannelNameSerializer
 
 class PayChannelViewSet(viewsets.ModelViewSet):
-    queryset = PayChannel.objects.all()
+    queryset = PayChannel.objects.all().order_by('-level')
     serializer_class = PayChannelSerializer
     filter_fields =['platform__name', 'merchant__name', 'type__name']
 
