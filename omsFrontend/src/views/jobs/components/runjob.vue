@@ -113,7 +113,7 @@ export default {
         offset: '',
         search: ''
       },
-      pagesize: [10, 25, 50, 100],
+      pagesize: [LIMIT, 25, 50, 100],
       tableData: [],
       tabletotal: 0,
       DEPLOY_STATUS: {

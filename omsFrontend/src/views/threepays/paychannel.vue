@@ -322,7 +322,7 @@ export default {
         merchant__name: ''
       },
       currentPage: 1,
-      pagesize: [10, 25, 50, 100],
+      pagesize: [LIMIT, 25, 50, 100],
       tabletotal: 0,
       paychannels: [],
       enclosureData: [],
@@ -637,11 +637,11 @@ export default {
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
-      this.fetchData()
+      this.fetchPayChannelData()
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
-      this.fetchData()
+      this.fetchPayChannelData()
     }
   }
 }
