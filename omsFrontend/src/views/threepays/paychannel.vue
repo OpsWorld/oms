@@ -27,20 +27,20 @@
         <el-card v-if="showenclosure" class="card-box">
           <el-tabs v-model="activeName" type="card">
             <el-tab-pane label="上传附件" name="upload">
-                <el-upload
-                  ref="upload"
-                  :action="uploadurl"
-                  :show-file-list="false"
-                  :disabled="count>10?true:false"
-                  :before-upload="beforeAvatarUpload">
-                  <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
-                             :disabled="count>10?true:false">
-                    上传
-                  </el-button>
-                  <div slot="tip" class="el-upload__tip">
-                    <p>上传文件不超过20m，<a style="color: red">最多只能上传10个文件</a></p>
-                  </div>
-                </el-upload>
+              <el-upload
+                ref="upload"
+                :action="uploadurl"
+                :show-file-list="false"
+                :disabled="count>10?true:false"
+                :before-upload="beforeAvatarUpload">
+                <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
+                           :disabled="count>10?true:false">
+                  上传
+                </el-button>
+                <div slot="tip" class="el-upload__tip">
+                  <p>上传文件不超过20m，<a style="color: red">最多只能上传10个文件</a></p>
+                </div>
+              </el-upload>
 
               <div v-if='enclosureData.length>0' class="ticketenclosure">
                 <ul>
@@ -87,7 +87,8 @@
               <el-input v-model="platformForm.name" :disabled="formStatus === 'view'"></el-input>
             </el-form-item>
             <el-form-item label="ip地址" prop="ipaddr">
-              <el-input v-model="platformForm.ipaddr" :disabled="formStatus === 'view'" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+              <el-input v-model="platformForm.ipaddr" :disabled="formStatus === 'view'" type="textarea"
+                        :autosize="{ minRows: 5, maxRows: 10}"></el-input>
             </el-form-item>
             <el-form-item label="描述" prop="desc">
               <el-input v-model="platformForm.desc" :disabled="formStatus === 'view'" type="textarea"
@@ -154,7 +155,8 @@
                     <el-input size="small" v-model="props.row.merchant" disabled></el-input>
                   </el-form-item>
                   <el-form-item label="key信息" prop="keyinfo">
-                    <el-input v-model="props.row.keyinfo" type="textarea" disabled :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+                    <el-input v-model="props.row.keyinfo" type="textarea" disabled
+                              :autosize="{ minRows: 5, maxRows: 10}"></el-input>
                   </el-form-item>
                   <el-form-item label="转发域名">
                     <el-input size="small" v-model="props.row.m_forwardurl" disabled></el-input>
@@ -181,7 +183,8 @@
               <template slot-scope="scope">
                 <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
                 <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
-                    <el-button @click="EditComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit" class="modifychange"></el-button>
+                  <el-button @click="EditComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
+                             class="modifychange"></el-button>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -195,10 +198,23 @@
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                <el-button v-if="paychannel_btn_delete_channel||role==='super'" @click="deletePayChannels(scope.row)" type="danger" size="mini">删除</el-button>
+                <el-button v-if="paychannel_btn_delete_channel||role==='super'" @click="deletePayChannels(scope.row)"
+                           type="danger" size="mini">删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
+          <div class="table-pagination">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="pagesize"
+              :page-size="listQuery.limit"
+              layout="prev, pager, next, sizes"
+              :total="tabletotal">
+            </el-pagination>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -251,7 +267,6 @@ export default {
     return {
       route_path: this.$route.path.split('/'),
       apiurl: apiUrl,
-      limit: LIMIT,
       platformData: [],
       merchantData: [],
       clickbtn: false,
@@ -301,9 +316,14 @@ export default {
       editChannelForm: false,
       dynamicChannels: [],
       listQuery: {
+        limit: LIMIT,
+        offset: '',
         platform__name: '',
         merchant__name: ''
       },
+      currentPage: 1,
+      pagesize: [10, 25, 50, 100],
+      tabletotal: 0,
       paychannels: [],
       enclosureData: [],
       count: 0,
@@ -353,7 +373,8 @@ export default {
       this.addChannelForm = false
       this.editChannelForm = false
       getPayChannel(this.listQuery).then(response => {
-        this.dynamicChannels = response.data
+        this.dynamicChannels = response.data.results
+        this.tabletotal = response.data.count
       })
     },
     postPlatformForm() {
@@ -613,6 +634,14 @@ export default {
         })
         return true
       }
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.fetchData()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.offset = (val - 1) * LIMIT
+      this.fetchData()
     }
   }
 }
@@ -646,5 +675,10 @@ export default {
   .modifychange {
     position: absolute;
     margin: 5px 20px;
+  }
+
+  .table-pagination {
+    padding: 10px 0;
+    float: right;
   }
 </style>
