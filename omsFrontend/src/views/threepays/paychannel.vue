@@ -199,7 +199,7 @@
                     <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
                   </li>
                   <li>
-                    <el-button v-if="scope.row.type == '代付通道'" type="primary" size="mini"
+                    <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
                                @click="editDaifu(scope.row)">代付测试
                     </el-button>
                   </li>
