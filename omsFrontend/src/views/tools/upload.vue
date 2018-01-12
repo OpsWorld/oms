@@ -42,7 +42,7 @@
             </div>
             <div class="table-footer">
                 <div class="table-button">
-                    <el-button type="danger" icon="delete" :disabled="butstatus" @click="deleteForm">删除记录</el-button>
+                    <el-button type="danger" :disabled="butstatus" @click="deleteForm">删除记录</el-button>
                 </div>
                 <div class="table-pagination">
                     <el-pagination

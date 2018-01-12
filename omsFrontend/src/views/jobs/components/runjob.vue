@@ -44,14 +44,16 @@
             </el-button>
           </div>
           <div>
-            <el-table :data='tableData' style="width: 100%">
+            <el-table :data='tableData' @selection-change="handleSelectionChange" style="width: 100%">
+              <el-table-column type="selection"></el-table-column>
               <el-table-column prop='id' label='id'></el-table-column>
               <el-table-column prop='env' label='发布环境'></el-table-column>
               <el-table-column prop='version' label='发布版本'></el-table-column>
               <el-table-column prop='deploy_status' label='发布状态' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-button plain size="mini" :type="DEPLOY_STATUS[scope.row.deploy_status].type" :icon="DEPLOY_STATUS[scope.row.deploy_status].icon">
+                    <el-button plain size="mini" :type="DEPLOY_STATUS[scope.row.deploy_status].type"
+                               :icon="DEPLOY_STATUS[scope.row.deploy_status].icon">
                       {{DEPLOY_STATUS[scope.row.deploy_status].text}}
                     </el-button>
                   </div>
@@ -67,16 +69,22 @@
               </el-table-column>
             </el-table>
           </div>
-          <div class="table-pagination">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage"
-              :page-sizes="pagesize"
-              :page-size="listQuery.limit"
-              layout="prev, pager, next, sizes"
-              :total="tabletotal">
-            </el-pagination>
+          <div class="table-footer">
+
+            <div class="table-button">
+              <el-button type="danger" icon="delete" :disabled="butstatus" @click="deleteForm">删除记录</el-button>
+            </div>
+            <div class="table-pagination">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="currentPage"
+                :page-sizes="pagesize"
+                :page-size="listQuery.limit"
+                layout="prev, pager, next, sizes"
+                :total="tabletotal">
+              </el-pagination>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -84,11 +92,11 @@
   </div>
 </template>
 <script>
-import { getJob, getDeployenv, getDeployJob, postDeployJob } from '@/api/job'
+import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob } from '@/api/job'
 import { LIMIT } from '@/config'
 
 export default {
-  components: { },
+  components: {},
 
   data() {
     return {
@@ -121,7 +129,8 @@ export default {
         success: { text: '发布成功', type: 'success', icon: 'el-icon-success' },
         failed: { text: '发布失败', type: 'danger', icon: 'el-icon-error' }
       },
-      jids: []
+      selectId: [],
+      butstatus: false
     }
   },
 
@@ -182,6 +191,25 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    handleSelectionChange(val) {
+      this.selectId = []
+      for (var i = 0, len = val.length; i < len; i++) {
+        this.selectId.push(val[i].id)
+      }
+      if (this.selectId.length > 0) {
+        this.butstatus = false
+      } else {
+        this.butstatus = true
+      }
+    },
+    deleteForm() {
+      for (var i = 0, len = this.selectId.length; i < len; i++) {
+        deleteDeployJob(this.selectId[i]).then(response => {
+          delete this.selectId[i]
+        })
+      }
+      setTimeout(this.fetchDeployJobData, 1000)
     }
   }
 }
@@ -198,11 +226,13 @@ export default {
   }
 
   .table-button {
+    padding: 10px 0;
     float: left;
   }
 
   .table-search {
     float: right;
+    padding: 10px 0;
   }
 
   .table-pagination {

@@ -81,3 +81,10 @@ export function getDeployJob(query) {
     params: query
   })
 }
+
+export function deleteDeployJob(id) {
+  return request({
+    url: apiURL.deployjobs + id + '/',
+    method: 'delete'
+  })
+}

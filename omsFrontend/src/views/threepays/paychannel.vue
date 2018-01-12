@@ -150,12 +150,6 @@
             <el-table-column label='查看明细' type="expand" width="100">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
-                  <el-form-item label="平台">
-                    <el-input size="small" v-model="props.row.platform" disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="商户">
-                    <el-input size="small" v-model="props.row.merchant" disabled></el-input>
-                  </el-form-item>
                   <el-form-item label="key信息" prop="keyinfo">
                     <el-input v-model="props.row.keyinfo" type="textarea" disabled
                               :autosize="{ minRows: 5, maxRows: 10}"></el-input>
@@ -169,6 +163,7 @@
                 </el-form>
               </template>
             </el-table-column>
+            <el-table-column prop='platform' label='平台'></el-table-column>
             <el-table-column prop='type' label='通道类型'></el-table-column>
             <el-table-column prop='level' label='紧急度' sortable>
               <template slot-scope="scope">
@@ -185,7 +180,7 @@
               <template slot-scope="scope">
                 <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
                 <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
-                  <el-button @click="EditComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
+                  <el-button @click="editComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
               </template>
@@ -199,10 +194,22 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                <el-button v-if="paychannel_btn_delete_channel||role==='super'" @click="deletePayChannels(scope.row)"
-                           type="danger" size="mini">删除
-                </el-button>
+                <ul>
+                  <li>
+                    <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
+                  </li>
+                  <li>
+                    <el-button v-if="scope.row.type == '代付通道'" type="primary" size="mini"
+                               @click="editDaifu(scope.row)">代付测试
+                    </el-button>
+                  </li>
+                  <li>
+                    <el-button v-if="paychannel_btn_delete_channel||role==='super'"
+                               @click="deletePayChannels(scope.row)"
+                               type="danger" size="mini">删除
+                    </el-button>
+                  </li>
+                </ul>
               </template>
             </el-table-column>
           </el-table>
@@ -230,10 +237,7 @@
     </el-dialog>
 
     <el-dialog :visible.sync="completeForm" width="30%">
-      <el-form :model="CommentForm" label-width="100px">
-        <el-form-item label="代付测试金额" props="content">
-          <el-input v-model="CommentForm.content"></el-input>
-        </el-form-item>
+      <el-form label-width="100px">
         <el-form-item label="完成百分比">
           <el-slider
             v-model="complete"
@@ -241,7 +245,18 @@
           </el-slider>
         </el-form-item>
         <el-form-item>
-          <el-button @click="changePayChannel" type="success" size="mini">确定</el-button>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog :visible.sync="daifuForm" width="30%">
+      <el-form :model="CommentForm" label-width="100px">
+        <el-form-item label="代付测试金额" props="content">
+          <el-input v-model="CommentForm.content"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeDaifu" type="success" size="mini">确定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -278,6 +293,7 @@ export default {
       formAdd: true,
       formStatus: '',
       completeForm: false,
+      daifuForm: false,
       paychannel_btn_delete_channel: false,
       platformForm: {
         name: '',
@@ -345,7 +361,8 @@ export default {
         content: 0,
         create_user: localStorage.getItem('username')
       },
-      comments: []
+      comments: [],
+      paychannelname: ''
     }
   },
   computed: {
@@ -501,15 +518,14 @@ export default {
       this.formEdit = true
       this.showbtn = false
     },
-    EditComplete(row) {
+    editComplete(row) {
       this.completeForm = true
-      this.complete = row.complete
       this.CommentForm.ticket = row.id
-      this.channel_create_user = row.create_user
+      this.CommentForm.merchant = row.merchant
+      this.complete = row.complete
+      this.paychannelname = row.type
     },
-    changePayChannel() {
-      this.completeForm = false
-      postThreePayComment(this.CommentForm)
+    changeComplete() {
       const parmas = {
         complete: this.complete
       }
@@ -518,22 +534,39 @@ export default {
           type: 'success',
           message: '更新成功!'
         })
-        const create_time = getCreatetime()
         const messageForm = {
           action_user: `${this.channel_create_user}`,
-          title: '【支付通道测试】',
-          message: `商户号: ${this.CommentForm.merchant}\n代付测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
+          title: '【通道完成进度】',
+          message: `商户号: ${this.CommentForm.merchant}\n通道类型: ${this.paychannelname}\n完成度: ${this.complete}`
         }
         postSendmessage(messageForm)
+        this.completeForm = false
         this.fetchPayChannelData()
-        this.fetchPayChannelData()
-        this.clickPayChannel({ id: this.CommentForm.ticket })
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '更新失败'
         })
       })
+    },
+    editDaifu(row) {
+      this.daifuForm = true
+      this.CommentForm.ticket = row.id
+      this.CommentForm.merchant = row.merchant
+      this.channel_create_user = row.create_user
+    },
+    changeDaifu() {
+      postThreePayComment(this.CommentForm)
+      const create_time = getCreatetime()
+      const messageForm = {
+        action_user: `${this.channel_create_user}`,
+        title: '【代付通道测试】',
+        message: `商户号: ${this.CommentForm.merchant}\n代付测试金额: ${this.CommentForm.content}\n测试时间: ${create_time}`
+      }
+      postSendmessage(messageForm)
+      this.daifuForm = false
+      this.showenclosure = true
+      setTimeout(this.clickPayChannel({ id: this.CommentForm.ticket }), 500)
     },
     resetForm() {
       this.platformForm = {
