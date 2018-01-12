@@ -67,6 +67,9 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
+            <el-tab-pane label="平台通道" name="platform">
+
+            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
@@ -139,15 +142,19 @@
           <div slot="header">
             <el-button size="small" type="primary" plain @click="addChannelForm=true">添加通道
             </el-button>
-            <a style="margin-left: 20px;color: #fa11ff">商户号：{{listQuery.merchant__name}}</a>
+            <div v-if="showenclosure" class="merchant_info">
+              商户号：{{merchantForm.name}} <a class="shu"></a>
+              商户公司：{{merchantForm.m_id}} <a class="shu"></a>
+              业务经理：{{merchantForm.three}}
+            </div>
             <el-button size="small" type="success" plain style="float: right" @click="showAllPaychannel">显示全部
             </el-button>
           </div>
 
           <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
                     @row-click="clickPayChannel">
-            <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column label='查看明细' type="expand" width="100">
+            <el-table-column type="index" width="30"></el-table-column>
+            <el-table-column label='查看明细' type="expand" width="50">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
                   <el-form-item label="key信息" prop="keyinfo">
@@ -163,8 +170,8 @@
                 </el-form>
               </template>
             </el-table-column>
-            <el-table-column prop='platform' label='平台'></el-table-column>
-            <el-table-column prop='type' label='通道类型'></el-table-column>
+            <el-table-column prop='platform' label='平台' width="130"></el-table-column>
+            <el-table-column prop='type' label='通道类型' width="130"></el-table-column>
             <el-table-column prop='level' label='紧急度' sortable>
               <template slot-scope="scope">
                 <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -176,7 +183,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop='complete' label='完成百分比'>
+            <el-table-column prop='complete' label='完成百分比' width="130">
               <template slot-scope="scope">
                 <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
                 <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
@@ -192,24 +199,16 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作"  width="280">
               <template slot-scope="scope">
-                <ul>
-                  <li>
                     <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                  </li>
-                  <li>
                     <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
                                @click="editDaifu(scope.row)">代付测试
                     </el-button>
-                  </li>
-                  <li>
                     <el-button v-if="paychannel_btn_delete_channel||role==='super'"
                                @click="deletePayChannels(scope.row)"
                                type="danger" size="mini">删除
                     </el-button>
-                  </li>
-                </ul>
               </template>
             </el-table-column>
           </el-table>
@@ -386,6 +385,11 @@ export default {
     fetchMerchantData() {
       getMerchant().then(response => {
         this.merchantData = response.data
+      })
+    },
+    clickMerchantData(parmas) {
+      getMerchant(parmas).then(response => {
+        this.merchantForm = response.data[0]
       })
     },
     fetchPayChannelData() {
@@ -620,6 +624,7 @@ export default {
       this.paychannels = row
     },
     clickPayChannel(row) {
+      this.showenclosure = true
       this.activeName = 'testpay'
       const parmas = {
         ticket__id: row.id
@@ -627,6 +632,7 @@ export default {
       getThreePayComment(parmas).then(response => {
         this.comments = response.data
       })
+      this.clickMerchantData({ name: row.merchant })
     },
     EnclosureData() {
       const parms = {
@@ -725,5 +731,10 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
+  }
+  .merchant_info {
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 14px;
   }
 </style>
