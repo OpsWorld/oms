@@ -123,7 +123,6 @@ export function putPayChannel(id, data) {
 }
 
 export function patchPayChannel(id, data) {
-  console.log(id, data)
   return request({
     url: apiURL.paychannels + id + '/',
     method: 'patch',
