@@ -33,10 +33,10 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             if job.ready():  # check task state: true/false
                 try:
                     result = job.get(timeout=1)
-                    print(result.status)
-                    if result.status == 'deploy':
+                    print(result)
+                    if job.state in ['PENDING ','STARTED ']:
                         j.deploy_status = 'deploy'
-                    elif result.status == 'success':
+                    elif job.state == 'SUCCESS':
                         j.deploy_status = 'success'
                     else:
                         j.deploy_status = 'failed'
