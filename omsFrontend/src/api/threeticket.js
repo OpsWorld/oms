@@ -185,3 +185,20 @@ export function getThreePayComment(query) {
     params: query
   })
 }
+
+// platformpaychannels
+export function getPlatformPayChannel(query) {
+  return request({
+    url: apiURL.platformpaychannels,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putPlatformPayChannel(id, data) {
+  return request({
+    url: apiURL.platformpaychannels + id + '/',
+    method: 'put',
+    data
+  })
+}

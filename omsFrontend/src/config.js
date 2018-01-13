@@ -74,6 +74,7 @@ module.exports = {
   paychannels: `${url}/api/paychannels/`,
   paychannelnames: `${url}/api/paychannelnames/`,
   threepaycomments: `${url}/api/threepaycomments/`,
+  platformpaychannels: `${url}/api/platformpaychannels/`,
 
   // 权限
   usermenuperms: `${url}/api/usermenuperms/`,

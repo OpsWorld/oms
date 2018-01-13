@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from threepay.models import Platform, Merchant, ThreePayEnclosure, PayChannelName, PayChannel, ThreePayComment
+from threepay.models import (Platform, Merchant, ThreePayEnclosure, PayChannelName, PayChannel, ThreePayComment,
+                             PlatformPayChannel)
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -38,8 +39,8 @@ class PayChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayChannel
         fields = (
-        'url', 'id', 'platform', 'merchant', 'type', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
-        'status', 'create_user', 'action_user', 'create_time')
+            'url', 'id', 'platform', 'merchant', 'type', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
+            'status', 'create_user', 'action_user', 'create_time')
 
 
 class ThreePayEnclosureSerializer(serializers.ModelSerializer):
@@ -59,3 +60,12 @@ class ThreePayCommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = ThreePayComment
         fields = ('url', 'id', 'ticket', 'merchant', 'content', 'create_user', 'create_time')
+
+
+class PlatformPayChannelSerializer(serializers.ModelSerializer):
+    platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')
+    type = serializers.SlugRelatedField(queryset=PayChannelName.objects.all(), slug_field='name')
+
+    class Meta:
+        model = PlatformPayChannel
+        fields = ('url', 'id', 'name', 'platform', 'type', 'complete')

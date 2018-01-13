@@ -68,7 +68,22 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="已对接通道" name="platform">
-
+              <el-table :data="dynamicPlatformChannels" border style="width: 100%">
+                <el-table-column prop='platform' label='平台' width="50"></el-table-column>
+                <el-table-column prop='type' label='通道类型' width="80"></el-table-column>
+                <el-table-column prop='complete' label='完成百分比' width="100">
+                  <template slot-scope="scope">
+                    <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                  <template slot-scope="scope">
+                    <el-button @click="editComplete(scope.row)" type="primary" size="mini">
+                      更新进度
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -153,7 +168,7 @@
 
           <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
                     @row-click="clickPayChannel">
-            <el-table-column type="index" width="30"></el-table-column>
+            <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label='查看明细' type="expand" width="50">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
@@ -183,15 +198,15 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop='complete' label='完成百分比' width="130">
-              <template slot-scope="scope">
-                <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
-                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
-                  <el-button @click="editComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
-                             class="modifychange"></el-button>
-                </el-tooltip>
-              </template>
-            </el-table-column>
+            <!--<el-table-column prop='complete' label='完成百分比' width="100">-->
+              <!--<template slot-scope="scope">-->
+                <!--<el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>-->
+                <!--<el-tooltip class="item" effect="dark" content="更新进度" placement="top">-->
+                  <!--<el-button @click="editComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"-->
+                             <!--class="modifychange"></el-button>-->
+                <!--</el-tooltip>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column prop='create_time' label='创建时间' sortable>
               <template slot-scope="scope">
                 <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -199,16 +214,16 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作"  width="280">
+            <el-table-column label="操作" width="280">
               <template slot-scope="scope">
-                    <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                    <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
-                               @click="editDaifu(scope.row)">代付测试
-                    </el-button>
-                    <el-button v-if="paychannel_btn_delete_channel||role==='super'"
-                               @click="deletePayChannels(scope.row)"
-                               type="danger" size="mini">删除
-                    </el-button>
+                <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
+                <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
+                           @click="editDaifu(scope.row)">代付测试
+                </el-button>
+                <el-button v-if="paychannel_btn_delete_channel||role==='super'"
+                           @click="deletePayChannels(scope.row)"
+                           type="danger" size="mini">删除
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -237,9 +252,9 @@
 
     <el-dialog :visible.sync="completeForm" width="30%">
       <el-form label-width="100px">
-        <el-form-item label="完成百分比">
+        <el-form-item :model="CompleteForm" label="完成百分比">
           <el-slider
-            v-model="complete"
+            v-model="CompleteForm.complete"
             :step="10">
           </el-slider>
         </el-form-item>
@@ -266,8 +281,8 @@
 import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
 import { getThreePayEnclosure, postThreePayEnclosure, deleteThreePayEnclosure } from 'api/threeticket'
-import { postThreePayComment, getThreePayComment } from 'api/threeticket'
-import { getPayChannel, deletePayChannel, patchPayChannel } from 'api/threeticket'
+import { postThreePayComment, getThreePayComment, getPlatformPayChannel, putPlatformPayChannel } from 'api/threeticket'
+import { getPayChannel, deletePayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
 import addPaychannel from './components/addPaychannel.vue'
 import editPaychannel from './components/editPaychannel.vue'
@@ -352,7 +367,6 @@ export default {
       uploadurl: uploadurl,
       showenclosure: false,
       activeName: 'upload',
-      complete: 0,
       channel_create_user: '',
       CommentForm: {
         ticket: '',
@@ -360,8 +374,15 @@ export default {
         content: 0,
         create_user: localStorage.getItem('username')
       },
+      CompleteForm: {
+        id: '',
+        platform: '',
+        type: '',
+        complete: 0
+      },
       comments: [],
-      paychannelname: ''
+      paychannelname: '',
+      dynamicPlatformChannels: []
     }
   },
   computed: {
@@ -398,6 +419,11 @@ export default {
       getPayChannel(this.listQuery).then(response => {
         this.dynamicChannels = response.data.results
         this.tabletotal = response.data.count
+      })
+    },
+    fetchPlatformPayChannelData() {
+      getPlatformPayChannel().then(response => {
+        this.dynamicPlatformChannels = response.data
       })
     },
     postPlatformForm() {
@@ -524,28 +550,22 @@ export default {
     },
     editComplete(row) {
       this.completeForm = true
-      this.CommentForm.ticket = row.id
-      this.CommentForm.merchant = row.merchant
-      this.complete = row.complete
-      this.paychannelname = row.type
+      this.CompleteForm = row
     },
     changeComplete() {
-      const parmas = {
-        complete: this.complete
-      }
-      patchPayChannel(this.CommentForm.ticket, parmas).then(response => {
+      putPlatformPayChannel(this.CompleteForm.id, this.CompleteForm).then(response => {
         this.$message({
           type: 'success',
           message: '更新成功!'
         })
         const messageForm = {
-          action_user: `${this.channel_create_user}`,
+          action_user: `${this.CommentForm.create_user}`,
           title: '【通道完成进度】',
-          message: `商户号: ${this.CommentForm.merchant}\n通道类型: ${this.paychannelname}\n完成度: ${this.complete}`
+          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}`
         }
         postSendmessage(messageForm)
         this.completeForm = false
-        this.fetchPayChannelData()
+        this.fetchPlatformPayChannelData()
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -616,6 +636,7 @@ export default {
         this.listQuery.platform__name = data.name
         this.listQuery.merchant__name = ''
         this.EnclosureData()
+        this.fetchPlatformPayChannelData()
       }
       this.fetchPayChannelData()
     },
@@ -732,6 +753,7 @@ export default {
     padding: 10px 0;
     float: right;
   }
+
   .merchant_info {
     display: inline-block;
     margin-left: 20px;
