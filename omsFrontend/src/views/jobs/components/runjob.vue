@@ -40,7 +40,7 @@
         <el-card>
           <div slot="header">
             <a class="jobname">发布记录</a>
-            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh">刷新状态
+            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh" @click="fetchDeployJobData">刷新状态
             </el-button>
           </div>
           <div>
@@ -71,7 +71,7 @@
           </div>
           <div class="table-footer">
 
-            <div class="table-button">
+            <div class="table-button" v-if="jobs_btn_delete_deployjob||role==='super'">
               <el-button type="danger" icon="delete" :disabled="butstatus" @click="deleteForm">删除记录</el-button>
             </div>
             <div class="table-pagination">
@@ -94,6 +94,7 @@
 <script>
 import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob } from '@/api/job'
 import { LIMIT } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
@@ -130,11 +131,18 @@ export default {
         failed: { text: '发布失败', type: 'danger', icon: 'el-icon-error' }
       },
       selectId: [],
-      butstatus: false
+      butstatus: false,
+      jobs_btn_delete_deployjob: false
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'elements',
+      'role'
+    ])
+  },
   created() {
+    this.jobs_btn_delete_deployjob = this.elements['发布管理-删除发布任务']
     this.fetchJobData()
     this.fetchDeployJobData()
   },

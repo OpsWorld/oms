@@ -35,6 +35,7 @@ export function deletePlatform(id) {
 
 // merchants
 export function postMerchant(data) {
+  console.log(data)
   return request({
     url: apiURL.merchants,
     method: 'post',

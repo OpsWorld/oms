@@ -18,5 +18,9 @@ def send_to_mail(to_list, cc_list, sub, content):
 
 @celery_app.task
 def salt_run_cmd(hosts,cmd,deploy_path):
-    print(hosts, cmd, deploy_path)
-    return salt_run(hosts,cmd,deploy_path)
+    from time import sleep
+    for i in range(10):
+        sleep(1)
+        print(i)
+        print(hosts, cmd, deploy_path)
+        salt_run(hosts,cmd,deploy_path)
