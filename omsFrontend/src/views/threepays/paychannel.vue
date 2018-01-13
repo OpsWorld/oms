@@ -425,7 +425,10 @@ export default {
       })
     },
     fetchPlatformPayChannelData() {
-      getPlatformPayChannel().then(response => {
+      const parmas = {
+        platform__name: this.listQuery.platform__name
+      }
+      getPlatformPayChannel(parmas).then(response => {
         this.dynamicPlatformChannels = response.data
       })
     },
@@ -633,10 +636,9 @@ export default {
         this.CommentForm.merchant = this.listQuery.merchant__name = data.name
       } else {
         this.activeName = 'upload'
-        this.enclosureForm.ticket = data.name
         this.showenclosure = true
         this.platformForm = data
-        this.listQuery.platform__name = data.name
+        this.enclosureForm.ticket = this.listQuery.platform__name = data.name
         this.listQuery.merchant__name = ''
         this.EnclosureData()
         this.fetchPlatformPayChannelData()
