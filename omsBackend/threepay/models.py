@@ -64,6 +64,7 @@ class PayChannel(models.Model):
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     merchant = models.ForeignKey('Merchant', verbose_name=u'依附商户')
     type = models.ForeignKey('PayChannelName', verbose_name=u'通道类型')
+    rate = models.CharField(max_length=10, blank=True, null=True, verbose_name=u'费率')
     keyinfo = models.TextField(max_length=500, blank=True, null=True, verbose_name=u'秘钥信息')
     m_forwardurl = models.CharField(max_length=100, blank=True, null=True, verbose_name=u'转发域名')
     m_submiturl = models.CharField(max_length=100, blank=True, null=True, verbose_name=u'提交域名')
