@@ -76,7 +76,7 @@
                     <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="操作" v-if="paychannel_btn_change_complete||role==='super'">
                   <template slot-scope="scope">
                     <el-button @click="editComplete(scope.row)" type="primary" size="mini">
                       更新进度
@@ -310,6 +310,7 @@ export default {
       completeForm: false,
       daifuForm: false,
       paychannel_btn_delete_channel: false,
+      paychannel_btn_change_complete: false,
       platformForm: {
         name: '',
         ipaddr: '',
@@ -394,6 +395,7 @@ export default {
   },
   created() {
     this.paychannel_btn_delete_channel = this.elements['支付通道列表-删除通道']
+    this.paychannel_btn_change_complete = this.elements['支付通道列表-更新进度']
     this.fetchPlatformData()
     this.fetchMerchantData()
     this.fetchPayChannelData()
@@ -521,7 +523,7 @@ export default {
       }).then(() => {
         deletePayChannel(row.id)
         this.dynamicChannels.remove(row)
-        this.fetchPayChannelData()
+        setTimeout(this.fetchPayChannelData(), 500)
         this.$message({
           type: 'success',
           message: '删除成功!'
