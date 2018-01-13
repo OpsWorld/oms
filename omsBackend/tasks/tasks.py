@@ -24,3 +24,5 @@ def salt_run_cmd(hosts,cmd,deploy_path):
         print(i)
         print(hosts, cmd, deploy_path)
         salt_run(hosts,cmd,deploy_path)
+        return {'status': 'success'}
+    return {'status': 'deploy'}

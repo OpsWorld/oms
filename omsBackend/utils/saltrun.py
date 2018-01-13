@@ -4,4 +4,3 @@
 
 def salt_run(hosts,cmd,deploy_path):
     print(hosts)
-    return {'status': 'deploy'}

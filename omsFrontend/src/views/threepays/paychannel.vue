@@ -76,9 +76,9 @@
                     <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" v-if="paychannel_btn_change_complete||role==='super'">
+                <el-table-column label="操作">
                   <template slot-scope="scope">
-                    <el-button @click="editComplete(scope.row)" type="primary" size="mini">
+                    <el-button @click="editComplete(scope.row)" type="primary" size="mini"  v-if="paychannel_btn_change_complete||role==='super'">
                       更新进度
                     </el-button>
                   </template>
