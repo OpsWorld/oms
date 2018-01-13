@@ -186,7 +186,7 @@
               </template>
             </el-table-column>
             <el-table-column prop='platform' label='平台' width="50"></el-table-column>
-            <el-table-column prop='type' label='通道类型' width="100"></el-table-column>
+            <el-table-column prop='type' label='通道类型' width="130"></el-table-column>
             <el-table-column prop='rate' label='费率' width="80"></el-table-column>
             <el-table-column prop='level' label='紧急度' sortable>
               <template slot-scope="scope">
