@@ -37,6 +37,7 @@
       <el-select v-model="rowdata.action_user" filterable placeholder="请选择通知人">
         <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
       </el-select>
+      <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
@@ -75,7 +76,8 @@ export default {
         value: 'name',
         children: 'merchants'
       },
-      users: []
+      users: [],
+      sendnotice: false
     }
   },
   created() {
@@ -89,12 +91,14 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           putPayChannel(this.rowdata.id, this.rowdata).then(response => {
-            const messageForm = {
-              action_user: this.rowdata.action_user,
-              title: '【支付通道修改】',
-              message: `修改人: ${this.create_user}\n处理人: ${this.rowdata.action_user}\n平台: ${this.rowdata.platform}     商户: ${this.rowdata.merchant}     通道: ${this.rowdata.type}`
+            if (this.sendnotice) {
+              const messageForm = {
+                action_user: this.rowdata.action_user,
+                title: '【支付通道修改】',
+                message: `修改人: ${this.create_user}\n处理人: ${this.rowdata.action_user}\n平台: ${this.rowdata.platform}     商户: ${this.rowdata.merchant}     通道: ${this.rowdata.type}`
+              }
+              postSendmessage(messageForm)
             }
-            postSendmessage(messageForm)
             this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
           })

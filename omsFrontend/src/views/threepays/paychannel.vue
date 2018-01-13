@@ -67,7 +67,7 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="平台通道" name="platform">
+            <el-tab-pane label="已对接通道" name="platform">
 
             </el-tab-pane>
           </el-tabs>
@@ -608,8 +608,8 @@ export default {
       if (this.selecttype) {
         this.merchantForm = data
         this.CommentForm.merchant = this.listQuery.merchant__name = data.name
-        this.activeName = 'upload'
       } else {
+        this.activeName = 'upload'
         this.enclosureForm.ticket = data.name
         this.showenclosure = true
         this.platformForm = data
