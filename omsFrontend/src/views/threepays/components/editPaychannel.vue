@@ -15,6 +15,9 @@
         <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
+    <el-form-item label="费率" prop="rate">
+      <el-input v-model="rowdata.rate"></el-input>
+    </el-form-item>
     <el-form-item label="key信息" prop="keyinfo">
       <el-input v-model="rowdata.keyinfo" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
