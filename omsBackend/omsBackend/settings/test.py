@@ -40,7 +40,7 @@ SK_ACOUNT = {
 SK = 'skype'
 
 # celery配置
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_BROKER_URL = 'redis://192.168.10.99:6379/0'
 
 # celery结果返回，可用于跟踪结果
 CELERY_RESULT_BACKEND = 'django-db'
