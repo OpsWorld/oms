@@ -10,15 +10,15 @@ var path = require('path');
 var express = require('express');
 var webpack = require('webpack');
 var proxyMiddleware = require('http-proxy-middleware');
-var webpackConfig = require('./webpack.dev.conf');
+var webpackConfig = require('./webpack.test.conf');
 
 // default port where dev server listens for incoming traffic
-var port = process.env.PORT || config.dev.port;
+var port = process.env.PORT || config.test.port;
 // automatically open browser, if not set will be false
-var autoOpenBrowser = !!config.dev.autoOpenBrowser;
+var autoOpenBrowser = !!config.test.autoOpenBrowser;
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-var proxyTable = config.dev.proxyTable;
+var proxyTable = config.test.proxyTable;
 
 var app = express();
 var compiler = webpack(webpackConfig);
@@ -63,7 +63,7 @@ app.use(devMiddleware);
 app.use(hotMiddleware);
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
+var staticPath = path.posix.join(config.test.assetsPublicPath, config.test.assetsSubDirectory);
 app.use(staticPath, express.static('./static'));
 
 var uri = 'http://localhost:' + port
@@ -77,7 +77,7 @@ console.log('> Starting test server...')
 devMiddleware.waitUntilValid(() => {
   console.log('> Listening at ' + uri + '\n')
   // when env is testing, don't need open it
-  if (autoOpenBrowser && process.env.NODE_ENV !== 'testing') {
+  if (autoOpenBrowser && process.env.NODE_ENV !== 'test') {
     opn(uri)
   }
   _resolve()
