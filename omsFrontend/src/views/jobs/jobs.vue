@@ -26,10 +26,10 @@
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column prop='update_time' label='更新时间' sortable>
+          <el-table-column prop='create_time' label='创建时间' sortable>
             <template slot-scope="scope">
               <div slot="reference">
-                {{scope.row.update_time | formatTime}}
+                {{scope.row.create_time | formatTime}}
               </div>
             </template>
           </el-table-column>

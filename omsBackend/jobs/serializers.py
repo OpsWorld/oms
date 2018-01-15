@@ -11,7 +11,7 @@ from tasks.tasks import salt_run_cmd
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'create_time', 'update_time', 'desc']
+        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'create_time', 'desc']
 
 
 class DeployenvSerializer(serializers.ModelSerializer):

@@ -17,7 +17,6 @@ class Jobs(models.Model):
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-    update_time = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'最近发布时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):

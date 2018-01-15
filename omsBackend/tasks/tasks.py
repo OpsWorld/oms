@@ -20,7 +20,4 @@ def salt_run_cmd(hosts,cmd,deploy_path):
     from time import sleep
     for i in range(10):
         sleep(1)
-        current_task.update_state(state='PROGRESS',meta={'current': i, 'total': 100})
-        return {'status': 'deploy'}
-    current_task.update_state(state='SUCCESS ', meta={'current': 100, 'total': 100})
-    return {'status': 'success'}
+        return {'status': 'success'}
