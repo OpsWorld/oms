@@ -14,6 +14,9 @@ django-rest-auth==0.9.1
 djangorestframework==3.6.3
 djangorestframework-jwt==1.11.0
 dry-rest-permissions==0.1.9
+enum34==1.1.6
+eventlet==0.22.0
+greenlet==0.4.12
 idna==2.6
 kombu==4.1.0
 ldap3==2.3
@@ -28,5 +31,5 @@ requests==2.18.4
 six==1.11.0
 SkPy==0.8.1
 urllib3==1.22
-uwsgi==2.0.15
+uWSGI==2.0.15
 vine==1.1.4
