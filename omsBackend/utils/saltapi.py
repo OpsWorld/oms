@@ -8,7 +8,6 @@ restful = {
     "login": "/login",
     "jobs": "/jobs"
 }
-url = "https://192.168.36.152:7878"
 header = {"Accept": "application/json"}
 
 
