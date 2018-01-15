@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 } else if (process.env.NODE_ENV === 'test') {
   CONFIG = {
-    apiUrl: '',
+    apiUrl: 'oms.tb-gaming.local:8000',
     super_group: 'admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
