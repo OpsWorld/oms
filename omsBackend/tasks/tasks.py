@@ -1,28 +1,26 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from omsBackend import celery_app
+from celery import task, current_task
 from utils.sendskype import skype_bot
 from utils.sendmail import send_mail
-from utils.saltrun import salt_run
-from jobs.models import DeployJobs
 
-@celery_app.task
+@task.task
 def send_to_skype(user,content):
     print(content)
     skype_bot(user, content)
 
-@celery_app.task
+@task.task
 def send_to_mail(to_list, cc_list, sub, content):
     print(sub)
     send_mail(to_list, cc_list, sub, content)
 
-@celery_app.task
+@task.task
 def salt_run_cmd(hosts,cmd,deploy_path):
     from time import sleep
-    for i in range(5):
+    for i in range(10):
         sleep(1)
-        print(i)
-        print(hosts, cmd, deploy_path)
-        return {'status': 'success'}
-    return {'status': 'deploy'}
+        current_task.update_state(state='PROGRESS',meta={'current': i, 'total': 100})
+        return {'status': 'deploy'}
+    current_task.update_state(state='SUCCESS ', meta={'current': 100, 'total': 100})
+    return {'status': 'success'}
