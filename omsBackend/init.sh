@@ -6,4 +6,5 @@ python manage.py makemigrations tools
 python manage.py makemigrations threepay
 python manage.py makemigrations hosts
 python manage.py makemigrations jobs
+python manage.py makemigrations django_celery_results
 python manage.py migrate
