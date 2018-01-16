@@ -3,11 +3,6 @@
 
 import requests
 
-restful = {
-    "login": "/login",
-    "jobs": "/jobs"
-}
-
 salt_info = {
     "url": "http://192.168.6.99:8080",
     "username": "salt",
