@@ -4,7 +4,6 @@
 from rest_framework import viewsets
 from jobs.models import Jobs, Deployenv, DeployJobs
 from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSerializer
-from celery.result import AsyncResult
 from rest_framework.response import Response
 from rest_framework import status
 from omsBackend.settings import sapi
@@ -30,17 +29,14 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
         for work in deploy_serializer.data:
             j_id = work['j_id']
             j = DeployJobs.objects.get(j_id=j_id)
-            jobs = sapi.check_job(j_id)
-            job_status = []
-            for i in jobs.values():
-                job_status.append(i)
+            job_results = sapi.get_result(j_id)
 
-            if True in job_status:
+            if job_results:
                 j.deploy_status = 'success'
             else:
                 j.deploy_status = 'failed'
 
-            j.result = jobs
+            j.result = job_results
             j.save()
         queryset = DeployJobs.objects.all().order_by('-create_time')
         serializer = DeployJobsSerializer(queryset, many=True, context={'request': request})
