@@ -97,9 +97,12 @@
     </el-row>
 
     <el-dialog :visible.sync="showresult">
-      <code>
-        {{ job_result }}
-      </code>
+      <div>
+        <div class="runlog" v-for="item in job_results" :key="item.id">
+          <p>{{ item.host }}</p>
+          <pre>{{ item.data }}</pre>
+        </div>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -146,7 +149,7 @@ export default {
       butstatus: false,
       jobs_btn_delete_deployjob: false,
       showresult: false,
-      job_result: {}
+      job_results: []
     }
   },
   computed: {
@@ -200,13 +203,13 @@ export default {
       this.ruleForm.hosts = this.ruleForm.hosts.join()
       postDeployJob(formdata).then(response => {
         this.$message({
-          message: '恭喜你，构建成功',
+          message: '构建成功，系统正在玩命发布中 ...',
           type: 'success'
         })
         this.fetchDeployJobData()
         this.resetForm('ruleForm')
       }).catch(error => {
-        this.$message.error('构建失败')
+        this.$message.error('构建失败，请检查参数是否正确！')
         this.resetForm('ruleForm')
         console.log(error)
       })
@@ -236,7 +239,11 @@ export default {
     showJobResult(row) {
       this.showresult = true
       const data = (new Function('return ' + row))()
-      this.job_result = data
+      const a = []
+      Object.keys(data).map(function(k) {
+        a.push({ 'host': k, 'data': data[k] })
+      })
+      this.job_results = a
     }
   }
 }
@@ -265,5 +272,13 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
+  }
+
+  .runlog {
+    padding: 0 20px;
+    background-color: #000;
+    border: 1px solid rgba(0, 255, 0, 0.41);
+    border-radius: 5px;
+    color: #00ff00;
   }
 </style>

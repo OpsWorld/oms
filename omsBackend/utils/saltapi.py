@@ -19,7 +19,7 @@ class SaltAPI(object):
         self.__header["Accept"] = "application/json"
         self.__token = self.get_token()
 
-    def get_token(self):
+    def get_token(self, prefix='/login'):
         '''
         登录获取token
         '''
@@ -29,7 +29,7 @@ class SaltAPI(object):
             "password": self.__password,
             "eauth": "pam"
         }
-        loginurl = self.__url + restful["login"]
+        loginurl = self.__url + prefix
         req = requests.post(loginurl, data=data, headers=self.__header)
         try:
             token = req.json()["return"][0]["token"]
@@ -156,7 +156,7 @@ def main():
     cmd = 'ls /'
     jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
     print(jid)
-    print(sapi.get_job_info())
+    print(sapi.check_job(jid))
 
 
 if __name__ == '__main__':

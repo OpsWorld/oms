@@ -5,8 +5,8 @@ from rest_framework import serializers
 from jobs.models import Jobs, Deployenv, DeployJobs
 from hosts.models import Host
 from users.models import User
-
 from omsBackend.settings import sapi
+
 
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,8 +36,8 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         hosts = validated_data["hosts"]
         version = validated_data["version"]
         deploy_path = validated_data["deploy_path"]
-        # cmd = 'cd %s; svn up -r %s' % (deploy_path,version)
-        cmd = "ls %s" % (deploy_path)
+        runcmd = 'cd %s;svn up -r %s' % (deploy_path,version)
+        cmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
         print(cmd)
         jid = sapi.remote_cmd(tgt=hosts, fun='cmd.run', arg=cmd)
         validated_data["j_id"] = jid

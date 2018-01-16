@@ -92,10 +92,6 @@ export function nFormatter(num, digits) {
   return num.toString()
 }
 
-export function PrettyJSON(data) {
-  return JSON.stringify(JSON.parse(data), null, 2)
-}
-
 export function parseDate(datestr) {
   if (datestr !== undefined) {
     const datetime = datestr.split('T')
