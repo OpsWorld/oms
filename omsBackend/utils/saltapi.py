@@ -27,7 +27,10 @@ class SaltAPI(object):
         self.__token = self.get_token()
 
     def get_token(self):
-        ''' user login and get token'''
+        '''
+        登录获取token
+        '''
+
         data = {
             "username": self.__username,
             "password": self.__password,
@@ -42,6 +45,10 @@ class SaltAPI(object):
             raise KeyError
 
     def salt_request(self, data, prefix='/'):
+        '''
+        接收请求，返回结果
+        '''
+
         url = self.__url + prefix
         self.__header["X-Auth-Token"] = self.__token
 
@@ -54,17 +61,39 @@ class SaltAPI(object):
         return req.json()
 
     def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg=(), **kwargs):
+        '''
+        异步执行远程命令、部署模块
+        '''
+
         data = {'client': client, 'fun': fun, 'tgt': tgt, 'expr_form': expr_form, 'arg': arg}
         content = self.salt_request(data)
         ret = content['return'][0]['jid']
         return ret
 
     def check_jid(self, jid):
+        '''
+        通过jid获取执行结果
+        '''
+
         prefix = "{0}/{1}".format(restful["jobs"], jid)
         content = self.salt_request(None, prefix)
         return content
 
+    def running_jobs(self):
+        '''
+        获取运行中的任务
+        '''
+
+        data = {'client': 'runner', 'fun': 'jobs.active'}
+        content = self.salt_request(data)
+        ret = content['return'][0]
+        return ret
+
     def list_key(self):
+        '''
+        获取包括认证、未认证salt主机
+        '''
+
         prefix = '/keys'
         content = self.salt_request(None, prefix)
         accepted = content['return']['minions']
@@ -74,21 +103,39 @@ class SaltAPI(object):
         return {"accepted": accepted, "denied": denied, "unaccept": unaccept, "rejected": rejected}
 
     def accept_key(self, key_id):
+        '''
+        接受salt主机
+        '''
+
         data = {'client': 'wheel', 'fun': 'key.accept', 'match': key_id}
         content = self.salt_request(data)
         ret = content['return'][0]['data']['success']
         return ret
 
     def delete_key(self, key_id):
+        '''
+        删除salt主机
+        '''
+
         data = {'client': 'wheel', 'fun': 'key.delete', 'match': key_id}
         content = self.salt_request(data)
         ret = content['return'][0]['data']['success']
         return ret
 
+    def salt_alive(self, tgt):
+        '''
+        salt主机存活检测
+        '''
+
+        data = {'client': 'local', 'tgt': tgt, 'fun': 'test.ping'}
+        content = self.salt_request(data)
+        ret = content['return'][0]
+        return ret
+
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    jid = sapi.remote_cmd(tgt='sh-aa-01',fun='cmd.run',arg=('ls', '/'))
+    jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=('ls', '/'))
     print(jid)
     print(sapi.check_jid(jid))
 
