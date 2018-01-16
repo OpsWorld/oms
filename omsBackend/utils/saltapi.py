@@ -60,35 +60,6 @@ class SaltAPI(object):
 
         return req.json()
 
-    def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg=(), **kwargs):
-        '''
-        异步执行远程命令、部署模块
-        '''
-
-        data = {'client': client, 'fun': fun, 'tgt': tgt, 'expr_form': expr_form, 'arg': arg}
-        content = self.salt_request(data)
-        ret = content['return'][0]['jid']
-        return ret
-
-    def check_jid(self, jid):
-        '''
-        通过jid获取执行结果
-        '''
-
-        prefix = "{0}/{1}".format(restful["jobs"], jid)
-        content = self.salt_request(None, prefix)
-        return content
-
-    def running_jobs(self):
-        '''
-        获取运行中的任务
-        '''
-
-        data = {'client': 'runner', 'fun': 'jobs.active'}
-        content = self.salt_request(data)
-        ret = content['return'][0]
-        return ret
-
     def list_key(self):
         '''
         获取包括认证、未认证salt主机
@@ -128,6 +99,35 @@ class SaltAPI(object):
         '''
 
         data = {'client': 'local', 'tgt': tgt, 'fun': 'test.ping'}
+        content = self.salt_request(data)
+        ret = content['return'][0]
+        return ret
+
+    def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg=(), **kwargs):
+        '''
+        异步执行远程命令、部署模块
+        '''
+
+        data = {'client': client, 'fun': fun, 'tgt': tgt, 'expr_form': expr_form, 'arg': arg}
+        content = self.salt_request(data)
+        ret = content['return'][0]['jid']
+        return ret
+
+    def check_jid(self, jid):
+        '''
+        通过jid获取执行结果
+        '''
+
+        prefix = "{0}/{1}".format(restful["jobs"], jid)
+        content = self.salt_request(None, prefix)
+        return content
+
+    def running_jobs(self):
+        '''
+        获取运行中的任务
+        '''
+
+        data = {'client': 'runner', 'fun': 'jobs.active'}
         content = self.salt_request(data)
         ret = content['return'][0]
         return ret
