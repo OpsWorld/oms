@@ -3,7 +3,6 @@
 
 import os
 import datetime
-from django import
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'libti7mq=88d+s!ds$c7lvg8e38jo*pqwywogpqf_=fl#xl8%4'
@@ -234,7 +233,6 @@ LOGGING = {
         },
     }
 }
-logging.captureWarnings(True)
 from logging.config import dictConfig
 dictConfig(LOGGING)
 
