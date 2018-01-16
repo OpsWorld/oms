@@ -242,3 +242,6 @@ salt_info = {
     "username":"salt",
     "password": "123"
 }
+
+from utils.saltapi import SaltAPI
+sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

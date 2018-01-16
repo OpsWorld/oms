@@ -3,8 +3,6 @@
 
 import requests
 
-# from omsBackend.settings import salt_info
-
 restful = {
     "login": "/login",
     "jobs": "/jobs"
@@ -103,7 +101,7 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg=(), **kwargs):
+    def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg='', **kwargs):
         '''
         异步执行远程命令、部署模块
         '''
@@ -135,8 +133,8 @@ class SaltAPI(object):
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=('ls', '/'))
-    print(jid)
+    cmd = 'for i in `seq 5`;do sleep 1; echo $i;done'
+    jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
     print(sapi.check_jid(jid))
 
 

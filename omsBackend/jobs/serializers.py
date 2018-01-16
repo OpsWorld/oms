@@ -6,7 +6,7 @@ from jobs.models import Jobs, Deployenv, DeployJobs
 from hosts.models import Host
 from users.models import User
 
-from tasks.tasks import salt_run_cmd
+from omsBackend.settings import sapi
 
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,10 +35,10 @@ class DeployJobsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         hosts = validated_data["hosts"]
         version = validated_data["version"]
-        cmd = 'svn up -r %s' % version
         deploy_path = validated_data["deploy_path"]
-        work = salt_run_cmd.delay(hosts, cmd, deploy_path)
-        validated_data["j_id"] = work.id
+        cmd = 'cd %s; svn up -r %s' % (deploy_path,version)
+        jid = sapi.remote_cmd(tgt=hosts, fun='cmd.run', arg=tuple(cmd.split()))
+        validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()
         return deployjob
