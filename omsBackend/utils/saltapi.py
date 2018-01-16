@@ -86,12 +86,12 @@ class SaltAPI(object):
         ret = content['return'][0]['data']['success']
         return ret
 
-    def salt_alive(self, tgt):
+    def minions_status(self):
         '''
         salt主机存活检测
         '''
 
-        data = {'client': 'local', 'tgt': tgt, 'fun': 'test.ping'}
+        data = {'client': 'runner', 'fun': 'manage.status'}
         content = self.salt_request(data)
         ret = content['return'][0]
         return ret
@@ -153,10 +153,10 @@ class SaltAPI(object):
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    cmd = 'ls /'
-    jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
-    print(jid)
-    print(sapi.check_job(jid))
+    # cmd = 'ls /'
+    # jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
+    # print(jid)
+    print(sapi.minions_status())
 
 
 if __name__ == '__main__':
