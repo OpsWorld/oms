@@ -121,6 +121,20 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
+    def get_job_info(self, jid=''):
+        '''
+        获取任务的详细执行信息
+        '''
+
+        if jid:
+            prefix = '/jobs/' + jid
+        else:
+            prefix = '/jobs'
+
+        content = self.salt_request(None, prefix)
+        ret = content['return'][0]
+        return ret
+
     def running_jobs(self):
         '''
         获取运行中的任务
@@ -131,13 +145,23 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
+    def check_job(self,jid):
+        '''
+        检查任务是否已经执行并成功退出
+        '''
+
+        data = {'client': 'runner', 'fun': 'jobs.exit_success', 'jid': jid}
+        content = self.salt_request(data)
+        ret = content['return'][0]
+        return ret
+
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    cmd = 'ls /;sleep 10;ls /tmp'
+    cmd = 'ls /'
     jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
     print(jid)
-    print(sapi.get_result(jid))
+    print(sapi.get_job_info())
 
 
 if __name__ == '__main__':

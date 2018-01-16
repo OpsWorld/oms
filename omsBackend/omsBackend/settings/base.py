@@ -238,7 +238,7 @@ dictConfig(LOGGING)
 
 # saltapi
 salt_info = {
-    "url": "https://192.168.6.99:8080",
+    "url": "http://192.168.6.99:8080",
     "username":"salt",
     "password": "123"
 }

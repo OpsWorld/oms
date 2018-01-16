@@ -92,14 +92,8 @@ export function nFormatter(num, digits) {
   return num.toString()
 }
 
-export function html2Text(val) {
-  const div = document.createElement('div')
-  div.innerHTML = val
-  return div.textContent || div.innerText
-}
-
-export function toThousandslsFilter(num) {
-  return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+export function PrettyJSON(data) {
+  return JSON.stringify(JSON.parse(data), null, 2)
 }
 
 export function parseDate(datestr) {

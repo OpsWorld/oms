@@ -57,7 +57,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="addTab">确 定</el-button>
-  </span>
+      </span>
     </el-dialog>
   </div>
 </template>

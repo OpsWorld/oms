@@ -34,7 +34,7 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             if job_results:
                 j.deploy_status = 'success'
             else:
-                j.deploy_status = 'failed'
+                j.deploy_status = 'deploy'
 
             j.result = job_results
             j.save()

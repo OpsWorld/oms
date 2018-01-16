@@ -40,7 +40,8 @@
         <el-card>
           <div slot="header">
             <a class="jobname">发布记录</a>
-            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh" @click="fetchDeployJobData">刷新状态
+            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh"
+                       @click="fetchDeployJobData">刷新
             </el-button>
           </div>
           <div>
@@ -67,6 +68,11 @@
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button @click="showJobResult(scope.row.result)" type="success" size="mini">查看结果</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="table-footer">
@@ -89,6 +95,12 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <el-dialog :visible.sync="showresult">
+      <code>
+        {{ job_result }}
+      </code>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -132,7 +144,9 @@ export default {
       },
       selectId: [],
       butstatus: false,
-      jobs_btn_delete_deployjob: false
+      jobs_btn_delete_deployjob: false,
+      showresult: false,
+      job_result: {}
     }
   },
   computed: {
@@ -218,6 +232,11 @@ export default {
         })
       }
       setTimeout(this.fetchDeployJobData, 1000)
+    },
+    showJobResult(row) {
+      this.showresult = true
+      const data = (new Function('return ' + row))()
+      this.job_result = data
     }
   }
 }
