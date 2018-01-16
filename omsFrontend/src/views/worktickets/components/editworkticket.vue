@@ -294,6 +294,12 @@ export default {
           postSendmessage(messageForm)
         } else {
           this.commentForm.content = '【问题处理】' + this.mailcontent
+          const messageForm = {
+            action_user: this.ticketData.follower.join(),
+            title: '【工单有新回复】' + this.ticketData.title,
+            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
         }
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)

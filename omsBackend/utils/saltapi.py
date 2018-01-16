@@ -2,7 +2,7 @@
 # author: itimor
 
 import requests
-from omsBackend.settings import salt_info
+# from omsBackend.settings import salt_info
 
 restful = {
     "login": "/login",
@@ -10,6 +10,11 @@ restful = {
 }
 header = {"Accept": "application/json"}
 
+salt_info = {
+    "url": "https://192.168.6.99:8080",
+    "username":"salt",
+    "password": "123"
+}
 
 class SaltAPI(object):
     token = ''
@@ -29,10 +34,9 @@ class SaltAPI(object):
         }
         loginurl = self.__url + restful["login"]
         req = requests.post(loginurl, data=data, headers=self.__header, verify=False)
-        print(req)
-
         try:
             self.token = req.json()["return"][0]["token"]
+            print(self.token)
             return self.token
         except KeyError:
             raise KeyError
