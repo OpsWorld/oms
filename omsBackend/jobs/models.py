@@ -15,6 +15,7 @@ DEPLOY_STATUS = {
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
+    showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -50,6 +51,7 @@ class DeployJobs(models.Model):
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
     deploy_path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
+    content = models.TextField(null=True, blank=True, verbose_name=u'更新内容')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')

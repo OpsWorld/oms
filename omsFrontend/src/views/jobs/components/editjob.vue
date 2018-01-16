@@ -1,12 +1,15 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card style="max-width: 800px">
-      <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="研发可见" prop="showdev">
+          <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
         <el-form-item label="配置环境">
           <el-tabs v-model="actionTab" type="card" editable @tab-add="addenvForm=true" @tab-remove="removeTab">
@@ -76,6 +79,14 @@ export default {
         code_repo: 'svn',
         code_url: '',
         desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        code_url: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ]
       },
       addenvForm: false,
       envForm: {},

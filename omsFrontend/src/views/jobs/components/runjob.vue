@@ -6,7 +6,7 @@
           <div slot="header">
             <a class="jobname">{{jobs.name}}</a>
           </div>
-          <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
+          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
             <el-form-item label="发布环境" prop="env">
               <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
                 <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
@@ -30,8 +30,11 @@
             <el-form-item label="发布路径" prop="deploy_path">
               <el-input v-model="ruleForm.deploy_path" disabled></el-input>
             </el-form-item>
+            <el-form-item label="更新内容" prop="content">
+              <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+            </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm(ruleForm)">开始构建</el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')">开始构建</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -124,7 +127,22 @@ export default {
         hosts: [],
         version: 'HEAD',
         deploy_path: '',
+        content: '',
         action_user: localStorage.getItem('username')
+      },
+      rules: {
+        env: [
+          { required: true, message: '请输入正确的内容', trigger: 'change' }
+        ],
+        hosts: [
+          { required: true, type: 'array', message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        version: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ]
       },
       envs: [],
       deploy_envs: [],
@@ -200,18 +218,25 @@ export default {
       this.fetchDeployJobData()
     },
     submitForm(formdata) {
-      this.ruleForm.hosts = this.ruleForm.hosts.join()
-      postDeployJob(formdata).then(response => {
-        this.$message({
-          message: '构建成功，系统正在玩命发布中 ...',
-          type: 'success'
-        })
-        this.fetchDeployJobData()
-        this.resetForm('ruleForm')
-      }).catch(error => {
-        this.$message.error('构建失败，请检查参数是否正确！')
-        this.resetForm('ruleForm')
-        console.log(error)
+      this.$refs[formdata].validate((valid) => {
+        if (valid) {
+          this.ruleForm.hosts = this.ruleForm.hosts.join()
+          postDeployJob(this.ruleForm).then(response => {
+            this.$message({
+              message: '构建成功，系统正在玩命发布中 ...',
+              type: 'success'
+            })
+            this.fetchDeployJobData()
+            this.resetForm('ruleForm')
+          }).catch(error => {
+            this.$message.error('构建失败，请检查参数是否正确！')
+            this.resetForm(formdata)
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     },
     resetForm(formName) {

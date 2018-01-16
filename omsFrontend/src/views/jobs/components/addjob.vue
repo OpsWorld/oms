@@ -8,6 +8,9 @@
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="研发可见" prop="showdev">
+          <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </el-form-item>
         <el-form-item label="配置环境">
           <el-tabs v-model="actionTab" type="card" editable @tab-add="addenvForm=true" @tab-remove="removeTab">
             <el-tab-pane v-for="item in TabValues" :key="item.name" :label="item.title" :name="item.name">
@@ -22,7 +25,7 @@
                   <el-form-item label="发布主机">
                     <el-tag v-for="host in item.content.hosts" :key="host" style="margin-right: 5px">{{host}}</el-tag>
                   </el-form-item>
-                  <el-form-item label="描述">
+                  <el-form-item label="更新内容">
                     <span>{{item.content.desc}}</span>
                   </el-form-item>
                 </el-form>
@@ -74,6 +77,7 @@ export default {
         name: '',
         code_repo: 'svn',
         code_url: '',
+        showdev: false,
         desc: ''
       },
       rules: {
