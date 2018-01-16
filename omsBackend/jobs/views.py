@@ -7,6 +7,7 @@ from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSeri
 from celery.result import AsyncResult
 from rest_framework.response import Response
 from rest_framework import status
+from omsBackend.settings import sapi
 
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
@@ -29,21 +30,18 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
         for work in deploy_serializer.data:
             j_id = work['j_id']
             j = DeployJobs.objects.get(j_id=j_id)
-            job = AsyncResult(j_id)
-            if job.ready():  # check task state: true/false
-                try:
-                    result = job.get(timeout=1)
-                    print(result)
-                    if job.state in ['PENDING ','STARTED ']:
-                        j.deploy_status = 'deploy'
-                    elif job.state == 'SUCCESS':
-                        j.deploy_status = 'success'
-                    else:
-                        j.deploy_status = 'failed'
-                    j.save()
-                except:
-                    pass
+            jobs = sapi.check_job(j_id)
+            job_status = []
+            for i in jobs.values():
+                job_status.append(i)
 
+            if True in job_status:
+                j.deploy_status = 'success'
+            else:
+                j.deploy_status = 'failed'
+
+            j.result = jobs
+            j.save()
         queryset = DeployJobs.objects.all().order_by('-create_time')
         serializer = DeployJobsSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)

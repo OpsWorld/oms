@@ -118,7 +118,8 @@ class SaltAPI(object):
 
         prefix = "{0}/{1}".format(restful["jobs"], jid)
         content = self.salt_request(None, prefix)
-        return content
+        ret = content['info'][0]['Result']
+        return ret
 
     def running_jobs(self):
         '''
@@ -130,12 +131,23 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
+    def check_job(self,jid):
+        '''
+        检查任务是否已经执行并成功退出
+        '''
+
+        data = {'client': 'runner', 'fun': 'jobs.exit_success', 'jid': jid}
+        content = self.salt_request(data)
+        ret = content['return'][0]
+        return ret
+
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    cmd = 'for i in `seq 5`;do sleep 1; echo $i;done'
+    cmd = 'ls /;sleep 10;ls /tmp'
     jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
-    print(sapi.check_jid(jid))
+    print(jid)
+    print(sapi.check_job(jid))
 
 
 if __name__ == '__main__':
