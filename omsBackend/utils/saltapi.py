@@ -150,13 +150,25 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
+    def get_minion_info(self, tgt, args=('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')):
+        '''
+        获取远程主机信息
+        '''
+
+        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.items'}
+        content = self.salt_request(data)
+        items = content['return'][0][tgt]
+        ret = dict()
+        for item in args:
+            ret[item] = items[item]
+        return ret
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'ls /'
     # jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.minions_status())
+    print(sapi.get_minion_info('sh-aa-01'))
 
 
 if __name__ == '__main__':

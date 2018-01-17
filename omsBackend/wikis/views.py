@@ -6,6 +6,7 @@ from wikis.models import Wiki
 from wikis.serializers import WikiSerializer
 from rest_framework.filters import SearchFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from dry_rest_permissions.generics import DRYPermissions
 
 class WikiViewSet(viewsets.ModelViewSet):
     queryset = Wiki.objects.all().order_by('-update_time')
@@ -13,4 +14,5 @@ class WikiViewSet(viewsets.ModelViewSet):
     filter_backends = (SearchFilter,DjangoFilterBackend)
     search_fields = ['title', 'content']
     filter_fields = ['create_user__username', 'type__name']
+    permission_classes = (DRYPermissions,)
 

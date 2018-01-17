@@ -212,7 +212,7 @@ LOGGING = {
         },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'NOTSET',
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },
@@ -226,6 +226,7 @@ LOGGING = {
         'django': {
             'handlers': ['console'],
             'propagate': True,
+            'level': 'NOTSET',
         },
         'celery': {
             'handlers': ['celery', 'console'],

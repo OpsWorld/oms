@@ -11,6 +11,7 @@ DEPLOY_STATUS = {
     "failed": u"发布失败"
 }
 
+admin_groups = ['admin','OMS_Super_Admin']
 
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
@@ -27,6 +28,35 @@ class Jobs(models.Model):
         verbose_name = u'项目或任务'
         verbose_name_plural = u'项目或任务'
 
+    @staticmethod
+    def has_read_permission(request):
+        return True
+
+    def has_object_read_permission(self, request):
+        groups = User.objects.get(username=request.user).groups.all()
+        admin_list = [group.name for group in groups]
+
+        # 求交集
+        is_admin = [i for i in admin_list if i in admin_groups]
+        print(is_admin)
+        if len(is_admin) > 0 or self.showdev:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def has_write_permission(request):
+        return True
+
+    def has_object_write_permission(self, request):
+        return True
+
+    @staticmethod
+    def has_update_permission(request):
+        return True
+
+    def has_object_update_permission(self, request):
+        return True
 
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
