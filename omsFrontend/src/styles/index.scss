@@ -218,3 +218,15 @@ li {
   list-style-type: none;
   padding-bottom: 3px;
 }
+
+.runlog {
+  padding: 0 20px;
+  background-color: #000;
+  border: 1px solid rgba(0, 255, 0, 0.41);
+  border-radius: 5px;
+  color: #00ff00;
+  .host {
+    color: #fa11ff;
+    font-size: 18px;
+  }
+}

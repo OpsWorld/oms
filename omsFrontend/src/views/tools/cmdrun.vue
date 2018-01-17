@@ -20,7 +20,7 @@
         </el-form-item>
 
         <div class="runlog" v-for="item in job_results" :key="item.id">
-          <p>-- {{ item.host }} --</p>
+          <p class="host">{{ item.host }}</p>
           <pre>{{ item.data }}</pre>
         </div>
       </el-form>
@@ -65,7 +65,7 @@ export default {
         ]
       },
       commands: [
-        { name: '连接', cmd: 'netstat -nt' },
+        { name: '连接数', cmd: 'netstat -nt' },
         { name: '磁盘', cmd: 'df -h' },
         { name: '内存', cmd: 'free -m' },
         {
@@ -95,8 +95,11 @@ export default {
         if (valid) {
           getCmdrun(this.ruleForm).then(response => {
             this.jid = response.data.results
+            console.log(this.jid)
             this.running = this.showresult = true
-            this.cmdrun_result = setInterval(this.getResult(), 3000)
+            this.cmdrun_result = setInterval(() => {
+              this.getResult(this.jid)
+            }, 2000)
           })
         } else {
           console.log('error submit!!')
@@ -104,10 +107,9 @@ export default {
         }
       })
     },
-    getResult() {
-      getSaltResult(this.jid).then(response => {
+    getResult(jid) {
+      getSaltResult(jid).then(response => {
         const data = response.data.results
-        console.log(response)
         const a = []
         Object.keys(data).map(function(k) {
           a.push({ host: k, data: data[k] })
@@ -132,14 +134,5 @@ export default {
 <style lang='scss'>
   .runcmd {
     width: 80%;
-  }
-
-  .runlog {
-    padding: 0 20px;
-    margin-left: 20px;
-    background-color: #000;
-    border: 1px solid rgba(0, 255, 0, 0.41);
-    border-radius: 5px;
-    color: #00ff00;
   }
 </style>

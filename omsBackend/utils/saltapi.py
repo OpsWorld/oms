@@ -165,11 +165,11 @@ class SaltAPI(object):
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    cmd = 'ls /'
-    tgt = ['sh-aa-01','bj-aa-02']
-    jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
-    print(jid)
-    #print(sapi.remote_server_info('sh-aa-01',('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')))
+    # cmd = 'netstat'
+    # tgt = ['sh-aa-01','bj-aa-02']
+    # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
+    # print(jid)
+    print(sapi.check_job(20180117175736250021))
 
 
 if __name__ == '__main__':

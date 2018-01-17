@@ -73,7 +73,7 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button @click="showJobResult(scope.row.result)" type="success" size="mini">查看结果</el-button>
+                  <el-button @click="showJobResult(scope.row.result)" type="success" size="mini" :disabled="!scope.row.result">查看结果</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -102,7 +102,7 @@
     <el-dialog :visible.sync="showresult">
       <div>
         <div class="runlog" v-for="item in job_results" :key="item.id">
-          <p>-- {{ item.host }} --</p>
+          <p class="host">{{ item.host }}</p>
           <pre>{{ item.data }}</pre>
         </div>
       </div>
@@ -220,7 +220,9 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
+          this.ruleForm.hosts = this.ruleForm.hosts.join()
           postDeployJob(this.ruleForm).then(response => {
+            console.log(response.data.j_id)
             this.$message({
               message: '构建成功，系统正在玩命发布中 ...',
               type: 'success'
@@ -296,13 +298,5 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
-  }
-
-  .runlog {
-    padding: 0 20px;
-    background-color: #000;
-    border: 1px solid rgba(0, 255, 0, 0.41);
-    border-radius: 5px;
-    color: #00ff00;
   }
 </style>

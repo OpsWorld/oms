@@ -38,8 +38,7 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         deploy_path = validated_data["deploy_path"]
         runcmd = 'cd %s;svn up -r %s' % (deploy_path,version)
         cmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
-        print(cmd)
-        jid = sapi.remote_cmd(tgt=hosts, fun='cmd.run', arg=cmd)
+        jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=cmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()

@@ -29,14 +29,15 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
         for work in deploy_serializer.data:
             j_id = work['j_id']
             j = DeployJobs.objects.get(j_id=j_id)
-            job_results = sapi.get_result(j_id)
+            job_status = sapi.check_job(j_id)
 
-            if job_results:
+            if  list(set(job_status.values()))[0]:
+                job_results = sapi.get_result(j_id)
+                j.result = job_results
                 j.deploy_status = 'success'
             else:
                 j.deploy_status = 'deploy'
 
-            j.result = job_results
             j.save()
         queryset = DeployJobs.objects.all().order_by('-create_time')
         serializer = DeployJobsSerializer(queryset, many=True, context={'request': request})
