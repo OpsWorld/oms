@@ -102,7 +102,7 @@
     <el-dialog :visible.sync="showresult">
       <div>
         <div class="runlog" v-for="item in job_results" :key="item.id">
-          <p>{{ item.host }}</p>
+          <p>-- {{ item.host }} --</p>
           <pre>{{ item.data }}</pre>
         </div>
       </div>

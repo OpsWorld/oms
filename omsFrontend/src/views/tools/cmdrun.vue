@@ -20,7 +20,7 @@
         </el-form-item>
 
         <div class="runlog" v-for="item in job_results" :key="item.id">
-          <p>{{ item.host }}</p>
+          <p>-- {{ item.host }} --</p>
           <pre>{{ item.data }}</pre>
         </div>
       </el-form>
@@ -62,9 +62,6 @@ export default {
         cmd: [
           { required: true, message: '请输入命令', trigger: 'blur' },
           { validator: cmdRule, trigger: 'blur' }
-        ],
-        hosts: [
-          { required: true, type: 'array', message: '请选择主机', trigger: 'change' }
         ]
       },
       commands: [
@@ -82,7 +79,7 @@ export default {
       ],
       denycmd: ['rm', 'rf', 'shutdown', 'reboot', 'init', 'halt', 'rmdir', 'mkdir', 'iptables', 'mv', 'wget', 'mk', '>', 'dev', '&', 'dd', '^'],
       jid: '',
-      job_results: [],
+      job_results: undefined,
       running: false,
       showresult: false,
       cmdrun_result: ''
@@ -95,6 +92,7 @@ export default {
       this.results = []
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.ruleForm.hosts = this.ruleForm.hosts.join()
           getCmdrun(this.ruleForm).then(response => {
             this.jid = response.data.results
             this.running = this.showresult = true
@@ -109,6 +107,7 @@ export default {
     getResult() {
       getSaltResult(this.jid).then(response => {
         const data = response.data.results
+        console.log(response)
         const a = []
         Object.keys(data).map(function(k) {
           a.push({ host: k, data: data[k] })
