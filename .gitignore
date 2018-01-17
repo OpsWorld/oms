@@ -10,3 +10,4 @@ yarn-error.log*
 node_modules/
 package-lock.json
 *.db
+.vscode/
