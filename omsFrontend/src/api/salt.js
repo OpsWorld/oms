@@ -22,3 +22,18 @@ export function getMinionInfo(key_id) {
     method: 'get'
   })
 }
+
+export function getCmdrun(data) {
+  return request({
+    url: apiURL.cmdrun,
+    method: 'post',
+    data
+  })
+}
+
+export function getSaltResult(jid) {
+  return request({
+    url: apiURL.get_result + jid,
+    method: 'get'
+  })
+}

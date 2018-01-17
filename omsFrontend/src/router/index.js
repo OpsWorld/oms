@@ -135,6 +135,7 @@ export const asyncRouterMap = [
     icon: 'cogs',
     redirect: 'upload',
     children: [
+      { path: 'cmdrun', component: _import('tools/cmdrun'), name: '远程命令执行' },
       { path: 'upload', component: _import('tools/upload'), name: '上传列表' },
       { path: 'test', component: _import('tools/test'), name: '测试页面' }
     ]

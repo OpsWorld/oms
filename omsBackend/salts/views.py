@@ -7,15 +7,33 @@ from omsBackend.settings import sapi
 
 @api_view()
 def get_all_key(request):
-    date = sapi.list_key()
-    return Response({"results": date})
+    data = sapi.list_key()
+    count = len(data)
+    return Response({"results": data, "count": count})
 
 @api_view()
 def minions_status(request):
-    date = sapi.minions_status()
-    return Response({"results": date})
+    data = sapi.minions_status()
+    count = len(data)
+    return Response({"results": data, "count": count})
 
 @api_view()
 def get_minion_info(request, key_id):
-    date = sapi.get_minion_info(key_id)
-    return Response({"results": date})
+    data = sapi.get_minion_info(key_id)
+    count = len(data)
+    return Response({"results": data, "count": count})
+
+@api_view(['POST'])
+def cmdrun(request):
+    if request.method == 'POST':
+        hosts = request.data["hosts"]
+        cmd = request.data["cmd"]
+        data = sapi.remote_cmd(tgt=hosts, fun='cmd.run', arg=cmd)
+        count = len(data)
+        return Response({"results": data, "count": count})
+
+@api_view()
+def get_result(request,jid):
+    data = sapi.get_result(jid)
+    count = len(data)
+    return Response({"results": data, "count": count})

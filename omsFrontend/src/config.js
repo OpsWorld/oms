@@ -100,5 +100,7 @@ module.exports = {
   // salt
   get_all_key: `${url}/api/salts/get_all_key/`,
   minions_status: `${url}/api/salts/minions_status/`,
-  get_minion_info: `${url}/api/salts/get_minion_info/`
+  get_minion_info: `${url}/api/salts/get_minion_info/`,
+  cmdrun: `${url}/api/salts/cmdrun/`,
+  get_result: `${url}/api/salts/get_result/`
 }

@@ -168,7 +168,7 @@ def main():
     # cmd = 'ls /'
     # jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.get_minion_info('sh-aa-01'))
+    print(sapi.list_key())
 
 
 if __name__ == '__main__':

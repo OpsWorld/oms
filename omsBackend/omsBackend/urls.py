@@ -16,7 +16,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^api/routers/(?P<username>\w+)', routers, name="myrouter"),
 
     # salt
-    url(r'^api/salt/', include('salts.urls')),
+    url(r'^api/salts/', include('salts.urls')),
 
     # 用户认证
     url(r'^api/changepasswd/', PasswordChangeView.as_view(), name='changepasswd'),
