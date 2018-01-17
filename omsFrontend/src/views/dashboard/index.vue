@@ -25,11 +25,15 @@
               </div>
               <div class='progress-item'>
                 <span>第三支付对接</span>
-                <el-progress :percentage="99"></el-progress>
+                <el-progress :percentage="100"></el-progress>
               </div>
               <div class='progress-item'>
                 <span>文档系统</span>
-                <el-progress :percentage="88"></el-progress>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>发布系统</span>
+                <el-progress :percentage="50"></el-progress>
               </div>
             </el-card>
             <el-card class="box-card-card">
@@ -44,11 +48,6 @@
                 <span>cmdb</span>
                 <el-progress :percentage="0"></el-progress>
               </div>
-              <div class='progress-item'>
-                <span>发布系统</span>
-                <el-progress :percentage="0"></el-progress>
-              </div>
-
             </el-card>
 
           </div>
