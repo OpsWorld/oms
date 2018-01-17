@@ -220,7 +220,6 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          this.ruleForm.hosts = this.ruleForm.hosts.join()
           postDeployJob(this.ruleForm).then(response => {
             this.$message({
               message: '构建成功，系统正在玩命发布中 ...',

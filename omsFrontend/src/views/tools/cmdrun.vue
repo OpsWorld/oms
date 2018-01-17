@@ -65,7 +65,7 @@ export default {
         ]
       },
       commands: [
-        { name: '端口', cmd: 'netstat -tpnl' },
+        { name: '连接', cmd: 'netstat -nt' },
         { name: '磁盘', cmd: 'df -h' },
         { name: '内存', cmd: 'free -m' },
         {
@@ -82,7 +82,8 @@ export default {
       job_results: undefined,
       running: false,
       showresult: false,
-      cmdrun_result: ''
+      cmdrun_result: '',
+      selecthosts: []
     }
   },
   created() {
@@ -92,7 +93,6 @@ export default {
       this.results = []
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.ruleForm.hosts = this.ruleForm.hosts.join()
           getCmdrun(this.ruleForm).then(response => {
             this.jid = response.data.results
             this.running = this.showresult = true

@@ -96,12 +96,12 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_cmd(self, tgt, fun, client='local_async', expr_form='glob', arg='', **kwargs):
+    def remote_cmd(self, tgt, fun, client='local_async', expr_form='list', arg='', **kwargs):
         '''
         异步执行远程命令、部署模块
         '''
 
-        data = {'client': client, 'fun': fun, 'tgt': tgt, 'expr_form': expr_form, 'arg': arg}
+        data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
         content = self.salt_request(data)
         ret = content['return'][0]['jid']
         return ret
@@ -150,7 +150,7 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def get_minion_info(self, tgt, args=('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')):
+    def remote_server_info(self, tgt=(), args=('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')):
         '''
         获取远程主机信息
         '''
@@ -165,10 +165,11 @@ class SaltAPI(object):
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    # cmd = 'ls /'
-    # jid = sapi.remote_cmd(tgt='sh-aa-01', fun='cmd.run', arg=cmd)
-    # print(jid)
-    print(sapi.list_key())
+    cmd = 'ls /'
+    tgt = ['sh-aa-01','bj-aa-02']
+    jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
+    print(jid)
+    #print(sapi.remote_server_info('sh-aa-01',('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')))
 
 
 if __name__ == '__main__':
