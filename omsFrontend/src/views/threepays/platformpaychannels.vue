@@ -32,7 +32,7 @@
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="editComplete(scope.row)" type="primary" size="mini"
-                         v-if="paychannel_btn_change_complete||role==='super'">
+                         v-if="platformpaychannels_btn_change_complete||role==='super'">
                 更新进度
               </el-button>
             </template>
@@ -91,7 +91,7 @@ export default {
       limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
-      paychannel_btn_change_complete: false,
+      platformpaychannels_btn_change_complete: false,
       completeForm: false,
       CompleteForm: {
         id: '',
@@ -111,7 +111,7 @@ export default {
     ])
   },
   created() {
-    this.paychannel_btn_change_complete = this.elements['支付通道列表-更新进度']
+    this.platformpaychannels_btn_change_complete = this.elements['对接通道进度-更新进度']
     this.fetchData()
     this.fetchPlatformData()
   },
