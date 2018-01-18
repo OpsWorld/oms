@@ -136,7 +136,11 @@ export default {
   computed: {
     ...mapGetters([
       'allkeys'
+      //      'allminions'
     ])
+  },
+  created() {
+    this.getAllminions()
   },
   methods: {
     getAllkeys() {
@@ -145,7 +149,6 @@ export default {
     getAllminions() {
       this.getminions = false
       getAllminionStatus().then(response => {
-        console.log(response)
         this.status = false
         this.getminions = true
         this.allminions = response.data.results

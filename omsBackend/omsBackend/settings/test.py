@@ -39,8 +39,9 @@ SK_ACOUNT = {
 #SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
 SK = 'skype'
 
+REDIS_URL = 'redis://192.168.6.99:6379/'
 # celery配置
-CELERY_BROKER_URL = 'redis://192.168.10.99:6379/0'
+CELERY_BROKER_URL = REDIS_URL + '0'
 
 # celery结果返回，可用于跟踪结果
 CELERY_RESULT_BACKEND = 'django-db'
@@ -51,3 +52,13 @@ CELERY_TASK_SERIALIZER = 'json'
 
 # celery时区设置，使用settings中TIME_ZONE同样的时区
 CELERY_TIMEZONE = TIME_ZONE
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL + '1',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
