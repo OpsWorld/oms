@@ -276,7 +276,7 @@ export default {
           this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
           const messageForm = {
-            action_user: this.rowdata.action_user + ',' + this.ticketData.follower.join(),
+            action_user: this.rowdata.action_user,
             title: '【工单更换指派人】' + this.ticketData.title,
             message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.rowdata.action_user}\n工单地址: ${window.location.href}`
           }
