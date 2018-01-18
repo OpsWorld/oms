@@ -48,6 +48,8 @@ class ThreePayCommentViewSet(viewsets.ModelViewSet):
 
 
 class PlatformPayChannelViewSet(viewsets.ModelViewSet):
-    queryset = PlatformPayChannel.objects.all().order_by('-id')
+    queryset = PlatformPayChannel.objects.all().order_by('-complete')
     serializer_class = PlatformPayChannelSerializer
     filter_fields = ['platform__name']
+    ordering_fields = ('type', 'complete')
+

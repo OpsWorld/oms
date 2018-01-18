@@ -67,9 +67,6 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="已对接通道" name="platform">
-
-            </el-tab-pane>
           </el-tabs>
         </el-card>
       </el-col>
@@ -236,20 +233,6 @@
       <edit-paychannel :rowdata="paychannels" @formdata="fetchPayChannelData"></edit-paychannel>
     </el-dialog>
 
-    <el-dialog :visible.sync="completeForm" width="30%">
-      <el-form label-width="100px">
-        <el-form-item :model="CompleteForm" label="完成百分比">
-          <el-slider
-            v-model="CompleteForm.complete"
-            :step="10">
-          </el-slider>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
     <el-dialog :visible.sync="daifuForm" width="30%">
       <el-form :model="CommentForm" label-width="100px">
         <el-form-item label="代付测试金额" props="content">
@@ -267,7 +250,7 @@
 import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
 import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
 import { getThreePayEnclosure, postThreePayEnclosure, deleteThreePayEnclosure } from 'api/threeticket'
-import { postThreePayComment, getThreePayComment, getPlatformPayChannel, putPlatformPayChannel } from 'api/threeticket'
+import { postThreePayComment, getThreePayComment } from 'api/threeticket'
 import { getPayChannel, deletePayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
 import addPaychannel from './components/addPaychannel.vue'
@@ -295,7 +278,6 @@ export default {
       completeForm: false,
       daifuForm: false,
       paychannel_btn_delete_channel: false,
-      paychannel_btn_change_complete: false,
       platformForm: {
         name: '',
         ipaddr: '',
@@ -361,15 +343,7 @@ export default {
         content: 0,
         create_user: localStorage.getItem('username')
       },
-      CompleteForm: {
-        id: '',
-        platform: '',
-        type: '',
-        complete: 0
-      },
-      comments: [],
-      paychannelname: '',
-      dynamicPlatformChannels: []
+      comments: []
     }
   },
   computed: {
@@ -380,7 +354,6 @@ export default {
   },
   created() {
     this.paychannel_btn_delete_channel = this.elements['支付通道列表-删除通道']
-    this.paychannel_btn_change_complete = this.elements['支付通道列表-更新进度']
     this.fetchPlatformData()
     this.fetchMerchantData()
     this.fetchPayChannelData()
@@ -407,14 +380,6 @@ export default {
       getPayChannel(this.listQuery).then(response => {
         this.dynamicChannels = response.data.results
         this.tabletotal = response.data.count
-      })
-    },
-    fetchPlatformPayChannelData() {
-      const parmas = {
-        platform__name: this.listQuery.platform__name
-      }
-      getPlatformPayChannel(parmas).then(response => {
-        this.dynamicPlatformChannels = response.data
       })
     },
     postPlatformForm() {
@@ -539,31 +504,6 @@ export default {
       this.formEdit = true
       this.showbtn = false
     },
-    editComplete(row) {
-      this.completeForm = true
-      this.CompleteForm = row
-    },
-    changeComplete() {
-      putPlatformPayChannel(this.CompleteForm.id, this.CompleteForm).then(response => {
-        this.$message({
-          type: 'success',
-          message: '更新成功!'
-        })
-        const messageForm = {
-          action_user: `${this.CommentForm.create_user}`,
-          title: '【通道完成进度】',
-          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}`
-        }
-        postSendmessage(messageForm)
-        this.completeForm = false
-        this.fetchPlatformPayChannelData()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '更新失败'
-        })
-      })
-    },
     editDaifu(row) {
       this.daifuForm = true
       this.CommentForm.ticket = row.id
@@ -626,7 +566,6 @@ export default {
         this.enclosureForm.ticket = this.listQuery.platform__name = data.name
         this.listQuery.merchant__name = ''
         this.EnclosureData()
-        this.fetchPlatformPayChannelData()
       }
       this.fetchPayChannelData()
     },

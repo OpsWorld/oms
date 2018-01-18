@@ -3,7 +3,13 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
+          <el-select v-model="platform" placeholder="请选择平台进行筛选" @change="changePlatform">
+            <el-option
+              v-for="item in platforms"
+              :key="item.id"
+              :value="item.name">
+            </el-option>
+          </el-select>
         </div>
         <div class="table-search">
           <el-input
@@ -15,22 +21,23 @@
         </div>
       </div>
       <div>
-                     <el-table :data="tableData" border style="width: 100%">
-                <el-table-column prop='platform' label='平台' width="50"></el-table-column>
-                <el-table-column prop='type' label='通道类型' width="80"></el-table-column>
-                <el-table-column prop='complete' label='完成百分比' width="100">
-                  <template slot-scope="scope">
-                    <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button @click="editComplete(scope.row)" type="primary" size="mini"  v-if="paychannel_btn_change_complete||role==='super'">
-                      更新进度
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
+        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
+          <el-table-column prop='platform' label='平台'></el-table-column>
+          <el-table-column prop='type' label='通道类型'></el-table-column>
+          <el-table-column prop='complete' label='完成百分比' sortable="custom">
+            <template slot-scope="scope">
+              <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button @click="editComplete(scope.row)" type="primary" size="mini"
+                         v-if="paychannel_btn_change_complete||role==='super'">
+                更新进度
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <div class="table-pagination">
         <el-pagination
@@ -44,15 +51,31 @@
         </el-pagination>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="completeForm" width="30%">
+      <el-form label-width="100px">
+        <el-form-item :model="CompleteForm" label="完成百分比">
+          <el-slider
+            v-model="CompleteForm.complete"
+            :step="10">
+          </el-slider>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getPlatform, postPlatform, putPlatform, deletePlatform } from '@/api/threeticket'
+import { getPlatformPayChannel, putPlatformPayChannel, getPlatform } from 'api/threeticket'
 import { LIMIT } from '@/config'
+import { mapGetters } from 'vuex'
+import { postSendmessage } from 'api/tool'
 
 export default {
-  components: { },
+  components: {},
   data() {
     return {
       tableData: [],
@@ -62,74 +85,82 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        name__contains: this.searchdata
+        platform__name: '',
+        ordering: ''
       },
       limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
-      addForm: false,
-      editForm: false,
-      viewForm: false,
-      groupName: '',
-      rowdata: {}
+      paychannel_btn_change_complete: false,
+      completeForm: false,
+      CompleteForm: {
+        id: '',
+        platform: '',
+        type: '',
+        complete: 0
+      },
+      platform: '',
+      platforms: []
     }
   },
 
+  computed: {
+    ...mapGetters([
+      'elements',
+      'role'
+    ])
+  },
   created() {
+    this.paychannel_btn_change_complete = this.elements['支付通道列表-更新进度']
     this.fetchData()
+    this.fetchPlatformData()
   },
 
   methods: {
     fetchData() {
-      getPlatform(this.listQuery).then(response => {
+      getPlatformPayChannel(this.listQuery).then(response => {
         this.tableData = response.data.results
-        this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postPlatform(formdata).then(response => {
+
+    fetchPlatformData() {
+      getPlatform().then(response => {
+        this.platforms = [{ 'name': '全部' }].concat(response.data)
+      })
+    },
+
+    changeComplete() {
+      putPlatformPayChannel(this.CompleteForm.id, this.CompleteForm).then(response => {
         this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
+          type: 'success',
+          message: '更新成功!'
         })
+        const messageForm = {
+          action_user: `${this.CommentForm.create_user}`,
+          title: '【通道完成进度】',
+          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}`
+        }
+        postSendmessage(messageForm)
+        this.completeForm = false
         this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
-    },
-    editGroupSubmit(formdata) {
-      putPlatform(this.rowdata.id, formdata).then(response => {
+      }).catch(() => {
         this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
+          type: 'info',
+          message: '更新失败'
         })
-        this.fetchData()
-        this.editForm = false
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
       })
     },
-    deleteGroup(id) {
-      deletePlatform(id).then(response => {
-        this.$message({
-          message: '恭喜你，删除成功',
-          type: 'success'
-        })
-        this.fetchData()
-      }).catch(error => {
-        this.$message.error('删除失败')
-        console.log(error)
-      })
+    editComplete(row) {
+      this.completeForm = true
+      this.CompleteForm = row
     },
-    closeEditForm() {
+    changePlatform(res) {
+      if (res === '全部') {
+        this.listQuery.platform__name = ''
+      } else {
+        this.listQuery.platform__name = res
+      }
       this.fetchData()
-    },
-    handleEdit(row) {
-      this.editForm = true
-      this.rowdata = row
     },
     searchClick() {
       this.fetchData()
@@ -140,6 +171,16 @@ export default {
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
+      this.fetchData()
+    },
+    handleSortChange(res) {
+      if (res.order === 'ascending') {
+        this.listQuery.ordering = res.prop
+      } else if (res.order === 'descending') {
+        this.listQuery.ordering = '-' + res.prop
+      } else {
+        this.listQuery.ordering = ''
+      }
       this.fetchData()
     }
   }
