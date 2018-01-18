@@ -144,6 +144,7 @@ export default {
     getAllminions() {
       this.getminions = false
       store.dispatch('getAllminions').then(response => {
+        this.status = false
         this.getminions = true
         this.tableData = this.allminions.up
         this.tabletotal = this.allminions.up.length
