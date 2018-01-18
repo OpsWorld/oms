@@ -120,6 +120,7 @@ export default {
     fetchData() {
       getPlatformPayChannel(this.listQuery).then(response => {
         this.tableData = response.data.results
+        this.tabletotal = response.data.count
       })
     },
 
