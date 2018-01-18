@@ -94,6 +94,16 @@ class SaltAPI(object):
         data = {'client': 'runner', 'fun': 'manage.status'}
         content = self.salt_request(data)
         ret = content['return'][0]
+        up = ret['up']
+        down = ret['down']
+        ups = []
+        downs = []
+        for host in up:
+            ups.append({'hostname': host, 'status': 'up'})
+        for host in down:
+            downs.append({'hostname': host, 'status': 'down'})
+        ret['up'] = ups
+        ret['down'] = downs
         return ret
 
     def remote_cmd(self, tgt, fun, client='local_async', expr_form='list', arg='', **kwargs):
@@ -169,7 +179,7 @@ def main():
     # tgt = ['sh-aa-01','bj-aa-02']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.check_job(20180117175736250021))
+    print(sapi.minions_status())
 
 
 if __name__ == '__main__':

@@ -11,6 +11,8 @@ const getters = {
   elements: state => state.user.elements,
   permission_routers: state => state.permission.routers,
   addRouters: state => state.permission.addRouters,
-  permissionMenus: state => state.user.permissionMenus
+  permissionMenus: state => state.user.permissionMenus,
+  allkeys: state => state.salt.allkeys,
+  allminions: state => state.salt.allminions
 }
 export default getters
