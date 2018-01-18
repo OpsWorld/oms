@@ -68,22 +68,7 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="已对接通道" name="platform">
-              <el-table :data="dynamicPlatformChannels" border style="width: 100%">
-                <el-table-column prop='platform' label='平台' width="50"></el-table-column>
-                <el-table-column prop='type' label='通道类型' width="80"></el-table-column>
-                <el-table-column prop='complete' label='完成百分比' width="100">
-                  <template slot-scope="scope">
-                    <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button @click="editComplete(scope.row)" type="primary" size="mini"  v-if="paychannel_btn_change_complete||role==='super'">
-                      更新进度
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
+
             </el-tab-pane>
           </el-tabs>
         </el-card>
