@@ -114,6 +114,7 @@
 import store from '@/store'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
+import { getAllminionStatus } from 'api/salt'
 
 export default {
   components: {},
@@ -128,13 +129,13 @@ export default {
       offset: '',
       pagesize: [10, 25, 50, 100],
       getminions: true,
-      searchdata: ''
+      searchdata: '',
+      allminions: {}
     }
   },
   computed: {
     ...mapGetters([
-      'allkeys',
-      'allminions'
+      'allkeys'
     ])
   },
   methods: {
@@ -143,12 +144,20 @@ export default {
     },
     getAllminions() {
       this.getminions = false
-      store.dispatch('getAllminions').then(response => {
+      getAllminionStatus().then(response => {
+        console.log(response)
         this.status = false
         this.getminions = true
+        this.allminions = response.data.results
         this.tableData = this.allminions.up
         this.tabletotal = this.allminions.up.length
       })
+      //      store.dispatch('getAllminions').then(response => {
+      //        this.status = false
+      //        this.getminions = true
+      //        this.tableData = this.allminions.up
+      //        this.tabletotal = this.allminions.up.length
+      //      })
     },
     searchClick() {
       this.fetchData()

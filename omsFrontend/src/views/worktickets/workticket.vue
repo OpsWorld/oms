@@ -34,7 +34,8 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange"
+                  @sort-change="handleSortChange">
           <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
           <el-table-column prop='ticketid' label='工单编号'>
             <template slot-scope="scope">
@@ -45,7 +46,7 @@
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
           <el-table-column prop='type' label='工单类型'></el-table-column>
-          <el-table-column prop='level' label='工单等级' sortable>
+          <el-table-column prop='level' label='工单等级' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-rate
@@ -56,26 +57,26 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='ticket_status' label='工单状态' sortable>
+          <el-table-column prop='ticket_status' label='工单状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-              <el-tag :type="TICKET_STATUS_TYPE[scope.row.ticket_status]">
-                {{TICKET_STATUS_TEXT[scope.row.ticket_status]}}
-              </el-tag>
+                <el-tag :type="TICKET_STATUS_TYPE[scope.row.ticket_status]">
+                  {{TICKET_STATUS_TEXT[scope.row.ticket_status]}}
+                </el-tag>
               </div>
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
           <el-table-column prop='action_user' label='工单指派者'></el-table-column>
           <el-table-column prop='edit_user' label='最新回复人'></el-table-column>
-          <el-table-column prop='create_time' label='工单创建时间' sortable>
+          <el-table-column prop='create_time' label='工单创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='update_time' label='工单更新时间' sortable>
+          <el-table-column prop='update_time' label='工单更新时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.update_time | parseDate}}</span>
@@ -94,7 +95,7 @@
             @current-change="handleCurrentChange"
             :current-page.sync="currentPage"
             :page-sizes="pagesize"
-            :page-size="limit"
+            :page-size="listQuery.limit"
             layout="total, sizes, prev, pager, next, jumper"
             :total="tabletotal">
           </el-pagination>
@@ -132,8 +133,6 @@ export default {
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
       ticket_status: '',
       pagesize: [10, 25, 50, 100],
       rowdata: {
@@ -143,10 +142,14 @@ export default {
       TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
       TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       listQuery: {
+        limit: LIMIT,
+        offset: '',
         ticketid: '',
+        ticket_status: '',
         create_user: '',
         action_user: '',
-        search: ''
+        search: '',
+        ordering: ''
       },
       workticketlist_btn_add: false,
       workticketlist_btn_change_status: false,
@@ -171,16 +174,7 @@ export default {
 
   methods: {
     fetchData() {
-      const parms = {
-        limit: this.limit,
-        offset: this.offset,
-        search: this.listQuery.search,
-        ticket_status: this.ticket_status,
-        ticketid: this.listQuery.ticketid,
-        create_user__username: this.listQuery.create_user,
-        action_user__username: this.listQuery.action_user
-      }
-      getWorkticket(parms).then(response => {
+      getWorkticket(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -189,15 +183,15 @@ export default {
       this.fetchData()
     },
     handleSizeChange(val) {
-      this.limit = val
+      this.listQuery.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = (val - 1) * LIMIT
+      this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
     statusChange(val) {
-      this.ticket_status = val
+      this.listQuery.ticket_status = val
       this.fetchData()
     },
     showMeCreate() {
@@ -214,7 +208,7 @@ export default {
       this.listQuery.create_user = ''
       this.listQuery.action_user = ''
       this.listQuery.search = ''
-      this.ticket_status = ''
+      this.listQuery.ticket_status = ''
       this.fetchData()
     },
     handleSelectionChange(val) {
@@ -235,8 +229,18 @@ export default {
           delete this.selectId[i]
         })
       }
-      setTimeout(this.fetchData, 3000)
+      setTimeout(this.fetchData, 2000)
       this.show_status = false
+    },
+    handleSortChange(res) {
+      if (res.order === 'ascending') {
+        this.listQuery.ordering = res.prop
+      } else if (res.order === 'descending') {
+        this.listQuery.ordering = '-' + res.prop
+      } else {
+        this.listQuery.ordering = ''
+      }
+      this.fetchData()
     }
   }
 }

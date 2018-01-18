@@ -4,6 +4,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from omsBackend.settings import sapi
+from django.views.decorators.cache import cache_page
 
 @api_view()
 def get_all_key(request):
@@ -11,6 +12,7 @@ def get_all_key(request):
     count = len(data)
     return Response({"results": data, "count": count})
 
+@cache_page(86400)
 @api_view()
 def minions_status(request):
     data = sapi.minions_status()
