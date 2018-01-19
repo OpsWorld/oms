@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 } else {
   CONFIG = {
-    apiUrl: 'http://127.0.0.1:8000',
+    apiUrl: 'http://192.168.3.215:8000',
     super_group: 'admin',
     wsurl: ws_scheme + '://127.0.0.1:8000'
   }
@@ -88,6 +88,7 @@ module.exports = {
   // tools
   sendmail: `${url}/api/sendmail/`,
   sendmessage: `${url}/api/sendmessage/`,
+  calenders: `${url}/api/calenders/`,
 
   // 知识收集平台
   wikis: `${url}/api/wikis/`,

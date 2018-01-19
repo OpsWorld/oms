@@ -42,3 +42,27 @@ export function postSendmessage(data) {
     data
   })
 }
+
+// calenders
+export function postCalender(data) {
+  return request({
+    url: apiURL.calenders,
+    method: 'post',
+    data
+  })
+}
+
+export function getCalender(query, id) {
+  return request({
+    url: id ? apiURL.calenders + id + '/' : apiURL.calenders,
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteCalender(id) {
+  return request({
+    url: apiURL.calenders + id + '/',
+    method: 'delete'
+  })
+}

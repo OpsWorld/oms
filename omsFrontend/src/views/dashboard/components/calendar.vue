@@ -1,12 +1,14 @@
 <template>
-  <div>
-    <full-calendar :events="calenderData" first-day='1' locale="zh" @eventClick="eventClick">
+  <div class="calendar">
+    <full-calendar :events="calenderData" first-day='1' locale="zh" @eventClick="eventClick" @changeMonth="changeMonth">
       <template slot="fc-header-left">
-        <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件</el-button>
+        <el-button v-if="addbtn" type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件
+        </el-button>
       </template>
     </full-calendar>
+
     <el-dialog :visible.sync="addEvent">
-      <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
         <el-form-item label="标题" prop="title">
           <el-input v-model="ruleForm.title"></el-input>
         </el-form-item>
@@ -65,18 +67,35 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <div id="clickcalendar" v-show="showcontent" class="calendarcontent" @mouseleave="showcontent=false">
+      <a style="font-size: 16px">详细内容
+        <el-tooltip style="margin-left: 10px" effect="dark" content="删除本事件" placement="right">
+          <el-button type="text" icon="el-icon-delete" @click="deleteSubmit"></el-button>
+        </el-tooltip>
+      </a>
+      <hr class="heng"/>
+      <div v-if="ruleForm.content">
+        <p>开始时间：{{ruleForm.start}}</p>
+        <p>结束时间：{{ruleForm.end}}</p>
+        <p>内容：{{ruleForm.content}}</p>
+      </div>
+      <div v-else>暂无内容</div>
+    </div>
   </div>
 </template>
 
 <script>
-import { getCalender, postCalender } from 'api/tool'
+import { getCalender, postCalender, deleteCalender } from 'api/tool'
 
 export default {
   components: {},
+  props: ['addbtn'],
   data() {
     return {
       addEvent: false,
       ruleForm: {
+        id: '',
         title: '',
         start: '',
         end: '',
@@ -89,8 +108,10 @@ export default {
       endTime: '',
       cssClasss: ['yellow', 'green', 'pink', 'violet', 'blue', 'red', 'tiffany'],
       listQuery: {
-        title: ''
-      }
+        start__gte: '',
+        end__lte: ''
+      },
+      showcontent: true
     }
   },
   created() {
@@ -104,9 +125,18 @@ export default {
       })
     },
     eventClick(event, jsEvent, pos) {
-      console.log('eventClick', event, pos)
+      this.showcontent = true
+      this.ruleForm = event
+      const obj = document.getElementById('clickcalendar')
+      obj.style.left = pos.left + 50 + 'px'
+      obj.style.top = pos.top + 100 + 'px'
     },
-    addSubmit(formName) {
+    changeMonth(start, end, current) {
+      this.listQuery.start__gte = start
+      this.listQuery.end__lte = end
+      this.fetchData()
+    },
+    addSubmit() {
       postCalender(this.ruleForm).then(response => {
         this.$message({
           message: '添加成功',
@@ -114,10 +144,8 @@ export default {
         })
         this.addEvent = false
         this.fetchData()
-        this.resetForm(formName)
       }).catch(error => {
         this.$message.error('添加失败')
-        this.resetForm(formName)
         console.log(error)
       })
     },
@@ -127,6 +155,19 @@ export default {
     chooseDate(res) {
       this.ruleForm.start = res[0]
       this.ruleForm.end = res[1]
+    },
+    deleteSubmit(formName) {
+      deleteCalender(this.ruleForm.id).then(response => {
+        this.$message({
+          message: '删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        this.resetForm(formName)
+        console.log(error)
+      })
     }
   }
 }
@@ -135,44 +176,57 @@ export default {
 <style lang="scss">
   @import "src/styles/variables.scss";
 
-  .showcolor {
-    position: absolute;
-    color: #ffffff;
-    width: 36px;
-    height: 36px;
-    line-height: 36px; // 文字垂直居中
-    // overflow:hidden;  // 文字垂直居中
-    // display: inline-block;
-    // text-align:center;
-    border-radius: 50%;
-    margin-left: 20px;
-  }
+  .calendar {
+    .showcolor {
+      position: absolute;
+      color: #ffffff;
+      width: 36px;
+      height: 36px;
+      line-height: 36px; // 文字垂直居中
+      // overflow:hidden;  // 文字垂直居中
+      // display: inline-block;
+      // text-align:center;
+      border-radius: 50%;
+      margin-left: 20px;
+    }
 
-  .yellow {
-    background-color: $yellow !important;
-  }
+    .yellow {
+      background-color: $yellow !important;
+    }
 
-  .green {
-    background-color: $green !important;
-  }
+    .green {
+      background-color: $green !important;
+    }
 
-  .pink {
-    background-color: $pink !important;
-  }
+    .pink {
+      background-color: $pink !important;
+    }
 
-  .violet {
-    background-color: $violet !important;
-  }
+    .violet {
+      background-color: $violet !important;
+    }
 
-  .blue {
-    background-color: $blue !important;
-  }
+    .blue {
+      background-color: $blue !important;
+    }
 
-  .red {
-    background-color: $red !important;
-  }
+    .red {
+      background-color: $red !important;
+    }
 
-  .tiffany {
-    background-color: $tiffany !important;
+    .tiffany {
+      background-color: $tiffany !important;
+    }
+
+    .calendarcontent {
+      position: absolute;
+      z-index: 1024;
+      width: 250px;
+      height: 200px;
+      background-color: #ffffff;
+      border-radius: 3px;
+      box-shadow: 1px 1px 10px 5px #888888;
+      padding: 0 5px;
+    }
   }
 </style>

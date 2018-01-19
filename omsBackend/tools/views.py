@@ -8,6 +8,7 @@ from tools.models import Upload, Sendmail, Sendmessage, Calender
 from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer,CalenderSerializer
 from users.models import User
 from tasks.tasks import send_to_skype, send_to_mail
+from tools.filters import CalenderFilter
 
 
 class UploadViewSet(viewsets.ModelViewSet):
@@ -67,3 +68,4 @@ class SendmessageViewSet(viewsets.ModelViewSet):
 class CalenderViewSet(viewsets.ModelViewSet):
     queryset = Calender.objects.all()
     serializer_class = CalenderSerializer
+    filter_class = CalenderFilter
