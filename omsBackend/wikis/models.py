@@ -23,3 +23,36 @@ class Wiki(models.Model):
     class Meta:
         verbose_name = u'wiki'
         verbose_name_plural = u'wiki'
+
+    @staticmethod
+    def has_read_permission(request):
+        return True
+
+    def has_object_read_permission(self, request):
+        return True
+
+    @staticmethod
+    def has_write_permission(request):
+        return True
+
+    def has_object_write_permission(self, request):
+        return True
+
+    @staticmethod
+    def has_update_permission(request):
+        return True
+
+    def has_object_update_permission(self, request):
+        return True
+        # groups = User.objects.get(username=request.user).groups.all()
+        # groups_list = [group.name for group in self.create_group.all()]
+        # admin_list = [group.name for group in groups]
+        #
+        # # 求交集
+        # is_admin = [i for i in admin_list if i in admin_groups]
+        # is_owner = [i for i in groups_list if i in admin_groups]
+        #
+        # if len(is_admin) > 0 or len(is_owner) > 0 or request.user == self.create_user:
+        #     return True
+        # else:
+        #     return False
