@@ -16,7 +16,7 @@
             <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
           </el-button-group>
 
-          <el-radio-group v-model="radio" @change="statusChange" style="margin-left: 20px">
+          <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
             <el-radio label="1">正在处理</el-radio>
             <el-radio label="2">已解决</el-radio>
@@ -190,7 +190,7 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    statusChange(val) {
+    changeStatus(val) {
       this.listQuery.ticket_status = val
       this.fetchData()
     },
@@ -232,11 +232,11 @@ export default {
       setTimeout(this.fetchData, 2000)
       this.show_status = false
     },
-    handleSortChange(res) {
-      if (res.order === 'ascending') {
-        this.listQuery.ordering = res.prop
-      } else if (res.order === 'descending') {
-        this.listQuery.ordering = '-' + res.prop
+    handleSortChange(val) {
+      if (val.order === 'ascending') {
+        this.listQuery.ordering = val.prop
+      } else if (val.order === 'descending') {
+        this.listQuery.ordering = '-' + val.prop
       } else {
         this.listQuery.ordering = ''
       }

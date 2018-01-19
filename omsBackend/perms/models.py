@@ -3,7 +3,6 @@
 
 from django.db import models
 from menus.models import Firstmenu, Secondmenu, Element
-from users.models import Group
 
 class UserMenuPerms(models.Model):
     group = models.CharField(max_length=64, unique=True, verbose_name=u'部门')

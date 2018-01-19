@@ -10,6 +10,12 @@
               :value="item.name">
             </el-option>
           </el-select>
+
+          <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
+            <el-radio label="0">未进行</el-radio>
+            <el-radio label="1">正在进行</el-radio>
+            <el-radio label="2">已完成</el-radio>
+          </el-radio-group>
         </div>
         <div class="table-search">
           <el-input
@@ -26,7 +32,8 @@
           <el-table-column prop='type' label='通道类型'></el-table-column>
           <el-table-column prop='complete' label='完成百分比' sortable="custom">
             <template slot-scope="scope">
-              <el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>
+              <el-progress :text-inside="true" :status="complete_status" :percentage="scope.row.complete"
+                           :stroke-width="18"></el-progress>
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -52,13 +59,14 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="completeForm" width="30%">
+    <el-dialog :visible.sync="completeForm" width="30%" @close="fetchData">
       <el-form label-width="100px">
         <el-form-item :model="CompleteForm" label="完成百分比">
           <el-slider
             v-model="CompleteForm.complete"
             :step="10">
           </el-slider>
+          <a>{{CompleteForm.complete}}%</a>
         </el-form-item>
         <el-form-item>
           <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
@@ -86,7 +94,10 @@ export default {
         limit: LIMIT,
         offset: '',
         platform__name: '',
-        ordering: ''
+        ordering: '',
+        complete: '',
+        complete__gt: 0,
+        complete__lt: 100
       },
       limit: LIMIT,
       offset: '',
@@ -100,7 +111,9 @@ export default {
         complete: 0
       },
       platform: '',
-      platforms: []
+      platforms: [],
+      radio: '1',
+      complete_status: 'exception'
     }
   },
 
@@ -155,11 +168,11 @@ export default {
       this.completeForm = true
       this.CompleteForm = row
     },
-    changePlatform(res) {
-      if (res === '全部') {
+    changePlatform(val) {
+      if (val === '全部') {
         this.listQuery.platform__name = ''
       } else {
-        this.listQuery.platform__name = res
+        this.listQuery.platform__name = val
       }
       this.fetchData()
     },
@@ -174,13 +187,32 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    handleSortChange(res) {
-      if (res.order === 'ascending') {
-        this.listQuery.ordering = res.prop
-      } else if (res.order === 'descending') {
-        this.listQuery.ordering = '-' + res.prop
+    handleSortChange(val) {
+      if (val.order === 'ascending') {
+        this.listQuery.ordering = val.prop
+      } else if (val.order === 'descending') {
+        this.listQuery.ordering = '-' + val.prop
       } else {
         this.listQuery.ordering = ''
+      }
+      this.fetchData()
+    },
+    changeStatus(val) {
+      if (val === '0') {
+        this.listQuery.complete = 0
+        this.listQuery.complete__gt = ''
+        this.listQuery.complete__lt = ''
+        this.complete_status = 'exception'
+      } else if (val === '2') {
+        this.listQuery.complete = 100
+        this.listQuery.complete__gt = ''
+        this.listQuery.complete__lt = ''
+        this.complete_status = 'success'
+      } else {
+        this.listQuery.complete = ''
+        this.listQuery.complete__gt = 0
+        this.listQuery.complete__lt = 100
+        this.complete_status = 'exception'
       }
       this.fetchData()
     }
