@@ -23,28 +23,35 @@
           </el-date-picker>
         </el-form-item>
         <!--<el-form-item label="选择时间" firstDayOfWeek="1">-->
-          <!--<el-time-select-->
-            <!--placeholder="起始时间"-->
-            <!--v-model="startTime"-->
-            <!--:picker-options="{-->
-              <!--start: '08:00',-->
-              <!--step: '01:00',-->
-              <!--end: '24:00',-->
-            <!--}">-->
-          <!--</el-time-select>-->
-          <!--<el-time-select-->
-            <!--placeholder="结束时间"-->
-            <!--v-model="endTime"-->
-            <!--:picker-options="{-->
-              <!--start: '08:00',-->
-              <!--step: '01:00',-->
-              <!--end: '24:00',-->
-              <!--minTime: startTime-->
-            <!--}">-->
-          <!--</el-time-select>-->
+        <!--<el-time-select-->
+        <!--placeholder="起始时间"-->
+        <!--v-model="startTime"-->
+        <!--:picker-options="{-->
+        <!--start: '08:00',-->
+        <!--step: '01:00',-->
+        <!--end: '24:00',-->
+        <!--}">-->
+        <!--</el-time-select>-->
+        <!--<el-time-select-->
+        <!--placeholder="结束时间"-->
+        <!--v-model="endTime"-->
+        <!--:picker-options="{-->
+        <!--start: '08:00',-->
+        <!--step: '01:00',-->
+        <!--end: '24:00',-->
+        <!--minTime: startTime-->
+        <!--}">-->
+        <!--</el-time-select>-->
         <!--</el-form-item>-->
-        <el-form-item label="类名" prop="cssClass">
-          <el-input v-model="ruleForm.cssClass"></el-input>
+        <el-form-item label="显示颜色" prop="cssClass">
+          <el-select v-model="ruleForm.cssClass" placeholder="请选择显示颜色">
+            <el-option
+              v-for="item in cssClasss"
+              :key="item"
+              :value="item">
+            </el-option>
+          </el-select>
+          <div :class="`${ruleForm.cssClass} showcolor`">cool</div>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addGroupSubmit('ruleForm')">立即创建</el-button>
@@ -57,7 +64,7 @@
 
 <script>
 export default {
-  components: {},
+  components: { },
   data() {
     return {
       addEvent: false,
@@ -65,23 +72,24 @@ export default {
         title: '',
         start: '',
         end: '',
-        cssClass: 'jimmy'
+        cssClass: 'violet'
       },
       events: [
         {
           title: '8:00-10:00 jimmy',
           start: '2018-01-15',
-          cssClass: 'jimmy'
+          cssClass: 'violet'
         },
         {
           title: '19:00-24:00 larry',
           start: '2018-01-15',
-          cssClass: 'larry'
+          cssClass: 'pink'
         }
       ],
       selectdate: '',
       startTime: '',
-      endTime: ''
+      endTime: '',
+      cssClasss: ['yellow', 'green', 'pink', 'violet', 'blue', 'red', 'tiffany']
     }
   },
   methods: {
@@ -99,11 +107,43 @@ export default {
 </script>
 
 <style lang="scss">
-  .jimmy {
-    background-color: #00ff8d !important;
+  @import "src/styles/variables.scss";
+
+  .showcolor {
+    position: absolute;
+    text-align:center;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    border-radius: 50%;
+    margin-left: 20px;
+  }
+  .yellow {
+    background-color: $yellow !important;
   }
 
-  .larry {
-    background-color: #c0dbff !important;
+  .green {
+    background-color: $green !important;
+  }
+
+  .pink {
+    background-color: $pink !important;
+  }
+
+  .violet {
+    background-color: $violet !important;
+  }
+
+  .blue {
+    background-color: $blue !important;
+  }
+
+  .red {
+    background-color: $red !important;
+  }
+
+  .tiffany {
+    background-color: $tiffany !important;
   }
 </style>

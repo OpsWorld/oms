@@ -15,10 +15,6 @@
   @include colorBtn($blue)
 }
 
-.light-blue-btn {
-  @include colorBtn($light-blue)
-}
-
 .red-btn {
   @include colorBtn($red)
 }
@@ -37,6 +33,10 @@
 
 .yellow-btn {
   @include colorBtn($yellow)
+}
+
+.violet-btn {
+  @include colorBtn($violet)
 }
 
 .pan-btn {
