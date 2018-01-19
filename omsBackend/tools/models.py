@@ -53,3 +53,22 @@ class Sendmessage(models.Model):
     class Meta:
         verbose_name = u'发送消息提醒'
         verbose_name_plural = u'发送消息提醒'
+
+
+class Calender(models.Model):
+    name = models.CharField(max_length=30, unique=True, verbose_name=u'名称')
+    title = models.CharField(max_length=30, verbose_name=u'标题')
+    start = models.CharField(max_length=30, verbose_name=u'开始时间')
+    end = models.CharField(max_length=30, verbose_name=u'开始时间')
+    cssClass = models.CharField(max_length=30, verbose_name=u'显示颜色')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'日历表'
+        verbose_name_plural = u'日历表'
+
+    def save(self, *args, **kwargs):
+        self.size = '{}-{}'.format(self.start,self.title)
+        super(Calender, self).save(*args, **kwargs)

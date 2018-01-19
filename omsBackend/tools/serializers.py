@@ -2,7 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from tools.models import Upload, Sendmail, Sendmessage
+from tools.models import Upload, Sendmail, Sendmessage, Calender
 
 class UploadSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,3 +21,7 @@ class SendmessageSerializer(serializers.ModelSerializer):
         model = Sendmessage
         fields = ['url', 'id', 'action_user', 'title', 'message']
 
+class CalenderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Calender
+        fields = ['url', 'id', 'name', 'title', 'start', 'end', 'cssClass']

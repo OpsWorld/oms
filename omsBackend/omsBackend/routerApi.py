@@ -6,7 +6,7 @@ from users.views import UserViewSet, RoleViewSet, GroupViewSet
 from worktickets.views import WorkTicketViewSet, TicketCommentViewSet, TicketEnclosureViewSet, TicketTypeViewSet
 from threepay.views import (PlatformViewSet, MerchantViewSet, ThreePayEnclosureViewSet, PayChannelViewSet,
                             PayChannelNameViewSet, ThreePayCommentViewSet, PlatformPayChannelViewSet)
-from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet
+from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet, CalenderViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
 from perms.views import UserMenuPermsViewSet
 from wikis.views import WikiViewSet
@@ -27,6 +27,7 @@ router.register(r'tickettypes', TicketTypeViewSet)
 router.register(r'upload', UploadViewSet)
 router.register(r'sendmail', SendmailViewSet)
 router.register(r'sendmessage', SendmessageViewSet)
+router.register(r'calenders', CalenderViewSet)
 
 router.register(r'firstmenus', FirstmenuViewSet)
 router.register(r'secondmenus', SecondmenuViewSet)

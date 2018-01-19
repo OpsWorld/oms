@@ -4,9 +4,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
-from tools.models import Upload, Sendmail, Sendmessage
-from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer
-from tools.filters import UploadFilter
+from tools.models import Upload, Sendmail, Sendmessage, Calender
+from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer,CalenderSerializer
 from users.models import User
 from tasks.tasks import send_to_skype, send_to_mail
 
@@ -14,7 +13,6 @@ from tasks.tasks import send_to_skype, send_to_mail
 class UploadViewSet(viewsets.ModelViewSet):
     queryset = Upload.objects.all().order_by("-create_time")
     serializer_class = UploadSerializer
-    filter_class = UploadFilter
 
 
 class SendmailViewSet(viewsets.ModelViewSet):
@@ -22,7 +20,6 @@ class SendmailViewSet(viewsets.ModelViewSet):
     serializer_class = SendmailSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SendmailSerializer(data=request.data, context={'request': request})
         to = request.data["to"]
         try:
             to_list = User.objects.get(username=to).email
@@ -52,7 +49,6 @@ class SendmessageViewSet(viewsets.ModelViewSet):
     serializer_class = SendmessageSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = SendmessageSerializer(data=request.data, context={'request': request})
         content = request.data["title"] + '\n' + request.data["message"]
         action_users = set(request.data["action_user"].split(','))
         print(action_users)
@@ -66,3 +62,8 @@ class SendmessageViewSet(viewsets.ModelViewSet):
             print(e)
 
         return Response({"code":"1024"}, status=status.HTTP_201_CREATED)
+
+
+class CalenderViewSet(viewsets.ModelViewSet):
+    queryset = Calender.objects.all()
+    serializer_class = CalenderSerializer
