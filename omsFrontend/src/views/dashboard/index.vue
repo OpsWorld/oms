@@ -7,9 +7,9 @@
             <img src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png' width="340">
             <div class="title">
               <pan-thumb class="panThumb" :image="img">
-                <span class="username">Hi, {{username}}</span>
+                <span style="color: #fa43ff">TB</span>
               </pan-thumb>
-              <div class="name">OMS运维管理系统</div>
+              <mallki className='mallki-text' text='OMS运维管理系统'></mallki>
             </div>
           </div>
 
@@ -84,6 +84,11 @@
                 <el-table-column prop="s_tel" label="电话" :width="120"></el-table-column>
                 <el-table-column prop="desc" label="说明"></el-table-column>
               </el-table>
+              <div>
+                <p class="tips"> 1. 以上仅限在0点至8点时间内，影响范围广且急迫性高的问题处理</p>
+                <p class="tips"> 2. 其它非紧急且影响小的问题直接上工单系统提交问题，待技术白天上班后处理</p>
+                <p class="tips"> 3. 出现紧急重大问题时，请优先电话联系上表中对应的主负责人，当主负责人联系不上时，可以联系备份负责人</p>
+              </div>
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -96,10 +101,11 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import Calendar from './components/calendar.vue'
+import Mallki from '@/components/TextHoverEffect/Mallki'
 
 export default {
   components: {
-    PanThumb, Calendar
+    PanThumb, Calendar, Mallki
   },
 
   data() {
@@ -178,28 +184,68 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .username {
-    line-height: 90px; // 文字垂直居中
-    overflow: hidden; // 文字垂直居中
-    display: inline-block;
-    text-align: center;
-    color: #b75bdb;
-    font-weight: 600;
-  }
-
-  .name {
-    float: right;
-    margin-top: 80px;
-    color: #000000;
-    font-weight: 700;
-    font-size: 20px;
-    text-shadow: 5px 5px 5px #b8fff7;
-  }
-
   .duty {
     min-height: 900px;
     .title {
       color: #d36cff;
+    }
+  }
+   .box-card-component {
+    height: 100%;
+    .box-card-header {
+      position: relative;
+      height: 220px;
+      img {
+        width: 100%;
+        height: 100%;
+        transition: all 0.2s linear;
+        &:hover {
+          transform: scale(1.1, 1.1);
+          filter: contrast(130%);
+        }
+      }
+      .title {
+        position: relative;
+        .mallki-text {
+          position: absolute;
+          top: 0;
+          right: 0;
+          font-size: 26px;
+          font-weight: bold;
+        }
+        .panThumb {
+          z-index: 100;
+          height: 70px !important;
+          width: 70px !important;
+          position: absolute !important;
+          top: -25px;
+          left: 0;
+          border: 5px solid #ffffff;
+          background-color: #fff;
+          margin: auto;
+          box-shadow: none !important;
+          /deep/ .pan-info {
+            box-shadow: none !important;
+          }
+        }
+      }
+      .progress-item {
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      @media only screen and (max-width: 1510px) {
+        .mallki-text {
+          display: none;
+        }
+      }
+    }
+    .box-card-card {
+      margin-top: 50px;
+      .clearfix {
+        color: #3a8ee6;
+        font-size: 24px;
+        font-weight: 600;
+      }
     }
   }
 </style>

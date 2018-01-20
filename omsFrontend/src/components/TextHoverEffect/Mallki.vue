@@ -48,7 +48,7 @@ display: inline-block;
   width: 100%;
   height: 6px;
   margin: -3px 0 0 0;
-  background: rgba(157, 189, 52, 0.55);
+  background: rgba(250, 67, 255, 0.55);
   position: absolute;
   left: 0;
   top: 50%;
@@ -80,7 +80,7 @@ display: inline-block;
   left: 0;
   width: 100%;
   color: #30fa51;
-  font-size: 30px;
+  font-size: 26px;
   -webkit-transition: -webkit-transform 0.5s;
   transition: transform 0.5s;
 }

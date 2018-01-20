@@ -80,7 +80,7 @@ export default {
       selectId: [],
       butstatus: true,
       listQuery: {
-        offset: null,
+        offset: '',
         limit: LIMIT,
         username__contains: '',
         type: ''
@@ -113,13 +113,6 @@ export default {
       } else {
         this.butstatus = true
       }
-    },
-
-    handleIconUserClick() {
-      this.listQuery.username__contains = ''
-    },
-    handleIconTypeClick() {
-      this.listQuery.type = ''
     },
     searchClick() {
       this.listQuery.date_gte = format(new Date(this.datefilter[0]), 'YYYY-MM-DD')
