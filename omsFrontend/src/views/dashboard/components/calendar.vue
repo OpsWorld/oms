@@ -1,5 +1,5 @@
 <template>
-  <div class="calendar"  @mouseleave="showcontent=false">
+  <div class="calendar" @mouseleave="showcontent=false">
     <full-calendar :events="calenderData" first-day='1' lang="zh" @eventClick="eventClick" @changeMonth="changeMonth">
       <template slot="fc-header-left">
         <el-button v-if="addbtn" type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件
@@ -193,7 +193,9 @@ export default {
       border-radius: 50%;
       margin-left: 20px;
     }
-
+    .event-item {
+      color: #000000 !important;
+    }
     .yellow {
       background-color: $yellow !important;
     }
@@ -221,7 +223,6 @@ export default {
     .tiffany {
       background-color: $tiffany !important;
     }
-
     .calendarcontent {
       position: absolute;
       z-index: 1024;

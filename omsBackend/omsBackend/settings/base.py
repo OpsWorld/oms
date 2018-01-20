@@ -236,13 +236,3 @@ LOGGING = {
 }
 from logging.config import dictConfig
 dictConfig(LOGGING)
-
-# saltapi
-salt_info = {
-    "url": "http://192.168.6.99:8080",
-    "username":"salt",
-    "password": "123"
-}
-
-from salts.saltapi import SaltAPI
-sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

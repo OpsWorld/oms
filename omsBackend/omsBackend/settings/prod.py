@@ -86,3 +86,13 @@ CACHES = {
         }
     }
 }
+
+# saltapi
+salt_info = {
+    "url": "https://salt.tbsysmanager.com:8080",
+    "username": "saltdev",
+    "password": "FF01VeF4hs1FqZ5M"
+}
+
+from salts.saltapi import SaltAPI
+sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

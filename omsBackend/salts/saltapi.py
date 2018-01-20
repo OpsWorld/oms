@@ -30,7 +30,7 @@ class SaltAPI(object):
             "eauth": "pam"
         }
         loginurl = self.__url + prefix
-        req = requests.post(loginurl, data=data, headers=self.__header)
+        req = requests.post(loginurl, data=data, headers=self.__header, verify=False)
         try:
             token = req.json()["return"][0]["token"]
             return token
@@ -47,7 +47,7 @@ class SaltAPI(object):
 
         # 传入data参数字典，data为None 则方法为get，有date为post方法
         if data:
-            req = requests.post(url, data=data, headers=self.__header)
+            req = requests.post(url, data=data, headers=self.__header, verify=False)
         else:
             req = requests.get(url, headers=self.__header)
 
