@@ -198,10 +198,10 @@ export default {
       img {
         width: 100%;
         height: 100%;
-        transition: all 0.2s linear;
+        transition: all 0.3s linear;
         &:hover {
-          transform: scale(1.1, 1.1);
-          filter: contrast(130%);
+          transform: scale(1.12, 1.16);  // 控制图片放大长宽
+          filter: contrast(150%);
         }
       }
       .title {
@@ -218,7 +218,7 @@ export default {
           height: 70px !important;
           width: 70px !important;
           position: absolute !important;
-          top: -25px;
+          top: -20px;
           left: 0;
           border: 5px solid #ffffff;
           background-color: #fff;
