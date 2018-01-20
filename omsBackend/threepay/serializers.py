@@ -39,7 +39,7 @@ class PayChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayChannel
         fields = (
-            'url', 'id', 'platform', 'merchant', 'type', 'rate', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
+            'url', 'id', 'name', 'platform', 'merchant', 'type', 'rate', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
             'status', 'create_user', 'action_user', 'create_time')
 
     def create(self, validated_data):
