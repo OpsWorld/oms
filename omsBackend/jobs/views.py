@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from omsBackend.settings import sapi
 
+
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
     serializer_class = JobsSerializer
@@ -31,7 +32,7 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             j = DeployJobs.objects.get(j_id=j_id)
             job_status = sapi.check_job(j_id)
 
-            if  list(set(job_status.values()))[0]:
+            if list(set(job_status.values()))[0]:
                 job_results = sapi.get_result(j_id)
                 j.result = job_results
                 j.deploy_status = 'success'

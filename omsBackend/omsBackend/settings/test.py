@@ -29,14 +29,15 @@ MAIL_ACOUNT = {
     "mail_postfix": "tb-gaming.com",
 }
 
-#登录skype
+# 登录skype
 from skpy import Skype
+
 # skype账号
 SK_ACOUNT = {
     "sk_user": "tbkiven@outlook.com",
     "sk_pass": "tengfa9188"
 }
-#SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
+# SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
 SK = 'skype'
 
 REDIS_URL = 'redis://192.168.6.99:6379/'

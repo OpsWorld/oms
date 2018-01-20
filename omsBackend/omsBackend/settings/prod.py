@@ -8,17 +8,17 @@ TIME_ZONE = 'Asia/Shanghai'
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DATABASES = {
-   'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-       'NAME': 'oms',
-       'USER': 'oms',
-       'PASSWORD': '123456',
-       'HOST': '127.0.0.1',
-       'PORT': '5432'
-   }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'oms',
+        'USER': 'oms',
+        'PASSWORD': '123456',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
+    }
 }
 
-#使用ldap认证
+# 使用ldap认证
 AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
@@ -53,15 +53,16 @@ MAIL_ACOUNT = {
     "mail_postfix": "tb-gaming.com",
 }
 
-#登录skype
+# 登录skype
 from skpy import Skype
+
 # skype账号
 SK_ACOUNT = {
     'sk_user': 'oms@tb-gaming.com',
     'sk_pass': 'tengfa@918'
 }
 SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
-#SK = 'skype'
+# SK = 'skype'
 
 REDIS_URL = 'redis://192.168.6.110:6379/'
 # celery配置
@@ -95,4 +96,5 @@ salt_info = {
 }
 
 from salts.saltapi import SaltAPI
+
 sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

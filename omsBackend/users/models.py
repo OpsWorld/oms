@@ -5,9 +5,13 @@ from django.db import models
 # from django.contrib.auth.models import Group
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 
+
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None):
-        '''username 是唯一标识，没有会报错'''
+        """
+        username 是唯一标识，没有会报错
+        """
+
         if not username:
             raise ValueError('Users must have an username')
 
@@ -26,6 +30,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser):
     username = models.CharField(max_length=32, unique=True, db_index=True)
     email = models.EmailField(max_length=255, null=True, blank=True)
@@ -37,7 +42,8 @@ class User(AbstractBaseUser):
     roles = models.ForeignKey('Role', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'角色')
 
     USERNAME_FIELD = 'username'  # 必须有一个唯一标识--USERNAME_FIELD
-    #REQUIRED_FIELDS = ['email']  # 创建superuser时的必须字段
+
+    # REQUIRED_FIELDS = ['email']  # 创建superuser时的必须字段
 
     def __str__(self):  # __unicode__ on Python 2
         return self.username
@@ -51,6 +57,7 @@ class User(AbstractBaseUser):
         verbose_name_plural = u'用户'
 
     objects = UserManager()  # 创建用户
+
 
 class Group(models.Model):
     name = models.CharField(max_length=64, unique=True, verbose_name=u'部门')

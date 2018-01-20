@@ -13,13 +13,14 @@ mail_user = MAIL_ACOUNT["mail_user"]
 mail_pass = MAIL_ACOUNT["mail_pass"]
 mail_postfix = MAIL_ACOUNT["mail_postfix"]
 
+
 # 发送邮件函数
 def send_mail(to_list, cc_list, sub, content):
     me = mail_user + "<" + mail_user + "@" + mail_postfix + ">"
     # f = open(context)
     # msg = MIMEText(f.read(),_charset="utf-8")
     # f.close()
-    #msg = MIMEText(context)
+    # msg = MIMEText(context)
     msg = MIMEMultipart('alternative')
     msg['Subject'] = sub
     msg['From'] = me
@@ -37,10 +38,11 @@ def send_mail(to_list, cc_list, sub, content):
 
         send_smtp.sendmail(me, list, msg.as_string())
         send_smtp.close()
-        return {"code":'success',"msg":"通知邮件发送成功"}
+        return {"code": 'success', "msg": "通知邮件发送成功"}
     except Exception as e:
         print(e)
-        return {"code":'error',"msg":"通知邮件发送失败"}
+        return {"code": 'error', "msg": "通知邮件发送失败"}
+
 
 if __name__ == '__main__':
     to_list = sys.argv[1]  # 收件人列表   '111@126.com'
@@ -48,6 +50,6 @@ if __name__ == '__main__':
     sub = sys.argv[3]
     context = sys.argv[4]
     if send_mail(to_list, cc_list, sub, context):
-        print({"code":'success',"msg":"通知邮件发送成功"})
+        print({"code": 'success', "msg": "通知邮件发送成功"})
     else:
-        print({"code":'error',"msg":"通知邮件发送失败"})
+        print({"code": 'error', "msg": "通知邮件发送失败"})

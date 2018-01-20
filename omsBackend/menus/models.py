@@ -3,6 +3,7 @@
 
 from django.db import models
 
+
 class Firstmenu(models.Model):
     title = models.CharField(max_length=100, blank=True, unique=True, verbose_name=u'菜单中文')
     name = models.CharField(max_length=100, blank=True, unique=True, verbose_name=u'菜单名')
@@ -18,6 +19,7 @@ class Firstmenu(models.Model):
     class Meta:
         verbose_name = u'一级菜单'
         verbose_name_plural = u'一级菜单'
+
 
 class Secondmenu(models.Model):
     parent = models.ForeignKey("Firstmenu", verbose_name=u'上级菜单')
@@ -49,6 +51,6 @@ class Element(models.Model):
 
     def save(self, *args, **kwargs):
         parent = Secondmenu.objects.get(title=self.parent)
-        self.name = '{}-{}'.format(parent.title,self.name)
-        self.code = '{}:{}'.format(parent.name,self.code)
+        self.name = '{}-{}'.format(parent.title, self.name)
+        self.code = '{}:{}'.format(parent.name, self.code)
         super(Element, self).save(*args, **kwargs)

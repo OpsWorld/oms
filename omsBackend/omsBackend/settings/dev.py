@@ -29,14 +29,15 @@ MAIL_ACOUNT = {
     "mail_postfix": "tb-gaming.com",
 }
 
-#登录skype
+# 登录skype
 from skpy import Skype
+
 # skype账号
 SK_ACOUNT = {
     "sk_user": "tbkiven@outlook.com",
     "sk_pass": "tengfa9188"
 }
-#SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
+# SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
 SK = 'skype'
 
 REDIS_URL = 'redis://127.0.0.1:6379/'
@@ -64,16 +65,17 @@ CACHES = {
 }
 
 # saltapi
-# salt_info = {
-#     "url": "http://192.168.6.99:8080",
-#     "username": "salt",
-#     "password": "123"
-# }
 salt_info = {
-    "url": "https://salt.tbsysmanager.com:8080",
-    "username": "saltdev",
-    "password": "FF01VeF4hs1FqZ5M"
+    "url": "http://192.168.6.99:8080",
+    "username": "salt",
+    "password": "123"
 }
+# salt_info = {
+#     "url": "https://salt.tbsysmanager.com:8080",
+#     "username": "saltdev",
+#     "password": "FF01VeF4hs1FqZ5M"
+# }
 
 from salts.saltapi import SaltAPI
+
 sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

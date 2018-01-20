@@ -6,6 +6,7 @@ from tools.filesize import convert_size
 from tools.storage import PathAndRename
 import os
 
+
 class Upload(models.Model):
     username = models.CharField(max_length=20, verbose_name=u'上传用户')
     file = models.FileField(upload_to=PathAndRename("./"), blank=True, verbose_name=u'上传文件')
@@ -29,6 +30,7 @@ class Upload(models.Model):
     class Meta:
         verbose_name = u'文件上传'
         verbose_name_plural = u'文件上传'
+
 
 class Sendmail(models.Model):
     to = models.CharField(max_length=30, verbose_name=u'收件人')

@@ -3,6 +3,7 @@
 
 import os
 import datetime
+from logging.config import dictConfig
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'libti7mq=88d+s!ds$c7lvg8e38jo*pqwywogpqf_=fl#xl8%4'
@@ -21,7 +22,7 @@ INSTALLED_APPS = [
     'corsheaders',  # 跨域
     'django_python3_ldap',  # ldap认证
     'dry_rest_permissions',  # 权限
-    'django_celery_results', # celery results
+    'django_celery_results',  # celery results
     'worktickets',
     'tools',
     'users',
@@ -208,8 +209,8 @@ LOGGING = {
         'simple': {
             'format': '%(levelname)s %(asctime)s %(message)s',
             'datefmt': '%y %b %d, %H:%M:%S',
-            },
         },
+    },
     'handlers': {
         'console': {
             'level': 'INFO',
@@ -234,5 +235,5 @@ LOGGING = {
         },
     }
 }
-from logging.config import dictConfig
+
 dictConfig(LOGGING)

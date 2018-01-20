@@ -4,6 +4,7 @@
 from django.db import models
 from menus.models import Firstmenu, Secondmenu, Element
 
+
 class UserMenuPerms(models.Model):
     group = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
     firstmenus = models.ManyToManyField(Firstmenu, verbose_name=u'一级菜单')
@@ -16,5 +17,3 @@ class UserMenuPerms(models.Model):
     class Meta:
         verbose_name = u'用户菜单权限'
         verbose_name_plural = u'用户菜单权限'
-
-

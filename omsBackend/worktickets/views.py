@@ -12,6 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from dry_rest_permissions.generics import DRYPermissions
 
+
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('ticket_status','-create_time','-update_time')
     serializer_class = WorkTicketSerializer

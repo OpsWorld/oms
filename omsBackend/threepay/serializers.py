@@ -39,23 +39,25 @@ class PayChannelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PayChannel
         fields = (
-            'url', 'id', 'name', 'platform', 'merchant', 'type', 'rate', 'keyinfo', 'm_forwardurl', 'm_submiturl', 'complete', 'level',
-            'status', 'create_user', 'action_user', 'create_time')
+            'url', 'id', 'name', 'platform', 'merchant', 'type', 'rate', 'keyinfo', 'm_forwardurl', 'm_submiturl',
+            'complete', 'level', 'status', 'create_user', 'action_user', 'create_time')
 
     def create(self, validated_data):
         platform = validated_data["platform"]
         type = validated_data["type"]
         create_user = validated_data["create_user"]
         print(create_user)
-        name = '{}-{}'.format(platform,type)
+        name = '{}-{}'.format(platform, type)
         try:
             platformpaychannel = PlatformPayChannel.objects.get(name=name)
         except:
-            platformpaychannel = PlatformPayChannel.objects.create(platform=platform,type=type, create_user=create_user)
+            platformpaychannel = PlatformPayChannel.objects.create(platform=platform, type=type,
+                                                                   create_user=create_user)
             platformpaychannel.save()
         paychannel = PayChannel.objects.create(**validated_data)
         paychannel.save()
         return paychannel
+
 
 class ThreePayEnclosureSerializer(serializers.ModelSerializer):
     ticket = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')

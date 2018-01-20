@@ -22,6 +22,7 @@ TicketStatus = {
 
 admin_groups = ['admin','Tb_Development','OMS_Super_Admin']
 
+
 class WorkTicket(models.Model):
     ticketid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
     title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')

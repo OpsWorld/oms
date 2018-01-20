@@ -13,6 +13,7 @@ from threepay.serializers import (PlatformSerializer,
                                   PlatformPayChannelSerializer)
 from threepay.filters import PlatformPayChannelFilter
 
+
 class PlatformViewSet(viewsets.ModelViewSet):
     queryset = Platform.objects.all()
     serializer_class = PlatformSerializer
@@ -52,4 +53,3 @@ class PlatformPayChannelViewSet(viewsets.ModelViewSet):
     serializer_class = PlatformPayChannelSerializer
     filter_class = PlatformPayChannelFilter
     ordering_fields = ('type', 'complete')
-

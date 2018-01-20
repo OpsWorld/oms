@@ -15,14 +15,14 @@ class SaltAPI(object):
         self.__url = url
         self.__username = username
         self.__password = password
-        self.__header = {}
+        self.__header = dict()
         self.__header["Accept"] = "application/json"
         self.__token = self.get_token()
 
     def get_token(self, prefix='/login'):
-        '''
+        """
         登录获取token
-        '''
+        """
 
         data = {
             "username": self.__username,
@@ -38,9 +38,9 @@ class SaltAPI(object):
             raise KeyError
 
     def salt_request(self, data, prefix='/'):
-        '''
+        """
         接收请求，返回结果
-        '''
+        """
 
         url = self.__url + prefix
         self.__header["X-Auth-Token"] = self.__token
@@ -54,9 +54,9 @@ class SaltAPI(object):
         return req.json()
 
     def list_key(self):
-        '''
+        """
         获取包括认证、未认证salt主机
-        '''
+        """
 
         prefix = '/keys'
         content = self.salt_request(None, prefix)
@@ -67,9 +67,9 @@ class SaltAPI(object):
         return {"accepted": accepted, "denied": denied, "unaccept": unaccept, "rejected": rejected}
 
     def accept_key(self, key_id):
-        '''
+        """
         接受salt主机
-        '''
+        """
 
         data = {'client': 'wheel', 'fun': 'key.accept', 'match': key_id}
         content = self.salt_request(data)
@@ -77,9 +77,9 @@ class SaltAPI(object):
         return ret
 
     def delete_key(self, key_id):
-        '''
+        """
         删除salt主机
-        '''
+        """
 
         data = {'client': 'wheel', 'fun': 'key.delete', 'match': key_id}
         content = self.salt_request(data)
@@ -87,9 +87,9 @@ class SaltAPI(object):
         return ret
 
     def minions_status(self):
-        '''
+        """
         salt主机存活检测
-        '''
+        """
 
         data = {'client': 'runner', 'fun': 'manage.status'}
         content = self.salt_request(data)
@@ -107,9 +107,9 @@ class SaltAPI(object):
         return ret
 
     def remote_cmd(self, tgt, fun, client='local_async', expr_form='list', arg='', **kwargs):
-        '''
+        """
         异步执行远程命令、部署模块
-        '''
+        """
 
         data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
         content = self.salt_request(data)
@@ -117,19 +117,19 @@ class SaltAPI(object):
         return ret
 
     def get_result(self, jid):
-        '''
+        """
         通过jid获取执行结果
-        '''
+        """
 
-        data = {'client':'runner', 'fun':'jobs.lookup_jid', 'jid': jid}
+        data = {'client': 'runner', 'fun': 'jobs.lookup_jid', 'jid': jid}
         content = self.salt_request(data)
         ret = content['return'][0]
         return ret
 
     def get_job_info(self, jid=''):
-        '''
+        """
         获取任务的详细执行信息
-        '''
+        """
 
         if jid:
             prefix = '/jobs/' + jid
@@ -141,29 +141,29 @@ class SaltAPI(object):
         return ret
 
     def running_jobs(self):
-        '''
+        """
         获取运行中的任务
-        '''
+        """
 
         data = {'client': 'runner', 'fun': 'jobs.active'}
         content = self.salt_request(data)
         ret = content['return'][0]
         return ret
 
-    def check_job(self,jid):
-        '''
+    def check_job(self, jid):
+        """
         检查任务是否已经执行并成功退出
-        '''
+        """
 
         data = {'client': 'runner', 'fun': 'jobs.exit_success', 'jid': jid}
         content = self.salt_request(data)
         ret = content['return'][0]
         return ret
 
-    def remote_server_info(self, tgt=(), args=('fqdn','os','osrelease', 'ipv4','cpu_model','mem_total')):
-        '''
+    def remote_server_info(self, tgt=(), args=('fqdn', 'os', 'osrelease', 'ipv4', 'cpu_model', 'mem_total')):
+        """
         获取远程主机信息
-        '''
+        """
 
         data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.items'}
         content = self.salt_request(data)
@@ -172,6 +172,7 @@ class SaltAPI(object):
         for item in args:
             ret[item] = items[item]
         return ret
+
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

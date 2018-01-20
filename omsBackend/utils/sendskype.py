@@ -3,6 +3,7 @@
 
 from omsBackend.settings import SK
 
+
 def skype_bot(user, content):
     print(content)
     chat = SK.chats[user]

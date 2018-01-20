@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from tools.models import Upload, Sendmail, Sendmessage, Calender
-from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer,CalenderSerializer
+from tools.serializers import UploadSerializer, SendmailSerializer, SendmessageSerializer, CalenderSerializer
 from users.models import User
 from tasks.tasks import send_to_skype, send_to_mail
 from tools.filters import CalenderFilter
@@ -37,12 +37,12 @@ class SendmailViewSet(viewsets.ModelViewSet):
                     c_email = User.objects.get(username=c).email
                     cc_list = cc_list + c_email + ','
         except Exception as e:
-                cc_list = cc_list
+            cc_list = cc_list
         sub = request.data["sub"]
         content = request.data["content"]
         send_to_mail.delay(to_list, cc_list, sub, content)
 
-        return Response({"code":"1024"}, status=status.HTTP_201_CREATED)
+        return Response({"code": "1024"}, status=status.HTTP_201_CREATED)
 
 
 class SendmessageViewSet(viewsets.ModelViewSet):
@@ -62,7 +62,7 @@ class SendmessageViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
 
-        return Response({"code":"1024"}, status=status.HTTP_201_CREATED)
+        return Response({"code": "1024"}, status=status.HTTP_201_CREATED)
 
 
 class CalenderViewSet(viewsets.ModelViewSet):

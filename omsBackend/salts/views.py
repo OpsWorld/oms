@@ -6,11 +6,13 @@ from rest_framework.response import Response
 from omsBackend.settings import sapi
 from django.views.decorators.cache import cache_page
 
+
 @api_view()
 def get_all_key(request):
     data = sapi.list_key()
     count = len(data)
     return Response({"results": data, "count": count})
+
 
 @cache_page(86400)
 @api_view()
@@ -18,11 +20,13 @@ def minions_status(request):
     data = sapi.minions_status()
     return Response({"results": data})
 
+
 @api_view()
 def get_minion_info(request, key_id):
     data = sapi.get_minion_info(key_id)
     count = len(data)
     return Response({"results": data, "count": count})
+
 
 @api_view(['POST'])
 def cmdrun(request):
@@ -32,8 +36,9 @@ def cmdrun(request):
     count = len(data)
     return Response({"results": data, "count": count})
 
+
 @api_view()
-def get_result(request,jid):
+def get_result(request, jid):
     data = sapi.get_result(jid)
     count = len(data)
     return Response({"results": data, "count": count})

@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from wikis.models import Wiki
 from wikis.serializers import WikiSerializer
 
+
 class WikiViewSet(viewsets.ModelViewSet):
     queryset = Wiki.objects.all().order_by('-update_time')
     serializer_class = WikiSerializer

@@ -11,6 +11,7 @@ class HostViewSet(viewsets.ModelViewSet):
     serializer_class = HostSerializer
     search_fields = ['hostname', 'ip']
 
+
 class IdcViewSet(viewsets.ModelViewSet):
     queryset = Idc.objects.all()
     serializer_class = IdcSerializer

@@ -7,6 +7,7 @@ from hosts.models import Host, Idc
 
 class HostSerializer(serializers.ModelSerializer):
     idc = serializers.SlugRelatedField(queryset=Idc.objects.all(), slug_field='name')
+
     class Meta:
         model = Host
         fields = ['url', 'id', 'hostname', 'ip', 'other_ip', 'idc', 'asset_type', 'status', 'os', 'cpu',
@@ -16,4 +17,4 @@ class HostSerializer(serializers.ModelSerializer):
 class IdcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idc
-        fields = ['url', 'id', 'name', 'user','tel','desc']
+        fields = ['url', 'id', 'name', 'user', 'tel', 'desc']

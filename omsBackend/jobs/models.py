@@ -11,7 +11,8 @@ DEPLOY_STATUS = {
     "failed": u"发布失败"
 }
 
-admin_groups = ['admin','OMS_Super_Admin']
+admin_groups = ['admin', 'OMS_Super_Admin']
+
 
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
@@ -58,6 +59,7 @@ class Jobs(models.Model):
     def has_object_update_permission(self, request):
         return True
 
+
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     name = models.CharField(max_length=20, verbose_name=u'名称')
@@ -76,7 +78,8 @@ class Deployenv(models.Model):
 class DeployJobs(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     j_id = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'任务ID')
-    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=30,verbose_name=u'发布状态')
+    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=30,
+                                     verbose_name=u'发布状态')
     hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
@@ -85,7 +88,6 @@ class DeployJobs(models.Model):
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-
 
     def __str__(self):
         return self.j_id

@@ -35,7 +35,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.is_active = validated_data.get('is_active', instance.is_active)
         try:
             instance.set_password(validated_data['password'])
-        except:
+        except Exception as e:
             pass
         instance.groups = groups
         instance.save()
@@ -46,6 +46,7 @@ class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('url', 'id', 'name', 'desc')
+
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:

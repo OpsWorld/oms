@@ -29,14 +29,14 @@ class DeployJobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeployJobs
-        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'hosts', 'env', 'version', 'deploy_path', 'content', 'action_user',
-                  'result', 'create_time']
+        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'hosts', 'env', 'version', 'deploy_path', 'content',
+                  'action_user', 'result', 'create_time']
 
     def create(self, validated_data):
         hosts = validated_data["hosts"]
         version = validated_data["version"]
         deploy_path = validated_data["deploy_path"]
-        runcmd = 'cd %s;svn up -r %s' % (deploy_path,version)
+        runcmd = 'cd %s;svn up -r %s' % (deploy_path, version)
         cmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
         jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=cmd)
         validated_data["j_id"] = jid

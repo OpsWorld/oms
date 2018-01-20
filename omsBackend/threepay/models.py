@@ -86,7 +86,7 @@ class PayChannel(models.Model):
 
     def save(self, *args, **kwargs):
         if self.name == '':
-            self.name = '{}-{}-{}'.format(self.platform,self.merchant, self.type)
+            self.name = '{}-{}-{}'.format(self.platform, self.merchant, self.type)
         super(PayChannel, self).save(*args, **kwargs)
 
 
@@ -129,5 +129,5 @@ class PlatformPayChannel(models.Model):
 
     def save(self, *args, **kwargs):
         if self.name == '':
-            self.name = '{}-{}'.format(self.platform,self.type)
+            self.name = '{}-{}'.format(self.platform, self.type)
         super(PlatformPayChannel, self).save(*args, **kwargs)
