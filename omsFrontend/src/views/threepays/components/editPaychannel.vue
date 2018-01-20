@@ -104,6 +104,9 @@ export default {
             }
             this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
+          }).catch(error => {
+            this.$message.error('检查修改项是否正确')
+            console.log(error)
           })
         } else {
           console.log('error submit!!')

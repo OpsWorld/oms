@@ -45,11 +45,13 @@ class PayChannelSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         platform = validated_data["platform"]
         type = validated_data["type"]
+        create_user = validated_data["create_user"]
+        print(create_user)
         name = '{}-{}'.format(platform,type)
         try:
             platformpaychannel = PlatformPayChannel.objects.get(name=name)
         except:
-            platformpaychannel = PlatformPayChannel.objects.create(platform=platform,type=type)
+            platformpaychannel = PlatformPayChannel.objects.create(platform=platform,type=type, create_user=create_user)
             platformpaychannel.save()
         paychannel = PayChannel.objects.create(**validated_data)
         paychannel.save()
@@ -77,7 +79,8 @@ class ThreePayCommentSerializer(serializers.ModelSerializer):
 class PlatformPayChannelSerializer(serializers.ModelSerializer):
     platform = serializers.SlugRelatedField(queryset=Platform.objects.all(), slug_field='name')
     type = serializers.SlugRelatedField(queryset=PayChannelName.objects.all(), slug_field='name')
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
     class Meta:
         model = PlatformPayChannel
-        fields = ('url', 'id', 'name', 'platform', 'type', 'complete')
+        fields = ('url', 'id', 'name', 'platform', 'type', 'complete', 'create_user')

@@ -111,6 +111,9 @@ export default {
             postSendmessage(messageForm)
             this.$emit('formdata', response.data)
             this.$refs[formName].resetFields()
+          }).catch(error => {
+            this.$message.error('检查此平台此商户下面通道是否已经存在')
+            console.log(error)
           })
         } else {
           console.log('error submit!!')

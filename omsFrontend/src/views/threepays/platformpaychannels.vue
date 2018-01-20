@@ -108,7 +108,8 @@ export default {
         id: '',
         platform: '',
         type: '',
-        complete: 0
+        complete: 0,
+        create_user: ''
       },
       platform: '',
       platforms: [],
@@ -150,7 +151,7 @@ export default {
           message: '更新成功!'
         })
         const messageForm = {
-          action_user: `${this.CommentForm.create_user}`,
+          action_user: `${this.CompleteForm.create_user}`,
           title: '【通道完成进度】',
           message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}`
         }

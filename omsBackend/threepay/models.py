@@ -61,6 +61,7 @@ class PayChannelName(models.Model):
 
 
 class PayChannel(models.Model):
+    name = models.CharField(max_length=100, unique=True, blank=True, verbose_name=u'名称')
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     merchant = models.ForeignKey('Merchant', verbose_name=u'依附商户')
     type = models.ForeignKey('PayChannelName', verbose_name=u'通道类型')
@@ -76,9 +77,17 @@ class PayChannel(models.Model):
     complete = models.IntegerField(default=0, blank=True, verbose_name=u'进度')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         verbose_name = u'支付通道'
         verbose_name_plural = u'支付通道'
+
+    def save(self, *args, **kwargs):
+        if self.name == '':
+            self.name = '{}-{}-{}'.format(self.platform,self.merchant, self.type)
+        super(PayChannel, self).save(*args, **kwargs)
 
 
 class ThreePayEnclosure(models.Model):
@@ -109,6 +118,7 @@ class PlatformPayChannel(models.Model):
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     type = models.ForeignKey('PayChannelName', verbose_name=u'通道类型')
     complete = models.IntegerField(default=0, blank=True, verbose_name=u'进度')
+    create_user = models.ForeignKey(User, related_name='platpay_create_user', verbose_name=u'创建者')
 
     def __str__(self):
         return self.name

@@ -1,9 +1,25 @@
 <template>
-  <div class="calendar">
+  <div class="calendar"  @mouseleave="showcontent=false">
     <full-calendar :events="calenderData" first-day='1' locale="zh" @eventClick="eventClick" @changeMonth="changeMonth">
       <template slot="fc-header-left">
         <el-button v-if="addbtn" type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件
         </el-button>
+      </template>
+      <template slot="fc-body-card">
+        <div id="clickcalendar" v-show="showcontent" class="calendarcontent" @mouseleave="showcontent=false">
+          <a style="font-size: 16px">详细内容
+            <el-tooltip v-if="addbtn" style="margin-left: 10px" effect="dark" content="删除本事件" placement="right">
+              <el-button type="text" icon="el-icon-delete" @click="deleteSubmit"></el-button>
+            </el-tooltip>
+          </a>
+          <hr class="heng"/>
+          <div v-if="ruleForm.content">
+            <p>开始时间：{{ruleForm.start}}</p>
+            <p>结束时间：{{ruleForm.end}}</p>
+            <p>内容：{{ruleForm.content}}</p>
+          </div>
+          <div v-else>暂无内容</div>
+        </div>
       </template>
     </full-calendar>
 
@@ -67,21 +83,6 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-
-    <div id="clickcalendar" v-show="showcontent" class="calendarcontent" @mouseleave="showcontent=false">
-      <a style="font-size: 16px">详细内容
-        <el-tooltip style="margin-left: 10px" effect="dark" content="删除本事件" placement="right">
-          <el-button type="text" icon="el-icon-delete" @click="deleteSubmit"></el-button>
-        </el-tooltip>
-      </a>
-      <hr class="heng"/>
-      <div v-if="ruleForm.content">
-        <p>开始时间：{{ruleForm.start}}</p>
-        <p>结束时间：{{ruleForm.end}}</p>
-        <p>内容：{{ruleForm.content}}</p>
-      </div>
-      <div v-else>暂无内容</div>
-    </div>
   </div>
 </template>
 
@@ -111,7 +112,7 @@ export default {
         start__gte: '',
         end__lte: ''
       },
-      showcontent: true
+      showcontent: false
     }
   },
   created() {
@@ -128,15 +129,17 @@ export default {
       this.showcontent = true
       this.ruleForm = event
       const obj = document.getElementById('clickcalendar')
-      obj.style.left = pos.left + 50 + 'px'
-      obj.style.top = pos.top + 100 + 'px'
+      obj.style.left = pos.left + 'px'
+      obj.style.top = pos.top + 'px'
     },
     changeMonth(start, end, current) {
+      this.showcontent = false
       this.listQuery.start__gte = start
       this.listQuery.end__lte = end
       this.fetchData()
     },
     addSubmit() {
+      this.showcontent = false
       postCalender(this.ruleForm).then(response => {
         this.$message({
           message: '添加成功',
@@ -177,6 +180,7 @@ export default {
   @import "src/styles/variables.scss";
 
   .calendar {
+    min-height: 850px;
     .showcolor {
       position: absolute;
       color: #ffffff;
