@@ -1,6 +1,6 @@
 <template>
   <div class="calendar"  @mouseleave="showcontent=false">
-    <full-calendar :events="calenderData" first-day='1' locale="zh" @eventClick="eventClick" @changeMonth="changeMonth">
+    <full-calendar :events="calenderData" first-day='1' lang="zh" @eventClick="eventClick" @changeMonth="changeMonth">
       <template slot="fc-header-left">
         <el-button v-if="addbtn" type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件
         </el-button>

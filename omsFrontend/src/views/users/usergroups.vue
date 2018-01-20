@@ -8,7 +8,7 @@
         <div class="table-search">
           <el-input
             placeholder="搜索 ..."
-            v-model="searchdata"
+            v-model="listQuery.name"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -59,10 +59,12 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
+      listQuery: {
+        limit: LIMIT,
+        offset: '',
+        name: ''
+      },
       pagesize: [10, 25, 50, 100],
       addGroup: false,
       viewGroup: false,
@@ -76,12 +78,7 @@ export default {
 
   methods: {
     fetchData() {
-      const parms = {
-        limit: this.limit,
-        offset: this.offset,
-        name: this.searchdata
-      }
-      getGroup(parms).then(response => {
+      getGroup(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -122,11 +119,11 @@ export default {
       this.fetchData()
     },
     handleSizeChange(val) {
-      this.limit = val
+      this.listQuery.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.offset = val - 1
+      this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     }
   }
