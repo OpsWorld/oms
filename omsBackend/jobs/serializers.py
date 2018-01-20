@@ -36,9 +36,12 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         hosts = validated_data["hosts"]
         version = validated_data["version"]
         deploy_path = validated_data["deploy_path"]
-        runcmd = 'cd %s;svn up -r %s' % (deploy_path, version)
-        cmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
-        jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=cmd)
+        print(deploy_path)
+        svn_cmd = '"C:/Program Files/TortoiseSVN/bin/svn.exe"'
+        runcmd = '{} update {} -r {} --non-interactive --trust-server-cert'.format(svn_cmd,deploy_path, version)
+        print(runcmd)
+        printcmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
+        jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=runcmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()

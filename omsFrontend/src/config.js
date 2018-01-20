@@ -21,7 +21,7 @@ if (process.env.NODE_ENV === 'production') {
   }
 } else {
   CONFIG = {
-    apiUrl: 'http://192.168.3.215:8000',
+    apiUrl: 'http://127.0.0.1:8000',
     super_group: 'admin',
     wsurl: ws_scheme + '://127.0.0.1:8000'
   }

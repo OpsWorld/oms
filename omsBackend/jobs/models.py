@@ -62,9 +62,9 @@ class Jobs(models.Model):
 
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-    name = models.CharField(max_length=20, verbose_name=u'名称')
+    name = models.CharField(max_length=10, verbose_name=u'名称')
     hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
-    path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
+    path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
@@ -83,7 +83,7 @@ class DeployJobs(models.Model):
     hosts = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布主机')
     env = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布环境')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
-    deploy_path = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'发布路径')
+    deploy_path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
     content = models.TextField(null=True, blank=True, verbose_name=u'更新内容')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')

@@ -34,7 +34,7 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
 
             if list(set(job_status.values()))[0]:
                 job_results = sapi.get_result(j_id)
-                j.result = job_results
+                j.result = '{}\n{}'.format(j.content,job_results)
                 j.deploy_status = 'success'
             else:
                 j.deploy_status = 'deploy'
