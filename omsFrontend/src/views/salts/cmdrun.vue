@@ -98,8 +98,9 @@ export default {
             console.log(this.jid)
             this.running = this.showresult = true
             this.cmdrun_result = setInterval(() => {
+              console.log('check job_status 3/s')
               this.getResult(this.jid)
-            }, 2000)
+            }, 3000)
           })
         } else {
           console.log('error submit!!')

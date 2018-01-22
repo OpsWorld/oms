@@ -177,7 +177,8 @@ export default {
       butstatus: false,
       jobs_btn_delete_deployjob: false,
       showresult: false,
-      job_results: []
+      job_results: [],
+      check_job_status: ''
     }
   },
   computed: {
@@ -217,6 +218,17 @@ export default {
       getDeployJob(this.listQuery).then(response => {
         this.tableData = response.data
         this.tabletotal = response.data.length
+        const job_status = this.tableData.map(function(item) {
+          return item.deploy_status
+        })
+        if (job_status.indexOf('deploy') > -1) {
+          this.check_job_status = setInterval(() => {
+            console.log('check job_status 3/s')
+            this.fetchDeployJobData()
+          }, 3000)
+        } else {
+          clearInterval(this.check_job_status)
+        }
       })
     },
     handleSizeChange(val) {
@@ -239,7 +251,6 @@ export default {
             })
             this.fetchDeployJobData()
             this.resetForm('ruleForm')
-            setTimeout(this.fetchDeployJobData(), 5000)
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             this.resetForm(formdata)

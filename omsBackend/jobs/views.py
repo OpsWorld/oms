@@ -33,13 +33,10 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             job_status = sapi.check_job(j_id)
             print(job_status)
 
-            try:
-                if list(set(job_status.values()))[0]:
+            if list(set(job_status.values()))[0]:
                     j.result = sapi.get_result(j_id)
                     j.deploy_status = 'success'
-                else:
-                    j.deploy_status = 'deploy'
-            except Exception as e:
+            else:
                 j.deploy_status = 'deploy'
 
             j.save()
