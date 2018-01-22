@@ -59,7 +59,6 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop='env' label='发布环境'></el-table-column>
               <el-table-column prop='deploy_status' label='发布状态' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
