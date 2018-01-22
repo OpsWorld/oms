@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from worktickets.models import WorkTicket, admin_groups
+from jobs.models import Jobs, admin_groups
 from users.models import User
 from dry_rest_permissions.generics import DRYPermissionFiltersBase
 
 
-class WorkTicketFilterBackend(DRYPermissionFiltersBase):
+class JobFilterBackend(DRYPermissionFiltersBase):
     def filter_list_queryset(self, request, queryset, view):
         """
         Limits all list requests to only be seen by the create_groups.
@@ -22,4 +22,4 @@ class WorkTicketFilterBackend(DRYPermissionFiltersBase):
         else:
             # .distinct()去重
             print("not admin")
-            return queryset.filter(create_group__in=groups).distinct()
+            return queryset.filter(showdev=True).distinct()
