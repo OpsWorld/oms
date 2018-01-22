@@ -23,6 +23,8 @@ class DeployenvViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
+    filter_fields = ['job__name']
+
 
     def list(self, request, *args, **kwargs):
         works = DeployJobs.objects.all().filter(deploy_status='deploy')
