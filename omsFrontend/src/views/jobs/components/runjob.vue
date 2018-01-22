@@ -13,7 +13,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="发布主机" prop="hosts">
-              <el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">
+              <el-select v-model="ruleForm.hosts" multiple placeholder="请先选择发布环境">
                 <el-option v-for="item in hosts" :key="item.id" :value="item"></el-option>
               </el-select>
             </el-form-item>
