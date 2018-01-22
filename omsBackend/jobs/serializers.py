@@ -2,25 +2,27 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, Deployenv, DeployJobs
+from jobs.models import Jobs, DeployJobs
 from hosts.models import Host
 from users.models import User
 from omsBackend.settings import sapi
 
 
 class JobsSerializer(serializers.ModelSerializer):
+    deploy_hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
+
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'create_time', 'showdev', 'desc']
+        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_hosts', 'deploy_path', 'create_time', 'showdev', 'desc']
 
 
-class DeployenvSerializer(serializers.ModelSerializer):
-    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
-    hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
-
-    class Meta:
-        model = Deployenv
-        fields = ['url', 'id', 'job', 'name', 'path', 'hosts', 'desc']
+# class DeployenvSerializer(serializers.ModelSerializer):
+#     job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
+#     hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
+#
+#     class Meta:
+#         model = Deployenv
+#         fields = ['url', 'id', 'job', 'name', 'path', 'hosts', 'desc']
 
 
 class DeployJobsSerializer(serializers.ModelSerializer):

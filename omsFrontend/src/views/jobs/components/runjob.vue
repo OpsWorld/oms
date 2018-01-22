@@ -7,14 +7,14 @@
             <a class="jobname">{{jobs.name}}</a>
           </div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-            <el-form-item label="发布环境" prop="env">
-              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-              </el-select>
-            </el-form-item>
+            <!--<el-form-item label="发布环境" prop="env">-->
+              <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
+                <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
             <el-form-item label="发布主机" prop="hosts">
-              <el-select v-model="ruleForm.hosts" multiple placeholder="请先选择发布环境">
-                <el-option v-for="item in hosts" :key="item.id" :value="item"></el-option>
+              <el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">
+                <el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="代码地址">
@@ -28,7 +28,7 @@
               <a class="tips">Tip：HEAD 代表最新版本号，若要发布其他版本，请改为其他版本号</a>
             </el-form-item>
             <el-form-item label="发布路径" prop="deploy_path">
-              <el-input v-model="ruleForm.deploy_path" disabled></el-input>
+              <el-input v-model="jobs.deploy_path" disabled></el-input>
             </el-form-item>
             <el-form-item label="更新内容" prop="content">
               <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
@@ -140,9 +140,6 @@ export default {
         action_user: localStorage.getItem('username')
       },
       rules: {
-        env: [
-          { required: true, message: '请输入正确的内容', trigger: 'change' }
-        ],
         hosts: [
           { required: true, type: 'array', message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -194,8 +191,10 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
-        this.fetchJobenvData(this.jobs.name)
+        console.log(this.jobs.deploy_hosts)
+        //        this.fetchJobenvData(this.jobs.name)
         this.fetchDeployJobData()
       })
     },

@@ -19,6 +19,8 @@ class Jobs(models.Model):
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
+    deploy_hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
+    deploy_path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
@@ -60,19 +62,19 @@ class Jobs(models.Model):
         return True
 
 
-class Deployenv(models.Model):
-    job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-    name = models.CharField(max_length=10, verbose_name=u'名称')
-    hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
-    path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = u'发布环境'
-        verbose_name_plural = u'发布环境'
+# class Deployenv(models.Model):
+#     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
+#     name = models.CharField(max_length=10, verbose_name=u'名称')
+#     hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
+#     path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
+#     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
+#
+#     def __str__(self):
+#         return self.name
+#
+#     class Meta:
+#         verbose_name = u'发布环境'
+#         verbose_name_plural = u'发布环境'
 
 
 class DeployJobs(models.Model):

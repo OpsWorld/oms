@@ -2,8 +2,8 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, Deployenv, DeployJobs
-from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSerializer
+from jobs.models import Jobs, DeployJobs
+from jobs.serializers import JobsSerializer, DeployJobsSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from omsBackend.settings import sapi
@@ -16,10 +16,10 @@ class JobsViewSet(viewsets.ModelViewSet):
     filter_backends = (JobFilterBackend,)
 
 
-class DeployenvViewSet(viewsets.ModelViewSet):
-    queryset = Deployenv.objects.all()
-    serializer_class = DeployenvSerializer
-    filter_fields = ['job__name']
+# class DeployenvViewSet(viewsets.ModelViewSet):
+#     queryset = Deployenv.objects.all()
+#     serializer_class = DeployenvSerializer
+#     filter_fields = ['job__name']
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
