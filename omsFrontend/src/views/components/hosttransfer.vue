@@ -1,24 +1,27 @@
 <template>
-    <div>
-        <div class="host-select">
-            <el-transfer
-                    v-model="value"
-                    filterable
-                    :titles="['未选择', '已选择']"
-                    :button-texts="['向左走', '向右走']"
-                    :footer-format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
-                    @change="handleChange"
-                    :data="allhost">
-                <el-button type="info" class="transfer-footer" slot="left-footer" size="small" @click="hostData">重置数据</el-button>
-            </el-transfer>
-        </div>
+  <div>
+    <div class="host-select">
+      <el-transfer
+        v-model="value"
+        filterable
+        :titles="['未选择', '已选择']"
+        :button-texts="['向左走', '向右走']"
+        :footer-format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
+        @change="handleChange"
+        :data="allhost">
+        <el-button type="info" class="transfer-footer" slot="left-footer" size="small" @click="hostData">重置数据
+        </el-button>
+      </el-transfer>
     </div>
+  </div>
 </template>
 
 <script>
 import { getHost } from '@/api/host'
 export default {
-  props: ['selecthost'],
+  props: {
+    selecthost: Array
+  },
   data() {
     return {
       allhost: [],
@@ -39,6 +42,7 @@ export default {
         status: 'used'
       }
       getHost(parms).then(response => {
+        this.allhost = []
         const results = response.data
         for (var i = 0, len = results.length; i < len; i++) {
           this.allhost.push({
@@ -61,8 +65,8 @@ export default {
 </script>
 
 <style>
-    .transfer-footer {
-        margin-left: 20px;
-        padding: 6px 5px;
-    }
+  .transfer-footer {
+    margin-left: 20px;
+    padding: 6px 5px;
+  }
 </style>

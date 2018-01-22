@@ -12,7 +12,7 @@
           <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
         <el-form-item label="发布主机" prop="deploy_hosts">
-          <sesect-hosts :selecthost="envForm.hosts" @gethosts="getHosts"></sesect-hosts>
+          <sesect-hosts :selecthost="ruleForm.deploy_hosts" @gethosts="getHosts"></sesect-hosts>
         </el-form-item>
         <el-form-item label="研发可见" prop="showdev">
           <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
