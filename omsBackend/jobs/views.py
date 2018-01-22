@@ -31,12 +31,15 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             j_id = work['j_id']
             j = DeployJobs.objects.get(j_id=j_id)
             job_status = sapi.check_job(j_id)
+            print(job_status)
 
-            if list(set(job_status.values()))[0]:
-                job_results = sapi.get_result(j_id)
-                j.result = '{}\n{}'.format(j.content,job_results)
-                j.deploy_status = 'success'
-            else:
+            try:
+                if list(set(job_status.values()))[0]:
+                    j.result = sapi.get_result(j_id)
+                    j.deploy_status = 'success'
+                else:
+                    j.deploy_status = 'deploy'
+            except Exception as e:
                 j.deploy_status = 'deploy'
 
             j.save()

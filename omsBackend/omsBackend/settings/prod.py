@@ -90,7 +90,7 @@ CACHES = {
 
 # saltapi
 salt_info = {
-    "url": "https://salt.tbsysmanager.com:8080",
+    "url": "http://salt.tbsysmanager.com:8080",
     "username": "saltdev",
     "password": "FF01VeF4hs1FqZ5M"
 }

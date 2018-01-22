@@ -50,9 +50,16 @@
           <div>
             <el-table :data='tableData' @selection-change="handleSelectionChange" style="width: 100%">
               <el-table-column type="selection"></el-table-column>
-              <el-table-column prop='id' label='id'></el-table-column>
+              <el-table-column prop='version' label='发布版本'>
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-tooltip :content="scope.row.content" placement="top">
+                      <a style="color: #257cff">{{scope.row.version}}</a>
+                    </el-tooltip>
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column prop='env' label='发布环境'></el-table-column>
-              <el-table-column prop='version' label='发布版本'></el-table-column>
               <el-table-column prop='deploy_status' label='发布状态' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -64,6 +71,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop='action_user' label='发布人'></el-table-column>
+              <el-table-column prop='action_user' label='发布人'></el-table-column>
               <el-table-column prop='create_time' label='发布时间' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -73,7 +81,9 @@
               </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
-                  <el-button @click="showJobResult(scope.row.result)" type="success" size="mini" :disabled="!scope.row.result">查看结果</el-button>
+                  <el-button @click="showJobResult(scope.row.result)" type="success" size="mini"
+                             :disabled="!scope.row.result">查看结果
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -229,6 +239,7 @@ export default {
             })
             this.fetchDeployJobData()
             this.resetForm('ruleForm')
+            setTimeout(this.fetchDeployJobData(), 5000)
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             this.resetForm(formdata)
