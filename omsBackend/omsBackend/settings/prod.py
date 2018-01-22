@@ -62,7 +62,7 @@ SK_ACOUNT = {
     'sk_pass': 'tengfa@918'
 }
 SK = Skype(SK_ACOUNT["sk_user"], SK_ACOUNT["sk_pass"])
-# SK = 'skype'
+#SK = 'skype'
 
 REDIS_URL = 'redis://192.168.6.110:6379/'
 # celery配置
