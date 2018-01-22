@@ -117,7 +117,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: '发布管理',
+    name: '发布系统',
     path: '/jobs',
     component: Layout,
     icon: 'tasks',

@@ -49,7 +49,7 @@
           </div>
           <div>
             <el-table :data='tableData' @selection-change="handleSelectionChange" style="width: 100%">
-              <el-table-column type="selection"></el-table-column>
+              <el-table-column type="selection" v-if="role==='super'"></el-table-column>
               <el-table-column prop='version' label='发布版本'>
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -71,7 +71,6 @@
                 </template>
               </el-table-column>
               <el-table-column prop='action_user' label='发布人'></el-table-column>
-              <el-table-column prop='action_user' label='发布人'></el-table-column>
               <el-table-column prop='create_time' label='发布时间' sortable>
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -90,7 +89,7 @@
           </div>
           <div class="table-footer">
 
-            <div class="table-button" v-if="jobs_btn_delete_deployjob||role==='super'">
+            <div class="table-button" v-if="role==='super'">
               <el-button type="danger" icon="delete" :disabled="butstatus" @click="deleteForm">删除记录</el-button>
             </div>
             <div class="table-pagination">
@@ -163,7 +162,8 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        search: ''
+        search: '',
+        job__name: ''
       },
       pagesize: [LIMIT, 25, 50, 100],
       tableData: [],
@@ -175,7 +175,6 @@ export default {
       },
       selectId: [],
       butstatus: false,
-      jobs_btn_delete_deployjob: false,
       showresult: false,
       job_results: [],
       check_job_status: ''
@@ -183,14 +182,11 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'elements',
       'role'
     ])
   },
   created() {
-    this.jobs_btn_delete_deployjob = this.elements['发布管理-删除发布任务']
     this.fetchJobData()
-    this.fetchDeployJobData()
   },
   methods: {
     fetchJobData() {
@@ -198,7 +194,9 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.listQuery.job__name = this.jobs.name
         this.fetchJobenvData(this.jobs.name)
+        this.fetchDeployJobData()
       })
     },
     fetchJobenvData(job) {

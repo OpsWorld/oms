@@ -25,9 +25,9 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
 
-
     def list(self, request, *args, **kwargs):
-        works = DeployJobs.objects.all().filter(deploy_status='deploy')
+        job_name = request.GET['job__name']
+        works = DeployJobs.objects.all().filter(job__name=job_name).filter(deploy_status='deploy')
         deploy_serializer = DeployJobsSerializer(works, many=True, context={'request': request})
         for work in deploy_serializer.data:
             j_id = work['j_id']
@@ -45,6 +45,6 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
                 j.deploy_status = 'deploy'
 
             j.save()
-        queryset = DeployJobs.objects.all().order_by('-create_time')
+        queryset = DeployJobs.objects.all().filter(job__name=job_name).order_by('-create_time')
         serializer = DeployJobsSerializer(queryset, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link :to="'addjob'">
+          <router-link :to="'addjob'" v-if="role==='super'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
         </div>
@@ -34,7 +34,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='desc' label='描述'></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作"  v-if="role==='super'">
             <template slot-scope="scope">
               <router-link :to="'editjob/' + scope.row.id">
                 <el-button type="success" size="small" icon="el-icon-setting">配置</el-button>
@@ -62,6 +62,7 @@
 <script>
 import { getJob, deleteJob } from '@/api/job'
 import { LIMIT } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
@@ -79,7 +80,11 @@ export default {
       pagesize: [10, 25, 50, 100]
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
+  },
   created() {
     this.fetchData()
   },
