@@ -7,11 +7,13 @@ from jobs.serializers import JobsSerializer, DeployenvSerializer, DeployJobsSeri
 from rest_framework.response import Response
 from rest_framework import status
 from omsBackend.settings import sapi
+from jobs.filters import JobFilterBackend
 
 
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
     serializer_class = JobsSerializer
+    filter_backends = (JobFilterBackend,)
 
 
 class DeployenvViewSet(viewsets.ModelViewSet):
