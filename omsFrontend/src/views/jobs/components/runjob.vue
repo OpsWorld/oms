@@ -193,7 +193,6 @@ export default {
         this.ruleForm.job = this.jobs.name
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
-        console.log(this.jobs.deploy_hosts)
         //        this.fetchJobenvData(this.jobs.name)
         this.fetchDeployJobData()
       })

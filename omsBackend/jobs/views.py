@@ -37,14 +37,17 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
             job_status = sapi.check_job(j_id)
             print(job_status)
 
-            if list(set(job_status.values()))[0]:
-                    j.result = sapi.get_result(j_id)
-                    j.deploy_status = 'success'
-                    import re
-                    jdata = list(j.result.values())[0]
-                    j.version = re.findall('At revision (\d+)', jdata)[0]
-            else:
-                j.deploy_status = 'deploy'
+            try:
+                if list(set(job_status.values()))[0]:
+                        j.result = sapi.get_result(j_id)
+                        j.deploy_status = 'success'
+                        import re
+                        jdata = list(j.result.values())[0]
+                        j.version = re.findall('At revision (\d+)', jdata)[0]
+                else:
+                    j.deploy_status = 'deploy'
+            except Exception as e:
+                pass
 
             j.save()
         queryset = DeployJobs.objects.all().filter(job__name=job_name).order_by('-create_time')

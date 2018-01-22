@@ -94,7 +94,6 @@ export default {
     fetchData() {
       getJob(this.listQuery).then(response => {
         this.tableData = response.data.results
-        console.log(this.tableData)
         this.tabletotal = response.data.count
       })
     },
