@@ -26,6 +26,7 @@
               </router-link>
             </template>
           </el-table-column>
+          <!--<el-table-column prop='deploy_path' label='发布路径'>-->
           <el-table-column prop='create_time' label='创建时间' sortable>
             <template slot-scope="scope">
               <div slot="reference">
@@ -93,6 +94,7 @@ export default {
     fetchData() {
       getJob(this.listQuery).then(response => {
         this.tableData = response.data.results
+        console.log(this.tableData)
         this.tabletotal = response.data.count
       })
     },

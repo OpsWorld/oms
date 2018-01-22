@@ -8,31 +8,37 @@
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="发布路径" prop="deploy_path">
+          <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="发布主机" prop="deploy_hosts">
+          <sesect-hosts :selecthost="envForm.hosts" @gethosts="getHosts"></sesect-hosts>
+        </el-form-item>
         <el-form-item label="研发可见" prop="showdev">
           <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
-        <el-form-item label="配置环境">
-          <el-tabs v-model="actionTab" type="card" editable @tab-add="addenvForm=true" @tab-remove="removeTab">
-            <el-tab-pane v-for="item in TabValues" :key="item.name" :label="item.title" :name="item.name">
-              <el-card>
-                <el-form label-position="right" inline class="table-expand">
-                  <el-form-item label="环境名称">
-                    <span>{{item.content.name}}</span>
-                  </el-form-item>
-                  <el-form-item label="发布路径">
-                    <span>{{item.content.path}}</span>
-                  </el-form-item>
-                  <el-form-item label="发布主机">
-                    <el-tag v-for="host in item.content.hosts" :key="host" style="margin-right: 5px">{{host}}</el-tag>
-                  </el-form-item>
-                  <el-form-item label="更新内容">
-                    <span>{{item.content.desc}}</span>
-                  </el-form-item>
-                </el-form>
-              </el-card>
-            </el-tab-pane>
-          </el-tabs>
-        </el-form-item>
+        <!--<el-form-item label="配置环境">-->
+          <!--<el-tabs v-model="actionTab" type="card" editable @tab-add="addenvForm=true" @tab-remove="removeTab">-->
+            <!--<el-tab-pane v-for="item in TabValues" :key="item.name" :label="item.title" :name="item.name">-->
+              <!--<el-card>-->
+                <!--<el-form label-position="right" inline class="table-expand">-->
+                  <!--<el-form-item label="环境名称">-->
+                    <!--<span>{{item.content.name}}</span>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="发布路径">-->
+                    <!--<span>{{item.content.path}}</span>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="发布主机">-->
+                    <!--<el-tag v-for="host in item.content.hosts" :key="host" style="margin-right: 5px">{{host}}</el-tag>-->
+                  <!--</el-form-item>-->
+                  <!--<el-form-item label="更新内容">-->
+                    <!--<span>{{item.content.desc}}</span>-->
+                  <!--</el-form-item>-->
+                <!--</el-form>-->
+              <!--</el-card>-->
+            <!--</el-tab-pane>-->
+          <!--</el-tabs>-->
+        <!--</el-form-item>-->
         <el-form-item label="描述" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -65,7 +71,7 @@
   </div>
 </template>
 <script>
-import { postJob, postDeployenv } from '@/api/job'
+import { postJob } from '@/api/job'
 import sesectHosts from '../../components/hosttransfer.vue'
 
 export default {
@@ -78,6 +84,8 @@ export default {
         code_repo: 'svn',
         code_url: '',
         showdev: false,
+        deploy_hosts: [],
+        deploy_path: '',
         desc: ''
       },
       rules: {
@@ -85,6 +93,9 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         code_url: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        deploy_path: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
@@ -114,11 +125,11 @@ export default {
                 type: 'success',
                 message: '恭喜你，新建成功'
               })
-              for (const env of this.TabValues) {
-                const envsForm = env.content
-                envsForm.job = response.data.name
-                postDeployenv(envsForm)
-              }
+              //              for (const env of this.TabValues) {
+              //                const envsForm = env.content
+              //                envsForm.job = response.data.name
+              //                postDeployenv(envsForm)
+              //              }
             }
             this.$router.push('/jobs/jobs')
           })
@@ -160,7 +171,7 @@ export default {
       this.TabValues = tabs.filter(tab => tab.name !== targetName)
     },
     getHosts(data) {
-      this.envForm.hosts = data
+      this.ruleForm.deploy_hosts = data
     }
   }
 }
