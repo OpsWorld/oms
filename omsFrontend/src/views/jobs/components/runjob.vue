@@ -12,11 +12,11 @@
                 <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
               <!--</el-select>-->
             <!--</el-form-item>-->
-            <el-form-item label="发布主机" prop="hosts">
-              <el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">
-                <el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>
-              </el-select>
-            </el-form-item>
+            <!--<el-form-item label="发布主机" prop="hosts">-->
+              <!--<el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">-->
+                <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
             <el-form-item label="代码地址">
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
@@ -237,7 +237,7 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          this.ruleForm.hosts = this.ruleForm.hosts.join()
+          this.ruleForm.hosts = this.jobs.deploy_hosts.join()
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
