@@ -26,11 +26,13 @@ class JobsViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
-    filter_fields = ['job__name']
+    filter_fields = ['job__name', 'version', 'content']
 
     def list(self, request, *args, **kwargs):
         try:
             job_name = request.GET['job__name']
+            version = request.GET['version']
+            content = request.GET['content']
             works = DeployJobs.objects.all().filter(job__name=job_name).filter(deploy_status='deploy')
             deploy_serializer = DeployJobsSerializer(works, many=True, context={'request': request})
             for work in deploy_serializer.data:

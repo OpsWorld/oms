@@ -42,6 +42,14 @@
             <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh"
                        @click="fetchDeployJobData">刷新
             </el-button>
+            <div class="table-search">
+              <el-input
+                placeholder="search"
+                v-model="searchdata"
+                @keyup.enter.native="searchClick">
+                <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+              </el-input>
+            </div>
           </div>
           <div>
             <el-table :data='tableData' @selection-change="handleSelectionChange" style="width: 100%">
@@ -170,7 +178,8 @@ export default {
       butstatus: false,
       showresult: false,
       job_results: [],
-      check_job_status: ''
+      check_job_status: '',
+      searchdata: ''
     }
   },
   computed: {
@@ -247,7 +256,7 @@ export default {
             const messageForm = {
               action_user: 'ITDept_SkypeID',
               title: `【${this.ruleForm.job}】更新`,
-              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}\n发布地址：${window.location.href}`
+              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
             }
             postSendmessage(messageForm)
             this.resetForm('ruleForm')
@@ -291,6 +300,10 @@ export default {
         a.push({ 'host': k, 'data': data[k] })
       })
       this.job_results = a
+    },
+    searchClick() {
+      this.listQuery.search = this.searchdata
+      this.fetchDeployJobData()
     }
   }
 }
@@ -313,7 +326,6 @@ export default {
 
   .table-search {
     float: right;
-    padding: 10px 0;
   }
 
   .table-pagination {
