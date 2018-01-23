@@ -8,14 +8,14 @@
           </div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
             <!--<el-form-item label="发布环境" prop="env">-->
-              <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
-                <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
-              <!--</el-select>-->
+            <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
+            <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
+            <!--</el-select>-->
             <!--</el-form-item>-->
             <!--<el-form-item label="发布主机" prop="hosts">-->
-              <!--<el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">-->
-                <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
-              <!--</el-select>-->
+            <!--<el-select v-model="ruleForm.deploy_hosts" multiple placeholder="请选择发布主机">-->
+            <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
+            <!--</el-select>-->
             <!--</el-form-item>-->
             <el-form-item label="代码地址">
               <el-input v-model="jobs.code_url" disabled></el-input>
@@ -121,6 +121,7 @@
 import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob } from '@/api/job'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
+import { postSendmessage } from '@/api/tool'
 
 export default {
   components: {},
@@ -132,7 +133,7 @@ export default {
       ruleForm: {
         job: '',
         env: '',
-        hosts: [],
+        deploy_hosts: [],
         version: 'HEAD',
         deploy_path: '',
         content: '',
@@ -190,10 +191,10 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
-        //        this.fetchJobenvData(this.jobs.name)
-        this.fetchDeployJobData()
+        this.fetchJobenvData(this.jobs.name)
       })
     },
     fetchJobenvData(job) {
@@ -237,7 +238,7 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          this.ruleForm.hosts = this.jobs.deploy_hosts.join()
+          this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -245,10 +246,15 @@ export default {
               type: 'success'
             })
             this.fetchDeployJobData()
+            const messageForm = {
+              action_user: 'ITDept_SkypeID',
+              title: `【${this.ruleForm.job}】更新`,
+              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+            }
+            postSendmessage(messageForm)
             this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
-            this.resetForm(formdata)
             console.log(error)
           })
         } else {

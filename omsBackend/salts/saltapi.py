@@ -59,7 +59,13 @@ class SaltAPI(object):
         """
 
         prefix = '/keys'
-        content = self.salt_request(None, prefix)
+        try:
+            content = self.salt_request(None, prefix)
+        except Exception as e:
+            print("salt-api token is Expired")
+            self.get_token()
+            content = self.salt_request(None, prefix)
+
         accepted = content['return']['minions']
         denied = content['return']['minions_denied']
         unaccept = content['return']['minions_pre']
@@ -92,8 +98,15 @@ class SaltAPI(object):
         """
 
         data = {'client': 'runner', 'fun': 'manage.status'}
-        content = self.salt_request(data)
-        ret = content['return'][0]
+        try:
+            content = self.salt_request(data)
+            ret = content['return'][0]
+        except Exception as e:
+            print("salt-api token is Expired")
+            self.get_token()
+            content = self.salt_request(data)
+            ret = content['return'][0]
+
         up = ret['up']
         down = ret['down']
         ups = []
@@ -112,8 +125,15 @@ class SaltAPI(object):
         """
 
         data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
-        content = self.salt_request(data)
-        ret = content['return'][0]['jid']
+        try:
+            content = self.salt_request(data)
+            ret = content['return'][0]['jid']
+        except Exception as e:
+            print("salt-api token is Expired")
+            self.get_token()
+            content = self.salt_request(data)
+            ret = content['return'][0]['jid']
+        print(content)
         return ret
 
     def get_result(self, jid):
@@ -122,8 +142,14 @@ class SaltAPI(object):
         """
 
         data = {'client': 'runner', 'fun': 'jobs.lookup_jid', 'jid': jid}
-        content = self.salt_request(data)
-        ret = content['return'][0]
+        try:
+            content = self.salt_request(data)
+            ret = content['return'][0]
+        except Exception as e:
+            print("salt-api token is Expired")
+            self.get_token()
+            content = self.salt_request(data)
+            ret = content['return'][0]
         return ret
 
     def get_job_info(self, jid=''):
