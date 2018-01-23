@@ -35,23 +35,23 @@ export default {
   components: { sesectHosts },
 
   data() {
-    const cmdRule = (rule, value, callback) => {
-      let num = 1
-      for (var i of this.denycmd) {
-        if (value.indexOf(i) > -1) {
-          num = 0
-          const cmd = value.split(' ')[0]
-          this.results = ['你坏坏！命令【' + cmd + '】已进入黑名单']
-        } else {
-          num = num * num
-        }
-      }
-      if (num === 0) {
-        callback(new Error(this.results))
-      } else {
-        callback()
-      }
-    }
+    //    const cmdRule = (rule, value, callback) => {
+    //      let num = 1
+    //      for (var i of this.denycmd) {
+    //        if (value.indexOf(i) > -1) {
+    //          num = 0
+    //          const cmd = value.split(' ')[0]
+    //          this.results = ['你坏坏！命令【' + cmd + '】已进入黑名单']
+    //        } else {
+    //          num = num * num
+    //        }
+    //      }
+    //      if (num === 0) {
+    //        callback(new Error(this.results))
+    //      } else {
+    //        callback()
+    //      }
+    //    }
     return {
       ruleForm: {
         hosts: [],
@@ -60,8 +60,8 @@ export default {
       },
       rules: {
         cmd: [
-          { required: true, message: '请输入命令', trigger: 'blur' },
-          { validator: cmdRule, trigger: 'blur' }
+          { required: true, message: '请输入命令', trigger: 'blur' }
+          //          { validator: cmdRule, trigger: 'blur' }
         ]
       },
       commands: [
