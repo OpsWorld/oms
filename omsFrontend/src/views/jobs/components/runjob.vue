@@ -246,7 +246,7 @@ export default {
             const messageForm = {
               action_user: 'ITDept_SkypeID',
               title: `【${this.ruleForm.job}】更新`,
-              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}\n发布地址：${window.location.href}`
             }
             postSendmessage(messageForm)
             this.resetForm('ruleForm')
