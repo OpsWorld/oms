@@ -43,7 +43,7 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         runcmd = '{} update {} -r {} --non-interactive --trust-server-cert'.format(svn_cmd,deploy_path, version)
         print(runcmd)
         printcmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
-        jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=runcmd)
+        jid = sapi.remote_cmd(tgt=hosts.split(','), fun='cmd.run', arg=printcmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()
