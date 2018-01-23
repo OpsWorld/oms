@@ -187,6 +187,7 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.ruleForm.repo_cmd = this.jobs.repo_cmd
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
@@ -246,7 +247,7 @@ export default {
             const messageForm = {
               action_user: 'ITDept_SkypeID',
               title: `【${this.ruleForm.job}】更新`,
-              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}\n发布地址：${window.location.href}`
             }
             postSendmessage(messageForm)
             this.resetForm('ruleForm')

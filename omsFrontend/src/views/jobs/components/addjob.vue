@@ -5,6 +5,9 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="svn命令" prop="repo_cmd">
+          <el-input v-model="ruleForm.repo_cmd" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
@@ -82,6 +85,7 @@ export default {
       ruleForm: {
         name: '',
         code_repo: 'svn',
+        repo_cmd: '',
         code_url: '',
         showdev: false,
         deploy_hosts: [],
@@ -90,6 +94,9 @@ export default {
       },
       rules: {
         name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        repo_cmd: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         code_url: [
