@@ -8,12 +8,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
-
+from rest_framework.filters import SearchFilter
 
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
     serializer_class = JobsSerializer
-    filter_backends = (JobFilterBackend,)
+    filter_backends = (JobFilterBackend,SearchFilter)
+    search_fields = ('name', 'code_url')
 
 
 # class DeployenvViewSet(viewsets.ModelViewSet):

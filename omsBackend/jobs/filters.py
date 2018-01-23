@@ -22,4 +22,4 @@ class JobFilterBackend(DRYPermissionFiltersBase):
         else:
             # .distinct()去重
             print("not admin")
-            return queryset.filter(showdev=True).distinct()
+            return queryset.filter(showdev=True).distinct().order_by('id')
