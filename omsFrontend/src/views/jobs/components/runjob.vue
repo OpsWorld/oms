@@ -13,7 +13,7 @@
               <!--</el-select>-->
             <!--</el-form-item>-->
             <!--<el-form-item label="发布主机" prop="hosts">-->
-              <!--<el-select v-model="ruleForm.hosts" multiple placeholder="请选择发布主机">-->
+              <!--<el-select v-model="ruleForm.deploy_hosts" multiple placeholder="请选择发布主机">-->
                 <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
               <!--</el-select>-->
             <!--</el-form-item>-->
@@ -132,7 +132,7 @@ export default {
       ruleForm: {
         job: '',
         env: '',
-        hosts: [],
+        deploy_hosts: [],
         version: 'HEAD',
         deploy_path: '',
         content: '',
@@ -190,10 +190,10 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
-        //        this.fetchJobenvData(this.jobs.name)
-        this.fetchDeployJobData()
+        this.fetchJobenvData(this.jobs.name)
       })
     },
     fetchJobenvData(job) {
@@ -237,7 +237,7 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          this.ruleForm.hosts = this.jobs.deploy_hosts.join()
+          this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -248,7 +248,6 @@ export default {
             this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
-            this.resetForm(formdata)
             console.log(error)
           })
         } else {
