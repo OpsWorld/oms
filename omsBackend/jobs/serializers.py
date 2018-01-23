@@ -13,7 +13,8 @@ class JobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_hosts', 'deploy_path', 'create_time', 'showdev', 'desc']
+        fields = ['url', 'id', 'name', 'code_repo', 'repo_cmd', 'code_url', 'deploy_hosts', 'deploy_path',
+                  'create_time', 'showdev', 'desc']
 
 
 # class DeployenvSerializer(serializers.ModelSerializer):
@@ -31,16 +32,16 @@ class DeployJobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeployJobs
-        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'env', 'version', 'deploy_path', 'content',
-                  'action_user', 'result', 'create_time']
+        fields = ['url', 'id', 'job', 'j_id', 'repo_cmd', 'deploy_status', 'deploy_hosts', 'env', 'version',
+                  'deploy_path', 'content', 'action_user', 'result', 'create_time']
 
     def create(self, validated_data):
+        repo_cmd = validated_data["repo_cmd"]
         deploy_hosts = validated_data["deploy_hosts"]
         version = validated_data["version"]
         deploy_path = validated_data["deploy_path"]
         print(deploy_path)
-        svn_cmd = '"C:/Program Files/TortoiseSVN/bin/svn.exe"'
-        runcmd = '{} update {} -r {} --non-interactive --trust-server-cert'.format(svn_cmd,deploy_path, version)
+        runcmd = '{} update {} -r {} --non-interactive --trust-server-cert'.format(repo_cmd, deploy_path, version)
         print(runcmd)
         printcmd = "echo '发布版本：'%s; echo '发布路径：'%s; echo '发布命令：%s'" % (version, deploy_path, runcmd)
         jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), fun='cmd.run', arg=runcmd)

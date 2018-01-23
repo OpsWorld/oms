@@ -187,6 +187,7 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
+        this.ruleForm.repo_cmd = this.jobs.repo_cmd
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
