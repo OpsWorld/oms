@@ -22,10 +22,6 @@
             </el-form-item>
             <el-form-item label="发布版本" prop="version">
               <el-input v-model="ruleForm.version"></el-input>
-              <!--<el-select v-model="ruleForm.version" placeholder="请选择发布版本">-->
-              <!--<el-option v-for="item in versions" :key="item.id" :value="item"></el-option>-->
-              <!--</el-select>-->
-              <a class="tips">Tip：HEAD 代表最新版本号，若要发布其他版本，请改为其他版本号</a>
             </el-form-item>
             <el-form-item label="发布路径" prop="deploy_path">
               <el-input v-model="jobs.deploy_path" disabled></el-input>
@@ -134,7 +130,7 @@ export default {
         job: '',
         env: '',
         deploy_hosts: [],
-        version: 'HEAD',
+        version: '',
         deploy_path: '',
         content: '',
         action_user: localStorage.getItem('username')
