@@ -37,19 +37,19 @@
       </el-col>
       <el-col :span="16">
         <el-card>
-          <div slot="header">
+          <div class="table-button">
             <a class="jobname">发布记录</a>
             <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh"
                        @click="fetchDeployJobData">刷新
             </el-button>
-            <div class="table-search">
-              <el-input
-                placeholder="search"
-                v-model="searchdata"
-                @keyup.enter.native="searchClick">
-                <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
-              </el-input>
-            </div>
+          </div>
+          <div class="table-search">
+            <el-input
+              placeholder="search"
+              v-model="searchdata"
+              @keyup.enter.native="searchClick">
+              <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+            </el-input>
           </div>
           <div>
             <el-table :data='tableData' @selection-change="handleSelectionChange" style="width: 100%">
@@ -303,7 +303,7 @@ export default {
     },
     searchClick() {
       this.listQuery.search = this.searchdata
-      this.fetchDeployJobData()
+      setTimeout(this.fetchDeployJobData(), 500)
     }
   }
 }
@@ -326,6 +326,7 @@ export default {
 
   .table-search {
     float: right;
+    padding: 10px 0;
   }
 
   .table-pagination {

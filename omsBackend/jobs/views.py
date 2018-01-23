@@ -9,11 +9,13 @@ from rest_framework import status
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter
+from django.db.models import Q
+
 
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
     serializer_class = JobsSerializer
-    filter_backends = (JobFilterBackend,SearchFilter)
+    filter_backends = (JobFilterBackend, SearchFilter)
     search_fields = ('name', 'code_url')
 
 
@@ -26,14 +28,14 @@ class JobsViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
-    filter_fields = ['job__name', 'version', 'content']
+    filter_fields = ['job__name']
+    search_fields = ['version', 'content']
 
     def list(self, request, *args, **kwargs):
         try:
             job_name = request.GET['job__name']
-            version = request.GET['version']
-            content = request.GET['content']
-            works = DeployJobs.objects.all().filter(job__name=job_name).filter(deploy_status='deploy')
+            search = request.GET['search']
+            works = DeployJobs.objects.filter(job__name=job_name).filter(deploy_status='deploy')
             deploy_serializer = DeployJobsSerializer(works, many=True, context={'request': request})
             for work in deploy_serializer.data:
                 j_id = work['j_id']
@@ -43,18 +45,22 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
 
                 try:
                     if list(set(job_status.values()))[0]:
-                            j.result = sapi.get_result(j_id)
-                            j.deploy_status = 'success'
-                            import re
-                            jdata = list(j.result.values())[0]
-                            j.version = re.findall('At revision (\d+)', jdata)[0]
+                        j.result = sapi.get_result(j_id)
+                        j.deploy_status = 'success'
+                        import re
+                        jdata = list(j.result.values())[0]
+                        j.version = re.findall('At revision (\d+)', jdata)[0]
                     else:
                         j.deploy_status = 'deploy'
                 except Exception as e:
                     pass
 
                 j.save()
-            queryset = DeployJobs.objects.all().filter(job__name=job_name).order_by('-create_time')
+            if search:
+                queryset = DeployJobs.objects.filter(job__name=job_name).filter(
+                    Q(version=search) | Q(content__contains=search)).order_by('-create_time')
+            else:
+                queryset = DeployJobs.objects.filter(job__name=job_name).order_by('-create_time')
             serializer = DeployJobsSerializer(queryset, many=True, context={'request': request})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
