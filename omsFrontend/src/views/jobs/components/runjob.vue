@@ -303,7 +303,7 @@ export default {
     },
     searchClick() {
       this.listQuery.search = this.searchdata
-      this.fetchDeployJobData()
+      setTimeout(this.fetchDeployJobData(), 500)
     }
   }
 }
