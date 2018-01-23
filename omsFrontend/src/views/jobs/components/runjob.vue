@@ -190,7 +190,8 @@ export default {
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.ruleForm.deploy_path = this.jobs.deploy_path
         this.listQuery.job__name = this.jobs.name
-        this.fetchJobenvData(this.jobs.name)
+        this.fetchDeployJobData()
+        // this.fetchJobenvData(this.jobs.name)
       })
     },
     fetchJobenvData(job) {
