@@ -8,14 +8,14 @@
           </div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
             <!--<el-form-item label="发布环境" prop="env">-->
-              <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
-                <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
-              <!--</el-select>-->
+            <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
+            <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
+            <!--</el-select>-->
             <!--</el-form-item>-->
             <!--<el-form-item label="发布主机" prop="hosts">-->
-              <!--<el-select v-model="ruleForm.deploy_hosts" multiple placeholder="请选择发布主机">-->
-                <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
-              <!--</el-select>-->
+            <!--<el-select v-model="ruleForm.deploy_hosts" multiple placeholder="请选择发布主机">-->
+            <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
+            <!--</el-select>-->
             <!--</el-form-item>-->
             <el-form-item label="代码地址">
               <el-input v-model="jobs.code_url" disabled></el-input>
@@ -121,6 +121,7 @@
 import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob } from '@/api/job'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
+import { postSendmessage } from '@/api/tool'
 
 export default {
   components: {},
@@ -245,6 +246,12 @@ export default {
               type: 'success'
             })
             this.fetchDeployJobData()
+            const messageForm = {
+              action_user: 'ITDept_SkypeID',
+              title: `【${this.ruleForm.job}】更新`,
+              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+            }
+            postSendmessage(messageForm)
             this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
