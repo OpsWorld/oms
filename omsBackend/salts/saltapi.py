@@ -186,7 +186,7 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_server_info(self, tgt=(), args=('fqdn', 'os', 'osrelease', 'ipv4', 'cpu_model', 'mem_total')):
+    def remote_server_info(self, tgt, args=('fqdn', 'os', 'ipv4', 'cpu_model', 'mem_total')):
         """
         获取远程主机信息
         """
@@ -203,10 +203,10 @@ class SaltAPI(object):
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'netstat'
-    # tgt = ['sh-aa-01','bj-aa-02']
+    tgt = 'sh-aa-01'
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.minions_status())
+    print(sapi.remote_server_info(tgt))
 
 
 if __name__ == '__main__':
