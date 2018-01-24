@@ -151,6 +151,7 @@ JWT_AUTH = {
 AUTH_USER_MODEL = "users.User"
 
 CORS_ORIGIN_ALLOW_ALL = True
+CSRF_COOKIE_SECURE = True
 
 # 使用ldap认证
 LDAP_AUTH_USE_TLS = False

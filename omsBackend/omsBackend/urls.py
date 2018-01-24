@@ -10,10 +10,12 @@ from django.views.generic.base import TemplateView
 from omsBackend import settings
 from omsBackend.routerApi import router
 from perms.views import routers
+from jobs.views import update_jobs_status
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r'^api/', include(router.urls)),
     url(r'^api/routers/(?P<username>\w+)', routers, name="myrouter"),
+    url(r'^api/update_jobs_status/', update_jobs_status, name="update_jobs_status"),
 
     # salt
     url(r'^api/salts/', include('salts.urls')),
