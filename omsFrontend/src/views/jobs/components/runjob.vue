@@ -221,21 +221,26 @@ export default {
       getDeployJob(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
-
-        // 检查发布项目的状态是否是‘deploy',如果是 3s后会再检查一遍
-        this.check_job_status = setInterval(() => {
-          const pramas = {
-            job__name: this.listQuery.job__name
-          }
-          getUpdateJobsStatus(pramas).then(response => {
-            if (response.data.count === 0) {
-              clearInterval(this.check_job_status)
-            } else {
-              console.log('check job_status 3/s')
-              this.fetchDeployJobData()
+        const job_status = this.tableData.map(function(item) {
+          return item.deploy_status
+        })
+        if (job_status.indexOf('deploy') > -1) {
+          this.check_job_status = setInterval(() => {
+            const pramas = {
+              job__name: this.listQuery.job__name
             }
-          })
-        }, 3000)
+            getUpdateJobsStatus(pramas).then(response => {
+              if (response.data.count === 0) {
+                clearInterval(this.check_job_status)
+                this.fetchDeployJobData()
+              } else {
+                console.log('check job_status 3/s')
+              }
+            })
+          }, 3000)
+        } else {
+          clearInterval(this.check_job_status)
+        }
       })
     },
     handleSizeChange(val) {
