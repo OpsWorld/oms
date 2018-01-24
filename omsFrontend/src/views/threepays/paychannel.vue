@@ -149,7 +149,7 @@
           </div>
 
           <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
-                    @row-click="clickPayChannel">
+                    @row-click="clickPayChannel" @sort-change="handleSortChange">
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label='查看明细' type="expand" width="50">
               <template slot-scope="props">
@@ -182,13 +182,13 @@
               </template>
             </el-table-column>
             <!--<el-table-column prop='complete' label='完成百分比' width="100">-->
-              <!--<template slot-scope="scope">-->
-                <!--<el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>-->
-                <!--<el-tooltip class="item" effect="dark" content="更新进度" placement="top">-->
-                  <!--<el-button @click="editComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"-->
-                             <!--class="modifychange"></el-button>-->
-                <!--</el-tooltip>-->
-              <!--</template>-->
+            <!--<template slot-scope="scope">-->
+            <!--<el-progress type="circle" :percentage="scope.row.complete" :width="40"></el-progress>-->
+            <!--<el-tooltip class="item" effect="dark" content="更新进度" placement="top">-->
+            <!--<el-button @click="editComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"-->
+            <!--class="modifychange"></el-button>-->
+            <!--</el-tooltip>-->
+            <!--</template>-->
             <!--</el-table-column>-->
             <el-table-column prop='create_time' label='创建时间' sortable>
               <template slot-scope="scope">
@@ -320,7 +320,8 @@ export default {
         limit: LIMIT,
         offset: '',
         platform__name: '',
-        merchant__name: ''
+        merchant__name: '',
+        ordering: ''
       },
       currentPage: 1,
       pagesize: [LIMIT, 25, 50, 100],
@@ -641,6 +642,16 @@ export default {
         offset: '',
         platform__name: '',
         merchant__name: ''
+      }
+      this.fetchPayChannelData()
+    },
+    handleSortChange(val) {
+      if (val.order === 'ascending') {
+        this.listQuery.ordering = val.prop
+      } else if (val.order === 'descending') {
+        this.listQuery.ordering = '-' + val.prop
+      } else {
+        this.listQuery.ordering = ''
       }
       this.fetchPayChannelData()
     }
