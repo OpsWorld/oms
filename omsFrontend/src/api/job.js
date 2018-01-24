@@ -89,3 +89,13 @@ export function deleteDeployJob(id) {
     method: 'delete'
   })
 }
+
+// updaejobsstatus
+export function getUpdateJobsStatus(query) {
+  return request({
+    url: apiURL.updaejobsstatus,
+    method: 'get',
+    params: query
+  })
+}
+
