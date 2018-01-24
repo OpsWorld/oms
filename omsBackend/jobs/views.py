@@ -10,6 +10,7 @@ from rest_framework.filters import SearchFilter
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all()
     serializer_class = JobsSerializer
@@ -28,6 +29,7 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
     search_fields = ['version', 'content']
+
 
 @api_view()
 def update_jobs_status(request):
