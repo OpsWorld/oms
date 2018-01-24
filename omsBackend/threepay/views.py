@@ -33,6 +33,7 @@ class PayChannelNameViewSet(viewsets.ModelViewSet):
 class PayChannelViewSet(viewsets.ModelViewSet):
     queryset = PayChannel.objects.all().order_by('-level', '-create_time')
     serializer_class = PayChannelSerializer
+    ordering_fields = ('level', 'create_time')
     filter_fields = ['platform__name', 'merchant__name', 'type__name']
 
 

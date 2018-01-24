@@ -16,10 +16,10 @@ from dry_rest_permissions.generics import DRYPermissions
 class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('ticket_status', '-create_time', '-update_time')
     serializer_class = WorkTicketSerializer
-    filter_backends = (WorkTicketFilterBackend,DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filter_backends = (WorkTicketFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
     search_fields = ('title', 'content', 'type__name')
-    ordering_fields = ('level', 'ticket_status','create_time','update_time')
-    filter_fields = ('ticket_status','ticketid','create_user__username','action_user__username')
+    ordering_fields = ('level', 'ticket_status', 'create_time', 'update_time')
+    filter_fields = ('ticket_status', 'ticketid', 'create_user__username', 'action_user__username')
     permission_classes = (DRYPermissions,)
 
 
