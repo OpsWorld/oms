@@ -30,6 +30,9 @@
             <el-form-item label="更新内容" prop="content">
               <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
             </el-form-item>
+            <el-form-item label="通知skype" prop="content">
+              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')">开始构建</el-button>
             </el-form-item>
@@ -126,7 +129,7 @@
 import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob, getUpdateJobsStatus } from '@/api/job'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
-// import { postSendmessage } from '@/api/tool'
+import { postSendmessage } from '@/api/tool'
 
 export default {
   components: {},
@@ -179,7 +182,8 @@ export default {
       showresult: false,
       job_results: [],
       check_job_status: '',
-      searchdata: ''
+      searchdata: '',
+      sendnotice: true
     }
   },
   computed: {
@@ -268,12 +272,15 @@ export default {
               type: 'success'
             })
             this.fetchDeployJobData()
-            //            const messageForm = {
-            //              action_user: 'ITDept_SkypeID',
-            //              title: `【${this.ruleForm.job}】更新`,
-            //              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
-            //            }
-            //            postSendmessage(messageForm)
+
+            if (this.sendnotice) {
+              const messageForm = {
+                action_user: 'ITDept_SkypeID',
+                title: `【${this.ruleForm.job}】更新`,
+                message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+              }
+              postSendmessage(messageForm)
+            }
             this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
