@@ -92,6 +92,7 @@ module.exports = {
 
   // 知识收集平台
   wikis: `${url}/api/wikis/`,
+  opswikis: `${url}/api/opswikis/`,
 
   // 发布
   jobs: `${url}/api/jobs/`,
