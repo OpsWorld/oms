@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 
 class JobsViewSet(viewsets.ModelViewSet):
-    queryset = Jobs.objects.all().order_by('-id')
+    queryset = Jobs.objects.all().order_by('id')
     serializer_class = JobsSerializer
     filter_backends = (JobFilterBackend, SearchFilter)
     search_fields = ('name', 'code_url')
