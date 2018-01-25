@@ -2,6 +2,7 @@
 # author: itimor
 
 import requests
+import datetime
 
 salt_info = {
     "url": "http://192.168.6.99:8080",
@@ -17,6 +18,7 @@ class SaltAPI(object):
         self.__password = password
         self.__header = dict()
         self.__header["Accept"] = "application/json"
+        self.token_s_time = ''
         self.__token = self.get_token()
 
     def get_token(self, prefix='/login'):
@@ -33,6 +35,7 @@ class SaltAPI(object):
         req = requests.post(loginurl, data=data, headers=self.__header, verify=False)
         try:
             token = req.json()["return"][0]["token"]
+            self.token_s_time = datetime.datetime.now()
             return token
         except KeyError:
             raise KeyError
@@ -41,6 +44,14 @@ class SaltAPI(object):
         """
         接收请求，返回结果
         """
+
+        token_e_time = datetime.datetime.now()
+        print("token_e_time: %s" % token_e_time)
+        print("token_s_time: %s" % self.token_s_time)
+
+        if (token_e_time - self.token_s_time).seconds/3600 > 3:
+            print("salt-api token is Expired")
+            self.get_token()
 
         url = self.__url + prefix
         self.__header["X-Auth-Token"] = self.__token
@@ -59,12 +70,7 @@ class SaltAPI(object):
         """
 
         prefix = '/keys'
-        try:
-            content = self.salt_request(None, prefix)
-        except Exception as e:
-            print("salt-api token is Expired")
-            self.get_token()
-            content = self.salt_request(None, prefix)
+        content = self.salt_request(None, prefix)
 
         accepted = content['return']['minions']
         denied = content['return']['minions_denied']
@@ -98,14 +104,8 @@ class SaltAPI(object):
         """
 
         data = {'client': 'runner', 'fun': 'manage.status'}
-        try:
-            content = self.salt_request(data)
-            ret = content['return'][0]
-        except Exception as e:
-            print("salt-api token is Expired")
-            self.get_token()
-            content = self.salt_request(data)
-            ret = content['return'][0]
+        content = self.salt_request(data)
+        ret = content['return'][0]
 
         up = ret['up']
         down = ret['down']
@@ -125,14 +125,8 @@ class SaltAPI(object):
         """
 
         data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
-        try:
-            content = self.salt_request(data)
-            ret = content['return'][0]['jid']
-        except Exception as e:
-            print("salt-api token is Expired")
-            self.get_token()
-            content = self.salt_request(data)
-            ret = content['return'][0]['jid']
+        content = self.salt_request(data)
+        ret = content['return'][0]['jid']
         print(content)
         return ret
 
@@ -142,14 +136,8 @@ class SaltAPI(object):
         """
 
         data = {'client': 'runner', 'fun': 'jobs.lookup_jid', 'jid': jid}
-        try:
-            content = self.salt_request(data)
-            ret = content['return'][0]
-        except Exception as e:
-            print("salt-api token is Expired")
-            self.get_token()
-            content = self.salt_request(data)
-            ret = content['return'][0]
+        content = self.salt_request(data)
+        ret = content['return'][0]
         return ret
 
     def get_job_info(self, jid=''):

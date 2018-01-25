@@ -77,5 +77,4 @@ salt_info = {
 }
 
 from salts.saltapi import SaltAPI
-
 sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
