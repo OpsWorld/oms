@@ -5,17 +5,18 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
-        <el-form-item label="svn命令" prop="repo_cmd">
-          <el-input v-model="ruleForm.repo_cmd" placeholder="请输入正确的内容"></el-input>
-        </el-form-item>
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
         <el-form-item label="发布路径" prop="deploy_path">
           <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
+          <i class="el-icon-question"> deploy_path</i>
         </el-form-item>
         <el-form-item label="发布主机" prop="deploy_hosts">
           <sesect-hosts :selecthost="ruleForm.deploy_hosts" @gethosts="getHosts"></sesect-hosts>
+        </el-form-item>
+        <el-form-item label="发布命令" prop="deploy_cmd">
+          <el-input v-model="ruleForm.deploy_cmd" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item label="研发可见" prop="showdev">
           <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
@@ -89,13 +90,14 @@ export default {
         code_url: '',
         deploy_hosts: [],
         deploy_path: '',
+        deploy_cmd: '',
         desc: ''
       },
       rules: {
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        repo_cmd: [
+        deploy_cmd: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         code_url: [

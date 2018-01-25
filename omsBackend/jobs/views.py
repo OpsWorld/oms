@@ -43,7 +43,7 @@ def update_jobs_status(request):
             j_id = job.j_id
             j = DeployJobs.objects.get(j_id=j_id)
             job_status = sapi.check_job(j_id)
-            print(job_status)
+            print(list(set(job_status.values()))[0])
             try:
                 if list(set(job_status.values()))[0]:
                     j.result = sapi.get_result(j_id)

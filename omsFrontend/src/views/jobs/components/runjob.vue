@@ -22,8 +22,9 @@
             </el-form-item>
             <el-form-item label="发布版本" prop="version">
               <el-input v-model="ruleForm.version"></el-input>
+              <i class="el-icon-question"> version</i>
             </el-form-item>
-            <el-form-item label="发布路径" prop="deploy_path">
+            <el-form-item label="发布路径">
               <el-input v-model="jobs.deploy_path" disabled></el-input>
             </el-form-item>
             <el-form-item label="更新内容" prop="content">
@@ -125,7 +126,7 @@
 import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob, getUpdateJobsStatus } from '@/api/job'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
-import { postSendmessage } from '@/api/tool'
+// import { postSendmessage } from '@/api/tool'
 
 export default {
   components: {},
@@ -136,10 +137,9 @@ export default {
       job_id: this.$route.params.job_id,
       ruleForm: {
         job: '',
-        env: '',
         deploy_hosts: [],
         version: '',
-        deploy_path: '',
+        deploy_cmd: '',
         content: '',
         action_user: localStorage.getItem('username')
       },
@@ -196,9 +196,8 @@ export default {
       getJob(parms, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
-        this.ruleForm.repo_cmd = this.jobs.repo_cmd
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
-        this.ruleForm.deploy_path = this.jobs.deploy_path
+        this.ruleForm.deploy_cmd = this.jobs.deploy_cmd
         this.listQuery.job__name = this.jobs.name
         this.fetchDeployJobData()
         // this.fetchJobenvData(this.jobs.name)
@@ -255,6 +254,13 @@ export default {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
+          this.jobs.version = this.ruleForm.version
+          const rex = /\$\w+/g
+          const rex_pool = this.ruleForm.deploy_cmd.match(rex)
+          for (var i of rex_pool) {
+            var j = i.replace('$', '')
+            this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(i, this.jobs[j])
+          }
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -262,15 +268,16 @@ export default {
               type: 'success'
             })
             this.fetchDeployJobData()
-            const messageForm = {
-              action_user: 'ITDept_SkypeID',
-              title: `【${this.ruleForm.job}】更新`,
-              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
-            }
-            postSendmessage(messageForm)
+            //            const messageForm = {
+            //              action_user: 'ITDept_SkypeID',
+            //              title: `【${this.ruleForm.job}】更新`,
+            //              message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
+            //            }
+            //            postSendmessage(messageForm)
             this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
+            this.resetForm('ruleForm')
             console.log(error)
           })
         } else {
