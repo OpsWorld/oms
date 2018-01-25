@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 
 class JobsViewSet(viewsets.ModelViewSet):
-    queryset = Jobs.objects.all()
+    queryset = Jobs.objects.all().order_by('-id')
     serializer_class = JobsSerializer
     filter_backends = (JobFilterBackend, SearchFilter)
     search_fields = ('name', 'code_url')
@@ -25,7 +25,7 @@ class JobsViewSet(viewsets.ModelViewSet):
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
-    queryset = DeployJobs.objects.all()
+    queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
     search_fields = ['version', 'content']
