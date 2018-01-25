@@ -25,7 +25,7 @@ class JobsViewSet(viewsets.ModelViewSet):
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
-    queryset = DeployJobs.objects.all().order_by('-create_time')
+    queryset = DeployJobs.objects.all()
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
     search_fields = ['version', 'content']
