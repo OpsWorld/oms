@@ -44,7 +44,11 @@ export const constantRouterMap = [
       { path: 'addwiki', hidden: true, component: _import('wikis/components/addwiki'), name: '添加文档' },
       { path: 'editwiki/:wikiid', hidden: true, component: _import('wikis/components/editwiki'), name: '编辑文档' },
       { path: 'viewwiki/:wikiid', hidden: true, component: _import('wikis/components/viewwiki'), name: '查看文档' },
-      { path: 'wikilist', component: _import('wikis/wikilist'), name: '文档中心' }
+      { path: 'wikilist', component: _import('wikis/wikilist'), name: '文档中心' },
+      { path: 'opswikiadmin', component: _import('wikis/opswikiadmin'), name: '运维文档管理' },
+      { path: 'addopswiki', hidden: true, component: _import('wikis/components/addopswiki'), name: '添加运维文档' },
+      { path: 'editopswiki/:wikiid', hidden: true, component: _import('wikis/components/editopswiki'), name: '编辑运维文档' },
+      { path: 'viewopswiki/:wikiid', hidden: true, component: _import('wikis/components/viewopswiki'), name: '查看运维文档' }
     ]
   }
 ]

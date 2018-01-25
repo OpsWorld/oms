@@ -32,3 +32,35 @@ export function deleteWiki(id) {
     method: 'delete'
   })
 }
+
+// opswikis
+export function postOpsWiki(data) {
+  return request({
+    url: apiURL.opswikis,
+    method: 'post',
+    data
+  })
+}
+
+export function getOpsWiki(query, id) {
+  return request({
+    url: id ? apiURL.opswikis + id + '/' : apiURL.opswikis,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putOpsWiki(id, data) {
+  return request({
+    url: apiURL.opswikis + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteOpsWiki(id) {
+  return request({
+    url: apiURL.opswikis + id + '/',
+    method: 'delete'
+  })
+}
