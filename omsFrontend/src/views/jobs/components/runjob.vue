@@ -147,7 +147,7 @@ export default {
         job: '',
         deploy_hosts: [],
         version: '',
-        deploy_cmd: 'svn更新',
+        deploy_cmd: '',
         content: '',
         action_user: localStorage.getItem('username')
       },
@@ -208,7 +208,6 @@ export default {
         this.ruleForm.job = this.jobs.name
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
         this.listQuery.job__name = this.jobs.name
-        console.log(this.ruleForm)
         this.fetchDeployJobData()
         this.fetchJobcmdData(this.jobs.name)
       })
@@ -232,7 +231,7 @@ export default {
       }
       getDeploycmd(parms).then(response => {
         this.deploy_cmds = response.data
-        this.ruleForm.deploy_cmd = this.deploy_cmds[0].name
+        this.ruleForm.deploy_cmd = this.deploy_cmds[0].deploy_cmd
       })
     },
     fetchDeployJobData() {
@@ -297,6 +296,7 @@ export default {
               postSendmessage(messageForm)
             }
             this.resetForm('ruleForm')
+            this.ruleForm.deploy_cmd = this.deploy_cmds[0].name
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             this.resetForm('ruleForm')

@@ -48,7 +48,7 @@
                     <el-pagination
                             @size-change="handleSizeChange"
                             @current-change="handleCurrentChange"
-                            :current-page.sync="listQuery.offset"
+                            :current-page.sync="currentPage"
                             :page-sizes="pagesize"
                             :page-size="listQuery.limit"
                             layout="prev, pager, next, sizes"
@@ -75,6 +75,7 @@ export default {
       tableData: [],
       tabletotal: 0,
       searchdata: '',
+      currentPage: 1,
       pagesize: [10, 25, 50, 100],
       rowdata: {},
       selectId: [],

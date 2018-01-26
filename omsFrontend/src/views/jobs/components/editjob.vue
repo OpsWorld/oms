@@ -19,7 +19,7 @@
           <el-tabs v-model="actioncmdTab" type="card" editable @tab-add="addcmdForm=true" @tab-remove="removecmdTab">
             <el-tab-pane v-for="item in cmdTabValues" :key="item.name" :label="item.title" :name="item.name">
               <el-card>
-                <el-form label-position="right" inline class="table-expand">
+                <el-form label-position="right" inline>
                   <el-form-item>
                     <span>{{item.content.deploy_cmd}}</span>
                   </el-form-item>
@@ -136,6 +136,7 @@ export default {
       removeenvs: [],
       cmdForm: {
         job: '',
+        name: 'svn更新',
         deploy_cmd: ''
       },
       addcmdForm: false,
@@ -258,18 +259,5 @@ export default {
 </script>
 
 <style lang='scss'>
-  .table-expand {
-    font-size: 0;
-    .el-form-item {
-      margin: 0;
-      width: 100%;
-      .el-form-item__label {
-        width: 90px;
-        color: #99a9bf;
-      }
-      .el-form-item__content {
-        width: 80%;
-      }
-    }
-  }
+
 </style>
