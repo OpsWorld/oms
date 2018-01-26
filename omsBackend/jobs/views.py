@@ -2,8 +2,8 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, DeployJobs
-from jobs.serializers import JobsSerializer, DeployJobsSerializer
+from jobs.models import Jobs, DeployJobs, Deploycmd
+from jobs.serializers import JobsSerializer, DeployJobsSerializer, DeploycmdSerializer
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter
@@ -29,6 +29,12 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
     search_fields = ['version', 'content']
+
+
+class DeploycmdViewSet(viewsets.ModelViewSet):
+    queryset = Deploycmd.objects.all().order_by('id')
+    serializer_class = DeploycmdSerializer
+    filter_fields = ['job__name']
 
 
 @api_view()

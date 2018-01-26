@@ -153,7 +153,7 @@ export default {
         const messageForm = {
           action_user: `${this.CompleteForm.create_user}`,
           title: '【通道完成进度】',
-          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}`
+          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}%`
         }
         postSendmessage(messageForm)
         this.completeForm = false

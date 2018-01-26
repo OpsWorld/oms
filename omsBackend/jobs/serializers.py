@@ -2,7 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, DeployJobs
+from jobs.models import Jobs, DeployJobs, Deploycmd
 from hosts.models import Host
 from users.models import User
 from omsBackend.settings import sapi
@@ -13,8 +13,8 @@ class JobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_hosts', 'deploy_path', 'deploy_cmd',
-                  'create_time', 'showdev', 'desc']
+        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_hosts', 'deploy_path', 'create_time', 'showdev',
+                  'desc']
 
 
 # class DeployenvSerializer(serializers.ModelSerializer):
@@ -44,3 +44,11 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()
         return deployjob
+
+
+class DeploycmdSerializer(serializers.ModelSerializer):
+    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
+
+    class Meta:
+        model = Deploycmd
+        fields = ['url', 'id', 'job', 'name', 'deploy_cmd']
