@@ -231,7 +231,6 @@ export default {
       }
       getDeploycmd(parms).then(response => {
         this.deploy_cmds = response.data
-        this.ruleForm.deploy_cmd = this.deploy_cmds[0].deploy_cmd
       })
     },
     fetchDeployJobData() {
@@ -271,6 +270,9 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
+          if (this.ruleForm.deploy_cmd === '') {
+            this.ruleForm.deploy_cmd = this.deploy_cmds[0].deploy_cmd
+          }
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
           this.jobs.version = this.ruleForm.version
           const rex = /\$\w+/g
@@ -296,7 +298,6 @@ export default {
               postSendmessage(messageForm)
             }
             this.resetForm('ruleForm')
-            this.ruleForm.deploy_cmd = this.deploy_cmds[0].name
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             this.resetForm('ruleForm')
