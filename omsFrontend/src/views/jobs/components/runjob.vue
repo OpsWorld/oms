@@ -17,6 +17,11 @@
             <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
             <!--</el-select>-->
             <!--</el-form-item>-->
+            <el-form-item label="发布命令" prop="env">
+              <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
+                <el-option v-for="item in deploy_cmds" :key="item.id" :label="item.name" :value="item.deploy_cmd"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="代码地址">
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
@@ -126,7 +131,7 @@
   </div>
 </template>
 <script>
-import { getJob, getDeployenv, getDeployJob, postDeployJob, deleteDeployJob, getUpdateJobsStatus } from '@/api/job'
+import { getJob, getDeploycmd, getDeployJob, postDeployJob, deleteDeployJob, getUpdateJobsStatus } from '@/api/job'
 import { LIMIT } from '@/config'
 import { mapGetters } from 'vuex'
 import { postSendmessage } from '@/api/tool'
@@ -142,7 +147,7 @@ export default {
         job: '',
         deploy_hosts: [],
         version: '',
-        deploy_cmd: '',
+        deploy_cmd: 'svn更新',
         content: '',
         action_user: localStorage.getItem('username')
       },
@@ -183,7 +188,8 @@ export default {
       job_results: [],
       check_job_status: '',
       searchdata: '',
-      sendnotice: true
+      sendnotice: true,
+      deploy_cmds: ''
     }
   },
   computed: {
@@ -201,24 +207,33 @@ export default {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
         this.ruleForm.deploy_hosts = this.jobs.deploy_hosts
-        this.ruleForm.deploy_cmd = this.jobs.deploy_cmd
         this.listQuery.job__name = this.jobs.name
+        console.log(this.ruleForm)
         this.fetchDeployJobData()
-        // this.fetchJobenvData(this.jobs.name)
+        this.fetchJobcmdData(this.jobs.name)
       })
     },
-    fetchJobenvData(job) {
+    //    fetchJobenvData(job) {
+    //      const parms = {
+    //        job__name: job
+    //      }
+    //      getDeployenv(parms).then(response => {
+    //        this.envs = response.data
+    //      })
+    //    },
+    //    selectEnv(env) {
+    //      const selectenv = this.envs.filter(envs => envs.name === env)[0]
+    //      this.hosts = selectenv.hosts
+    //      this.ruleForm.deploy_path = selectenv.path
+    //    },
+    fetchJobcmdData(job) {
       const parms = {
         job__name: job
       }
-      getDeployenv(parms).then(response => {
-        this.envs = response.data
+      getDeploycmd(parms).then(response => {
+        this.deploy_cmds = response.data
+        this.ruleForm.deploy_cmd = this.deploy_cmds[0].name
       })
-    },
-    selectEnv(env) {
-      const selectenv = this.envs.filter(envs => envs.name === env)[0]
-      this.hosts = selectenv.hosts
-      this.ruleForm.deploy_path = selectenv.path
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {

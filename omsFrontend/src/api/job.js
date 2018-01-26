@@ -98,3 +98,34 @@ export function getUpdateJobsStatus(query) {
   })
 }
 
+// deploycmds
+export function postDeploycmd(data) {
+  return request({
+    url: apiURL.deploycmds,
+    method: 'post',
+    data
+  })
+}
+
+export function getDeploycmd(query) {
+  return request({
+    url: apiURL.deploycmds,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putDeploycmd(id, data) {
+  return request({
+    url: apiURL.deploycmds + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteDeploycmd(id) {
+  return request({
+    url: apiURL.deploycmds + id + '/',
+    method: 'delete'
+  })
+}
