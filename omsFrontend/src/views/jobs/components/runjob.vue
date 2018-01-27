@@ -19,7 +19,8 @@
             <!--</el-form-item>-->
             <el-form-item label="发布命令" prop="env">
               <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
-                <el-option v-for="item in deploy_cmds" :key="item.id" :label="item.name" :value="item.deploy_cmd"></el-option>
+                <el-option v-for="item in deploy_cmds" :key="item.id" :label="item.name"
+                           :value="item.deploy_cmd"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="代码地址">
@@ -66,9 +67,14 @@
               <el-table-column prop='version' label='发布版本'>
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-tooltip :content="scope.row.content" placement="top">
-                      <a style="color: #257cff">{{scope.row.version}}</a>
-                    </el-tooltip>
+                    <el-popover
+                      placement="top"
+                      title="发布内容"
+                      width="200"
+                      trigger="hover"
+                      :content="scope.row.content">
+                      <el-button size="mini" slot="reference">{{scope.row.version}}</el-button>
+                    </el-popover>
                   </div>
                 </template>
               </el-table-column>

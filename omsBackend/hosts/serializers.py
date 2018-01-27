@@ -10,8 +10,8 @@ class HostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Host
-        fields = ['url', 'id', 'hostname', 'ip', 'other_ip', 'idc', 'asset_type', 'status', 'os', 'cpu',
-                  'memory', 'disk', 'desc']
+        fields = ['url', 'id', 'hostname', 'an', 'sn', 'ip', 'have_net', 'gateway', 'idc', 'asset_type', 'status', 'os',
+                  'cpu', 'memory', 'disk', 'desc']
 
 
 class IdcSerializer(serializers.ModelSerializer):

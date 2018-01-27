@@ -3,11 +3,24 @@
     <el-form-item label="主机名" prop="hostname">
       <el-input v-model="rowdata.hostname"></el-input>
     </el-form-item>
+    <el-form-item label="资产编号" prop="an">
+      <el-input v-model="rowdata.an"></el-input>
+    </el-form-item>
+    <el-form-item label="序列号" prop="sn">
+      <el-input v-model="rowdata.sn"></el-input>
+    </el-form-item>
     <el-form-item label="主机ip" prop="ip">
       <el-input v-model="rowdata.ip"></el-input>
     </el-form-item>
-    <el-form-item label="其他ip" prop="other_ip">
-      <el-input v-model="rowdata.other_ip"></el-input>
+    <el-form-item label="网关" prop="gateway">
+      <el-input v-model="rowdata.gateway"></el-input>
+    </el-form-item>
+    <el-form-item label="外网" prop="have_net">
+      <el-switch
+        v-model="rowdata.have_net"
+        active-color="#13ce66"
+        inactive-color="#ff4949">
+      </el-switch>
     </el-form-item>
     <el-form-item label="机房" prop="idc">
       <el-select v-model="rowdata.idc" placeholder="请选择机房">
@@ -71,7 +84,8 @@ export default {
       ASSET_STATUS: [
         { key: 'used', name: '使用中' },
         { key: 'noused', name: '未使用' },
-        { key: 'broken', name: '故障' }
+        { key: 'broken', name: '故障' },
+        { key: 'trash', name: '废弃' }
       ],
       ASSET_TYPE: [
         { key: 'physical', name: '物理机' },

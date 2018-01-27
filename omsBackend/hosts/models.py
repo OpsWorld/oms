@@ -6,7 +6,8 @@ from django.db import models
 ASSET_STATUS = {
     'used': u'使用中',
     'noused': u'未使用',
-    'broken': u'故障'
+    'broken': u'故障',
+    'trash': u'报废'
 }
 
 ASSET_TYPE = {
@@ -20,8 +21,11 @@ ASSET_TYPE = {
 
 class Host(models.Model):
     hostname = models.CharField(unique=True, max_length=50, verbose_name=u"主机名")
-    ip = models.GenericIPAddressField(unique=True, max_length=15, verbose_name=u"主IP")
-    other_ip = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"备用IP")
+    an = models.CharField(max_length=20, null=True, blank=True, verbose_name=u"资产编号")
+    sn = models.CharField(max_length=20, null=True, blank=True, verbose_name=u"序列号  ")
+    ip = models.CharField(max_length=50, null=True, blank=True, verbose_name=u"IP")
+    have_net = models.BooleanField(default=False, verbose_name=u"是否外网")
+    gateway = models.CharField(max_length=10, null=True, blank=True, verbose_name=u"网关")
     idc = models.ForeignKey('Idc', null=True, blank=True, verbose_name=u"机房")
     asset_type = models.CharField(choices=ASSET_TYPE.items(), default='virtual', max_length=30, verbose_name=u"设备类型")
     status = models.CharField(choices=ASSET_STATUS.items(), default='used', max_length=30, verbose_name=u"设备状态")

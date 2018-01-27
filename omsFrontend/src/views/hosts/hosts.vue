@@ -19,8 +19,8 @@
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="其他ip" prop="other_ip">
-                  <span>{{ props.row.other_ip }}</span>
+                <el-form-item label="网关" prop="gateway">
+                  <span>{{ props.row.gateway }}</span>
                 </el-form-item>
                 <el-form-item label="系统" prop="os">
                   <span>{{ props.row.os }}</span>
@@ -40,8 +40,9 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column prop='hostname' label='主机名' sortable></el-table-column>
-          <el-table-column prop='ip' label='ip' sortable></el-table-column>
+          <el-table-column prop='hostname' label='主机名'></el-table-column>
+          <el-table-column prop='an' label='资产编号'></el-table-column>
+          <el-table-column prop='ip' label='ip'></el-table-column>
           <el-table-column prop='idc' label='机房'></el-table-column>
           <el-table-column prop='asset_type' label='类型'>
             <template slot-scope="scope">
@@ -127,7 +128,8 @@ export default {
       ASSET_STATUS: {
         'used': { 'status': '使用中', 'type': 'primary' },
         'noused': { 'status': '未使用', 'type': 'gray' },
-        'broken': { 'status': '故障', 'type': 'danger' }
+        'broken': { 'status': '故障', 'type': 'danger' },
+        'trash': { 'status': '废弃', 'type': 'warning' }
       }
     }
   },
