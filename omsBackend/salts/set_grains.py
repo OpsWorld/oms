@@ -11,12 +11,13 @@ def get_grains_info():
     disks = []
     for disk in disk_data:
         diskname = disk.mountpoint
-        disktotal = psutil.disk_usage(disk.mountpoint).total
-        disks.append('{} {}'.format(diskname, convert_bytes(disktotal)))
+        disktotal = convert_bytes(psutil.disk_usage(disk.mountpoint).total)
+        disks.append('{} {}'.format(diskname, disktotal))
     grains["disk_info"] = disks
 
     mem_data = psutil.virtual_memory()
-    grains["memory_info"] = '{}'.format(convert_bytes(mem_data.total))
+    total = convert_bytes(mem_data.total)
+    grains["memory_info"] = '{}'.format(total)
     return grains
 
 
