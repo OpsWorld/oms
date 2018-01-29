@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^get_minion_info/(?P<key_id>\w+)', views.get_minion_info),
     url(r'^cmdrun/', views.cmdrun),
     url(r'^get_result/(?P<jid>\w+)', views.get_result),
+    url(r'^sync_remote_server/', views.sync_remote_server),
 ]

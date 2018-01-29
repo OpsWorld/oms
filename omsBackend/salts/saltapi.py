@@ -49,7 +49,7 @@ class SaltAPI(object):
         print("token_e_time: %s" % token_e_time)
         print("token_s_time: %s" % self.token_s_time)
 
-        if (token_e_time - self.token_s_time).seconds/3600 > 3:
+        if (token_e_time - self.token_s_time).seconds / 3600 > 3:
             print("salt-api token is Expired")
             self.get_token()
 
@@ -174,27 +174,28 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_server_info(self, tgt, args=('fqdn', 'os', 'ipv4', 'cpu_model', 'mem_total')):
+    def sync_remote_server(self, tgt='*', arg=[], expr_form='list'):
         """
         获取远程主机信息
         """
 
-        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.items'}
-        content = self.salt_request(data)
-        items = content['return'][0][tgt]
-        ret = dict()
-        for item in args:
-            ret[item] = items[item]
-        return ret
+        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.item', 'arg': arg}
+        content = self.salt_request(data)['return'][0]
+
+        # ret = dict()
+        # for item in args:
+        #     ret[item] = items[item]
+        return content
 
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'netstat'
-    tgt = 'sh-aa-01'
+    tgt = '*'
+    arg = ['osfinger', 'ipv4', 'cpu_model', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.remote_server_info(tgt))
+    print(sapi.sync_remote_server(tgt, arg))
 
 
 if __name__ == '__main__':

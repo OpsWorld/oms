@@ -4,6 +4,14 @@
       <div class="head-lavel">
         <div class="table-button">
           <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
+          <el-button type="success" plain @click="getHostFromSalt" :loading="getsalt">自动获取机器</el-button>
+
+          <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
+            <el-radio label="noused">未使用</el-radio>
+            <el-radio label="used">使用中</el-radio>
+            <el-radio label="broken">故障</el-radio>
+            <el-radio label="trash">报废</el-radio>
+          </el-radio-group>
         </div>
         <div class="table-search">
           <el-input
@@ -15,12 +23,13 @@
         </div>
       </div>
       <div>
-        <el-table :data='tableData' border style="width: 100%">
+        <el-table :data='tableData' border @selection-change="handleSelectionChange" style="width: 100%">
+          <el-table-column type="selection"></el-table-column>
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
-                <el-form-item label="其他ip" prop="other_ip">
-                  <span>{{ props.row.other_ip }}</span>
+                <el-form-item label="网关" prop="gateway">
+                  <span>{{ props.row.gateway }}</span>
                 </el-form-item>
                 <el-form-item label="系统" prop="os">
                   <span>{{ props.row.os }}</span>
@@ -32,7 +41,10 @@
                   <span>{{ props.row.memory }}</span>
                 </el-form-item>
                 <el-form-item label="磁盘信息" prop="disk">
-                  <span>{{ props.row.disk }}</span>
+                  <a v-for="disk in props.row.disk.split('|')" :key="disk.id" style="margin-right: 5px" size="mini">
+                    <el-tag size="mini">{{disk.split(' ')[0]}}</el-tag>
+                    <span>{{disk.split(' ')[1]}}</span>
+                  </a>
                 </el-form-item>
                 <el-form-item label="备注" prop="desc">
                   <span>{{ props.row.desc }}</span>
@@ -40,8 +52,17 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column prop='hostname' label='主机名' sortable></el-table-column>
-          <el-table-column prop='ip' label='ip' sortable></el-table-column>
+          <el-table-column prop='hostname' label='主机名'></el-table-column>
+          <el-table-column prop='an' label='资产编号'></el-table-column>
+          <el-table-column prop='ip' label='ip'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center">
+                <el-tag v-for="item in scope.row.ip.split('|')" :key="item.id" size="mini" style="margin-right: 3px">
+                  {{item}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='idc' label='机房'></el-table-column>
           <el-table-column prop='asset_type' label='类型'>
             <template slot-scope="scope">
@@ -69,16 +90,21 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="table-pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
-          :total="tabletotal">
-        </el-pagination>
+      <div class="table-footer">
+
+        <div class="table-button">
+        </div>
+        <div class="table-pagination">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="pagesize"
+            :page-size="listQuery.limit"
+            layout="prev, pager, next, sizes"
+            :total="tabletotal">
+          </el-pagination>
+        </div>
       </div>
     </el-card>
     <el-dialog :visible.sync="addForm">
@@ -92,6 +118,7 @@
 
 <script>
 import { postHost, getHost, putHost, deleteHost } from '@/api/host'
+import { getSyncRemoteServer } from 'api/salt'
 import { LIMIT } from '@/config'
 import addObj from './components/addhost.vue'
 import editObj from './components/edithost.vue'
@@ -107,7 +134,8 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        search: ''
+        search: '',
+        status: 'used'
       },
       limit: LIMIT,
       offset: '',
@@ -126,14 +154,17 @@ export default {
       },
       ASSET_STATUS: {
         'used': { 'status': '使用中', 'type': 'primary' },
-        'noused': { 'status': '未使用', 'type': 'gray' },
-        'broken': { 'status': '故障', 'type': 'danger' }
-      }
+        'noused': { 'status': '未使用', 'type': 'info' },
+        'broken': { 'status': '故障', 'type': 'danger' },
+        'trash': { 'status': '废弃', 'type': 'warning' }
+      },
+      getsalt: false
     }
   },
 
   created() {
     this.fetchData()
+    this.getIdcs()
   },
 
   methods: {
@@ -199,6 +230,21 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    changeStatus(val) {
+      this.listQuery.status = val
+      if (val === 'noused') {
+        this.havenoused = true
+      }
+      this.fetchData()
+    },
+    getHostFromSalt() {
+      this.getsalt = true
+      getSyncRemoteServer().then(response => {
+        this.getsalt = false
+        this.listQuery.status = 'noused'
+        this.fetchData()
+      })
     }
   }
 }
@@ -210,11 +256,13 @@ export default {
   }
 
   .table-button {
+    padding: 10px 0;
     float: left;
   }
 
   .table-search {
     float: right;
+    padding: 10px 0;
   }
 
   .table-pagination {

@@ -26,6 +26,14 @@ export function putHost(id, data) {
   })
 }
 
+export function patchHost(id, data) {
+  return request({
+    url: apiURL.hosts + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
 export function deleteHost(id) {
   return request({
     url: apiURL.hosts + id + '/',
