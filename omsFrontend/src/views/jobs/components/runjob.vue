@@ -69,7 +69,6 @@
                   <div slot="reference">
                     <el-popover
                       placement="top"
-                      title="发布内容"
                       width="200"
                       trigger="hover"
                       :content="scope.row.content">
@@ -330,6 +329,7 @@ export default {
       }
     },
     deleteForm() {
+      clearInterval(this.check_job_status)
       for (var i = 0, len = this.selectId.length; i < len; i++) {
         deleteDeployJob(this.selectId[i]).then(response => {
           delete this.selectId[i]
