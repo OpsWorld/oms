@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'wikis',
     'hosts',
     'jobs',
+    'records',
 ]
 
 MIDDLEWARE = [

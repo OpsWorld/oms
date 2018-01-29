@@ -23,8 +23,7 @@
         </div>
       </div>
       <div>
-        <el-table :data='tableData' border @selection-change="handleSelectionChange" style="width: 100%">
-          <el-table-column type="selection"></el-table-column>
+        <el-table :data='tableData' border style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
@@ -164,7 +163,6 @@ export default {
 
   created() {
     this.fetchData()
-    this.getIdcs()
   },
 
   methods: {
@@ -244,6 +242,11 @@ export default {
         this.getsalt = false
         this.listQuery.status = 'noused'
         this.fetchData()
+      }).catch(error => {
+        this.getsalt = false
+        this.listQuery.status = 'noused'
+        this.fetchData()
+        console.log(error)
       })
     }
   }

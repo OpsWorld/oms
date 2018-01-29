@@ -113,6 +113,7 @@ export const asyncRouterMap = [
     redirect: 'hosts',
     children: [
       { path: 'hosts', component: _import('hosts/hosts'), name: '主机列表' },
+      { path: 'assetrecords', component: _import('hosts/assetrecords'), name: '资产修改记录' },
       { path: 'idcs', component: _import('hosts/idcs'), name: '机房列表' }
     ]
   },

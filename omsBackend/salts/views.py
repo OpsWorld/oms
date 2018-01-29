@@ -62,4 +62,5 @@ def sync_remote_server(request):
         )
         if created:
             print('%s add succed' % k)
+        print(addhost)
     return Response({"results": data, "count": count})
