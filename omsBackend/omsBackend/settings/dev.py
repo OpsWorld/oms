@@ -15,7 +15,7 @@ DATABASES = {
 }
 
 # 使用ldap认证
-# AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
+#AUTHENTICATION_BACKENDS = ("django_python3_ldap.auth.LDAPBackend",)
 LDAP_AUTH_URL = "ldap://192.168.6.101:389"
 LDAP_AUTH_SEARCH_BASE = "ou=AllUser,dc=tb-gaming,dc=local"
 LDAP_AUTH_CONNECTION_USERNAME = r'tb-gaming\itconfig'
@@ -65,16 +65,16 @@ CACHES = {
 }
 
 # saltapi
-# salt_info = {
-#     "url": "http://192.168.6.99:8080",
-#     "username": "salt",
-#     "password": "123"
-# }
 salt_info = {
-    "url": "http://salt.tbsysmanager.com:8080",
-    "username": "saltdev",
-    "password": "FF01VeF4hs1FqZ5M"
+    "url": "http://192.168.6.99:8080",
+    "username": "salt",
+    "password": "123"
 }
+# salt_info = {
+#     "url": "http://salt.tbsysmanager.com:8080",
+#     "username": "saltdev",
+#     "password": "FF01VeF4hs1FqZ5M"
+# }
 
 from salts.saltapi import SaltAPI
 sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])

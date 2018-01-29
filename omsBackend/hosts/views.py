@@ -10,6 +10,7 @@ class HostViewSet(viewsets.ModelViewSet):
     queryset = Host.objects.all()
     serializer_class = HostSerializer
     search_fields = ['hostname', 'ip']
+    filter_fields = ['status']
 
 
 class IdcViewSet(viewsets.ModelViewSet):

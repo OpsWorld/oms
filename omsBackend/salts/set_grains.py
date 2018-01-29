@@ -17,7 +17,7 @@ def get_grains_info():
 
     mem_data = psutil.virtual_memory()
     total = convert_bytes(mem_data.total)
-    grains["memory_info"] = '{}'.format(total)
+    grains["memory_info"] = total
     return grains
 
 
@@ -29,6 +29,6 @@ def convert_bytes(byte, lst=None):
 
     if i >= len(lst):
         i = len(lst) - 1
-    return ('%.2f' + " " + lst[i]) % (byte/math.pow(1024, i))
+    return ('%.2f' + lst[i]) % (byte/math.pow(1024, i))
 
 print(get_grains_info())

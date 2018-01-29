@@ -57,12 +57,14 @@ class Connection(object):
             if attribute_name in attributes
         }
         user_fields = import_func(settings.LDAP_AUTH_CLEAN_USER_DATA)(user_fields)
+        print(user_fields)
         # Create the user lookup.
         user_lookup = {
             field_name: user_fields.pop(field_name, "")
             for field_name
             in settings.LDAP_AUTH_USER_LOOKUP_FIELDS
         }
+        print(user_lookup)
         # Added this to handle the fact that groups is a list that actually needs to stay as a list
         try:
             groups = attributes.get(settings.LDAP_AUTH_USER_FIELDS.get('groups'))
@@ -76,6 +78,7 @@ class Connection(object):
             defaults=user_fields,
             **user_lookup
         )
+        print(user, created)
         if groups:
             self._update_or_create_user_groups(user, groups)
         # If the user was created, set them an unusable password.

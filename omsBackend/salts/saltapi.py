@@ -174,12 +174,12 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_server_info(self, tgt, arg=[], expr_form='list'):
+    def sync_remote_server(self, tgt='*', arg=[], expr_form='list'):
         """
         获取远程主机信息
         """
 
-        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.item', 'arg': arg, 'expr_form': expr_form}
+        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.item', 'arg': arg}
         content = self.salt_request(data)['return'][0]
 
         # ret = dict()
@@ -191,11 +191,11 @@ class SaltAPI(object):
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'netstat'
-    tgt = ['sh-aa-01', 'bj-aa-02']
+    tgt = '*'
     arg = ['osfinger', 'ipv4', 'cpu_model', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.remote_server_info(tgt, arg))
+    print(sapi.sync_remote_server(tgt, arg))
 
 
 if __name__ == '__main__':

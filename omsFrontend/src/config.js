@@ -106,5 +106,6 @@ module.exports = {
   minions_status: `${url}/api/salts/minions_status/`,
   get_minion_info: `${url}/api/salts/get_minion_info/`,
   cmdrun: `${url}/api/salts/cmdrun/`,
-  get_result: `${url}/api/salts/get_result/`
+  get_result: `${url}/api/salts/get_result/`,
+  sync_remote_server: `${url}/api/salts/sync_remote_server/`
 }
