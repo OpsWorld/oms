@@ -7,7 +7,7 @@ from records.serializers import RecordSerializer
 
 
 class RecordViewSet(viewsets.ModelViewSet):
-    queryset = Record.objects.all()
+    queryset = Record.objects.all().order_by('-create_time')
     serializer_class = RecordSerializer
     search_fields = ['asset']
     filter_fields = ['name']

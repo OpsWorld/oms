@@ -258,11 +258,9 @@ export default {
         this.autoupdate = true
         getSyncRemoteServer(val).then(response => {
           this.autoupdate = false
-          this.listQuery.status = 'noused'
           this.fetchData()
         }).catch(error => {
           this.autoupdate = false
-          this.listQuery.status = 'noused'
           this.fetchData()
           console.log(error)
         })
