@@ -66,3 +66,11 @@ export function deleteCalender(id) {
     method: 'delete'
   })
 }
+
+export function getRecord(query, id) {
+  return request({
+    url: apiURL.records,
+    method: 'get',
+    params: query
+  })
+}

@@ -4,8 +4,12 @@
       <div class="head-lavel">
         <div class="table-button">
           <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
-          <el-button type="success" plain @click="getHostFromSalt" :loading="getsalt">自动获取机器</el-button>
-
+          <el-button-group>
+            <el-button type="primary" plain size="mini" @click="getHostFromSalt('create')" :loading="autocreate">自动获取
+            </el-button>
+            <el-button type="success" plain size="mini" @click="getHostFromSalt('update')" :loading="autoupdate">自动更新
+            </el-button>
+          </el-button-group>
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
             <el-radio label="noused">未使用</el-radio>
             <el-radio label="used">使用中</el-radio>
@@ -23,8 +27,7 @@
         </div>
       </div>
       <div>
-        <el-table :data='tableData' border @selection-change="handleSelectionChange" style="width: 100%">
-          <el-table-column type="selection"></el-table-column>
+        <el-table :data='tableData' border style="width: 100%">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="table-expand">
@@ -158,13 +161,13 @@ export default {
         'broken': { 'status': '故障', 'type': 'danger' },
         'trash': { 'status': '废弃', 'type': 'warning' }
       },
-      getsalt: false
+      autocreate: false,
+      autoupdate: false
     }
   },
 
   created() {
     this.fetchData()
-    this.getIdcs()
   },
 
   methods: {
@@ -238,13 +241,30 @@ export default {
       }
       this.fetchData()
     },
-    getHostFromSalt() {
-      this.getsalt = true
-      getSyncRemoteServer().then(response => {
-        this.getsalt = false
-        this.listQuery.status = 'noused'
-        this.fetchData()
-      })
+    getHostFromSalt(val) {
+      if (val === 'create') {
+        this.autocreate = true
+        getSyncRemoteServer(val).then(response => {
+          this.autocreate = false
+          this.listQuery.status = 'noused'
+          this.fetchData()
+        }).catch(error => {
+          this.autocreate = false
+          this.listQuery.status = 'noused'
+          this.fetchData()
+          console.log(error)
+        })
+      } else {
+        this.autoupdate = true
+        getSyncRemoteServer(val).then(response => {
+          this.autoupdate = false
+          this.fetchData()
+        }).catch(error => {
+          this.autoupdate = false
+          this.fetchData()
+          console.log(error)
+        })
+      }
     }
   }
 }

@@ -66,6 +66,7 @@ module.exports = {
   ticketcomments: `${url}/api/ticketcomments/`,
   ticketenclosures: `${url}/api/ticketenclosures/`,
   tickettypes: `${url}/api/tickettypes/`,
+  records: `${url}/api/records/`,
 
   // 第三支付工单
   platforms: `${url}/api/platforms/`,

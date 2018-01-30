@@ -174,7 +174,7 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def sync_remote_server(self, tgt='*', arg=[], expr_form='list'):
+    def sync_remote_server(self, tgt='*', arg=[]):
         """
         获取远程主机信息
         """

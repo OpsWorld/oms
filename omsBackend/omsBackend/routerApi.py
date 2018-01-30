@@ -12,6 +12,7 @@ from perms.views import UserMenuPermsViewSet
 from wikis.views import WikiViewSet, OpsWikiViewSet
 from hosts.views import HostViewSet, IdcViewSet
 from jobs.views import JobsViewSet, DeployJobsViewSet, DeploycmdViewSet
+from records.views import RecordViewSet
 
 router = DefaultRouter()
 
@@ -51,3 +52,5 @@ router.register(r'idcs', IdcViewSet)
 router.register(r'jobs', JobsViewSet)
 router.register(r'deployjobs', DeployJobsViewSet)
 router.register(r'deploycmds', DeploycmdViewSet)
+
+router.register(r'records', RecordViewSet)

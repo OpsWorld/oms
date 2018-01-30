@@ -38,9 +38,9 @@ export function getSaltResult(jid) {
   })
 }
 
-export function getSyncRemoteServer() {
+export function getSyncRemoteServer(method) {
   return request({
-    url: apiURL.sync_remote_server,
+    url: apiURL.sync_remote_server + method,
     method: 'get'
   })
 }
