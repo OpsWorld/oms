@@ -26,20 +26,12 @@ class HostViewSet(viewsets.ModelViewSet):
             asset=host,
             method='create',
             before='{}',
-            after=after_data
+            after=after_data,
+            create_user=request.user
+
         )
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, headers=headers)
-
-        # records
-        Record.objects.create(
-            name='hosts',
-            asset=host,
-            method='delete',
-            before=before_data,
-            after='{"code": 1024}'
-        )
-        return Response({"code": 1024})
 
     def update(self, request, *args, **kwargs):
         hostname = request.data['hostname']
@@ -47,7 +39,7 @@ class HostViewSet(viewsets.ModelViewSet):
         before_data = self.get_serializer(before_host, partial=False).data
         host = before_data['hostname']
         instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         after_data = serializer.data
@@ -58,7 +50,8 @@ class HostViewSet(viewsets.ModelViewSet):
             asset=host,
             method='update',
             before=before_data,
-            after=after_data
+            after=after_data,
+            create_user=request.user
         )
         return Response(serializer.data)
 
@@ -74,7 +67,8 @@ class HostViewSet(viewsets.ModelViewSet):
             asset=host,
             method='delete',
             before=before_data,
-            after='{}'
+            after='{}',
+            create_user=request.user
         )
         return Response({"code": 1024})
 

@@ -15,16 +15,16 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='name' label='模块名称'></el-table-column>
-          <el-table-column prop='type' label='添加类型'>
+          <el-table-column prop='name' label='模块名称' width="100"></el-table-column>
+          <el-table-column prop='type' label='添加类型' width="80">
             <template slot-scope="scope">
-              <div slot="reference" style="text-align: center">
+              <div slot="reference">
                 {{AddTypes[scope.row.type]}}
               </div>
             </template>
           </el-table-column>
           <el-table-column prop='asset' label='资产名称'></el-table-column>
-          <el-table-column prop='method' label='操作类型'></el-table-column>
+          <el-table-column prop='method' label='操作类型' width="80"></el-table-column>
           <el-table-column prop='before' label='修改前数据'>
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center">
@@ -51,6 +51,7 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='create_user' label='操作人' width="100"></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable>
             <template slot-scope="scope">
               <div slot="reference">

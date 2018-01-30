@@ -46,21 +46,31 @@ def get_result(request, jid):
 
 
 @api_view()
-def sync_remote_server(request):
+def sync_remote_server(request, method):
     tgt = '*'
     arg = ['osfinger', 'ipv4', 'cpu_model', 'memory_info', 'disk_info']
     data = sapi.sync_remote_server(tgt=tgt, arg=arg)
     count = len(data)
     for k, v in data.items():
-        addhost, created = Host.objects.update_or_create(
-            hostname=k,
-            os=v['osfinger'],
-            cpu=v['cpu_model'],
-            memory=v['memory_info'],
-            disk='|'.join(v['disk_info']),
-            ip='|'.join(v['ipv4'])
-        )
-        if created:
-            print('%s add succed' % k)
-        print(addhost)
+        host_info = {
+            'os': v['osfinger'],
+            'cpu': v['cpu_model'],
+            'memory': v['memory_info'],
+            'disk': '|'.join(v['disk_info']),
+            'ip': '|'.join(v['ipv4'])
+        }
+
+        if method == 'create':
+            print("auto created start")
+            host, created = Host.objects.get_or_create(
+                hostname=k,
+                defaults=host_info
+            )
+        else:
+            print("auto updated start")
+            host, updated = Host.objects.update_or_create(
+                hostname=k,
+                defaults=host_info
+            )
+
     return Response({"results": data, "count": count})

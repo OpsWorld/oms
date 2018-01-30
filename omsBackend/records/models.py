@@ -16,6 +16,7 @@ class Record(models.Model):
     method = models.CharField(max_length=30, verbose_name=u"请求方式")
     before = models.CharField(max_length=500, verbose_name=u"修改前内容")
     after = models.CharField(max_length=500, verbose_name=u"修改后内容")
+    create_user = models.CharField(max_length=10, default='kiven', verbose_name=u'创建者')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'修改时间')
 
     def __str__(self):
