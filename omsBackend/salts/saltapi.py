@@ -192,7 +192,7 @@ def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'netstat'
     tgt = '*'
-    arg = ['osfinger', 'ipv4', 'cpu_model', 'memory_info', 'disk_info']
+    arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
     print(sapi.sync_remote_server(tgt, arg))

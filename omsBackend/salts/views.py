@@ -49,14 +49,14 @@ def get_result(request, jid):
 @api_view()
 def sync_remote_server(request, method):
     tgt = '*'
-    arg = ['osfinger', 'ipv4', 'cpu_model', 'memory_info', 'disk_info']
+    arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     data = sapi.sync_remote_server(tgt=tgt, arg=arg)
     count = len(data)
     for k, v in data.items():
         host_info = {
             'hostname': k,
             'os': v['osfinger'],
-            'cpu': v['cpu_model'],
+            'cpu': '{} * {}'.format(v['cpu_model'], v['num_cpus']),
             'memory': v['memory_info'],
             'disk': '|'.join(v['disk_info']),
             'ip': '|'.join(v['ipv4'])
