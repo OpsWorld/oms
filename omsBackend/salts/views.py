@@ -101,7 +101,7 @@ def sync_remote_server(request, method):
                         asset=k,
                         type=1,
                         method='update',
-                        before='{}',
+                        before=obj_info,
                         after=host_info,
                         create_user='auto'
                     )
