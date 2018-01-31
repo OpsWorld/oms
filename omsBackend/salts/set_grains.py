@@ -4,7 +4,6 @@
 import psutil
 import math
 
-
 def get_grains_info():
     grains = {}
     disk_data = psutil.disk_partitions()
