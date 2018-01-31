@@ -3,12 +3,22 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
         </div>
         <div class="table-search">
+          <el-date-picker
+            v-model="selectdatatime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="selectDatetime">
+          </el-date-picker>
           <el-input
             placeholder="search"
             v-model="listQuery.search"
-            @keyup.enter.native="searchClick">
+            @keyup.enter.native="searchClick"
+            style="width: 200px">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
         </div>
@@ -54,8 +64,8 @@
           <el-table-column prop='create_user' label='操作人' width="100"></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable>
             <template slot-scope="scope">
-              <div slot="reference">
-                {{scope.row.create_time | formatTime}}
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{scope.row.create_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
@@ -73,15 +83,21 @@
         </el-pagination>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="addForm">
+      <add-obj @formdata="addGroupSubmit"></add-obj>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getRecord } from '@/api/tool'
+import { getRecord, postRecord } from '@/api/tool'
 import { LIMIT } from '@/config'
+import addObj from './components/addrecord.vue'
+import formatDate from '@/utils/dateformat'
 
 export default {
-  components: {},
+  components: { addObj },
   data() {
     return {
       tableData: [],
@@ -90,12 +106,16 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        search: ''
+        search: '',
+        create_time_0: '',
+        create_time_1: ''
       },
       limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
-      AddTypes: { 0: '手动', 1: '自动' }
+      AddTypes: { 0: '手动', 1: '自动' },
+      addForm: false,
+      selectdatatime: ''
     }
   },
 
@@ -120,6 +140,29 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    addGroupSubmit(formdata) {
+      postRecord(formdata).then(response => {
+        this.$message({
+          message: '恭喜你，添加成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.addForm = false
+      }).catch(error => {
+        this.$message.error('添加失败')
+        console.log(error)
+      })
+    },
+    selectDatetime(val) {
+      if (val) {
+        this.listQuery.create_time_0 = formatDate(val[0], 'YYYY-MM-DD HH:mm:ss')
+        this.listQuery.create_time_1 = formatDate(val[1], 'YYYY-MM-DD HH:mm:ss')
+      } else {
+        this.listQuery.create_time_0 = ''
+        this.listQuery.create_time_1 = ''
+      }
+      this.fetchData()
     }
   }
 }
@@ -131,11 +174,13 @@ export default {
   }
 
   .table-button {
+    padding: 10px 0;
     float: left;
   }
 
   .table-search {
     float: right;
+    padding: 10px 0;
   }
 
   .table-pagination {
