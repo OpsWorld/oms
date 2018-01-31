@@ -67,6 +67,15 @@ export function deleteCalender(id) {
   })
 }
 
+// records
+export function postRecord(data) {
+  return request({
+    url: apiURL.records,
+    method: 'post',
+    data
+  })
+}
+
 export function getRecord(query, id) {
   return request({
     url: apiURL.records,
