@@ -155,8 +155,13 @@ export default {
       })
     },
     selectDatetime(val) {
-      this.listQuery.create_time_0 = formatDate(val[0], 'YYYY-MM-DD HH:mm:ss')
-      this.listQuery.create_time_1 = formatDate(val[1], 'YYYY-MM-DD HH:mm:ss')
+      if (val) {
+        this.listQuery.create_time_0 = formatDate(val[0], 'YYYY-MM-DD HH:mm:ss')
+        this.listQuery.create_time_1 = formatDate(val[1], 'YYYY-MM-DD HH:mm:ss')
+      } else {
+        this.listQuery.create_time_0 = ''
+        this.listQuery.create_time_1 = ''
+      }
       this.fetchData()
     }
   }
