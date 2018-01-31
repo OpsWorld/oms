@@ -83,18 +83,18 @@ def sync_remote_server(request, method):
                 )
         else:
             try:
-                obj = Host.objects.get(hostname=k)
+                obj = Host.objects.filter(hostname=k)
                 obj_info = {
                     'hostname': k,
-                    'os': obj.os,
-                    'cpu': obj.cpu,
-                    'memory': obj.memory,
-                    'disk': obj.disk,
-                    'ip': obj.ip
+                    'os': obj[0].os,
+                    'cpu': obj[0].cpu,
+                    'memory': obj[0].memory,
+                    'disk': obj[0].disk,
+                    'ip': obj[0].ip
                 }
 
                 if json_tools.diff(host_info, obj_info):
-                    Host.objects.filter(hostname=k).update(**host_info)
+                    obj.update(**host_info)
                     # records
                     Record.objects.create(
                         name='hosts',
