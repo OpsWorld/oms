@@ -19,6 +19,7 @@ enum34==1.1.6
 eventlet==0.22.0
 greenlet==0.4.12
 idna==2.6
+json_tools==0.4.1
 kombu==4.1.0
 ldap3==2.3
 olefile==0.44
