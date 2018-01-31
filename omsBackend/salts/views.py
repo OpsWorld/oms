@@ -7,6 +7,7 @@ from omsBackend.settings import sapi
 from django.views.decorators.cache import cache_page
 from hosts.models import Host
 from records.models import Record
+import json_tools
 
 
 @api_view()
@@ -52,6 +53,8 @@ def sync_remote_server(request, method):
     arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     data = sapi.sync_remote_server(tgt=tgt, arg=arg)
     count = len(data)
+    update_list = []
+    no_update_list = []
     for k, v in data.items():
         host_info = {
             'hostname': k,
@@ -63,7 +66,6 @@ def sync_remote_server(request, method):
         }
 
         if method == 'create':
-            print("auto created start")
             try:
                 obj = Host.objects.get(hostname=k)
             except Host.DoesNotExist:
@@ -80,20 +82,36 @@ def sync_remote_server(request, method):
                     create_user='auto'
                 )
         else:
-            print("auto updated start")
-            host = Host.objects.update_or_create(
-                hostname=k,
-                defaults=host_info
-            )
-            # records
-            Record.objects.create(
-                name='hosts',
-                asset=k,
-                type=1,
-                method='update',
-                before='{}',
-                after=host_info,
-                create_user='auto'
-            )
+            try:
+                obj = Host.objects.get(hostname=k)
+                obj_info = {
+                    'hostname': k,
+                    'os': obj.os,
+                    'cpu': obj.cpu,
+                    'memory': obj.memory,
+                    'disk': obj.disk,
+                    'ip': obj.ip
+                }
+
+                if json_tools.diff(host_info, obj_info):
+                    Host.objects.filter(hostname=k).update(**host_info)
+                    # records
+                    Record.objects.create(
+                        name='hosts',
+                        asset=k,
+                        type=1,
+                        method='update',
+                        before='{}',
+                        after=host_info,
+                        create_user='auto'
+                    )
+                    update_list.append(k)
+                else:
+                    no_update_list.append(k)
+
+            except Host.DoesNotExist:
+                print("%s is not exist" % k)
+    print("update_list: %s" % update_list)
+    print("no_update_list: %s" % no_update_list)
 
     return Response({"results": data, "count": count})
