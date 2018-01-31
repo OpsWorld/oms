@@ -25,7 +25,7 @@
         </div>
         <div class="table-search">
           <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick"
-                    v-model="listQuery.create_user"></el-input>
+                    v-model="listQuery.create_user__username"></el-input>
           <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick"
                     v-model="listQuery.ticketid"></el-input>
           <el-input style="width: 180px;" class="filter-item" placeholder="工单标题、内容或类型" @keyup.enter.native="searchClick"
@@ -146,8 +146,8 @@ export default {
         offset: '',
         ticketid: '',
         ticket_status: '',
-        create_user: '',
-        action_user: '',
+        create_user__username: '',
+        action_user__username: '',
         search: '',
         ordering: ''
       },
@@ -195,18 +195,18 @@ export default {
       this.fetchData()
     },
     showMeCreate() {
-      this.listQuery.create_user = localStorage.getItem('username')
-      this.listQuery.action_user = ''
+      this.listQuery.create_user__username = localStorage.getItem('username')
+      this.listQuery.action_user__username = ''
       this.fetchData()
     },
     showMeAction() {
-      this.listQuery.action_user = localStorage.getItem('username')
-      this.listQuery.create_user = ''
+      this.listQuery.action_user__username = localStorage.getItem('username')
+      this.listQuery.create_user__username = ''
       this.fetchData()
     },
     showAllTicket() {
-      this.listQuery.create_user = ''
-      this.listQuery.action_user = ''
+      this.listQuery.create_user__username = ''
+      this.listQuery.action_user__username = ''
       this.listQuery.search = ''
       this.listQuery.ticket_status = ''
       this.fetchData()
