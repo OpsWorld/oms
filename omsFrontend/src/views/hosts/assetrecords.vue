@@ -156,8 +156,8 @@ export default {
     },
     selectDatetime(val) {
       if (val) {
-        this.listQuery.create_time_0 = formatDate(val[0], 'YYYY-MM-DD HH:mm:ss')
-        this.listQuery.create_time_1 = formatDate(val[1], 'YYYY-MM-DD HH:mm:ss')
+        this.listQuery.create_time_0 = formatDate(val[0], 'YYYY-MM-DD')
+        this.listQuery.create_time_1 = formatDate(val[1], 'YYYY-MM-DD')
       } else {
         this.listQuery.create_time_0 = ''
         this.listQuery.create_time_1 = ''
