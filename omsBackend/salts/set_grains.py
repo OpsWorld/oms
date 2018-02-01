@@ -4,6 +4,7 @@
 import psutil
 import math
 
+
 def get_grains_info():
     grains = {}
     disk_data = psutil.disk_partitions()
@@ -28,6 +29,7 @@ def convert_bytes(byte, lst=None):
 
     if i >= len(lst):
         i = len(lst) - 1
-    return ('%.2f' + lst[i]) % (byte/math.pow(1024, i))
+    return ('%.2f' + lst[i]) % (byte / math.pow(1024, i))
+
 
 print(get_grains_info())
