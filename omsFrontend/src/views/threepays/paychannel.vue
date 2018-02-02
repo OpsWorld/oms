@@ -38,7 +38,7 @@
                   上传
                 </el-button>
                 <div slot="tip" class="el-upload__tip">
-                  <p>上传文件不超过20m，<a style="color: red">最多只能上传10个文件</a></p>
+                  <p>上传文件不超过20m，<a style="color: red">最多只能上传10个文件, 文件名不要带空格</a></p>
                 </div>
               </el-upload>
 
