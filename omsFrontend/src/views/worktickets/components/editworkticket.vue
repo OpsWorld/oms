@@ -70,7 +70,7 @@
                 上传附件
               </el-button>
               <div slot="tip" class="el-upload__tip">
-                <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
+                <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件, 文件名不要带空格</a></p>
               </div>
             </el-upload>
             <hr class="heng"/>
