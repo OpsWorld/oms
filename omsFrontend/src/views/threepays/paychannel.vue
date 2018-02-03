@@ -14,14 +14,16 @@
               </el-button>
             </el-button-group>
           </div>
-          <el-tree
-            :data="platformData"
-            :props="props"
-            :load="fetchNodeData"
-            accordion
-            lazy
-            @node-click="handleNodeClick">
-          </el-tree>
+          <div class="tree">
+              <el-tree
+                :data="platformData"
+                :props="props"
+                :load="fetchNodeData"
+                accordion
+                lazy
+                @node-click="handleNodeClick">
+              </el-tree>
+          </div>
         </el-card>
 
         <el-card v-if="showenclosure" class="card-box">
@@ -692,5 +694,11 @@ export default {
     display: inline-block;
     margin-left: 20px;
     font-size: 14px;
+  }
+
+  .tree {
+    height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 </style>
