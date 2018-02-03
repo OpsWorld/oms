@@ -13,13 +13,13 @@
                 编辑
               </el-button>
             </el-button-group>
-          </div>
-          <div class="tree">
             <el-input
-              style="margin-bottom: 10px"
+              style="margin-top: 10px"
               placeholder="search..."
               v-model="filterplatform">
             </el-input>
+          </div>
+          <div class="tree">
             <el-tree
               ref="tree"
               :data="platformData"
@@ -714,8 +714,26 @@ export default {
   }
 
   .tree {
-    height: 300px;
+    height: 100px;
     overflow-y: scroll;
     overflow-x: hidden;
+    /* 设置滚动条的样式 */
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+    /* 滚动槽 */
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    /* 滚动条滑块 */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: rgba(79, 255, 32, 0.24);
+      -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.57);
+    }
+    &::-webkit-scrollbar-thumb:window-inactive {
+      background: rgba(79, 255, 32, 0.53);
+    }
   }
 </style>
