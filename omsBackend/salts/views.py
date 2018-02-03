@@ -17,7 +17,7 @@ def get_all_key(request):
     return Response({"results": data, "count": count})
 
 
-@cache_page(60)
+@cache_page(300)
 @api_view()
 def minions_status(request):
     data = sapi.minions_status()

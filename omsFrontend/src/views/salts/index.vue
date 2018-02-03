@@ -177,9 +177,11 @@ export default {
       if (val) {
         this.tableData = this.allminions.down
         this.tabletotal = this.allminions.down.length
+        console.log(this.tabletotal)
       } else {
         this.tableData = this.allminions.up
         this.tabletotal = this.allminions.up.length
+        console.log(this.tabletotal)
       }
     }
   }
