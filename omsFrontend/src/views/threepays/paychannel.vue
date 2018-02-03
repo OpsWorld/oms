@@ -15,14 +15,21 @@
             </el-button-group>
           </div>
           <div class="tree">
-              <el-tree
-                :data="platformData"
-                :props="props"
-                :load="fetchNodeData"
-                accordion
-                lazy
-                @node-click="handleNodeClick">
-              </el-tree>
+            <el-input
+              style="margin-bottom: 10px"
+              placeholder="search..."
+              v-model="filterplatform">
+            </el-input>
+            <el-tree
+              ref="tree"
+              :data="platformData"
+              :props="props"
+              :load="fetchNodeData"
+              :filter-node-method="filterNode"
+              accordion
+              lazy
+              @node-click="handleNodeClick">
+            </el-tree>
           </div>
         </el-card>
 
@@ -346,7 +353,8 @@ export default {
         content: 0,
         create_user: localStorage.getItem('username')
       },
-      comments: []
+      comments: [],
+      filterplatform: ''
     }
   },
   computed: {
@@ -650,6 +658,15 @@ export default {
         this.listQuery.ordering = ''
       }
       this.fetchPayChannelData()
+    },
+    filterNode(value, data) {
+      if (!value) return true
+      return data.name.indexOf(value) !== -1
+    }
+  },
+  watch: {
+    filterplatform(val) {
+      this.$refs.tree.filter(val)
     }
   }
 }
