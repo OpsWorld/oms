@@ -99,7 +99,7 @@
                 :current-page.sync="currentPage"
                 :page-sizes="pagesize"
                 :page-size="limit"
-                layout="total, sizes, prev, pager, next, jumper"
+                layout="total"
                 :total="tabletotal">
               </el-pagination>
             </div>
