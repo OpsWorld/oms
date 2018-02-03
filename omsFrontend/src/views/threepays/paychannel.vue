@@ -15,7 +15,7 @@
             </el-button-group>
             <el-input
               style="margin-top: 10px"
-              placeholder="search..."
+              placeholder="搜索平台或商户号..."
               v-model="filterplatform">
             </el-input>
           </div>
