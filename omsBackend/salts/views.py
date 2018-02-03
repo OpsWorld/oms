@@ -17,10 +17,20 @@ def get_all_key(request):
     return Response({"results": data, "count": count})
 
 
-@cache_page(86400)
+@cache_page(60)
 @api_view()
 def minions_status(request):
     data = sapi.minions_status()
+    up = data['up']
+    down = data['down']
+    ups = []
+    downs = []
+    for host in up:
+        ups.append({'hostname': host, 'status': 'up'})
+    for host in down:
+        downs.append({'hostname': host, 'status': 'down'})
+    data['up'] = ups
+    data['down'] = downs
     return Response({"results": data})
 
 
@@ -49,7 +59,7 @@ def get_result(request, jid):
 
 @api_view()
 def sync_remote_server(request, method):
-    tgt = '*'
+    tgt = sapi.minions_status()['up']
     arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     data = sapi.sync_remote_server(tgt=tgt, arg=arg)
     count = len(data)

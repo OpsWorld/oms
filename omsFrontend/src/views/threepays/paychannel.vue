@@ -38,7 +38,7 @@
                   上传
                 </el-button>
                 <div slot="tip" class="el-upload__tip">
-                  <p>上传文件不超过20m，<a style="color: red">最多只能上传10个文件, 文件名不要带空格</a></p>
+                  <p><a style="color: red">最多只能上传10个文件, 文件名不要带空格</a></p>
                 </div>
               </el-upload>
 
@@ -599,34 +599,28 @@ export default {
       setTimeout(this.EnclosureData, 1000)
     },
     beforeAvatarUpload(file) {
-      const isLt = file.size / 1024 / 1024 < 20
-      if (!isLt) {
-        this.$message.error('上传文件大小不能超过 20MB!')
-        return false
-      } else {
-        const formData = new FormData()
-        formData.append('username', this.enclosureForm.create_user)
-        formData.append('file', file)
-        formData.append('create_time', getConversionTime())
-        formData.append('type', file.type)
-        formData.append('archive', this.route_path[1])
-        postUpload(formData).then(response => {
-          this.enclosureForm.file = response.data.filepath
-          postThreePayEnclosure(this.enclosureForm)
-          setTimeout(this.EnclosureData, 1000)
-          if (response.statusText === 'Created') {
-            this.$message({
-              type: 'success',
-              message: '恭喜你，上传成功'
-            })
-          }
-        }).catch(error => {
-          this.$message.error('上传失败')
-          this.$refs.upload.clearFiles()
-          console.log(error)
-        })
-        return true
-      }
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', file)
+      formData.append('create_time', getConversionTime())
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        this.enclosureForm.file = response.data.filepath
+        postThreePayEnclosure(this.enclosureForm)
+        setTimeout(this.EnclosureData, 1000)
+        if (response.statusText === 'Created') {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
+      return true
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
