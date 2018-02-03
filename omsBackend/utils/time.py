@@ -13,11 +13,10 @@
 #
 # print((e_time-s_time).seconds/3600)
 
-a = {'bj-aa-02': {'osfinger': 'Windows-7', 'memory_info': '15.87 GB', 'ipv4': ['1.1.1.1', '192.168.3.215', '192.168.10.1'], 'disk_info': ['C:\\ 120.00 GB', 'D:\\ 447.13 GB', 'E:\\ 103.57 GB'], 'cpu_model': 'Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz'}, 'sh-aa-01': {'osfinger': 'CentOS Linux-7', 'memory_info': '3.69 GB', 'ipv4': ['10.10.10.1', '127.0.0.1', '172.17.0.1', '192.168.6.99'], 'disk_info': ['/ 95.58 GB', '/boot 496.67 MB'], 'cpu_model': 'Intel(R) Core(TM) i7-4790 CPU @ 3.60GHz'}}
+a = [{'tw-btj-thirdpay-prod-02': {'num_cpus': 16, 'disk_info': ['C:\\ 488.18GB', 'D:\\ 443.23GB'], 'cpu_model': 'Intel(R) Xeon(R) CPU           L5630  @ 2.13GHz', 'memory_info': '15.99GB', 'ipv4': ['192.168.88.27'], 'osfinger': 'Windows-2008ServerR2'}, 'tw-btj-thirdpay-prod-01': {'num_cpus': 16, 'disk_info': ['C:\\ 200.00GB', 'D:\\ 731.41GB'], 'cpu_model': 'Intel(R) Xeon(R) CPU           L5630  @ 2.13GHz', 'memory_info': '15.99GB', 'ipv4': ['192.168.88.16'], 'osfinger': 'Windows-2008ServerR2'}}]
 
-host = {}
-for k, v in a.items():
-    host['hostname'] = k
-    host['os'] = v['osfinger']
+host = dict()
+for k, v in a[0].items():
+    print(k, v)
+    print("\nccc")
 
-print(host)

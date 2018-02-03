@@ -65,7 +65,7 @@ def sync_remote_server(request, method):
     count = len(data)
     update_list = []
     no_update_list = []
-    for k, v in data.items():
+    for k, v in data[0].items():
         host_info = {
             'hostname': k,
             'os': v['osfinger'],
