@@ -714,7 +714,7 @@ export default {
   }
 
   .tree {
-    height: 100px;
+    height: 350px;
     overflow-y: scroll;
     overflow-x: hidden;
     /* 设置滚动条的样式 */
