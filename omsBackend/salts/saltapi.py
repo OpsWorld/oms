@@ -5,9 +5,9 @@ import requests
 import datetime
 
 salt_info = {
-    "url": "http://192.168.6.99:8080",
-    "username": "salt",
-    "password": "123"
+    "url": "http://salt.tbsysmanager.com:8080",
+    "username": "saltdev",
+    "password": "FF01VeF4hs1FqZ5M"
 }
 
 
@@ -106,17 +106,6 @@ class SaltAPI(object):
         data = {'client': 'runner', 'fun': 'manage.status'}
         content = self.salt_request(data)
         ret = content['return'][0]
-
-        up = ret['up']
-        down = ret['down']
-        ups = []
-        downs = []
-        for host in up:
-            ups.append({'hostname': host, 'status': 'up'})
-        for host in down:
-            downs.append({'hostname': host, 'status': 'down'})
-        ret['up'] = ups
-        ret['down'] = downs
         return ret
 
     def remote_cmd(self, tgt, fun, client='local_async', expr_form='list', arg='', **kwargs):
@@ -174,28 +163,25 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def sync_remote_server(self, tgt='*', arg=[]):
+    def sync_remote_server(self, tgt=[], arg=[], expr_form='list'):
         """
         获取远程主机信息
         """
 
-        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.item', 'arg': arg}
-        content = self.salt_request(data)['return'][0]
-
-        # ret = dict()
-        # for item in args:
-        #     ret[item] = items[item]
+        data = {'client': 'local', 'tgt': tgt, 'fun': 'grains.item', 'arg': arg, 'expr_form': expr_form}
+        content = self.salt_request(data)['return']
         return content
 
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     # cmd = 'netstat'
-    tgt = '*'
+    tgt = sapi.minions_status()['up']
     arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
-    print(sapi.sync_remote_server(tgt, arg))
+    #print(sapi.sync_remote_server(tgt, arg))
+    print(sapi.minions_status())
 
 
 if __name__ == '__main__':

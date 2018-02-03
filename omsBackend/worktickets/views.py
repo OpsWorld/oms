@@ -24,7 +24,7 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):
-    queryset = TicketComment.objects.all()
+    queryset = TicketComment.objects.all().order_by('create_time')
     serializer_class = TicketCommentSerializer
     filter_fields = ('ticket__ticketid',)
 
