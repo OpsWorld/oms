@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "0.17.1",
     "babel-preset-latest": "^6.24.1",
+    "better-scroll": "^1.8.0",
     "clipboard": "1.7.1",
     "echarts": "3.8.5",
     "element-ui": "2.0.7",
@@ -24,6 +25,7 @@
     "mavon-editor": "^2.4.12",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
+    "pug": "^2.0.0-rc.4",
     "showdown": "1.8.2",
     "vue": "2.5.9",
     "vue-awesome": "^2.3.4",
@@ -33,6 +35,7 @@
     "vue-i18n": "^7.3.2",
     "vue-markdown": "^2.2.4",
     "vue-router": "3.0.1",
+    "vue-scrollbar-custom": "^1.0.9",
     "vuex": "3.0.1"
   },
   "devDependencies": {
