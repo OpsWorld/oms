@@ -17,6 +17,7 @@ admin_groups = ['admin', 'OMS_Super_Admin']
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
+    repo_cmd = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'仓库命令')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
     deploy_hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
     deploy_path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
@@ -101,6 +102,7 @@ class DeployJobs(models.Model):
 class Deploycmd(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     name = models.CharField(max_length=10, default='svn更新', verbose_name=u'名称')
+    hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
     deploy_cmd = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'发布命令')
 
     def __str__(self):

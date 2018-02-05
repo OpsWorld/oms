@@ -6,7 +6,13 @@
           <div slot="header">
             <a class="jobname">{{jobs.name}}</a>
           </div>
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+          <div class="deploycmd">
+            <a class="lable-text">发布命令</a>
+            <el-select v-model="deploy_cmd" placeholder="请选择发布命令" @change="changeExtcmd">
+              <el-option v-for="item in deploy_cmds" :key="item.id" :value="item.name"></el-option>
+            </el-select>
+          </div>
+          <el-form v-if="!selectext" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px">
             <!--<el-form-item label="发布环境" prop="env">-->
             <!--<el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">-->
             <!--<el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>-->
@@ -17,12 +23,6 @@
             <!--<el-option v-for="item in jobs.deploy_hosts" :key="item" :value="item"></el-option>-->
             <!--</el-select>-->
             <!--</el-form-item>-->
-            <el-form-item label="发布命令" prop="env">
-              <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
-                <el-option v-for="item in deploy_cmds" :key="item.id" :label="item.name"
-                           :value="item.deploy_cmd"></el-option>
-              </el-select>
-            </el-form-item>
             <el-form-item label="代码地址">
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
@@ -41,6 +41,20 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')">开始构建</el-button>
+            </el-form-item>
+          </el-form>
+
+          <el-form v-if="selectext" ref="extForm" label-width="90px">
+            <el-form-item label="勾选主机">
+              <el-checkbox-group v-model="selectexthosts" @change="selectExthosts">
+                <el-checkbox v-for="item in exthosts.split('|')" :key="item" :label="item"></el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="通知skype" prop="content">
+              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="extsubmitForm">开始构建</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -194,7 +208,12 @@ export default {
       check_job_status: '',
       searchdata: '',
       sendnotice: true,
-      deploy_cmds: ''
+      deploy_cmd: 'svn',
+      deploy_cmds: '',
+      selectext: false,
+      exthosts: '',
+      selectexthosts: [],
+      selecthosts: []
     }
   },
   computed: {
@@ -235,7 +254,7 @@ export default {
         job__name: job
       }
       getDeploycmd(parms).then(response => {
-        this.deploy_cmds = response.data
+        this.deploy_cmds = [{ 'name': 'svn' }].concat(response.data)
       })
     },
     fetchDeployJobData() {
@@ -275,17 +294,12 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          if (this.ruleForm.deploy_cmd === '') {
-            this.ruleForm.deploy_cmd = this.deploy_cmds[0].deploy_cmd
+          if ((typeof this.ruleForm.deploy_hosts) === 'string') {
+            this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
           }
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
+          this.ruleForm.deploy_cmd = this.jobs.repo_cmd + ' update --non-interactive --trust-server-cert ' + this.jobs.deploy_path + ' -r ' + this.ruleForm.version
           this.jobs.version = this.ruleForm.version
-          const rex = /\$\w+/g
-          const rex_pool = this.ruleForm.deploy_cmd.match(rex)
-          for (var i of rex_pool) {
-            var j = i.replace('$', '')
-            this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(i, this.jobs[j])
-          }
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -313,6 +327,33 @@ export default {
           return false
         }
       })
+    },
+    extsubmitForm() {
+      if ((typeof this.ruleForm.deploy_hosts) === 'string') {
+        this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
+      }
+      for (const host of this.selecthosts) {
+        const extForm = {
+          deploy_cmd: this.ruleForm.deploy_cmd + ' ' + host,
+          deploy_hosts: this.ruleForm.deploy_hosts.join(),
+          version: '同步',
+          content: 'HEAD',
+          job: this.ruleForm.job,
+          action_user: this.ruleForm.action_user
+        }
+        postDeployJob(extForm).then(response => {
+          console.log(response.data.j_id)
+          this.$message({
+            message: '构建成功，系统正在玩命发布中 ...',
+            type: 'success'
+          })
+        }).catch(error => {
+          this.$message.error('构建失败，请检查参数是否正确！')
+          this.resetForm('ruleForm')
+          console.log(error)
+        })
+      }
+      this.fetchDeployJobData()
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
@@ -349,6 +390,19 @@ export default {
     searchClick() {
       this.listQuery.search = this.searchdata
       setTimeout(this.fetchDeployJobData(), 500)
+    },
+    changeExtcmd(val) {
+      if (val === 'svn') {
+        this.selectext = false
+      } else {
+        this.selectext = true
+        const data = this.deploy_cmds.filter(tab => tab.name === val)[0]
+        this.ruleForm.deploy_cmd = data.deploy_cmd
+        this.exthosts = data.hosts
+      }
+    },
+    selectExthosts(val) {
+      this.selecthosts = val
     }
   }
 }
@@ -377,5 +431,14 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
+  }
+
+  .deploycmd {
+    margin-bottom: 25px;
+    .lable-text {
+      margin-left: 25px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
   }
 </style>

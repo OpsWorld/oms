@@ -13,8 +13,7 @@ class JobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_repo', 'code_url', 'deploy_hosts', 'deploy_path', 'create_time', 'showdev',
-                  'desc']
+        fields = ['url', 'id', 'name', 'code_repo', 'repo_cmd', 'code_url', 'deploy_hosts', 'deploy_path', 'create_time', 'showdev', 'desc']
 
 
 # class DeployenvSerializer(serializers.ModelSerializer):
@@ -32,13 +31,11 @@ class DeployJobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeployJobs
-        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'version', 'content', 'deploy_cmd',
-                  'action_user', 'result', 'create_time']
+        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'version', 'content', 'deploy_cmd', 'action_user', 'result', 'create_time']
 
     def create(self, validated_data):
         deploy_cmd = validated_data["deploy_cmd"]
         deploy_hosts = validated_data["deploy_hosts"]
-        printcmd = "echo '发布主机：'%s; echo '发布命令：'%s" % (deploy_hosts, deploy_cmd)
         jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), fun='cmd.run', arg=deploy_cmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
@@ -51,4 +48,4 @@ class DeploycmdSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deploycmd
-        fields = ['url', 'id', 'job', 'name', 'deploy_cmd']
+        fields = ['url', 'id', 'job', 'name', 'hosts', 'deploy_cmd']
