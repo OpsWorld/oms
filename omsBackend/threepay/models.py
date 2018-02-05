@@ -85,8 +85,7 @@ class PayChannel(models.Model):
         verbose_name_plural = u'支付通道'
 
     def save(self, *args, **kwargs):
-        if self.name == '':
-            self.name = '{}-{}-{}'.format(self.platform, self.merchant, self.type)
+        self.name = '{}-{}-{}'.format(self.platform, self.merchant, self.type)
         super(PayChannel, self).save(*args, **kwargs)
 
 
@@ -128,6 +127,5 @@ class PlatformPayChannel(models.Model):
         verbose_name_plural = u'平台通道进度'
 
     def save(self, *args, **kwargs):
-        if self.name == '':
-            self.name = '{}-{}'.format(self.platform, self.type)
+        self.name = '{}-{}'.format(self.platform, self.type)
         super(PlatformPayChannel, self).save(*args, **kwargs)

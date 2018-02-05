@@ -51,8 +51,8 @@ class PayChannelSerializer(serializers.ModelSerializer):
         try:
             platformpaychannel = PlatformPayChannel.objects.get(name=name)
         except:
-            platformpaychannel = PlatformPayChannel.objects.create(platform=platform, type=type,
-                                                                   create_user=create_user)
+            platformpaychannel = PlatformPayChannel.objects.update_or_create(platform=platform, type=type,
+                                                                             create_user=create_user)
             platformpaychannel.save()
         paychannel = PayChannel.objects.create(**validated_data)
         paychannel.save()
