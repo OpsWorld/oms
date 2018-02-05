@@ -36,7 +36,7 @@
             <el-form-item label="更新内容" prop="content">
               <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
             </el-form-item>
-            <el-form-item label="通知skype" prop="content">
+            <el-form-item label="通知skype">
               <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
             </el-form-item>
             <el-form-item>
@@ -50,7 +50,7 @@
                 <el-checkbox v-for="item in exthosts.split('|')" :key="item" :label="item"></el-checkbox>
               </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="通知skype" prop="content">
+            <el-form-item label="通知skype">
               <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
             </el-form-item>
             <el-form-item>
@@ -333,8 +333,14 @@ export default {
         this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
       }
       for (const host of this.selecthosts) {
+        const rex = /\$\w+/g
+        const rex_pool = this.ruleForm.deploy_cmd.match(rex)
+        let deploy_cmd
+        for (var i of rex_pool) {
+          deploy_cmd = this.ruleForm.deploy_cmd.replace(i, host)
+        }
         const extForm = {
-          deploy_cmd: this.ruleForm.deploy_cmd + ' ' + host,
+          deploy_cmd: deploy_cmd,
           deploy_hosts: this.ruleForm.deploy_hosts.join(),
           version: '同步',
           content: 'HEAD',
@@ -353,7 +359,7 @@ export default {
           console.log(error)
         })
       }
-      this.fetchDeployJobData()
+      setTimeout(this.fetchDeployJobData(), 1000)
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
