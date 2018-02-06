@@ -6,7 +6,7 @@ from jobs.models import Jobs, DeployJobs, Deploycmd
 from jobs.serializers import JobsSerializer, DeployJobsSerializer, DeploycmdSerializer
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, DjangoFilterBackend
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -14,7 +14,8 @@ from rest_framework.response import Response
 class JobsViewSet(viewsets.ModelViewSet):
     queryset = Jobs.objects.all().order_by('id')
     serializer_class = JobsSerializer
-    filter_backends = (JobFilterBackend, SearchFilter)
+    filter_backends = (JobFilterBackend, SearchFilter, DjangoFilterBackend)
+    filter_fields = ['showdev']
     search_fields = ('name', 'code_url')
 
 
