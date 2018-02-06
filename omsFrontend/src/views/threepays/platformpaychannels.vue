@@ -60,9 +60,10 @@
     </el-card>
 
     <el-dialog :visible.sync="completeForm" width="30%" @close="fetchData">
-      <el-form label-width="100px">
+      <el-form label-width="90px">
         <el-form-item :model="CompleteForm" label="完成百分比">
           <el-slider
+            style="margin-right: 50px"
             v-model="CompleteForm.complete"
             :step="10">
           </el-slider>
@@ -150,12 +151,14 @@ export default {
           type: 'success',
           message: '更新成功!'
         })
-        const messageForm = {
-          action_user: `${this.CompleteForm.create_user}`,
-          title: '【通道完成进度】',
-          message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}%`
+        if (this.CompleteForm.complete === 100) {
+          const messageForm = {
+            action_user: `${this.CompleteForm.create_user}`,
+            title: '【通道完成进度】',
+            message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}%`
+          }
+          postSendmessage(messageForm)
         }
-        postSendmessage(messageForm)
         this.completeForm = false
         this.fetchData()
       }).catch(() => {
