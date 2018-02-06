@@ -359,7 +359,15 @@ export default {
           console.log(error)
         })
       }
-      setTimeout(this.fetchDeployJobData(), 1000)
+      if (this.sendnotice) {
+        const messageForm = {
+          action_user: 'ITDept_SkypeID',
+          title: `【${this.ruleForm.job}】正在同步`,
+          message: `操作人: ${this.ruleForm.action_user}`
+        }
+        postSendmessage(messageForm)
+      }
+      setTimeout(this.fetchDeployJobData(), 3000)
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
