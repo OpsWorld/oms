@@ -6,6 +6,12 @@
           <router-link :to="'addjob'" v-if="role==='super'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
+
+          <el-radio-group v-model="listQuery.showdev" @change="changeStatus" style="margin-left: 20px">
+            <el-radio label="">全部</el-radio>
+            <el-radio label="false">正式</el-radio>
+            <el-radio label="true">测试</el-radio>
+          </el-radio-group>
         </div>
         <div class="table-search">
           <el-input
@@ -28,19 +34,20 @@
           </el-table-column>
           <el-table-column prop='code_url' label='代码地址'></el-table-column>
           <!--<el-table-column prop='create_time' label='创建时间' sortable>-->
-            <!--<template slot-scope="scope">-->
-              <!--<div slot="reference">-->
-                <!--{{scope.row.create_time | formatTime}}-->
-              <!--</div>-->
-            <!--</template>-->
+          <!--<template slot-scope="scope">-->
+          <!--<div slot="reference">-->
+          <!--{{scope.row.create_time | formatTime}}-->
+          <!--</div>-->
+          <!--</template>-->
           <!--</el-table-column>-->
           <el-table-column prop='desc' label='描述'></el-table-column>
-          <el-table-column label="操作"  v-if="role==='super'">
+          <el-table-column label="操作" v-if="role==='super'">
             <template slot-scope="scope">
               <router-link :to="'editjob/' + scope.row.id">
                 <el-button type="success" size="small" icon="el-icon-setting">配置</el-button>
               </router-link>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small" icon="el-icon-delete">删除</el-button>
+              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small" icon="el-icon-delete">删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -119,6 +126,10 @@ export default {
     },
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
+      this.fetchData()
+    },
+    changeStatus(val) {
+      this.listQuery.showdev = val
       this.fetchData()
     }
   }
