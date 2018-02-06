@@ -8,6 +8,9 @@
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="svn命令" prop="repo_cmd">
+          <el-input v-model="ruleForm.repo_cmd" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
         <el-form-item label="发布路径" prop="deploy_path">
           <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
           <i class="el-icon-question"> deploy_path</i>
@@ -15,13 +18,16 @@
         <el-form-item label="发布主机" prop="deploy_hosts">
           <sesect-hosts :selecthost="ruleForm.deploy_hosts" @gethosts="getHosts"></sesect-hosts>
         </el-form-item>
-        <el-form-item label="发布命令">
+        <el-form-item label="扩展命令">
           <el-tabs v-model="actioncmdTab" type="card" editable @tab-add="addcmdForm=true" @tab-remove="removecmdTab">
             <el-tab-pane v-for="item in cmdTabValues" :key="item.name" :label="item.title" :name="item.name">
               <el-card>
-                <el-form label-position="right" inline>
+                <el-form label-position="right">
                   <el-form-item>
-                    <span>{{item.content.deploy_cmd}}</span>
+                    <el-tag size="mini" style="margin-right: 3px" v-for="host in item.content.hosts.split('|')" :key="host">{{host}}</el-tag>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-alert :title="item.content.deploy_cmd" type="success" :closable="false"></el-alert>
                   </el-form-item>
                 </el-form>
               </el-card>
@@ -88,6 +94,9 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="cmdForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="主机" prop="hosts">
+          <el-input v-model="cmdForm.hosts" placeholder="1.1.1.1|2.2.2.2|3.3.3.3"></el-input>
+        </el-form-item>
         <el-form-item label="发布命令" prop="deploy_cmd">
           <el-input v-model="cmdForm.deploy_cmd" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -113,6 +122,7 @@ export default {
         name: '',
         code_repo: 'svn',
         code_url: '',
+        repo_cmd: '"C:\Program Files\TortoiseSVN\bin\svn.exe"',
         deploy_hosts: [],
         deploy_path: '',
         desc: ''
@@ -136,7 +146,8 @@ export default {
       removeenvs: [],
       cmdForm: {
         job: '',
-        name: 'svn更新',
+        name: '同步',
+        hosts: '',
         deploy_cmd: ''
       },
       addcmdForm: false,
