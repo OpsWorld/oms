@@ -19,8 +19,6 @@
               <a class="ticketinfo action_user" v-if="ticketData.ticket_status!=0">
                 <a class="shu"></a>
                 <span class="han">最新回复人：</span>{{ticketData.edit_user}}</a>
-            </div>
-            <div class="appendInfo">
               <a class="shu"></a>
               <span class="han">工单类型：</span>
               <a>{{ticketData.type}}</a>

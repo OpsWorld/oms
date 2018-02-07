@@ -51,17 +51,23 @@ class SendmessageViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         content = request.data["title"] + '\n' + request.data["message"]
-        action_users = set(request.data["action_user"].split(','))
-        print(action_users)
+        # action_users = set(request.data["action_user"].split(',')
+        # print(action_users)
+        # try:
+        #     for action_user in action_users:
+        #         if action_user:
+        #             to_action_user = User.objects.get(username=action_user).skype
+        #             print(to_action_user)
+        #             send_to_skype.delay(to_action_user, content)
+        # except Exception as e:
+        #     print(e)
+        action_user = request.data["action_user"]
         try:
-            for action_user in action_users:
-                if action_user:
-                    to_action_user = User.objects.get(username=action_user).skype
-                    print(to_action_user)
-                    send_to_skype.delay(to_action_user, content)
+            to_action_user = User.objects.get(username=action_user).skype
+            print(to_action_user)
+            send_to_skype.delay(to_action_user, content)
         except Exception as e:
             print(e)
-
         return Response({"code": "1024"}, status=status.HTTP_201_CREATED)
 
 
