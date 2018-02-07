@@ -86,7 +86,7 @@ class DeployJobs(models.Model):
     deploy_hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
     content = models.TextField(null=True, blank=True, verbose_name=u'更新内容')
-    deploy_cmd = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'发布命令')
+    deploy_cmd = models.TextField(null=True, blank=True, verbose_name=u'发布命令')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
