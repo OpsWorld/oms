@@ -42,6 +42,8 @@ const user = {
     Login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
+          const cur_date = new Date().getTime()
+          localStorage.setItem('token_time', cur_date)
           commit('SET_TOKEN', response.data.token)
           commit('SET_USERNAME', userInfo.username)
           localStorage.setItem('username', userInfo.username)

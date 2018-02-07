@@ -32,7 +32,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="limit"
+          :page-size="listQuery.limit"
           layout="prev, pager, next, sizes"
           :total="tabletotal">
         </el-pagination>
