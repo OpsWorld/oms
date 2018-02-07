@@ -6,10 +6,11 @@
           <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
-          <el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-          <a class="tips"> Tip：当前工单处理人，默认是指派给ITSupport群组</a>
+          <!--<el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">-->
+            <!--<el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>-->
+          <!--</el-select>-->
+          <!--<a class="tips"> Tip：当前工单处理人，默认是指派给ITSupport群组</a>-->
+          <el-input v-model="ruleForm.action_user" disabled></el-input>
         </el-form-item>
         <el-form-item label="工单类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
