@@ -356,7 +356,6 @@ export default {
           this.fetchDeployJobData()
         }).catch(error => {
           this.$message.error('构建失败，请检查参数是否正确！')
-          this.resetForm('ruleForm')
           console.log(error)
         })
       }
