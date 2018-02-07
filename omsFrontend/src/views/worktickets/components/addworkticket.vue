@@ -11,12 +11,6 @@
           </el-select>
           <a class="tips"> Tip：当前工单处理人，默认是指派给ITSupport群组</a>
         </el-form-item>
-        <el-form-item label="跟踪者" prop="follower">
-          <el-select v-model="ruleForm.follower" filterable multiple placeholder="请选择跟踪者">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-          <a class="tips"> Tip：工单状态发生变更时，邮件抄送给跟踪者</a>
-        </el-form-item>
         <el-form-item label="工单类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
             <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
@@ -64,11 +58,11 @@
 </template>
 <script>
 import { postWorkticket, postTicketenclosure, getTickettype } from 'api/workticket'
-import { postUpload, postSendmail, postSendmessage } from 'api/tool'
+import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { mapGetters } from 'vuex'
-import { getCreatetime, getConversionTime } from '@/utils'
+import { getConversionTime } from '@/utils'
 
 export default {
   components: {},
@@ -84,7 +78,6 @@ export default {
         level: 2,
         action_user: 'itsupport',
         edit_user: '',
-        follower: '',
         create_group: [],
         ticketid: ''
       },
@@ -167,26 +160,8 @@ export default {
                 postTicketenclosure(this.enclosureForm)
               })
             }
-            const create_time = getCreatetime()
-            const mailForm = {
-              to: this.ruleForm.action_user,
-              cc: this.ruleForm.follower.join(),
-              sub: '【新工单】' + this.ruleForm.title,
-              content: `
-                    <html xmlns="http://www.w3.org/1999/xhtml">
-                    <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>工单通知邮件</title></head>
-                    <body><div id="container">
-                    <p>工单提交人： ${this.ruleForm.create_user}</p>
-                    <p>工单提交时间：${create_time} </p>
-                    <p>点击工单地址: <a href='http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}'>
-                    http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}</a></p>
-                    <p>工单详细内容：</p>
-                    <p>${this.ruleForm.content}</p>
-                    </div></body></html>`
-            }
-            postSendmail(mailForm)
             const messageForm = {
-              action_user: this.ruleForm.action_user + ',' + this.ruleForm.follower.join(),
+              action_user: this.ruleForm.action_user,
               title: '【新工单】' + this.ruleForm.title,
               message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`
             }

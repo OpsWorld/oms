@@ -21,11 +21,6 @@
                 <span class="han">最新回复人：</span>{{ticketData.edit_user}}</a>
             </div>
             <div class="appendInfo">
-              <span class="han">问题跟踪人：</span>
-              <a style="margin-right: 5px" v-for="item in ticketData.follower" :key="item.id">
-                {{item}}
-              </a>
-              <a class="han" v-if="showfollower">未设置</a>
               <a class="shu"></a>
               <span class="han">工单类型：</span>
               <a>{{ticketData.type}}</a>
@@ -141,13 +136,13 @@ import {
   getTicketenclosure,
   deleteTicketenclosure
 } from 'api/workticket'
-import { postUpload, postSendmail, postSendmessage } from 'api/tool'
+import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
-import VueMarkdown from 'vue-markdown' // 前端显示
+import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import { getUser } from 'api/user'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
-import { getCreatetime, getConversionTime } from '@/utils'
+import { getConversionTime } from '@/utils'
 
 export default {
   components: {
@@ -204,7 +199,6 @@ export default {
       uploadurl: uploadurl,
       TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
       TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
-      showfollower: true,
       showinput: false,
       radio_status: '0',
       mailmsg: '',
@@ -236,9 +230,6 @@ export default {
         this.ticket_id = this.ticketData.id
         this.rowdata.action_user = this.ticketData.action_user
         this.rowdata.edit_user = this.ticketData.edit_user
-        if (this.ticketData.follower.length > 0) {
-          this.showfollower = false
-        }
       })
     },
     CommentData() {
@@ -269,7 +260,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(response => {
-        const create_time = getCreatetime()
         this.commentForm.ticket = this.ticket_id
         this.rowdata.edit_user = this.commentForm.create_user
         if (this.radio_status === '1') {
@@ -287,41 +277,16 @@ export default {
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
 
           const messageForm = {
-            action_user: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
+            action_user: this.ticketData.create_user,
             title: '【工单处理完成】' + this.ticketData.title,
             message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else {
           this.commentForm.content = '【问题处理】' + this.mailcontent
-          const messageForm = {
-            action_user: this.ticketData.follower.join(),
-            title: '【工单有新回复】' + this.ticketData.title,
-            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
-          }
-          postSendmessage(messageForm)
         }
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)
-          if (this.radio_status !== '0') {
-            const mailForm = {
-              to: this.ticketData.action_user,
-              cc: this.ticketData.create_user + ',' + this.ticketData.follower.join(),
-              sub: '【工单状态变化】' + this.ticketData.title,
-              content: `
-                    <html xmlns="http://www.w3.org/1999/xhtml">
-                    <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>工单通知邮件</title></head>
-                    <body><div id="container">
-                    <p>工单提交人： ${this.commentForm.create_user} </p>
-                    <p>工单提交时间：${create_time} </p>
-                    <p>点击工单地址: <a href='${window.location.href}'>${window.location.href}</a></p>
-                    <p>工单详细内容：</p>
-                    <p>${this.mailmsg}</p>
-                    <p>【工单处理内容】${this.mailcontent}</p>
-                    </div></body></html>`
-            }
-            postSendmail(mailForm)
-          }
           this.$router.push('/worktickets/workticket')
         })
       }).catch(() => {

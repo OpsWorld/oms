@@ -31,7 +31,6 @@ class WorkTicket(models.Model):
     create_user = models.ForeignKey(User, related_name='create_user', verbose_name=u'创建者')
     action_user = models.ForeignKey(User, related_name='action_user', verbose_name=u'指派人')
     edit_user = models.ForeignKey(User, related_name='edit_user', blank=True, null=True, verbose_name=u'处理人')
-    follower = models.ManyToManyField(User, null=True, blank=True, related_name='follower', verbose_name=u'跟踪人')
     create_group = models.ManyToManyField(Group, null=True, blank=True, verbose_name=u'部门')
     level = models.CharField(max_length=3, choices=TicketLevel.items(), default=2, verbose_name=u'工单等级')
     ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'工单状态')
