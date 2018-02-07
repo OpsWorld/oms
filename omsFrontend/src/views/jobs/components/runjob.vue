@@ -353,6 +353,7 @@ export default {
             message: '构建成功，系统正在玩命发布中 ...',
             type: 'success'
           })
+          this.fetchDeployJobData()
         }).catch(error => {
           this.$message.error('构建失败，请检查参数是否正确！')
           this.resetForm('ruleForm')
@@ -367,7 +368,6 @@ export default {
         }
         postSendmessage(messageForm)
       }
-      setTimeout(this.fetchDeployJobData(), 3000)
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
