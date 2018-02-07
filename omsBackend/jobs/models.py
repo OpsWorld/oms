@@ -103,7 +103,7 @@ class Deploycmd(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     name = models.CharField(max_length=10, default='svn更新', verbose_name=u'名称')
     hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
-    deploy_cmd = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'发布命令')
+    deploy_cmd = models.CharField(max_length=500, null=True, blank=True, verbose_name=u'发布命令')
 
     def __str__(self):
         return self.name
