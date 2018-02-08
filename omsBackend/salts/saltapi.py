@@ -115,8 +115,8 @@ class SaltAPI(object):
 
         data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
         content = self.salt_request(data)
-        ret = content['return'][0]['jid']
         print(content)
+        ret = content['return'][0]['jid']
         return ret
 
     def get_result(self, jid):
