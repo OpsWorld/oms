@@ -67,6 +67,7 @@ export function deleteDeployenv(id) {
 
 // deployjobs
 export function postDeployJob(data) {
+  console.log(data)
   return request({
     url: apiURL.deployjobs,
     method: 'post',
