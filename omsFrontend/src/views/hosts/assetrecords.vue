@@ -183,7 +183,6 @@ export default {
       this.fetchData()
     },
     strToJson(str) {
-      console.log(str)
       var json = (new Function('return ' + str))()
       return json
     }
