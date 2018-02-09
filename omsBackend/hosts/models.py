@@ -25,7 +25,7 @@ class Host(models.Model):
     sn = models.CharField(max_length=20, null=True, blank=True, verbose_name=u"序列号  ")
     ip = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"IP")
     have_net = models.BooleanField(default=False, verbose_name=u"是否外网")
-    gateway = models.CharField(max_length=10, null=True, blank=True, verbose_name=u"网关")
+    gateway = models.CharField(max_length=20, null=True, blank=True, verbose_name=u"网关")
     idc = models.ForeignKey('Idc', null=True, blank=True, verbose_name=u"机房")
     asset_type = models.CharField(choices=ASSET_TYPE.items(), default='physical', max_length=30, verbose_name=u"设备类型")
     status = models.CharField(choices=ASSET_STATUS.items(), default='noused', max_length=30, verbose_name=u"设备状态")
