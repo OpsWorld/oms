@@ -103,7 +103,7 @@ def sync_remote_server(request, method):
                     'ip': obj[0].ip
                 }
 
-                diff = json_tools.diff(host_info, obj_info)
+                diff = json_tools.diff(obj_info, host_info)
                 if diff:
                     obj.update(**host_info)
                     # records
