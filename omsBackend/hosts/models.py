@@ -45,6 +45,7 @@ class Host(models.Model):
 
 class Idc(models.Model):
     name = models.CharField(max_length=30, unique=True, verbose_name=u"名称")
+    addr = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"地址")
     user = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"联系人")
     tel = models.CharField(max_length=30, null=True, blank=True, verbose_name=u"联系人电话")
     desc = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"备注")

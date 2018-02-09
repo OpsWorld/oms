@@ -3,6 +3,9 @@
     <el-form-item label="名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
+    <el-form-item label="地址" prop="addr">
+      <el-input v-model="ruleForm.addr"></el-input>
+    </el-form-item>
     <el-form-item label="联系人" prop="user">
       <el-input v-model="ruleForm.user"></el-input>
     </el-form-item>
@@ -24,6 +27,7 @@ export default {
     return {
       ruleForm: {
         name: '',
+        addr: '',
         user: '',
         tel: '',
         desc: ''
