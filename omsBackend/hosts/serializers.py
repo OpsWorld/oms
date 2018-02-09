@@ -17,4 +17,4 @@ class HostSerializer(serializers.ModelSerializer):
 class IdcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idc
-        fields = ['url', 'id', 'name', 'user', 'tel', 'desc']
+        fields = ['url', 'id', 'name', 'addr', 'user', 'tel', 'desc']

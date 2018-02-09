@@ -17,6 +17,7 @@
       <div>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='name' label='名称'></el-table-column>
+          <el-table-column prop='addr' label='地址'></el-table-column>
           <el-table-column prop='user' label='联系人'></el-table-column>
           <el-table-column prop='tel' label='联系人电话'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
