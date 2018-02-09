@@ -151,7 +151,6 @@ export default {
           type: 'success',
           message: '更新成功!'
         })
-        console.log(this.CompleteForm.complete)
         if (this.CompleteForm.complete === 100) {
           const messageForm = {
             action_user: `${this.CompleteForm.create_user}`,
