@@ -103,7 +103,8 @@ def sync_remote_server(request, method):
                     'ip': obj[0].ip
                 }
 
-                if json_tools.diff(host_info, obj_info):
+                diff = json_tools.diff(host_info, obj_info)
+                if diff:
                     obj.update(**host_info)
                     # records
                     Record.objects.create(
@@ -113,6 +114,7 @@ def sync_remote_server(request, method):
                         method='update',
                         before=obj_info,
                         after=host_info,
+                        diff=diff,
                         create_user='auto'
                     )
                     update_list.append(k)

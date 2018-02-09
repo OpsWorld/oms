@@ -6,6 +6,7 @@ from hosts.models import Host, Idc
 from hosts.serializers import HostSerializer, IdcSerializer
 from rest_framework.response import Response
 from records.models import Record
+import json_tools
 
 
 class HostViewSet(viewsets.ModelViewSet):
@@ -45,12 +46,14 @@ class HostViewSet(viewsets.ModelViewSet):
         after_data = serializer.data
 
         # records
+        diff = json_tools.diff(before_data, after_data)
         Record.objects.create(
             name='hosts',
             asset=host,
             method='update',
             before=before_data,
             after=after_data,
+            diff=diff,
             create_user=request.user
         )
         return Response(serializer.data)
