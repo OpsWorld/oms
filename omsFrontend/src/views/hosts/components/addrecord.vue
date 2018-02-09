@@ -17,6 +17,9 @@
     <el-form-item label="修改后数据" prop="after">
       <el-input v-model="ruleForm.after" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
+    <el-form-item label="前后数据对比" prop="diff">
+      <el-input v-model="ruleForm.diff" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
       <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -32,6 +35,7 @@ export default {
         asset: '',
         method: '',
         before: '',
+        diff: '',
         after: ''
       },
       rules: {

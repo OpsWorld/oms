@@ -33,9 +33,9 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='asset' label='资产名称'></el-table-column>
+          <el-table-column prop='asset' label='资产名称' width="210"></el-table-column>
           <el-table-column prop='method' label='操作类型' width="80"></el-table-column>
-          <el-table-column prop='before' label='修改前数据'>
+          <el-table-column prop='before' label='修改前数据' width="150">
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center">
                 <el-popover
@@ -48,7 +48,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='after' label='修改后数据'>
+          <el-table-column prop='after' label='修改后数据' width="150">
             <template slot-scope="scope">
               <div slot="reference" style="text-align: center">
                 <el-popover
@@ -61,8 +61,26 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='diff' label='前后数据对比'>
+            <template slot-scope="scope">
+              <div slot="reference" v-for="item in strToJson(scope.row.diff)" :key="item.id">
+                <el-tag type="danger">{{item.replace.replace('/', '')}}</el-tag>
+                ：
+                <div class="prevalue">
+                  前：
+                  <el-tag size="mini" v-if="item.prev">{{item.prev}}</el-tag>
+                  <el-tag type="success" size="mini" v-else>null</el-tag>
+                </div>
+                <div class="prevalue">
+                  后：
+                  <el-tag type="primary" size="mini" v-if="item.value">{{item.value}}</el-tag>
+                  <el-tag type="primary" size="mini" v-else>null</el-tag>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='create_user' label='操作人' width="100"></el-table-column>
-          <el-table-column prop='create_time' label='创建时间' sortable>
+          <el-table-column prop='create_time' label='创建时间' sortable width="200">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
@@ -163,6 +181,10 @@ export default {
         this.listQuery.create_time_1 = ''
       }
       this.fetchData()
+    },
+    strToJson(str) {
+      var json = (new Function('return ' + str))()
+      return json
     }
   }
 }
@@ -186,5 +208,9 @@ export default {
   .table-pagination {
     padding: 10px 0;
     float: right;
+  }
+
+  .prevalue {
+    margin-left: 20px;
   }
 </style>
