@@ -4,7 +4,7 @@
       <el-input v-model="rowdata.name"></el-input>
     </el-form-item>
     <el-form-item label="地址" prop="addr">
-      <el-input v-model="ruleForm.addr"></el-input>
+      <el-input v-model="rowdata.addr"></el-input>
     </el-form-item>
     <el-form-item label="联系人" prop="user">
       <el-input v-model="rowdata.user"></el-input>
