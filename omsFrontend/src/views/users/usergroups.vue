@@ -33,7 +33,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -49,7 +49,7 @@
 
 <script>
 import { getGroup, postGroup, deleteGroup } from 'api/user'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import viewGroup from './viewgroup.vue'
 
@@ -65,7 +65,8 @@ export default {
         offset: '',
         name: ''
       },
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addGroup: false,
       viewGroup: false,
       rowdata: ''

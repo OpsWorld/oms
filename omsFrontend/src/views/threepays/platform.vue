@@ -66,7 +66,6 @@ export default {
         offset: '',
         name__contains: this.searchdata
       },
-      limit: LIMIT,
       offset: '',
       pagesize: [10, 25, 50, 100],
       addForm: false,

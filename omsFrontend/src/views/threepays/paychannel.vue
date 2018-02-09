@@ -226,7 +226,7 @@
               :current-page.sync="currentPage"
               :page-sizes="pagesize"
               :page-size="listQuery.limit"
-              layout="prev, pager, next, sizes"
+              :layout="pageformat"
               :total="tabletotal">
             </el-pagination>
           </div>
@@ -264,7 +264,7 @@ import { getPayChannel, deletePayChannel } from 'api/threeticket'
 import { mapGetters } from 'vuex'
 import addPaychannel from './components/addPaychannel.vue'
 import editPaychannel from './components/editPaychannel.vue'
-import { LIMIT, apiUrl, uploadurl } from '@/config'
+import { LIMIT, pagesize, pageformat, apiUrl, uploadurl } from '@/config'
 import { getCreatetime, getConversionTime } from '@/utils'
 import { postUpload, postSendmessage } from 'api/tool'
 
@@ -333,7 +333,8 @@ export default {
         ordering: ''
       },
       currentPage: 1,
-      pagesize: [LIMIT, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       tabletotal: 0,
       paychannels: [],
       enclosureData: [],
