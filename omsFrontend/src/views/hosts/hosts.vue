@@ -104,7 +104,7 @@
             :current-page.sync="currentPage"
             :page-sizes="pagesize"
             :page-size="listQuery.limit"
-            layout="prev, pager, next, sizes"
+            :layout="pageformat"
             :total="tabletotal">
           </el-pagination>
         </div>
@@ -122,7 +122,7 @@
 <script>
 import { postHost, getHost, putHost, deleteHost } from '@/api/host'
 import { getSyncRemoteServer } from 'api/salt'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addObj from './components/addhost.vue'
 import editObj from './components/edithost.vue'
 
@@ -140,9 +140,8 @@ export default {
         search: '',
         status: 'used'
       },
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addForm: false,
       editForm: false,
       viewForm: false,

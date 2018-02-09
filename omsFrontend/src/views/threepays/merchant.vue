@@ -21,10 +21,10 @@
           <el-table-column prop='domain' label='绑定域名'></el-table-column>
           <el-table-column prop='three' label='业务经理'></el-table-column>
           <!--<el-table-column label="操作">-->
-            <!--<template slot-scope="scope">-->
-              <!--<el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>-->
-              <!--<el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>-->
-            <!--</template>-->
+          <!--<template slot-scope="scope">-->
+          <!--<el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>-->
+          <!--<el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>-->
+          <!--</template>-->
           <!--</el-table-column>-->
         </el-table>
       </div>
@@ -34,17 +34,17 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="limit"
-          layout="prev, pager, next, sizes"
+          :page-size="listQuery.limit"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
     </el-card>
     <!--<el-dialog :visible.sync="addForm">-->
-      <!--<add-group @formdata="addGroupSubmit"></add-group>-->
+    <!--<add-group @formdata="addGroupSubmit"></add-group>-->
     <!--</el-dialog>-->
     <!--<el-dialog :visible.sync="editForm">-->
-      <!--<edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>-->
+    <!--<edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>-->
     <!--</el-dialog>-->
   </div>
 </template>
@@ -52,7 +52,7 @@
 <script>
 import { getMerchant } from 'api/threeticket'
 // import { getMerchant, postMerchant, putMerchant, deleteMerchant } from 'api/threeticket'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addMerchant.vue'
 import editGroup from './components/editMerchant.vue'
 
@@ -64,9 +64,8 @@ export default {
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addForm: false,
       editForm: false,
       rowdata: {},

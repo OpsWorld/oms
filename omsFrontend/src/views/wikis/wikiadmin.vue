@@ -55,7 +55,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -65,7 +65,7 @@
 
 <script>
 import { getWiki, deleteWiki } from 'api/wiki'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -75,7 +75,8 @@ export default {
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       rowdata: {},
       listQuery: {
         limit: LIMIT,

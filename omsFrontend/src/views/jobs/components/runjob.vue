@@ -130,7 +130,7 @@
                 :current-page.sync="currentPage"
                 :page-sizes="pagesize"
                 :page-size="listQuery.limit"
-                layout="prev, pager, next, sizes"
+                :layout="pageformat"
                 :total="tabletotal">
               </el-pagination>
             </div>
@@ -151,7 +151,7 @@
 </template>
 <script>
 import { getJob, getDeploycmd, getDeployJob, postDeployJob, deleteDeployJob, getUpdateJobsStatus } from '@/api/job'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
 import { postSendmessage } from '@/api/tool'
 
@@ -193,7 +193,8 @@ export default {
         search: '',
         job__name: ''
       },
-      pagesize: [LIMIT, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       tableData: [],
       tabletotal: 0,
       DEPLOY_STATUS: {

@@ -36,7 +36,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -52,7 +52,7 @@
 
 <script>
 import { postIdc, getIdc, putIdc, deleteIdc } from '@/api/host'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addObj from './components/addidc.vue'
 import editObj from './components/editidc.vue'
 
@@ -69,9 +69,8 @@ export default {
         offset: '',
         name: this.searchdata
       },
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addForm: false,
       editForm: false,
       viewForm: false,

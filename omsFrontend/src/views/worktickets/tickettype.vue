@@ -33,7 +33,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="limit"
-          layout="prev, pager, next, sizes"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -49,7 +49,7 @@
 
 <script>
 import { getTickettype, postTickettype, putTickettype, deleteTickettype } from 'api/workticket'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import editGroup from '../components/editgroup.vue'
 
@@ -63,7 +63,8 @@ export default {
       currentPage: 1,
       limit: LIMIT,
       offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addForm: false,
       editForm: false,
       rowdata: {}

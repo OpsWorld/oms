@@ -39,8 +39,10 @@ module.exports = {
   // 超级管理组
   super_group: CONFIG.super_group,
 
-  // 数据分页限制
-  LIMIT: 10,
+  // 表格数据
+  LIMIT: 20,
+  pagesize: [20, 50, 100],
+  pageformat: 'total, prev, pager, next, sizes',
 
   // 本地上传到服务器
   uploads: `${url}/api/upload/`,

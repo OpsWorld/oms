@@ -8,7 +8,7 @@
         <div class="table-search">
           <el-input
             placeholder="搜索 ..."
-            v-model="searchdata"
+            v-model="listQuery.name__contains"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -32,8 +32,8 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="limit"
-          layout="prev, pager, next, sizes"
+          :page-size="listQuery.limit"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -49,7 +49,7 @@
 
 <script>
 import { getPayChannelName, postPayChannelName, putPayChannelName, deletePayChannelName } from 'api/threeticket'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import editGroup from '../components/editgroup.vue'
 
@@ -59,18 +59,16 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       addForm: false,
       editForm: false,
       rowdata: {},
       listQuery: {
         limit: LIMIT,
         offset: '',
-        name__contains: this.searchdata
+        name__contains: ''
       }
     }
   },

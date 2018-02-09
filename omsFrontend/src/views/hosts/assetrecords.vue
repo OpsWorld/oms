@@ -96,7 +96,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+          :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -110,7 +110,7 @@
 
 <script>
 import { getRecord, postRecord } from '@/api/tool'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addObj from './components/addrecord.vue'
 import formatDate from '@/utils/dateformat'
 
@@ -128,9 +128,8 @@ export default {
         create_time_0: '',
         create_time_1: ''
       },
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       AddTypes: { 0: '手动', 1: '自动' },
       addForm: false,
       selectdatatime: ''
