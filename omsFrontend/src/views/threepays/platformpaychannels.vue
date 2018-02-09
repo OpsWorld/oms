@@ -151,6 +151,7 @@ export default {
           type: 'success',
           message: '更新成功!'
         })
+        console.log(this.CompleteForm.complete)
         if (this.CompleteForm.complete === 100) {
           const messageForm = {
             action_user: `${this.CompleteForm.create_user}`,
@@ -158,6 +159,7 @@ export default {
             message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}%`
           }
           postSendmessage(messageForm)
+          console.log('通道完成100')
         }
         this.completeForm = false
         this.fetchData()
