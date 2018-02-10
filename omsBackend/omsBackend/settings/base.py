@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'hosts',
     'jobs',
     'records',
+    'projects',
 ]
 
 MIDDLEWARE = [

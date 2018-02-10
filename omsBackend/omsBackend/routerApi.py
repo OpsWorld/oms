@@ -13,6 +13,7 @@ from wikis.views import WikiViewSet, OpsWikiViewSet
 from hosts.views import HostViewSet, IdcViewSet
 from jobs.views import JobsViewSet, DeployJobsViewSet, DeploycmdViewSet
 from records.views import RecordViewSet
+from projects.views import ProjectViewSet, ProjectCommentViewSet, ProjectTypeViewSet
 
 router = DefaultRouter()
 
@@ -54,3 +55,7 @@ router.register(r'deployjobs', DeployJobsViewSet)
 router.register(r'deploycmds', DeploycmdViewSet)
 
 router.register(r'records', RecordViewSet)
+
+router.register(r'projects', ProjectViewSet)
+router.register(r'projectcomments', ProjectCommentViewSet)
+router.register(r'projecttypes', ProjectTypeViewSet)

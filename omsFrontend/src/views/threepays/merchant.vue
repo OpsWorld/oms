@@ -146,20 +146,5 @@ export default {
 </script>
 
 <style lang='scss'>
-  .head-lavel {
-    padding-bottom: 50px;
-  }
 
-  .table-button {
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
-  }
 </style>

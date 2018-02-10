@@ -121,7 +121,7 @@
 
 <script>
 import { getWorkticket, patchWorkticket } from 'api/workticket'
-import { LIMIT, pagesize } from '@/config'
+import { LIMIT } from '@/config'
 import addWorkticket from './components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
@@ -134,7 +134,7 @@ export default {
       tabletotal: 0,
       currentPage: 1,
       ticket_status: '',
-      pagesize: pagesize,
+      pagesize: [10, 25, 50, 100],
       rowdata: {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
@@ -247,22 +247,5 @@ export default {
 </script>
 
 <style lang='scss'>
-  .head-lavel {
-    padding-bottom: 50px;
-  }
 
-  .table-button {
-    padding: 10px 0;
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-    padding: 10px 0;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
-  }
 </style>

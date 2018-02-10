@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { getUploadList, deleteUpload } from 'api/tool'
+import { getUpload, deleteUpload } from 'api/tool'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import format from '@/utils/dateformat'
 
@@ -98,7 +98,7 @@ export default {
 
   methods: {
     fetchData() {
-      getUploadList(this.listQuery).then(response => {
+      getUpload(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -143,22 +143,5 @@ export default {
 </script>
 
 <style lang='scss'>
-  .head-lavel {
-    padding-bottom: 50px;
-  }
 
-  .table-button {
-    padding: 10px 0;
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-    padding: 10px 0;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
-  }
 </style>

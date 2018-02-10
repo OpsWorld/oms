@@ -190,25 +190,6 @@ export default {
 </script>
 
 <style lang='scss'>
-  .head-lavel {
-    padding-bottom: 50px;
-  }
-
-  .table-button {
-    padding: 10px 0;
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-    padding: 10px 0;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
-  }
-
   .prevalue {
     margin-left: 20px;
   }

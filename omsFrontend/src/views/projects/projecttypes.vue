@@ -3,13 +3,11 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link :to="'addopswiki'">
-            <el-button type="primary" icon="el-icon-plus">新建</el-button>
-          </router-link>
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
         </div>
         <div class="table-search">
           <el-input
-            placeholder="标题或内容"
+            placeholder="搜索 ..."
             v-model="searchdata"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
@@ -18,33 +16,11 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='title' label='标题'>
-            <template slot-scope="scope">
-              <router-link :to="'viewopswiki/' + scope.row.id">
-                <a style="color: #257cff">{{scope.row.title}}</a>
-              </router-link>
-            </template>
-          </el-table-column>
-          <el-table-column prop='create_user' label='创建人'></el-table-column>
-          <el-table-column prop='create_time' label='创建时间'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{scope.row.create_time | parseDate}}</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop='update_time' label='更新时间'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{scope.row.update_time | parseDate}}</span>
-              </div>
-            </template>
-          </el-table-column>
+          <el-table-column prop='name' label='名称' sortable='custom'></el-table-column>
+          <el-table-column prop='desc' label='描述'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <router-link :to="'editopswiki/' + scope.row.id">
-                <el-button type="success" size="small">修改</el-button>
-              </router-link>
+              <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
               <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>
@@ -56,34 +32,42 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
-          :page-size="listQuery.limit"
+          :page-size="limit"
           :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
     </el-card>
+    <el-dialog :visible.sync="addForm">
+      <add-group @formdata="addGroupSubmit"></add-group>
+    </el-dialog>
+    <el-dialog :visible.sync="editForm" @close="closeEditForm">
+      <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getOpsWiki, deleteOpsWiki } from 'api/wiki'
+import { getProjectType, postProjectType, putProjectType, deleteProjectType } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import addGroup from '../components/addgroup.vue'
+import editGroup from '../components/editgroup.vue'
 
 export default {
+  components: { addGroup, editGroup },
   data() {
     return {
       tableData: [],
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
+      limit: LIMIT,
+      offset: '',
       pagesize: pagesize,
       pageformat: pageformat,
-      rowdata: {},
-      listQuery: {
-        limit: LIMIT,
-        offset: '',
-        search: this.searchdata
-      }
+      addForm: false,
+      editForm: false,
+      rowdata: {}
     }
   },
 
@@ -93,13 +77,44 @@ export default {
 
   methods: {
     fetchData() {
-      getOpsWiki(this.listQuery).then(response => {
+      const parms = {
+        limit: this.limit,
+        offset: this.offset,
+        name__contains: this.searchdata
+      }
+      getProjectType(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
+    addGroupSubmit(formdata) {
+      postProjectType(formdata).then(response => {
+        this.$message({
+          message: '恭喜你，添加成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.addForm = false
+      }).catch(error => {
+        this.$message.error('添加失败')
+        console.log(error)
+      })
+    },
+    editGroupSubmit(formdata) {
+      putProjectType(this.rowdata.id, formdata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.editForm = false
+      }).catch(error => {
+        this.$message.error('更新失败')
+        console.log(error)
+      })
+    },
     deleteGroup(id) {
-      deleteOpsWiki(id).then(response => {
+      deleteProjectType(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
@@ -121,11 +136,11 @@ export default {
       this.fetchData()
     },
     handleSizeChange(val) {
-      this.listQuery.limit = val
+      this.limit = val
       this.fetchData()
     },
     handleCurrentChange(val) {
-      this.listQuery.offset = (val - 1) * LIMIT
+      this.offset = (val - 1) * LIMIT
       this.fetchData()
     }
   }
