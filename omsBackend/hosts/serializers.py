@@ -2,7 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from hosts.models import Host, Idc
+from hosts.models import Host, Idc, HostGroup
 
 
 class HostSerializer(serializers.ModelSerializer):
@@ -18,3 +18,9 @@ class IdcSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idc
         fields = ['url', 'id', 'name', 'addr', 'user', 'tel', 'desc']
+
+
+class HostGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = HostGroup
+        fields = ('url', 'id', 'name', 'desc')

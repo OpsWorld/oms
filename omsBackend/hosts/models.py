@@ -18,6 +18,8 @@ ASSET_TYPE = {
     'other': u"其他设备"
 }
 
+admin_groups = ['admin', 'OMS_Super_Admin']
+
 
 class Host(models.Model):
     hostname = models.CharField(unique=True, max_length=50, verbose_name=u"主机名")
