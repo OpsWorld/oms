@@ -10,7 +10,7 @@ import json_tools
 from hosts.filters import HostFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-
+from utils.tools import removeNone
 
 class HostViewSet(viewsets.ModelViewSet):
     queryset = Host.objects.all()
@@ -50,7 +50,7 @@ class HostViewSet(viewsets.ModelViewSet):
         after_data = serializer.data
 
         # records
-        diff = json_tools.diff(before_data, after_data)
+        diff = removeNone(json_tools.diff(before_data, after_data))
         Record.objects.create(
             name='hosts',
             asset=host,

@@ -3,7 +3,7 @@ import store from '@/store'
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // axios.defaults.withCredentials = true
 
 // 创建axios实例
@@ -22,7 +22,6 @@ service.interceptors.request.use(config => {
     // 加上这个，解决build后 post出现403错误
     config.headers['X-CSRFToken'] = token
   }
-  config.headers['Content-Type'] = 'application/json;charset=utf-8'
   return config
 }, error => {
   // Do something with request error

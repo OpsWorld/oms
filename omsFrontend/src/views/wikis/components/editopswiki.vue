@@ -69,7 +69,7 @@ export default {
               message: '恭喜你，更新成功',
               type: 'success'
             })
-            this.$router.push('/wikis/opswikiadmin')
+            this.$router.push('/tools/opswikiadmin')
           }).catch(error => {
             this.$message.error('更新失败')
             console.log(error)

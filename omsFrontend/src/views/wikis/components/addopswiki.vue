@@ -64,7 +64,7 @@ export default {
               message: '恭喜你，添加成功',
               type: 'success'
             })
-            this.$router.push('/wikis/opswikiadmin')
+            this.$router.push('/tools/opswikiadmin')
           }).catch(error => {
             this.$message.error('添加失败')
             console.log(error)

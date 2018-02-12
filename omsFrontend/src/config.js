@@ -81,6 +81,7 @@ module.exports = {
 
   // 权限
   usermenuperms: `${url}/api/usermenuperms/`,
+  userhostperms: `${url}/api/userhostperms/`,
   routerinfo: `${url}/api/routers/`,
 
   // 菜单
