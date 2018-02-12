@@ -36,7 +36,7 @@ class Project(models.Model):
     from_user = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'需求人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
-    start_time = models.DateTimeField(null=True, blank=True, verbose_name=u'开始时间')
+    start_time = models.DateTimeField(auto_now=True, verbose_name=u'开始时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):

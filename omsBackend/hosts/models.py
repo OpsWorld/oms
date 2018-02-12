@@ -26,6 +26,7 @@ class Host(models.Model):
     ip = models.CharField(max_length=100, null=True, blank=True, verbose_name=u"IP")
     have_net = models.BooleanField(default=False, verbose_name=u"是否外网")
     gateway = models.CharField(max_length=20, null=True, blank=True, verbose_name=u"网关")
+    groups = models.ManyToManyField('HostGroup', null=True, blank=True, related_name='host_group', verbose_name=u'主机组')
     idc = models.ForeignKey('Idc', null=True, blank=True, verbose_name=u"机房")
     asset_type = models.CharField(choices=ASSET_TYPE.items(), default='physical', max_length=30, verbose_name=u"设备类型")
     status = models.CharField(choices=ASSET_STATUS.items(), default='noused', max_length=30, verbose_name=u"设备状态")
@@ -56,3 +57,15 @@ class Idc(models.Model):
     class Meta:
         verbose_name = u'idc'
         verbose_name_plural = u'idc'
+
+
+class HostGroup(models.Model):
+    name = models.CharField(max_length=64, unique=True, verbose_name=u'主机组')
+    desc = models.CharField(max_length=64, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'主机组'
+        verbose_name_plural = u'主机组'

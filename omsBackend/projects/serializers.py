@@ -9,7 +9,7 @@ from users.models import User, Group
 class ProjectSerializer(serializers.ModelSerializer):
     type = serializers.SlugRelatedField(queryset=ProjectType.objects.all(), slug_field='name', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
-    action_user = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username', allow_null=True)
+    action_user = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username',allow_null=True)
 
     class Meta:
         model = Project
