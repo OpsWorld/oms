@@ -28,12 +28,15 @@ export default {
   },
 
   created() {
+    this.getData()
   },
 
   methods: {
-
+    getData() {
+      this.value = this.selectdata
+    },
     handleChange(value, direction, movedKeys) {
-      this.$emit('getdatas', value)
+      this.$emit('getDatas', value)
     }
   }
 }

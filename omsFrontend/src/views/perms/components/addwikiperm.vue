@@ -6,7 +6,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择文档" prop="hosts">
-      <sesect-hosts :selecthost="ruleForm.hosts" @gethosts="getHosts"></sesect-hosts>
+      <sesect-datas :selectdata="ruleForm.wikis" :alldata="allwikis" @getDatas="getWikis"></sesect-datas>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -15,11 +15,12 @@
   </el-form>
 </template>
 <script>
-import sesectHosts from 'views/components/hosttransfer.vue'
+import sesectDatas from 'views/components/datatransfer.vue'
 import { getGroup } from 'api/user'
+import { getWiki } from 'api/wiki'
 
 export default {
-  components: { sesectHosts },
+  components: { sesectDatas },
 
   data() {
     return {
@@ -32,11 +33,13 @@ export default {
           { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
         ]
       },
-      groups: []
+      groups: [],
+      allwikis: []
     }
   },
   created() {
     this.getGroups()
+    this.getAllwikis()
   },
   methods: {
     submitForm(formName) {
@@ -56,12 +59,23 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getHosts(data) {
-      this.ruleForm.hosts = data
+    getWikis(data) {
+      this.ruleForm.objs = data
     },
     getGroups() {
       getGroup().then(response => {
         this.groups = response.data
+      })
+    },
+    getAllwikis() {
+      getWiki().then(response => {
+        this.allwikis = []
+        const results = response.data
+        for (var i = 0, len = results.length; i < len; i++) {
+          this.allwikis.push({
+            key: results[i].title
+          })
+        }
       })
     }
   }
