@@ -4,7 +4,7 @@
       <el-input v-model="rowdata.usergroups" disabled></el-input>
     </el-form-item>
     <el-form-item label="选择文档" prop="hosts">
-      <sesect-hosts :selecthost="rowdata.hosts" @gethosts="getHosts"></sesect-hosts>
+      <sesect-datas :selectdata="rowdata.objs" :alldata="allwikis" @getDatas="getWikis"></sesect-datas>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
@@ -12,10 +12,11 @@
   </el-form>
 </template>
 <script>
-import sesectHosts from 'views/components/hosttransfer.vue'
+import sesectDatas from 'views/components/datatransfer.vue'
+import { getWiki } from 'api/wiki'
 
 export default {
-  components: { sesectHosts },
+  components: { sesectDatas },
 
   props: ['rowdata'],
   data() {
@@ -24,8 +25,12 @@ export default {
         usergroups: [
           { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
         ]
-      }
+      },
+      allwikis: []
     }
+  },
+  created() {
+    this.getAllwikis()
   },
   methods: {
     submitForm(formName) {
@@ -38,8 +43,19 @@ export default {
         }
       })
     },
-    getHosts(data) {
-      this.rowdata.hosts = data
+    getWikis(data) {
+      this.rowdata.objs = data
+    },
+    getAllwikis() {
+      getWiki().then(response => {
+        this.allwikis = []
+        const results = response.data
+        for (var i = 0, len = results.length; i < len; i++) {
+          this.allwikis.push({
+            key: results[i].title
+          })
+        }
+      })
     }
   }
 }
