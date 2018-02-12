@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from hosts.models import Host, admin_groups
+from wikis.models import Wiki, admin_groups
 from users.models import User, Group
-from perms.models import UserHostPerms
+from perms.models import UserWikiPerms
 from dry_rest_permissions.generics import DRYPermissionFiltersBase
 
 
-class HostFilterBackend(DRYPermissionFiltersBase):
+class WikiFilterBackend(DRYPermissionFiltersBase):
     def filter_list_queryset(self, request, queryset, view):
         """
         Limits all list requests to only be seen by the create_groups.
@@ -26,9 +26,9 @@ class HostFilterBackend(DRYPermissionFiltersBase):
             objs = []
             for group in groups:
                 try:
-                    objperm = UserHostPerms.objects.get(usergroups__name=group.name).objs.all()
+                    objperm = UserWikiPerms.objects.get(usergroups__name=group.name).objs.all()
                     for obj in objperm:
-                        objs.append(obj.hostname)
+                        objs.append(obj.title)
                 except:
                     pass
-            return queryset.filter(hostname__in=set(objs)).distinct()
+            return queryset.filter(title__in=set(objs)).distinct()

@@ -117,7 +117,8 @@ export const asyncRouterMap = [
     children: [
       { path: 'menus', component: _import('perms/menus'), name: '菜单列表' },
       { path: 'menuperm', component: _import('perms/menuperm'), name: '用户菜单权限' },
-      { path: 'hostperm', component: _import('perms/hostperm'), name: '用户主机权限' }
+      { path: 'hostperm', component: _import('perms/hostperm'), name: '用户主机权限' },
+      { path: 'wikiperm', component: _import('perms/wikiperm'), name: '用户文档权限' }
     ]
   },
   {

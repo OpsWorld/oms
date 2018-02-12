@@ -72,3 +72,35 @@ export function deleteHostPerm(id) {
     method: 'delete'
   })
 }
+
+// userwikiperms
+export function postWikiPerm(data) {
+  return request({
+    url: apiURL.userwikiperms,
+    method: 'post',
+    data
+  })
+}
+
+export function getWikiPerm(query, id) {
+  return request({
+    url: apiURL.userwikiperms,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putWikiPerm(id, data) {
+  return request({
+    url: apiURL.userwikiperms + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteWikiPerm(id) {
+  return request({
+    url: apiURL.userwikiperms + id + '/',
+    method: 'delete'
+  })
+}

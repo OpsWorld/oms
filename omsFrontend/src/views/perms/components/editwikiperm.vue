@@ -3,8 +3,8 @@
     <el-form-item label="用户组" prop="usergroups">
       <el-input v-model="rowdata.usergroups" disabled></el-input>
     </el-form-item>
-    <el-form-item label="选择主机" prop="hosts">
-      <sesect-hosts :selecthost="rowdata.objs" @gethosts="getHosts"></sesect-hosts>
+    <el-form-item label="选择文档" prop="hosts">
+      <sesect-hosts :selecthost="rowdata.hosts" @gethosts="getHosts"></sesect-hosts>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
@@ -27,9 +27,6 @@ export default {
       }
     }
   },
-  created() {
-  },
-
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -42,7 +39,7 @@ export default {
       })
     },
     getHosts(data) {
-      this.rowdata.objs = data
+      this.rowdata.hosts = data
     }
   }
 }
