@@ -8,7 +8,7 @@ from threepay.views import (PlatformViewSet, MerchantViewSet, ThreePayEnclosureV
                             PayChannelNameViewSet, ThreePayCommentViewSet, PlatformPayChannelViewSet)
 from tools.views import UploadViewSet, SendmailViewSet, SendmessageViewSet, CalenderViewSet
 from menus.views import FirstmenuViewSet, SecondmenuViewSet, ElementViewSet
-from perms.views import UserMenuPermsViewSet, UserHostPermsViewSet
+from perms.views import UserMenuPermsViewSet, UserHostPermsViewSet, UserWikiPermsViewSet
 from wikis.views import WikiViewSet, OpsWikiViewSet
 from hosts.views import HostViewSet, IdcViewSet, HostGroupViewSet
 from jobs.views import JobsViewSet, DeployJobsViewSet, DeploycmdViewSet
@@ -37,6 +37,7 @@ router.register(r'menumetas', ElementViewSet)
 
 router.register(r'usermenuperms', UserMenuPermsViewSet)
 router.register(r'userhostperms', UserHostPermsViewSet)
+router.register(r'userwikiperms', UserWikiPermsViewSet)
 
 router.register(r'platforms', PlatformViewSet)
 router.register(r'merchants', MerchantViewSet)

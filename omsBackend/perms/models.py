@@ -5,7 +5,7 @@ from django.db import models
 from menus.models import Firstmenu, Secondmenu, Element
 from users.models import User, Group
 from hosts.models import Host, HostGroup
-
+from wikis.models import Wiki
 
 class UserMenuPerms(models.Model):
     group = models.CharField(max_length=64, unique=True, verbose_name=u'部门')
@@ -26,7 +26,7 @@ class UserHostPerms(models.Model):
     # users = models.ManyToManyField(User, related_name='asset_permissions', blank=True)
     usergroups = models.ForeignKey(Group, models.SET_NULL, blank=True, null=True,
                                    related_name='usergroups_hostpermissions')
-    hosts = models.ManyToManyField(Host, related_name='hosts_hostpermissions', blank=True)
+    objs = models.ManyToManyField(Host, related_name='hosts_objspermissions', blank=True)
 
     # hostgroups = models.ManyToManyField(HostGroup, related_name='granted_by_permissions', blank=True)
 
@@ -40,3 +40,21 @@ class UserHostPerms(models.Model):
     def save(self, *args, **kwargs):
         self.name = '{}主机权限'.format(self.usergroups)
         super(UserHostPerms, self).save(*args, **kwargs)
+
+
+class UserWikiPerms(models.Model):
+    name = models.CharField(max_length=128, unique=True, blank=True)
+    usergroups = models.ForeignKey(Group, models.SET_NULL, blank=True, null=True,
+                                   related_name='usergroups_wikipermissions')
+    objs = models.ManyToManyField(Wiki, related_name='wikis_objspermissions', blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'用户wiki权限'
+        verbose_name_plural = u'用户wiki权限'
+
+    def save(self, *args, **kwargs):
+        self.name = '{}文档权限'.format(self.usergroups)
+        super(UserWikiPerms, self).save(*args, **kwargs)
