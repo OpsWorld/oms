@@ -68,13 +68,11 @@
                 ：
                 <div class="prevalue">
                   前：
-                  <el-tag size="mini" v-if="item.prev">{{item.prev}}</el-tag>
-                  <el-tag type="success" size="mini" v-else>null</el-tag>
+                  <el-tag size="mini">{{item.prev}}</el-tag>
                 </div>
                 <div class="prevalue">
                   后：
-                  <el-tag type="primary" size="mini" v-if="item.value">{{item.value}}</el-tag>
-                  <el-tag type="primary" size="mini" v-else>null</el-tag>
+                  <el-tag type="primary" size="mini">{{item.value}}</el-tag>
                 </div>
               </div>
             </template>
@@ -96,7 +94,7 @@
           :current-page.sync="currentPage"
           :page-sizes="pagesize"
           :page-size="listQuery.limit"
-          :layout="pageformat"
+          layout="prev, pager, next, sizes"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -110,7 +108,7 @@
 
 <script>
 import { getRecord, postRecord } from '@/api/tool'
-import { LIMIT, pagesize, pageformat } from '@/config'
+import { LIMIT } from '@/config'
 import addObj from './components/addrecord.vue'
 import formatDate from '@/utils/dateformat'
 
@@ -128,8 +126,9 @@ export default {
         create_time_0: '',
         create_time_1: ''
       },
-      pagesize: pagesize,
-      pageformat: pageformat,
+      limit: LIMIT,
+      offset: '',
+      pagesize: [10, 25, 50, 100],
       AddTypes: { 0: '手动', 1: '自动' },
       addForm: false,
       selectdatatime: ''
@@ -190,6 +189,25 @@ export default {
 </script>
 
 <style lang='scss'>
+  .head-lavel {
+    padding-bottom: 50px;
+  }
+
+  .table-button {
+    padding: 10px 0;
+    float: left;
+  }
+
+  .table-search {
+    float: right;
+    padding: 10px 0;
+  }
+
+  .table-pagination {
+    padding: 10px 0;
+    float: right;
+  }
+
   .prevalue {
     margin-left: 20px;
   }

@@ -28,7 +28,7 @@ export function putFirstmenus(id, data) {
 
 export function deleteFirstmenus(id) {
   return request({
-    url: apiURL.firstmenus + id,
+    url: apiURL.firstmenus + id + '/',
     method: 'delete'
   })
 }
@@ -60,7 +60,7 @@ export function putSecondmenus(id, data) {
 
 export function deleteSecondmenus(id) {
   return request({
-    url: apiURL.secondmenus + id,
+    url: apiURL.secondmenus + id + '/',
     method: 'delete'
   })
 }

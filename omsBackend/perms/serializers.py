@@ -3,9 +3,10 @@
 
 from rest_framework import serializers
 
-from perms.models import UserMenuPerms
+from perms.models import UserMenuPerms, UserHostPerms
 from menus.models import Firstmenu, Secondmenu, Element
 from users.models import Group
+from hosts.models import Host
 
 
 class UserMenuPermsSerializer(serializers.ModelSerializer):
@@ -19,3 +20,12 @@ class UserMenuPermsSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserMenuPerms
         fields = ('url', 'id', 'group', 'firstmenus', 'secondmenus', 'elements')
+
+
+class UserHostPermsSerializer(serializers.ModelSerializer):
+    usergroups = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
+    hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
+
+    class Meta:
+        model = UserHostPerms
+        fields = ('url', 'id', 'name', 'usergroups', 'hosts')

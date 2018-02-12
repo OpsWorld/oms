@@ -20,7 +20,7 @@ TicketStatus = {
     2: u'已解决',
 }
 
-admin_groups = ['admin','Tb_Development','OMS_Super_Admin']
+admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
 
 
 class WorkTicket(models.Model):
@@ -60,7 +60,7 @@ class WorkTicket(models.Model):
         is_admin = [i for i in admin_list if i in admin_groups]
         c_list = groups & create_groups
         print(is_admin)
-        if len(is_admin) > 0 or len(c_list)>0:
+        if len(is_admin) > 0 or len(c_list) > 0:
             return True
         else:
             return False

@@ -144,7 +144,7 @@ JWT_REFRESH_EXPIRATION_DELTA的确切含义是自从原始token被发布出去�
 客户端首先调用obtain_jwt_token进行登录操作，之后必须每隔小于5分钟就刷新一次token，才能保证不掉线。然而即使一直保持在线，上限也只有7天，7天过后必须重新登录
 '''
 JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
+    'JWT_AUTH_HEADER_PREFIX': 'token',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
@@ -153,7 +153,6 @@ JWT_AUTH = {
 AUTH_USER_MODEL = "users.User"
 
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_COOKIE_SECURE = True
 
 # 使用ldap认证
 LDAP_AUTH_USE_TLS = False

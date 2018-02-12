@@ -2,16 +2,20 @@
 # author: itimor
 
 from rest_framework import viewsets
-from hosts.models import Host, Idc
-from hosts.serializers import HostSerializer, IdcSerializer
+from hosts.models import Host, Idc, HostGroup
+from hosts.serializers import HostSerializer, IdcSerializer, HostGroupSerializer
 from rest_framework.response import Response
 from records.models import Record
 import json_tools
-
+from hosts.filters import HostFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from utils.tools import removeNone
 
 class HostViewSet(viewsets.ModelViewSet):
     queryset = Host.objects.all()
     serializer_class = HostSerializer
+    filter_backends = (HostFilterBackend, DjangoFilterBackend, SearchFilter)
     search_fields = ['hostname', 'ip']
     filter_fields = ['status']
 
@@ -46,7 +50,7 @@ class HostViewSet(viewsets.ModelViewSet):
         after_data = serializer.data
 
         # records
-        diff = json_tools.diff(before_data, after_data)
+        diff = removeNone(json_tools.diff(before_data, after_data))
         Record.objects.create(
             name='hosts',
             asset=host,
@@ -79,4 +83,10 @@ class HostViewSet(viewsets.ModelViewSet):
 class IdcViewSet(viewsets.ModelViewSet):
     queryset = Idc.objects.all()
     serializer_class = IdcSerializer
+    filter_fields = ['name']
+
+
+class HostGroupViewSet(viewsets.ModelViewSet):
+    queryset = HostGroup.objects.all()
+    serializer_class = HostGroupSerializer
     filter_fields = ['name']

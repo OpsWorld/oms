@@ -109,14 +109,15 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: '菜单管理',
-    path: '/menus',
+    name: '权限管理',
+    path: '/perms',
     component: Layout,
     icon: 'fire',
-    redirect: 'menus',
+    redirect: 'menuperm',
     children: [
-      { path: 'menus', component: _import('menus/menus'), name: '菜单列表' },
-      { path: 'menuperm', component: _import('menus/menuperm'), name: '菜单权限' }
+      { path: 'menus', component: _import('perms/menus'), name: '菜单列表' },
+      { path: 'menuperm', component: _import('perms/menuperm'), name: '用户菜单权限' },
+      { path: 'hostperm', component: _import('perms/hostperm'), name: '用户主机权限' }
     ]
   },
   {

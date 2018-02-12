@@ -8,6 +8,7 @@ from django.views.decorators.cache import cache_page
 from hosts.models import Host
 from records.models import Record
 import json_tools
+from utils.tools import removeNone
 
 
 @api_view()
@@ -103,7 +104,7 @@ def sync_remote_server(request, method):
                     'ip': obj[0].ip
                 }
 
-                diff = json_tools.diff(obj_info, host_info)
+                diff = removeNone(json_tools.diff(obj_info, host_info))
                 if diff:
                     obj.update(**host_info)
                     # records

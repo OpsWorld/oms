@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import apiURL from '@/config'
 
-// upload
+// usermenuperms
 export function postMenuPerm(data) {
   return request({
     url: apiURL.usermenuperms,
@@ -28,7 +28,7 @@ export function putMenuPerm(id, data) {
 
 export function deleteMenuPerm(id) {
   return request({
-    url: apiURL.usermenuperms + id,
+    url: apiURL.usermenuperms + id + '/',
     method: 'delete'
   })
 }
@@ -38,5 +38,37 @@ export function getRouterInfo(username) {
   return request({
     url: apiURL.routerinfo + username,
     method: 'get'
+  })
+}
+
+// userhostperms
+export function postHostPerm(data) {
+  return request({
+    url: apiURL.userhostperms,
+    method: 'post',
+    data
+  })
+}
+
+export function getHostPerm(query, id) {
+  return request({
+    url: apiURL.userhostperms,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putHostPerm(id, data) {
+  return request({
+    url: apiURL.userhostperms + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteHostPerm(id) {
+  return request({
+    url: apiURL.userhostperms + id + '/',
+    method: 'delete'
   })
 }

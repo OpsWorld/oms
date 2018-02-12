@@ -28,7 +28,7 @@ export function patchUser(id, data) {
 
 export function deleteUser(id) {
   return request({
-    url: apiURL.users + id,
+    url: apiURL.users + id + '/',
     method: 'delete'
   })
 }
@@ -60,7 +60,7 @@ export function putGroup(id, data) {
 
 export function deleteGroup(id) {
   return request({
-    url: apiURL.groups + id,
+    url: apiURL.groups + id + '/',
     method: 'delete'
   })
 }
@@ -92,7 +92,7 @@ export function putRole(id, data) {
 
 export function deleteRole(id) {
   return request({
-    url: apiURL.roles + id,
+    url: apiURL.roles + id + '/',
     method: 'delete'
   })
 }
