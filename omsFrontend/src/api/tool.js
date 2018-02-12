@@ -10,7 +10,7 @@ export function postUpload(data) {
   })
 }
 
-export function getUploadList(query, id) {
+export function getUpload(query, id) {
   return request({
     url: id ? apiURL.uploads + id + '/' : apiURL.uploads,
     method: 'get',

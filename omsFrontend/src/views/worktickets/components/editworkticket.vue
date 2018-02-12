@@ -90,6 +90,12 @@
                           @imgAdd="imgAdd" ref="md"></mavon-editor>
             <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
           </el-form-item>
+          <el-form-item v-if="radio_status === '0'" label="通知人" prop="action_user">
+            <el-select v-model="ticketData.create_user" filterable placeholder="请选择通知人">
+              <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+            </el-select>
+            <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           </el-form-item>
@@ -199,8 +205,8 @@ export default {
       TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       showinput: false,
       radio_status: '0',
-      mailmsg: '',
-      mailcontent: ''
+      mailcontent: '',
+      sendnotice: false
     }
   },
 
@@ -261,7 +267,6 @@ export default {
         this.commentForm.ticket = this.ticket_id
         this.rowdata.edit_user = this.commentForm.create_user
         if (this.radio_status === '1') {
-          this.mailmsg = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
           const messageForm = {
             action_user: this.rowdata.action_user,
@@ -271,7 +276,6 @@ export default {
           postSendmessage(messageForm)
         } else if (this.radio_status === '2') {
           this.rowdata.ticket_status = this.ticketData.ticket_status = this.radio_status
-          this.mailmsg = '【工单处理完成】工单被' + this.commentForm.create_user + '关闭！'
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '关闭！' + this.mailcontent
 
           const messageForm = {
@@ -282,6 +286,14 @@ export default {
           postSendmessage(messageForm)
         } else {
           this.commentForm.content = '【问题处理】' + this.mailcontent
+          if (this.sendnotice) {
+            const messageForm = {
+              action_user: this.ticketData.create_user,
+              title: '【工单有新回复】' + this.ticketData.title,
+              message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            }
+            postSendmessage(messageForm)
+          }
         }
         postTicketcomment(this.commentForm).then(response => {
           this.patchForm(this.rowdata)

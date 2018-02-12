@@ -83,6 +83,20 @@ export const asyncRouterMap = [
     ]
   },
   {
+    name: '研发管理',
+    path: '/projects',
+    component: Layout,
+    icon: 'bug',
+    redirect: 'projects',
+    children: [
+      { path: 'projects', component: _import('projects/projects'), name: '任务列表' },
+      { path: 'projecttypes', component: _import('projects/projecttypes'), name: '任务类型' },
+      { path: 'addproject', hidden: true, component: _import('projects/components/addproject'), name: '添加任务' },
+      { path: 'editproject/:id', hidden: true, component: _import('projects/components/editproject'), name: '编辑任务' },
+      { path: 'viewproject/:id', hidden: true, component: _import('projects/components/viewproject'), name: '查看任务' }
+    ]
+  },
+  {
     name: '用户管理',
     path: '/users',
     component: Layout,

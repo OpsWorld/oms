@@ -110,5 +110,10 @@ module.exports = {
   get_minion_info: `${url}/api/salts/get_minion_info/`,
   cmdrun: `${url}/api/salts/cmdrun/`,
   get_result: `${url}/api/salts/get_result/`,
-  sync_remote_server: `${url}/api/salts/sync_remote_server/`
+  sync_remote_server: `${url}/api/salts/sync_remote_server/`,
+
+  // 项目
+  projects: `${url}/api/projects/`,
+  projectcomments: `${url}/api/projectcomments/`,
+  projecttypes: `${url}/api/projecttypes/`
 }
