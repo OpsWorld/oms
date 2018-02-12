@@ -6,11 +6,8 @@
         filterable
         :titles="['未选择', '已选择']"
         :button-texts="['向左走', '向右走']"
-        :footer-format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
         @change="handleChange"
         :data="allhost">
-        <el-button type="info" class="transfer-footer" slot="left-footer" size="small" @click="hostData">重置数据
-        </el-button>
       </el-transfer>
     </div>
   </div>

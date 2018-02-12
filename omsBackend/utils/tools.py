@@ -21,4 +21,5 @@ def removeNone(lst):
         diff_list.append(yy)
     return diff_list
 
-print(removeNone(a))
+if __name__ == '__main__':
+    print(removeNone(a))

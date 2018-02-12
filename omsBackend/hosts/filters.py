@@ -23,9 +23,12 @@ class HostFilterBackend(DRYPermissionFiltersBase):
         else:
             # .distinct()去重
             print("not admin")
-            hosts = []
+            objs = []
             for group in groups:
-                hostperm = UserHostPerms.objects.get(usergroups__name=group.name).hosts.all()
-                for host in hostperm:
-                    hosts.append(host.hostname)
-            return queryset.filter(hostname__in=set(hosts)).distinct()
+                try:
+                    objperm = UserHostPerms.objects.get(usergroups__name=group.name).objs.all()
+                    for obj in objperm:
+                        objs.append(obj.hostname)
+                except:
+                    pass
+            return queryset.filter(hostname__in=set(objs)).distinct()

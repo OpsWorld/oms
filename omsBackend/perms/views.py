@@ -2,8 +2,8 @@
 # author: itimor
 
 from rest_framework import viewsets
-from perms.models import UserMenuPerms, UserHostPerms
-from perms.serializers import UserMenuPermsSerializer, UserHostPermsSerializer
+from perms.models import UserMenuPerms, UserHostPerms, UserWikiPerms
+from perms.serializers import UserMenuPermsSerializer, UserHostPermsSerializer, UserWikiPermsSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from users.models import User, Group
@@ -40,3 +40,8 @@ def routers(request, username=None):
 class UserHostPermsViewSet(viewsets.ModelViewSet):
     queryset = UserHostPerms.objects.all()
     serializer_class = UserHostPermsSerializer
+
+
+class UserWikiPermsViewSet(viewsets.ModelViewSet):
+    queryset = UserWikiPerms.objects.all()
+    serializer_class = UserWikiPermsSerializer

@@ -3,10 +3,11 @@
 
 from rest_framework import serializers
 
-from perms.models import UserMenuPerms, UserHostPerms
+from perms.models import UserMenuPerms, UserHostPerms, UserWikiPerms
 from menus.models import Firstmenu, Secondmenu, Element
 from users.models import Group
 from hosts.models import Host
+from wikis.models import Wiki
 
 
 class UserMenuPermsSerializer(serializers.ModelSerializer):
@@ -24,8 +25,17 @@ class UserMenuPermsSerializer(serializers.ModelSerializer):
 
 class UserHostPermsSerializer(serializers.ModelSerializer):
     usergroups = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
-    hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
+    objs = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
 
     class Meta:
         model = UserHostPerms
-        fields = ('url', 'id', 'name', 'usergroups', 'hosts')
+        fields = ('url', 'id', 'name', 'usergroups', 'objs')
+
+
+class UserWikiPermsSerializer(serializers.ModelSerializer):
+    usergroups = serializers.SlugRelatedField(queryset=Group.objects.all(), slug_field='name')
+    objs = serializers.SlugRelatedField(many=True, queryset=Wiki.objects.all(), slug_field='title')
+
+    class Meta:
+        model = UserWikiPerms
+        fields = ('url', 'id', 'name', 'usergroups', 'objs')
