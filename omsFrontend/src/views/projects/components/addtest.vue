@@ -1,0 +1,122 @@
+<template>
+  <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form-item label="关联工单" prop="workticket">
+      <el-select v-model="ruleForm.workticket" filterable placeholder="请选择关联工单">
+        <el-option v-for="item in worktickets" :key="item.id" :value="item.ticketid"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="关联bug" prop="bug">
+      <el-select v-model="ruleForm.bug" filterable placeholder="请选择关联bug">
+        <el-option v-for="item in bugs" :key="item.id" :value="item.id"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="名称" prop="name">
+      <el-input v-model="ruleForm.name"></el-input>
+    </el-form-item>
+    <el-form-item label="预期结果" prop="expect_result">
+      <el-input v-model="ruleForm.expect_result" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+    </el-form-item>
+    <el-form-item label="实际结果" prop="actual_result">
+      <el-input v-model="ruleForm.actual_result" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+    </el-form-item>
+    <el-form-item label="执行状态" prop="status">
+      <el-input v-model="ruleForm.status"></el-input>
+    </el-form-item>
+    <el-form-item label="测试人员" prop="test_user">
+      <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
+        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="开发人员" prop="action_user">
+      <el-select v-model="ruleForm.action_user" filterable placeholder="请选择用户">
+        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="测试时间" prop="test_time">
+      <el-date-picker
+        v-model="ruleForm.test_time"
+        type="datetime"
+        placeholder="选择日期时间">
+      </el-date-picker>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+      <el-button @click="resetForm('ruleForm')">重置</el-button>
+    </el-form-item>
+  </el-form>
+</template>
+<script>
+import { getUser } from 'api/user'
+import { getWorkticket } from 'api/workticket'
+import { getBugManager } from '@/api/project'
+export default {
+  data() {
+    return {
+      ruleForm: {
+        workticket: null,
+        name: '',
+        expect_result: '',
+        degree: 2,
+        nice: '',
+        test_user: '',
+        action_user: '',
+        test_time: '',
+        end_time: '',
+        desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
+        ]
+      },
+      worktickets: [],
+      nices: [
+        { 'label': '低', value: '0' },
+        { 'label': '中', value: '1' },
+        { 'label': '高', value: '2' }
+      ],
+      users: [],
+      bugs: []
+    }
+  },
+  created() {
+    this.getUsers()
+    this.getWorktickets()
+    this.getBugs()
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$emit('formdata', this.ruleForm)
+          this.ruleForm = {
+            name: '',
+            desc: ''
+          }
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    getUsers() {
+      getUser().then(response => {
+        this.users = response.data
+      })
+    },
+    getWorktickets() {
+      getWorkticket().then(response => {
+        this.worktickets = response.data
+      })
+    },
+    getBugs() {
+      getBugManager().then(response => {
+        this.bugs = response.data
+      })
+    }
+  }
+}
+</script>

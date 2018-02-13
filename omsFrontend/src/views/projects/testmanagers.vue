@@ -22,36 +22,22 @@
                 <el-form-item label="测试人员" prop="test_user">
                   <span>{{ props.row.test_user }}</span>
                 </el-form-item>
-                <el-form-item label="分配给" prop="action_user">
+                <el-form-item label="开发人员" prop="action_user">
                   <span>{{ props.row.action_user }}</span>
                 </el-form-item>
                 <el-form-item label="测试时间" prop="test_time">
                   <span>{{ props.row.test_time }}</span>
-                </el-form-item>
-                <el-form-item label="关闭时间" prop="end_time">
-                  <span>{{ props.row.end_time }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column prop='id' label='编号'></el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='summary' label='摘要'></el-table-column>
-          <el-table-column prop='degree' label='严重程度'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-rate
-                  v-model="scope.row.degree"
-                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-                  disabled>
-                </el-rate>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop='nice' label='优先级'></el-table-column>
-          <el-table-column prop='status' label='状态'></el-table-column>
-          <el-table-column prop='desc' label='描述'></el-table-column>
+          <el-table-column prop='expect_result' label='预期结果'></el-table-column>
+          <el-table-column prop='actual_result' label='实际结果'></el-table-column>
+          <el-table-column prop='status' label='执行状态'></el-table-column>
           <el-table-column prop='workticket' label='关联工单'></el-table-column>
+          <el-table-column prop='bug' label='关联bug'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
@@ -82,10 +68,10 @@
 </template>
 
 <script>
-import { getBugManager, postBugManager, putBugManager, deleteBugManager } from '@/api/project'
+import { getTestManager, postTestManager, putTestManager, deleteTestManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
-import addGroup from './components/addbug.vue'
-import editGroup from './components/editbug.vue'
+import addGroup from './components/addtest.vue'
+import editGroup from './components/edittest.vue'
 
 export default {
   components: { addGroup, editGroup },
@@ -116,13 +102,13 @@ export default {
         offset: this.offset,
         name__contains: this.searchdata
       }
-      getBugManager(parms).then(response => {
+      getTestManager(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
     addGroupSubmit(formdata) {
-      postBugManager(formdata).then(response => {
+      postTestManager(formdata).then(response => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
@@ -135,7 +121,7 @@ export default {
       })
     },
     editGroupSubmit(formdata) {
-      putBugManager(this.rowdata.id, formdata).then(response => {
+      putTestManager(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
@@ -148,7 +134,7 @@ export default {
       })
     },
     deleteGroup(id) {
-      deleteBugManager(id).then(response => {
+      deleteTestManager(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
