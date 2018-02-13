@@ -271,16 +271,4 @@ export default {
 
 <style lang='scss'>
 
-  .table-expand {
-    font-size: 0;
-    .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
-      .el-form-item__label {
-        width: 90px;
-        color: #99a9bf;
-      }
-    }
-  }
 </style>

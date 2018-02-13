@@ -2,10 +2,12 @@
 # author: kiven
 
 from rest_framework import viewsets
-from projects.models import Project, ProjectComment, ProjectType
+from projects.models import Project, ProjectComment, ProjectType, BugManager, TestManager
 from projects.serializers import (ProjectSerializer,
                                   ProjectCommentSerializer,
-                                  ProjectTypeSerializer)
+                                  ProjectTypeSerializer,
+                                  BugManagerSerializer,
+                                  TestManagerSerializer)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -21,3 +23,13 @@ class ProjectCommentViewSet(viewsets.ModelViewSet):
 class ProjectTypeViewSet(viewsets.ModelViewSet):
     queryset = ProjectType.objects.all()
     serializer_class = ProjectTypeSerializer
+
+
+class BugManagerViewSet(viewsets.ModelViewSet):
+    queryset = BugManager.objects.all()
+    serializer_class = BugManagerSerializer
+
+
+class TestManagerViewSet(viewsets.ModelViewSet):
+    queryset = TestManager.objects.all()
+    serializer_class = TestManagerSerializer

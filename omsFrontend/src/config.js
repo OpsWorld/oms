@@ -1,5 +1,5 @@
 /**
- * Created by Itimor on 2017/7/12.
+ * Created by Itimor on 2017/12/12.
  */
 
 let CONFIG
@@ -95,7 +95,7 @@ module.exports = {
   sendmessage: `${url}/api/sendmessage/`,
   calenders: `${url}/api/calenders/`,
 
-  // 知识收集平台
+  // 文档平台
   wikis: `${url}/api/wikis/`,
   opswikis: `${url}/api/opswikis/`,
 
@@ -117,5 +117,7 @@ module.exports = {
   // 项目
   projects: `${url}/api/projects/`,
   projectcomments: `${url}/api/projectcomments/`,
-  projecttypes: `${url}/api/projecttypes/`
+  projecttypes: `${url}/api/projecttypes/`,
+  bugmanagers: `${url}/api/bugmanagers/`,
+  testmanagers: `${url}/api/testmanagers/`
 }

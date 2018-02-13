@@ -104,3 +104,67 @@ export function deleteProjectComment(id) {
     method: 'delete'
   })
 }
+
+// bugmanagers
+export function postBugManager(data) {
+  return request({
+    url: apiURL.bugmanagers,
+    method: 'post',
+    data
+  })
+}
+
+export function getBugManager(query) {
+  return request({
+    url: apiURL.bugmanagers,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putBugManager(id, data) {
+  return request({
+    url: apiURL.bugmanagers + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteBugManager(id) {
+  return request({
+    url: apiURL.bugmanagers + id + '/',
+    method: 'delete'
+  })
+}
+
+// testmanagers
+export function postTestManager(data) {
+  return request({
+    url: apiURL.testmanagers,
+    method: 'post',
+    data
+  })
+}
+
+export function getTestManager(query) {
+  return request({
+    url: apiURL.testmanagers,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putTestManager(id, data) {
+  return request({
+    url: apiURL.testmanagers + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteTestManager(id) {
+  return request({
+    url: apiURL.testmanagers + id + '/',
+    method: 'delete'
+  })
+}

@@ -16,8 +16,8 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='name' label='组名' sortable='custom'></el-table-column>
-          <el-table-column prop='desc' label='描述' sortable='custom'></el-table-column>
+          <el-table-column prop='name' label='组名'></el-table-column>
+          <el-table-column prop='desc' label='描述'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="showGroup(scope.row)" type="success" size="small">查看</el-button>
