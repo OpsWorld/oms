@@ -95,7 +95,7 @@ export const asyncRouterMap = [
       { path: 'editproject/:id', hidden: true, component: _import('projects/components/editproject'), name: '编辑任务' },
       { path: 'viewproject/:id', hidden: true, component: _import('projects/components/viewproject'), name: '查看任务' },
       { path: 'bugmanagers', component: _import('projects/bugmanagers'), name: 'bug管理' },
-      { path: 'testmanagers', component: _import('projects/testmanagers'), name: '测试管理' }
+      { path: 'testmanagers', component: _import('projects/testmanagers'), name: '测试用例' }
     ]
   },
   {

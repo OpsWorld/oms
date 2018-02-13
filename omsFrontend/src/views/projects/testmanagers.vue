@@ -36,7 +36,7 @@
           <el-table-column prop='expect_result' label='预期结果'></el-table-column>
           <el-table-column prop='actual_result' label='实际结果'></el-table-column>
           <el-table-column prop='status' label='执行状态'></el-table-column>
-          <el-table-column prop='workticket' label='关联工单'></el-table-column>
+          <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column prop='bug' label='关联bug'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">

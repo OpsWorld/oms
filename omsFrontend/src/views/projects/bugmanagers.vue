@@ -51,7 +51,7 @@
           <el-table-column prop='nice' label='优先级'></el-table-column>
           <el-table-column prop='status' label='状态'></el-table-column>
           <el-table-column prop='desc' label='描述'></el-table-column>
-          <el-table-column prop='workticket' label='关联工单'></el-table-column>
+          <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>

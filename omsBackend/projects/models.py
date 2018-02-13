@@ -3,7 +3,6 @@
 
 from django.db import models
 from users.models import User, Group
-from worktickets.models import WorkTicket
 
 Level = {
     1: 'A',
@@ -127,8 +126,7 @@ Bug_Status = {
 
 
 class BugManager(models.Model):
-    workticket = models.ForeignKey(WorkTicket, on_delete=models.SET_NULL, null=True, blank=True,
-                                   related_name='bug_workticket', verbose_name=u'bug工单')
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='bug_project', verbose_name=u'bug工单')
     name = models.CharField(max_length=100, unique=True, verbose_name=u'名称')
     summary = models.TextField(null=True, blank=True, verbose_name=u'摘要')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -157,8 +155,7 @@ Test_Status = {
 
 
 class TestManager(models.Model):
-    workticket = models.ForeignKey(WorkTicket, on_delete=models.SET_NULL, null=True, blank=True,
-                                   related_name='test_workticket', verbose_name=u'测试工单')
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='test_project', verbose_name=u'测试工单')
     name = models.CharField(max_length=100, unique=True, verbose_name=u'名称')
     bug = models.ForeignKey('BugManager', related_name='test_bug', verbose_name=u'bug')
     expect_result = models.TextField(null=True, blank=True, verbose_name=u'预期结果')

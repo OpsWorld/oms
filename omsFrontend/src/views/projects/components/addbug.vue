@@ -1,8 +1,8 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-    <el-form-item label="关联工单" prop="workticket">
-      <el-select v-model="ruleForm.workticket" filterable placeholder="请选择关联工单">
-        <el-option v-for="item in worktickets" :key="item.id" :value="item.ticketid"></el-option>
+    <el-form-item label="关联任务" prop="project">
+      <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务">
+        <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
@@ -60,7 +60,7 @@
 </template>
 <script>
 import { getUser } from 'api/user'
-import { getWorkticket } from 'api/workticket'
+import { getProject } from '@/api/project'
 export default {
   data() {
     return {
@@ -81,7 +81,7 @@ export default {
           { required: true, message: '请输入一个正确的内容', trigger: 'blur' }
         ]
       },
-      worktickets: [],
+      projects: [],
       nices: [
         { 'label': '低', value: '0' },
         { 'label': '中', value: '1' },
@@ -117,9 +117,9 @@ export default {
         this.users = response.data
       })
     },
-    getWorktickets() {
-      getWorkticket().then(response => {
-        this.worktickets = response.data
+    getProjects() {
+      getProject().then(response => {
+        this.projects = response.data
       })
     }
   }
