@@ -18,6 +18,7 @@
 import sesectDatas from 'views/components/datatransfer.vue'
 import { getGroup } from 'api/user'
 import { getWiki } from 'api/wiki'
+import { postWikiPerm } from '@/api/perm'
 
 export default {
   components: { sesectDatas },
@@ -45,11 +46,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          this.ruleForm = {
-            usergroups: '',
-            objs: ''
-          }
+          postWikiPerm(this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.ruleForm = {
+              usergroups: '',
+              objs: []
+            }
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false
@@ -58,6 +68,7 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+      this.getAllwikis()
     },
     getWikis(data) {
       this.ruleForm.objs = data

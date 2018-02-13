@@ -13,6 +13,7 @@
 </template>
 <script>
 import sesectHosts from 'views/components/hosttransfer.vue'
+import { putHostPerm } from '@/api/perm'
 
 export default {
   components: { sesectHosts },
@@ -34,7 +35,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.rowdata)
+          putHostPerm(this.rowdata.id, this.rowdata).then(response => {
+            this.$message({
+              message: '恭喜你，更新成功',
+              type: 'success'
+            })
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('更新失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false

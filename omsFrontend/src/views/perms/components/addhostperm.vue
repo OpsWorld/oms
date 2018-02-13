@@ -17,6 +17,7 @@
 <script>
 import sesectHosts from 'views/components/hosttransfer.vue'
 import { getGroup } from 'api/user'
+import { postHostPerm } from '@/api/perm'
 
 export default {
   components: { sesectHosts },
@@ -42,11 +43,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          this.ruleForm = {
-            usergroups: '',
-            objs: ''
-          }
+          postHostPerm(this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.ruleForm = {
+              usergroups: '',
+              objs: []
+            }
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false

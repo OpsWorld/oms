@@ -38,17 +38,17 @@
         </el-pagination>
       </div>
     </el-card>
-    <el-dialog :visible.sync="addForm">
-      <add-group @formdata="addGroupSubmit"></add-group>
+    <el-dialog :visible.sync="addForm" @close="closeDialog">
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
-    <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
+    <el-dialog :visible.sync="editForm" @close="closeDialog">
+      <edit-group :rowdata="rowdata" @DialogStatus="getDialogStatus"></edit-group>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getHostPerm, postHostPerm, putHostPerm, deleteHostPerm } from '@/api/perm'
+import { getHostPerm, deleteHostPerm } from '@/api/perm'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addhostperm.vue'
 import editGroup from './components/edithostperm.vue'
@@ -87,31 +87,10 @@ export default {
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postHostPerm(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
-    },
-    editGroupSubmit(formdata) {
-      putHostPerm(this.rowdata.id, formdata).then(response => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.editForm = false
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
-      })
+    getDialogStatus(data) {
+      this.editForm = data
+      this.addForm = data
+      this.fetchData()
     },
     deleteGroup(id) {
       deleteHostPerm(id).then(response => {
@@ -125,7 +104,7 @@ export default {
         console.log(error)
       })
     },
-    closeEditForm() {
+    closeDialog() {
       this.fetchData()
     },
     handleEdit(row) {

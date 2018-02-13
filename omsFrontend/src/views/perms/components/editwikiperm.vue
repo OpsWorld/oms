@@ -14,6 +14,7 @@
 <script>
 import sesectDatas from 'views/components/datatransfer.vue'
 import { getWiki } from 'api/wiki'
+import { putWikiPerm } from '@/api/perm'
 
 export default {
   components: { sesectDatas },
@@ -36,7 +37,17 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.rowdata)
+          putWikiPerm(this.rowdata.id, this.rowdata).then(response => {
+            this.$message({
+              message: '恭喜你，更新成功',
+              type: 'success'
+            })
+            this.fetchData()
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('更新失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false
