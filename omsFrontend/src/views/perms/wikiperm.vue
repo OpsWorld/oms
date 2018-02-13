@@ -39,16 +39,16 @@
       </div>
     </el-card>
     <el-dialog :visible.sync="addForm" @close="closeDialog">
-      <add-group @formdata="addGroupSubmit"></add-group>
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
-    <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
+    <el-dialog :visible.sync="editForm" @close="closeDialog">
+      <edit-group :rowdata="rowdata" @DialogStatus="getDialogStatus"></edit-group>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getWikiPerm, postWikiPerm, putWikiPerm, deleteWikiPerm } from '@/api/perm'
+import { getWikiPerm, deleteWikiPerm } from '@/api/perm'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addwikiperm.vue'
 import editGroup from './components/editwikiperm.vue'
@@ -87,31 +87,10 @@ export default {
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postWikiPerm(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
-    },
-    editGroupSubmit(formdata) {
-      putWikiPerm(this.rowdata.id, formdata).then(response => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.editForm = false
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
-      })
+    getDialogStatus(data) {
+      this.editForm = data
+      this.addForm = data
+      setTimeout(this.fetchData, 3000)
     },
     deleteGroup(id) {
       deleteWikiPerm(id).then(response => {
@@ -124,9 +103,6 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
-    },
-    closeEditForm() {
-      this.fetchData()
     },
     handleEdit(row) {
       this.editForm = true
