@@ -10,6 +10,11 @@
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
         </el-form-item>
+                <el-form-item label="跟踪人" prop="follow_user">
+          <el-select v-model="ruleForm.follow_user" filterable multiple placeholder="请选择跟踪人">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="需求人" prop="from_user">
           <el-input v-model="ruleForm.from_user" placeholder="请输入需求人"></el-input>
         </el-form-item>
@@ -62,6 +67,7 @@ export default {
         level: 1,
         complete: 0,
         action_user: '',
+        follow_user: '',
         from_user: '',
         pid: '',
         desc: ''

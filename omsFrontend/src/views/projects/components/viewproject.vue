@@ -34,7 +34,7 @@
               <div v-if="showinput" class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
-                  <el-radio label="2">关闭工单</el-radio>
+                  <el-radio label="2">关闭任务</el-radio>
                   <el-radio label="1">更改指派人</el-radio>
                 </el-radio-group>
                 <div class="action" v-if="radio_status==1">
