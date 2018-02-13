@@ -59,8 +59,8 @@
 <script>
 import { getUser, deleteUser } from 'api/user'
 import { LIMIT, pagesize, pageformat } from '@/config'
-import addUser from './adduser.vue'
-import editUser from './edituser.vue'
+import addUser from './components/adduser.vue'
+import editUser from './components/edituser.vue'
 import { mapGetters } from 'vuex'
 
 export default {

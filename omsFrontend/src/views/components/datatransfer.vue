@@ -9,6 +9,7 @@
         :format="{noChecked: '${total}',hasChecked: '${checked}/${total}'}"
         @change="handleChange"
         :data="alldata">
+        <el-button type="info" class="transfer-footer" slot="left-footer" size="mini" @click="getData">重置</el-button>
       </el-transfer>
     </div>
   </div>
@@ -47,4 +48,8 @@ export default {
 </script>
 
 <style>
+  .transfer-footer {
+    float: right;
+    margin-top: 5px;
+  }
 </style>
