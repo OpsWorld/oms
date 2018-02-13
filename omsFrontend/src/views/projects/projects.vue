@@ -30,7 +30,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
-          <el-table-column prop='type' label='类型'></el-table-column>
+          <el-table-column prop='type' label='类型' width="100"></el-table-column>
           <el-table-column prop='level' label='等级' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -56,7 +56,7 @@
               <div slot="reference" class="name-wrapper">
                 {{scope.row.task_complete}}%
                 <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
-                  <el-button @click="updateTaskComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
+                  <el-button @click="updateTaskComplete(scope.row)" type="text" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
               </div>
@@ -67,14 +67,14 @@
               <div slot="reference" class="name-wrapper">
                 {{scope.row.test_complete}}%
                 <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
-                  <el-button @click="updateTestComplete(scope.row)" type="primary" plain size="mini" icon="el-icon-edit"
+                  <el-button @click="updateTestComplete(scope.row)" type="text" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='创建人'></el-table-column>
-          <el-table-column prop='action_user' label='指派人'>
+          <el-table-column prop='create_user' label='创建人' width="100"></el-table-column>
+          <el-table-column prop='action_user' label='指派人' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag v-for="item in scope.row.action_user" :key="item">
@@ -304,7 +304,6 @@ export default {
 
 <style lang='scss'>
   .modifychange {
-    position: absolute;
-    margin: 5px 20px;
+    margin: 5px;
   }
 </style>
