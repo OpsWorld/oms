@@ -38,7 +38,7 @@
         </el-pagination>
       </div>
     </el-card>
-    <el-dialog :visible.sync="addForm">
+    <el-dialog :visible.sync="addForm" @close="closeDialog">
       <add-group @formdata="addGroupSubmit"></add-group>
     </el-dialog>
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
@@ -141,6 +141,9 @@ export default {
     },
     handleCurrentChange(val) {
       this.offset = (val - 1) * LIMIT
+      this.fetchData()
+    },
+    closeDialog() {
       this.fetchData()
     }
   }

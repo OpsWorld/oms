@@ -16,9 +16,7 @@
 <script>
 import { getHost } from '@/api/host'
 export default {
-  props: {
-    selecthost: Array
-  },
+  props: ['selecthost'],
   data() {
     return {
       allhost: [],

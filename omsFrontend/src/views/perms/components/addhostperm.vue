@@ -6,7 +6,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择主机" prop="hosts">
-      <sesect-hosts :selecthost="ruleForm.hosts" @gethosts="getHosts"></sesect-hosts>
+      <sesect-hosts :selecthost="ruleForm.objs" @gethosts="getHosts"></sesect-hosts>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -25,7 +25,7 @@ export default {
     return {
       ruleForm: {
         usergroups: '',
-        hosts: []
+        objs: []
       },
       rules: {
         usergroups: [
@@ -45,7 +45,7 @@ export default {
           this.$emit('formdata', this.ruleForm)
           this.ruleForm = {
             usergroups: '',
-            hosts: ''
+            objs: ''
           }
         } else {
           console.log('error submit!!')
@@ -57,7 +57,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     getHosts(data) {
-      this.ruleForm.hosts = data
+      this.ruleForm.objs = data
     },
     getGroups() {
       getGroup().then(response => {
