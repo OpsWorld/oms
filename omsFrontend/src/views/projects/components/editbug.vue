@@ -80,7 +80,7 @@ export default {
   },
   created() {
     this.getUsers()
-    this.getWorktickets()
+    this.getProjects()
   },
   methods: {
     submitForm(formName) {

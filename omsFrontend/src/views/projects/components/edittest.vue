@@ -69,7 +69,7 @@ export default {
   },
   created() {
     this.getUsers()
-    this.getWorktickets()
+    this.getProjects()
     this.getBugs()
   },
   methods: {

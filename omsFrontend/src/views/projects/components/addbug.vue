@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        workticket: null,
+        project: null,
         name: '',
         summary: '',
         degree: 2,
@@ -92,7 +92,7 @@ export default {
   },
   created() {
     this.getUsers()
-    this.getWorktickets()
+    this.getProjects()
   },
   methods: {
     submitForm(formName) {
