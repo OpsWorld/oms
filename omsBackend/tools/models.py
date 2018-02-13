@@ -20,7 +20,7 @@ class Upload(models.Model):
     def save(self, *args, **kwargs):
         self.size = '{}'.format(convert_size(self.file.size))
         filename = os.path.splitext(self.file.name)
-        self.filename = '{}-{}{}'.format(filename[0], self.create_time, filename[1])
+        self.filename = '{}-{}{}'.format(filename[0], self.create_time, filename[1]).replace(' ', '_')
         self.filepath = '{}/{}'.format(self.archive, self.filename)
         super(Upload, self).save(*args, **kwargs)
 

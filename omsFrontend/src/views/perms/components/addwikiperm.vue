@@ -6,7 +6,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择文档" prop="hosts">
-      <sesect-datas :selectdata="ruleForm.wikis" :alldata="allwikis" @getDatas="getWikis"></sesect-datas>
+      <sesect-datas :selectdata="ruleForm.objs" :alldata="allwikis" @getDatas="getWikis"></sesect-datas>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -26,7 +26,7 @@ export default {
     return {
       ruleForm: {
         usergroups: '',
-        hosts: []
+        objs: []
       },
       rules: {
         usergroups: [
@@ -48,7 +48,7 @@ export default {
           this.$emit('formdata', this.ruleForm)
           this.ruleForm = {
             usergroups: '',
-            hosts: ''
+            objs: ''
           }
         } else {
           console.log('error submit!!')

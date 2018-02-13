@@ -5,22 +5,9 @@
         <div class="table-button">
         </div>
         <div class="table-search">
-          <el-input @keyup.enter.native="handleFilter" style="width: 110px;" class="filter-item"
-                    placeholder="上传人员"
-                    v-model="listQuery.username__contains">
-          </el-input>
-          <el-input @keyup.enter.native="handleFilter" style="width: 110px;" class="filter-item"
-                    placeholder="文件类型"
-                    v-model="listQuery.type">
-          </el-input>
-          <!--<el-date-picker-->
-          <!--class="filter-item"-->
-          <!--v-model="datefilter"-->
-          <!--type="daterange"-->
-          <!--placeholder="选择日期范围">-->
-          <!--</el-date-picker>-->
-          <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索
-          </el-button>
+          <el-input style="width: 110px;" class="filter-item" placeholder="上传人员" v-model="listQuery.username"></el-input>
+          <el-input style="width: 110px;" class="filter-item" placeholder="文件类型" v-model="listQuery.type"></el-input>
+          <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
         </div>
       </div>
       <div>
@@ -32,12 +19,6 @@
           <el-table-column prop='type' label='文件类型' sortable></el-table-column>
           <el-table-column prop='size' label='文件大小'></el-table-column>
           <el-table-column prop='create_time' label='文件日期' sortable></el-table-column>
-          <!--<el-table-column label="操作">-->
-          <!--<template slot-scope="scope">-->
-          <!--<el-button type="success" size="small"><a :href="scope.row.file" target="_blank">查看文件</a>-->
-          <!--</el-button>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
         </el-table>
       </div>
       <div class="table-footer">
@@ -66,7 +47,6 @@
 <script>
 import { getUpload, deleteUpload } from 'api/tool'
 import { LIMIT, pagesize, pageformat } from '@/config'
-import format from '@/utils/dateformat'
 
 export default {
   components: {},
@@ -83,10 +63,9 @@ export default {
       listQuery: {
         offset: '',
         limit: LIMIT,
-        username__contains: '',
+        username: '',
         type: ''
       },
-      datefilter: [],
       photo: '',
       showPhoto: false
     }
@@ -116,8 +95,6 @@ export default {
       }
     },
     searchClick() {
-      this.listQuery.date_gte = format(new Date(this.datefilter[0]), 'YYYY-MM-DD')
-      this.listQuery.date_lte = format(new Date(this.datefilter[1]), 'YYYY-MM-DD')
       this.fetchData()
     },
     handleSizeChange(val) {

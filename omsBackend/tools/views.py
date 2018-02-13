@@ -14,6 +14,7 @@ from tools.filters import CalenderFilter
 class UploadViewSet(viewsets.ModelViewSet):
     queryset = Upload.objects.all().order_by("-create_time")
     serializer_class = UploadSerializer
+    filter_fields = ('username', 'type',)
 
 
 class SendmailViewSet(viewsets.ModelViewSet):
@@ -51,16 +52,6 @@ class SendmessageViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         content = request.data["title"] + '\n' + request.data["message"]
-        # action_users = set(request.data["action_user"].split(',')
-        # print(action_users)
-        # try:
-        #     for action_user in action_users:
-        #         if action_user:
-        #             to_action_user = User.objects.get(username=action_user).skype
-        #             print(to_action_user)
-        #             send_to_skype.delay(to_action_user, content)
-        # except Exception as e:
-        #     print(e)
         action_user = request.data["action_user"]
         try:
             to_action_user = User.objects.get(username=action_user).skype
