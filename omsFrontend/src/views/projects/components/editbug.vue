@@ -59,7 +59,7 @@
 </template>
 <script>
 import { getUser } from 'api/user'
-import { getProject } from '@/api/project'
+import { getProject, getTestManager } from '@/api/project'
 export default {
   props: ['ruleForm'],
   data() {
@@ -75,12 +75,13 @@ export default {
         { 'label': '中', value: '1' },
         { 'label': '高', value: '2' }
       ],
-      users: []
+      tests: []
     }
   },
   created() {
     this.getUsers()
     this.getProjects()
+    this.getTests()
   },
   methods: {
     submitForm(formName) {
@@ -104,6 +105,11 @@ export default {
     getProjects() {
       getProject().then(response => {
         this.projects = response.data
+      })
+    },
+    getTests() {
+      getTestManager().then(response => {
+        this.tests = response.data
       })
     }
   }

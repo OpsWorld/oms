@@ -5,11 +5,6 @@
         <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="关联bug" prop="bug">
-      <el-select v-model="ruleForm.bug" filterable placeholder="请选择关联bug">
-        <el-option v-for="item in bugs" :key="item.id" :value="item.name"></el-option>
-      </el-select>
-    </el-form-item>
     <el-form-item label="名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
@@ -50,7 +45,6 @@
 <script>
 import { getUser } from 'api/user'
 import { getProject } from '@/api/project'
-import { getBugManager } from '@/api/project'
 export default {
   data() {
     return {
@@ -61,7 +55,6 @@ export default {
       },
       projects: [],
       users: [],
-      bugs: [],
       TEST_STATUS: [
         { 'label': 'Passed', value: '0' },
         { 'label': 'Failed', value: '1' },
@@ -73,7 +66,6 @@ export default {
   created() {
     this.getUsers()
     this.getProjects()
-    this.getBugs()
   },
   methods: {
     submitForm(formName) {
@@ -97,11 +89,6 @@ export default {
     getProjects() {
       getProject().then(response => {
         this.projects = response.data
-      })
-    },
-    getBugs() {
-      getBugManager().then(response => {
-        this.bugs = response.data
       })
     }
   }

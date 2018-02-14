@@ -43,7 +43,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='project' label='关联任务'></el-table-column>
-          <el-table-column prop='bug' label='关联bug'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
