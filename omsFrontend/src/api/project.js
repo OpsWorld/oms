@@ -27,7 +27,6 @@ export function putProject(id, data) {
 }
 
 export function patchProject(id, data) {
-  console.log(data)
   return request({
     url: apiURL.projects + id + '/',
     method: 'patch',
