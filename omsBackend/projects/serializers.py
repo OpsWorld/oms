@@ -19,7 +19,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time', 'start_time',
-            'desc')
+            'end_time', 'is_public', 'desc')
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):

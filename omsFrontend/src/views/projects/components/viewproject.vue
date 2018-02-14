@@ -31,14 +31,13 @@
               </div>
               <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
                 <span class="han">操作：</span>
-                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
+                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
                 <div v-if="showinput" class="action">
-                  <el-radio-group v-model="radio_status">
-                    <el-radio label="0">不操作</el-radio>
-                    <el-radio label="2">关闭任务</el-radio>
-                  </el-radio-group>
-                  <a class="tips" style="display: block;margin: 5px 160px -20px"> Tip：请在下方回复内容并提交</a>
+                  <el-select v-model="rowdata.status" filterable placeholder="请选择状态">
+                    <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                  </el-select>
+                  <el-button type="primary" plain @click="patchForm">确定</el-button>
                 </div>
 
               </div>
@@ -202,8 +201,7 @@ export default {
         file: ''
       },
       rowdata: {
-        status: 1,
-        action_user: ''
+        status: ''
       },
       count: 0,
       toolbars: {
@@ -229,6 +227,12 @@ export default {
       },
       workticketlist_btn_edit: false,
       uploadurl: uploadurl,
+      status: [
+        { label: '已指派', value: '1' },
+        { label: '处理中', value: '2' },
+        { label: '待审核', value: '3' },
+        { label: '已完成', value: '4' }
+      ],
       STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
       STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       showinput: false,
@@ -300,7 +304,6 @@ export default {
       })
     },
     submitForm(formName) {
-      console.log(this.commentForm)
       postProjectComment(this.commentForm).then(response => {
         this.CommentData()
       }).catch(() => {
@@ -310,8 +313,9 @@ export default {
         })
       })
     },
-    patchForm(rowdata) {
-      patchProject(this.pid, rowdata)
+    patchForm() {
+      patchProject(this.pid, this.rowdata)
+      this.fetchData()
     },
     imgAdd(pos, file) {
       var md = this.$refs.md

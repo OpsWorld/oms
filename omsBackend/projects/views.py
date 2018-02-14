@@ -8,12 +8,15 @@ from projects.serializers import (ProjectSerializer,
                                   ProjectTypeSerializer,
                                   BugManagerSerializer,
                                   TestManagerSerializer)
-
+from projects.filters import ProjectFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by('create_time')
     serializer_class = ProjectSerializer
-    filter_fields = ['pid']
+    filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter)
+    filter_fields = ['pid', 'status']
     search_fields = ['name', 'content', 'type__name']
 
 

@@ -6,8 +6,10 @@
           <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addproject'">
             <el-button type="primary" icon="el-icon-plus">新建任务</el-button>
           </router-link>
+          <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in [0,1,2,3,4]" :key="item" :type="STATUS_TYPE[item]">
+            <el-button plain size="mini" v-for="item in [1,2,3,4]" :key="item" :type="STATUS_TYPE[item]"
+                       @click="changeStatus(item)">
               {{STATUS_TEXT[item]}}
             </el-button>
           </el-button-group>
@@ -186,8 +188,8 @@ export default {
         status: 0,
         action_user: localStorage.getItem('username')
       },
-      STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
-      STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
+      STATUS_TEXT: { '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
+      STATUS_TYPE: { '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       listQuery: {
         limit: LIMIT,
         offset: '',
@@ -245,7 +247,7 @@ export default {
       this.fetchData()
     },
     changeStatus(val) {
-      this.listQuery.ticket_status = val
+      this.listQuery.status = val
       this.fetchData()
     },
     showMeCreate() {
@@ -261,8 +263,9 @@ export default {
     showAllTicket() {
       this.listQuery.create_user__username = ''
       this.listQuery.action_user__username = ''
+      this.listQuery.pid = ''
       this.listQuery.search = ''
-      this.listQuery.ticket_status = ''
+      this.listQuery.status = ''
       this.fetchData()
     },
     handleSortChange(val) {
@@ -297,7 +300,6 @@ export default {
         this.fetchData()
       })
     }
-
   }
 }
 </script>
