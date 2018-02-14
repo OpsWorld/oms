@@ -94,7 +94,6 @@ export default {
     getProjects() {
       getProject().then(response => {
         this.projects = response.data
-        console.log(this.projects)
       })
     }
   }
