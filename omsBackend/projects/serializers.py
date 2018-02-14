@@ -27,7 +27,7 @@ class ProjectCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProjectComment
-        fields = ('url', 'id', 'ticket', 'content', 'create_user', 'create_time')
+        fields = ('url', 'id', 'project', 'content', 'create_user', 'create_time')
 
 
 class ProjectTypeSerializer(serializers.ModelSerializer):
