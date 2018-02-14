@@ -129,7 +129,10 @@ export default {
       this.$refs[formName].resetFields()
     },
     getUsers() {
-      getUser().then(response => {
+      const query = {
+        groups__name: 'ITDept'
+      }
+      getUser(query).then(response => {
         this.users = response.data
       })
     },

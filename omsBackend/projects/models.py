@@ -76,7 +76,7 @@ class Project(models.Model):
 
 
 class ProjectComment(models.Model):
-    ticket = models.ForeignKey(Project, verbose_name=u'项目')
+    project = models.ForeignKey(Project, verbose_name=u'项目')
     content = models.TextField(verbose_name=u'回复内容')
     create_user = models.ForeignKey(User, verbose_name=u'回复人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'回复时间')

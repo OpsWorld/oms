@@ -3,6 +3,7 @@
     <el-card>
       <el-row :gutter="20">
         <el-col :span="18">
+
           <el-card>
             <div slot="header" class="clearfix">
               <a class="title">{{ticketData.title}}</a>
@@ -46,10 +47,10 @@
           </el-card>
 
           <div v-if="ticketData.ticket_status!=2&&showinput">
-            <el-form :model="commentForm" ref="mailcontent" label-width="80px" class="demo-ruleForm">
+            <el-form :model="commentForm" ref="content" label-width="80px" class="demo-ruleForm">
               <hr class="heng"/>
               <el-form-item label="问题处理" prop="content">
-                <mavon-editor style="z-index: 1" v-model="mailcontent" code_style="monokai" :toolbars="toolbars"
+                <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
                               @imgAdd="imgAdd" ref="md"></mavon-editor>
                 <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
               </el-form-item>
@@ -80,8 +81,10 @@
               </el-row>
             </div>
           </el-card>
+
         </el-col>
         <el-col :span="6">
+
           <el-card>
             <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
@@ -105,6 +108,7 @@
               <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
             </el-table>
           </el-card>
+
           <el-card>
             <div slot="header" class="clearfix">
               <a class="right-title">关联bug</a>
@@ -128,6 +132,7 @@
               <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
             </el-table>
           </el-card>
+
         </el-col>
       </el-row>
     </el-card>
@@ -187,9 +192,9 @@ export default {
       enclosureData: {},
       apiurl: apiUrl,
       commentForm: {
-        ticket: '',
+        project: '',
         create_user: localStorage.getItem('username'),
-        content: '【问题处理】'
+        content: ''
       },
       enclosureForm: {
         ticket: '',
@@ -197,9 +202,8 @@ export default {
         file: ''
       },
       rowdata: {
-        ticket_status: 1,
-        action_user: '',
-        edit_user: ''
+        status: 1,
+        action_user: ''
       },
       count: 0,
       toolbars: {
@@ -229,18 +233,20 @@ export default {
       STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       showinput: false,
       radio_status: '0',
-      mailcontent: '',
       addBugFrom: false,
       addTestFrom: false,
       bugData: [],
       testData: [],
       bugquery: {
-        project: '',
+        project__id: '',
         id: ''
       },
       testquery: {
-        project: '',
+        project__id: '',
         id: ''
+      },
+      commentquery: {
+        project__id: ''
       },
       showBugForm: false,
       showTestForm: false
@@ -255,6 +261,7 @@ export default {
   },
 
   created() {
+    this.bugquery.project__id = this.testquery.project__id = this.commentquery.project__id = this.commentForm.project = this.pid
     this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.fetchBugData()
@@ -267,7 +274,6 @@ export default {
       const query = null
       getProject(query, this.pid).then(response => {
         this.ticketData = response.data
-        this.bugquery.project = this.testquery.project = 1
       })
     },
     getDialogStatus(data) {
@@ -277,27 +283,25 @@ export default {
       this.fetchTestData()
     },
     CommentData() {
-      const parms = {
-        ticket__ticketid: this.pid
-      }
-      getProjectComment(parms).then(response => {
+      getProjectComment(this.commentquery).then(response => {
         this.commentData = response.data
       })
       this.commentForm.content = ''
     },
     fetchBugData() {
-      getBugManager(this.bugquery, this.pid).then(response => {
+      getBugManager(this.bugquery).then(response => {
         this.bugData = response.data
       })
     },
     fetchTestData() {
-      getTestManager(this.testquery, this.pid).then(response => {
+      getTestManager(this.testquery).then(response => {
         this.testData = response.data
       })
     },
     submitForm(formName) {
+      console.log(this.commentForm)
       postProjectComment(this.commentForm).then(response => {
-        this.patchForm(this.rowdata)
+        this.CommentData()
       }).catch(() => {
         this.$message({
           type: 'error',
