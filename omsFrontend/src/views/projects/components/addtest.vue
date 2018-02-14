@@ -32,7 +32,8 @@
     <el-form-item label="测试时间" prop="test_time">
       <el-date-picker
         v-model="ruleForm.test_time"
-        type="datetime"
+        type="date"
+        value-format="yyyy-MM-dd"
         placeholder="选择日期时间">
       </el-date-picker>
     </el-form-item>
@@ -47,7 +48,7 @@ import { getUser } from 'api/user'
 import { getProject } from '@/api/project'
 import { postTestManager } from '@/api/project'
 export default {
-  props: ['pid'],
+  props: ['pname'],
   data() {
     return {
       ruleForm: {
@@ -78,8 +79,8 @@ export default {
     }
   },
   created() {
-    if (this.pid) {
-      this.ruleForm.project = this.pid
+    if (this.pname) {
+      this.ruleForm.project = this.pname
     }
     this.getUsers()
     this.getProjects()
