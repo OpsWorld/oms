@@ -38,7 +38,7 @@ class ProjectTypeSerializer(serializers.ModelSerializer):
 
 class BugManagerSerializer(serializers.ModelSerializer):
     project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
-    test = serializers.SlugRelatedField(queryset=TestManager.objects.all(), slug_field='test')
+    test = serializers.SlugRelatedField(queryset=TestManager.objects.all(), slug_field='name')
     test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
