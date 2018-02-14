@@ -24,6 +24,7 @@ class ProjectFilterBackend(DRYPermissionFiltersBase):
             return queryset.filter(
                 (
                     (
+                        Q(create_user=request.user) |
                         Q(action_user__username__contains=request.user) |
                         Q(follow_user__username__contains=request.user)
                     ) &

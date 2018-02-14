@@ -112,7 +112,7 @@
               <router-link :to="'editproject/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
-              <el-button type="danger" size="small">删除</el-button>
+              <el-button type="danger" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import { getProject, patchProject } from '@/api/project'
+import { getProject, patchProject, deleteProject } from '@/api/project'
 import { LIMIT, pagesize } from '@/config'
 import { mapGetters } from 'vuex'
 
@@ -233,6 +233,18 @@ export default {
       getProject(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+      })
+    },
+    deleteGroup(id) {
+      deleteProject(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
       })
     },
     searchClick() {

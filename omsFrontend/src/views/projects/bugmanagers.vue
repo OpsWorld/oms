@@ -52,6 +52,7 @@
           </el-table-column>
           <el-table-column prop='nice' label='优先级'></el-table-column>
           <el-table-column prop='status' label='状态'></el-table-column>
+          <el-table-column prop='is_public' label='是否公开'></el-table-column>
           <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column prop='test' label='关联test'></el-table-column>
           <el-table-column label="操作">
