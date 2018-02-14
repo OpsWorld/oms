@@ -142,11 +142,11 @@
     </el-tooltip>
 
     <el-dialog :visible.sync="addBugFrom">
-      <add-bug :pid="ticketData.pid" @DialogStatus="getDialogStatus"></add-bug>
+      <add-bug :pname="ticketData.name" @DialogStatus="getDialogStatus"></add-bug>
     </el-dialog>
 
     <el-dialog :visible.sync="addTestFrom">
-      <add-test :pid="ticketData.pid" @DialogStatus="getDialogStatus"></add-test>
+      <add-test :pname="ticketData.name" @DialogStatus="getDialogStatus"></add-test>
     </el-dialog>
 
     <el-dialog :visible.sync="showBugForm">

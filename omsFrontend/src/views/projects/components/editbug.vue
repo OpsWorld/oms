@@ -35,14 +35,16 @@
     <el-form-item label="测试时间" prop="test_time">
       <el-date-picker
         v-model="ruleForm.test_time"
-        type="datetime"
+        type="date"
+        value-format="yyyy-MM-dd"
         placeholder="选择日期时间">
       </el-date-picker>
     </el-form-item>
     <el-form-item label="关闭时间" prop="end_time">
       <el-date-picker
         v-model="ruleForm.end_time"
-        type="datetime"
+        type="date"
+        value-format="yyyy-MM-dd"
         placeholder="选择日期时间">
       </el-date-picker>
     </el-form-item>
@@ -72,7 +74,8 @@ export default {
         { 'label': '中', value: '1' },
         { 'label': '高', value: '2' }
       ],
-      tests: []
+      tests: [],
+      users: []
     }
   },
   created() {

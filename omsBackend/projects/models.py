@@ -135,8 +135,8 @@ class BugManager(models.Model):
     status = models.CharField(max_length=3, choices=Bug_Status.items(), default=0, verbose_name=u'状态')
     test_user = models.ForeignKey(User, related_name='bug_test_user', verbose_name=u'测试人员')
     action_user = models.ForeignKey(User, related_name='bug_action_user', verbose_name=u'分配给')
-    test_time = models.CharField(max_length=100, blank=True, verbose_name=u'测试时间')
-    end_time = models.CharField(max_length=100, blank=True, verbose_name=u'关闭时间')
+    test_time = models.DateField(blank=True, verbose_name=u'测试时间')
+    end_time = models.DateField(blank=True, verbose_name=u'关闭时间')
 
     def __str__(self):
         return self.name
@@ -162,7 +162,7 @@ class TestManager(models.Model):
     status = models.CharField(max_length=3, choices=Test_Status.items(), default=0, verbose_name=u'执行状态')
     test_user = models.ForeignKey(User, related_name='test_test_user', verbose_name=u'测试人员')
     action_user = models.ForeignKey(User, related_name='test_action_user', verbose_name=u'开发人员')
-    test_time = models.CharField(max_length=100, blank=True, verbose_name=u'测试时间')
+    test_time = models.DateField(blank=True, verbose_name=u'测试时间')
 
     def __str__(self):
         return self.name

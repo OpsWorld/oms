@@ -122,6 +122,7 @@ export default {
       setTimeout(this.fetchData, 1000)
     },
     editGroupSubmit(formdata) {
+      console.log(formdata)
       putTestManager(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
