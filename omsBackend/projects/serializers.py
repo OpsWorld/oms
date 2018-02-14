@@ -17,7 +17,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
-            'url', 'id', 'pid', 'title', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
+            'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time', 'start_time',
             'desc')
 
@@ -37,7 +37,7 @@ class ProjectTypeSerializer(serializers.ModelSerializer):
 
 
 class BugManagerSerializer(serializers.ModelSerializer):
-    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='name', allow_null=True)
     test = serializers.SlugRelatedField(queryset=TestManager.objects.all(), slug_field='name')
     test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
@@ -45,12 +45,12 @@ class BugManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = BugManager
         fields = (
-            'url', 'id', 'project', 'test', 'name', 'summary', 'desc', 'degree', 'nice', 'status', 'test_user',
+            'url', 'id', 'project', 'test', 'name', 'desc', 'degree', 'nice', 'status', 'test_user',
             'action_user', 'test_time', 'end_time')
 
 
 class TestManagerSerializer(serializers.ModelSerializer):
-    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='name', allow_null=True)
     test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 

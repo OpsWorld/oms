@@ -31,12 +31,14 @@
                 <el-form-item label="关闭时间" prop="end_time">
                   <span>{{ props.row.end_time }}</span>
                 </el-form-item>
+                <el-form-item label="描述" prop="desc">
+                  <span>{{ props.row.desc }}</span>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <el-table-column prop='id' label='编号'></el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='summary' label='摘要'></el-table-column>
           <el-table-column prop='degree' label='严重程度'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -50,7 +52,6 @@
           </el-table-column>
           <el-table-column prop='nice' label='优先级'></el-table-column>
           <el-table-column prop='status' label='状态'></el-table-column>
-          <el-table-column prop='desc' label='描述'></el-table-column>
           <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column prop='test' label='关联test'></el-table-column>
           <el-table-column label="操作">

@@ -2,8 +2,8 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
+        <el-form-item label="名称" prop="title">
+          <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
           <el-select v-model="ruleForm.action_user" filterable multiple placeholder="请选择指派人">

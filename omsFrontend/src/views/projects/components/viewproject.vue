@@ -6,7 +6,7 @@
 
           <el-card>
             <div slot="header" class="clearfix">
-              <a class="title">{{ticketData.title}}</a>
+              <a class="title">{{ticketData.name}}</a>
               <hr class="heng"/>
 
               <div class="appendInfo">
@@ -90,7 +90,7 @@
               <a class="right-title">测试用例</a>
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addTestFrom=true"></el-button>
             </div>
-            <el-table :data="testData" stripe style="width: 100%">
+            <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%">
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -239,6 +239,7 @@ export default {
       testData: [],
       bugquery: {
         project__id: '',
+        test_id: '',
         id: ''
       },
       testquery: {
@@ -331,13 +332,13 @@ export default {
     },
     showBug(row) {
       this.showBugForm = true
-      this.bugquery.id = row.id
-      this.fetchBugData()
     },
     showTest(row) {
       this.showTestForm = true
-      this.testquery.id = row.id
-      this.fetchTestData()
+    },
+    clicktestTable(row) {
+      this.bugquery.test_id = row.id
+      this.fetchBugData()
     }
   }
 }

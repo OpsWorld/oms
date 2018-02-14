@@ -8,9 +8,6 @@
     <el-form-item label="名称" prop="name">
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
-    <el-form-item label="摘要" prop="summary">
-      <el-input v-model="ruleForm.summary" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-    </el-form-item>
     <el-form-item label="严重程度" prop="degree">
       <el-rate
         v-model="ruleForm.degree"
