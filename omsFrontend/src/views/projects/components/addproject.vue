@@ -10,7 +10,7 @@
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>
         </el-form-item>
-                <el-form-item label="跟踪人" prop="follow_user">
+                <el-form-item label="抄送人" prop="follow_user">
           <el-select v-model="ruleForm.follow_user" filterable multiple placeholder="请选择跟踪人">
             <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
           </el-select>

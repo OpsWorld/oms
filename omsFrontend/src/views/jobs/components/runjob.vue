@@ -338,8 +338,10 @@ export default {
         const rex_pool = this.ruleForm.deploy_cmd.match(rex)
         let deploy_cmd
         deploy_cmd = this.ruleForm.deploy_cmd
-        for (var i of rex_pool) {
-          deploy_cmd = deploy_cmd.replace(i, host)
+        if (rex_pool.length > 0) {
+          for (var i of rex_pool) {
+            deploy_cmd = deploy_cmd.replace(i, host)
+          }
         }
         const extForm = {
           deploy_cmd: deploy_cmd,
