@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from projects.models import Project, ProjectComment, ProjectType
+from projects.models import Project, ProjectComment, ProjectType, BugManager, TestManager
 from rest_framework import serializers
 from users.models import User, Group
 
@@ -34,3 +34,28 @@ class ProjectTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectType
         fields = ('url', 'id', 'name', 'desc')
+
+
+class BugManagerSerializer(serializers.ModelSerializer):
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
+    test = serializers.SlugRelatedField(queryset=TestManager.objects.all(), slug_field='name')
+    test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
+    class Meta:
+        model = BugManager
+        fields = (
+            'url', 'id', 'project', 'test', 'name', 'summary', 'desc', 'degree', 'nice', 'status', 'test_user',
+            'action_user', 'test_time', 'end_time')
+
+
+class TestManagerSerializer(serializers.ModelSerializer):
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
+    test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
+    class Meta:
+        model = TestManager
+        fields = (
+            'url', 'id', 'project', 'name', 'expect_result', 'actual_result', 'status', 'test_user',
+            'action_user', 'test_time')

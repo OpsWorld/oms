@@ -28,7 +28,6 @@
             </el-form-item>
             <el-form-item label="发布版本" prop="version">
               <el-input v-model="ruleForm.version"></el-input>
-              <i class="el-icon-question"> version</i>
             </el-form-item>
             <el-form-item label="发布路径">
               <el-input v-model="jobs.deploy_path" disabled></el-input>
@@ -333,6 +332,7 @@ export default {
       if ((typeof this.ruleForm.deploy_hosts) === 'string') {
         this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
       }
+      this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
       for (const host of this.selecthosts) {
         const rex = /\$\w+/g
         const rex_pool = this.ruleForm.deploy_cmd.match(rex)
@@ -343,7 +343,7 @@ export default {
         }
         const extForm = {
           deploy_cmd: deploy_cmd,
-          deploy_hosts: this.ruleForm.deploy_hosts.join(),
+          deploy_hosts: this.ruleForm.deploy_hosts,
           version: '同步',
           content: 'HEAD',
           job: this.ruleForm.job,

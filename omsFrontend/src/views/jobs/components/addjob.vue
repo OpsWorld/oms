@@ -13,7 +13,6 @@
         </el-form-item>
         <el-form-item label="发布路径" prop="deploy_path">
           <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
-          <i class="el-icon-question"> deploy_path</i>
         </el-form-item>
         <el-form-item label="发布主机" prop="deploy_hosts">
           <sesect-hosts :selecthost="envForm.hosts" @gethosts="getHosts"></sesect-hosts>

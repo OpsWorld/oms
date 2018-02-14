@@ -90,7 +90,7 @@ export default {
     getDialogStatus(data) {
       this.editForm = data
       this.addForm = data
-      setTimeout(this.fetchData, 3000)
+      setTimeout(this.fetchData, 1000)
     },
     deleteGroup(id) {
       deleteWikiPerm(id).then(response => {

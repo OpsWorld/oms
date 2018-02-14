@@ -16,8 +16,33 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
+          <el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="table-expand">
+                <el-form-item label="测试人员" prop="test_user">
+                  <span>{{ props.row.test_user }}</span>
+                </el-form-item>
+                <el-form-item label="开发人员" prop="action_user">
+                  <span>{{ props.row.action_user }}</span>
+                </el-form-item>
+                <el-form-item label="测试时间" prop="test_time">
+                  <span>{{ props.row.test_time }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>
+          <el-table-column prop='id' label='编号'></el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='desc' label='描述'></el-table-column>
+          <el-table-column prop='expect_result' label='预期结果'></el-table-column>
+          <el-table-column prop='actual_result' label='实际结果'></el-table-column>
+          <el-table-column prop='status' label='执行状态'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag>{{TEST_STATUS[scope.row.status]}}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
@@ -39,22 +64,26 @@
       </div>
     </el-card>
     <el-dialog :visible.sync="addForm">
-      <add-group @formdata="addGroupSubmit"></add-group>
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-group :rowdata="rowdata" @formdata="editGroupSubmit"></edit-group>
+      <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getTickettype, postTickettype, putTickettype, deleteTickettype } from 'api/workticket'
+import { getTestManager, putTestManager, deleteTestManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
-import addGroup from '../components/addgroup.vue'
-import editGroup from '../components/editgroup.vue'
+import addGroup from './components/addtest.vue'
+import editGroup from './components/edittest.vue'
+import ElTabPane from '../../../../../../git/lucifer-frontend/node_modules/element-ui/packages/tabs/src/tab-pane'
 
 export default {
-  components: { addGroup, editGroup },
+  components: {
+    ElTabPane,
+    addGroup, editGroup
+  },
   data() {
     return {
       tableData: [],
@@ -67,7 +96,8 @@ export default {
       pageformat: pageformat,
       addForm: false,
       editForm: false,
-      rowdata: {}
+      rowdata: {},
+      TEST_STATUS: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' }
     }
   },
 
@@ -82,26 +112,17 @@ export default {
         offset: this.offset,
         name__contains: this.searchdata
       }
-      getTickettype(parms).then(response => {
+      getTestManager(parms).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postTickettype(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
+    getDialogStatus(data) {
+      this.addForm = data
+      setTimeout(this.fetchData, 1000)
     },
     editGroupSubmit(formdata) {
-      putTickettype(this.rowdata.id, formdata).then(response => {
+      putTestManager(this.rowdata.id, formdata).then(response => {
         this.$message({
           message: '恭喜你，更新成功',
           type: 'success'
@@ -114,7 +135,7 @@ export default {
       })
     },
     deleteGroup(id) {
-      deleteTickettype(id).then(response => {
+      deleteTestManager(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
@@ -140,7 +161,6 @@ export default {
       this.fetchData()
     },
     handleCurrentChange(val) {
-      console.log(val)
       this.offset = (val - 1) * LIMIT
       this.fetchData()
     }

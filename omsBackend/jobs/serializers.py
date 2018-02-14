@@ -36,6 +36,7 @@ class DeployJobsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         deploy_cmd = validated_data["deploy_cmd"]
         deploy_hosts = validated_data["deploy_hosts"]
+        print(deploy_hosts)
         jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), fun='cmd.run', arg=deploy_cmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)

@@ -30,7 +30,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='title' label='标题'></el-table-column>
-          <el-table-column prop='type' label='类型'></el-table-column>
+          <el-table-column prop='type' label='类型' width="100"></el-table-column>
           <el-table-column prop='level' label='等级' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -51,8 +51,30 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='创建人'></el-table-column>
-          <el-table-column prop='action_user' label='指派人'>
+          <el-table-column prop='task_complete' label='任务进度'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                {{scope.row.task_complete}}%
+                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
+                  <el-button @click="updateTaskComplete(scope.row)" type="text" icon="el-icon-edit"
+                             class="modifychange"></el-button>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='test_complete' label='测试进度'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                {{scope.row.test_complete}}%
+                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
+                  <el-button @click="updateTestComplete(scope.row)" type="text" icon="el-icon-edit"
+                             class="modifychange"></el-button>
+                </el-tooltip>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='create_user' label='创建人' width="100"></el-table-column>
+          <el-table-column prop='action_user' label='指派人' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag v-for="item in scope.row.action_user" :key="item">
@@ -85,7 +107,9 @@
           <!--</el-table-column>-->
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="success" size="small">修改</el-button>
+              <router-link :to="'editproject/' + scope.row.id">
+                <el-button type="success" size="small">修改</el-button>
+              </router-link>
               <el-button type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>
@@ -108,11 +132,43 @@
         </div>
       </div>
     </el-card>
+
+    <el-dialog title="更新任务进度" :visible.sync="TaskCompleteForm">
+      <el-form label-width="90px">
+        <el-form-item :model="updateform" label="完成百分比">
+          <el-slider
+            style="margin-right: 50px"
+            v-model="updateform.task_complete"
+            :step="10">
+          </el-slider>
+          <a>{{updateform.task_complete}}%</a>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog title="更新测试进度" :visible.sync="TestCompleteForm">
+      <el-form label-width="90px">
+        <el-form-item :model="updateform" label="完成百分比">
+          <el-slider
+            style="margin-right: 50px"
+            v-model="updateform.test_complete"
+            :step="10">
+          </el-slider>
+          <a>{{updateform.test_complete}}%</a>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getProject } from '@/api/project'
+import { getProject, patchProject } from '@/api/project'
 import { LIMIT, pagesize } from '@/config'
 import { mapGetters } from 'vuex'
 
@@ -146,7 +202,14 @@ export default {
       workticketlist_btn_change_status: false,
       btnstatus: true,
       select_status: 1,
-      show_status: false
+      show_status: false,
+      TaskCompleteForm: false,
+      TestCompleteForm: false,
+      updateform: {
+        id: '',
+        task_complete: '',
+        test_complete: ''
+      }
     }
   },
 
@@ -211,11 +274,36 @@ export default {
         this.listQuery.ordering = ''
       }
       this.fetchData()
+    },
+    updateTaskComplete(row) {
+      this.TaskCompleteForm = true
+      this.updateform.id = row.id
+      this.updateform.task_complete = row.task_complete
+      this.updateform.test_complete = row.test_complete
+    },
+    updateTestComplete(row) {
+      this.TestCompleteForm = true
+      this.updateform.id = row.id
+      this.updateform.task_complete = row.task_complete
+      this.updateform.test_complete = row.test_complete
+    },
+    changeComplete() {
+      patchProject(this.updateform.id, this.updateform).then(response => {
+        this.$message({
+          type: 'success',
+          message: '更新成功!'
+        })
+        this.TaskCompleteForm = this.TestCompleteForm = false
+        this.fetchData()
+      })
     }
+
   }
 }
 </script>
 
 <style lang='scss'>
-
+  .modifychange {
+    margin: 5px;
+  }
 </style>

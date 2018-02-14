@@ -27,6 +27,7 @@ export function putProject(id, data) {
 }
 
 export function patchProject(id, data) {
+  console.log(data)
   return request({
     url: apiURL.projects + id + '/',
     method: 'patch',
@@ -101,6 +102,70 @@ export function putProjectComment(id, data) {
 export function deleteProjectComment(id) {
   return request({
     url: apiURL.projectcomments + id + '/',
+    method: 'delete'
+  })
+}
+
+// bugmanagers
+export function postBugManager(data) {
+  return request({
+    url: apiURL.bugmanagers,
+    method: 'post',
+    data
+  })
+}
+
+export function getBugManager(query) {
+  return request({
+    url: apiURL.bugmanagers,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putBugManager(id, data) {
+  return request({
+    url: apiURL.bugmanagers + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteBugManager(id) {
+  return request({
+    url: apiURL.bugmanagers + id + '/',
+    method: 'delete'
+  })
+}
+
+// testmanagers
+export function postTestManager(data) {
+  return request({
+    url: apiURL.testmanagers,
+    method: 'post',
+    data
+  })
+}
+
+export function getTestManager(query) {
+  return request({
+    url: apiURL.testmanagers,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putTestManager(id, data) {
+  return request({
+    url: apiURL.testmanagers + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function deleteTestManager(id) {
+  return request({
+    url: apiURL.testmanagers + id + '/',
     method: 'delete'
   })
 }
