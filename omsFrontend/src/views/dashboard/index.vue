@@ -9,7 +9,7 @@
               <pan-thumb class="panThumb" :image="img">
                 <span style="color: #fa43ff">TB</span>
               </pan-thumb>
-              <mallki className='mallki-text' text='OMS运维管理系统'></mallki>
+              <mallki className='mallki-text' text='协同办公系统'></mallki>
             </div>
           </div>
 
@@ -33,7 +33,15 @@
               </div>
               <div class='progress-item'>
                 <span>发布系统</span>
-                <el-progress :percentage="50"></el-progress>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>cmdb</span>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>研发管理</span>
+                <el-progress :percentage="80"></el-progress>
               </div>
             </el-card>
             <el-card class="box-card-card">
@@ -44,12 +52,7 @@
                 <span>工作流系统</span>
                 <el-progress :percentage="0"></el-progress>
               </div>
-              <div class='progress-item'>
-                <span>cmdb</span>
-                <el-progress :percentage="0"></el-progress>
-              </div>
             </el-card>
-
           </div>
         </el-card>
       </el-col>
@@ -190,7 +193,8 @@ export default {
       color: #d36cff;
     }
   }
-   .box-card-component {
+
+  .box-card-component {
     height: 100%;
     .box-card-header {
       position: relative;
@@ -200,7 +204,7 @@ export default {
         height: 100%;
         transition: all 0.3s linear;
         &:hover {
-          transform: scale(1.12, 1.16);  // 控制图片放大长宽
+          transform: scale(1.12, 1.16); // 控制图片放大长宽
           filter: contrast(150%);
         }
       }

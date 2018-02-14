@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="card-box login-form" autoComplete="on" :model="loginForm" ref="loginForm"
              label-position="left">
-      <h3 class="title">OMS运维管理系统</h3>
+      <h3 class="title">协同办公系统</h3>
 
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
