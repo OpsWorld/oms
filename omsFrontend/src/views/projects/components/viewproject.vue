@@ -1,100 +1,168 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card>
-      <div class="workticket">
-        <el-card>
-          <div slot="header" class="clearfix">
-            <a class="title">{{ticketData.title}}</a>
-            <hr class="heng"/>
+      <el-row :gutter="20">
+        <el-col :span="18">
+          <el-card>
+            <div slot="header" class="clearfix">
+              <a class="title">{{ticketData.title}}</a>
+              <hr class="heng"/>
 
-            <div class="appendInfo">
-              <a class="ticketinfo create_user"><span class="han">
+              <div class="appendInfo">
+                <a class="ticketinfo create_user"><span class="han">
                                 创建时间：</span>{{ticketData.create_time | parseDate}}</a>
-              <a class="ticketinfo create_user"><span class="han">
+                <a class="ticketinfo create_user"><span class="han">
                               <a class="shu"></a>
                                 发起人：</span>{{ticketData.create_user}}</a>
-              <a class="ticketinfo action_user">
-                <span class="han"><a class="shu"></a>指派人：</span>
-                <el-tag v-for="item in ticketData.action_user" :key="item.id" style="margin-right: 3px">{{item}}
+                <a class="ticketinfo action_user">
+                  <span class="han"><a class="shu"></a>指派人：</span>
+                  <el-tag size="mini" v-for="item in ticketData.action_user" :key="item.id" style="margin-right: 3px">{{item}}
+                  </el-tag>
+                </a>
+                <a class="shu"></a>
+                <span class="han">类型：</span>
+                <a>{{ticketData.type}}</a>
+                <a class="shu"></a>
+                <span class="han">当前状态：</span>
+                <el-tag :type="STATUS_TYPE[ticketData.status]">
+                  {{STATUS_TEXT[ticketData.status]}}
                 </el-tag>
-              </a>
-              <a class="shu"></a>
-              <span class="han">类型：</span>
-              <a>{{ticketData.type}}</a>
-              <a class="shu"></a>
-              <span class="han">当前状态：</span>
-              <el-tag :type="STATUS_TYPE[ticketData.status]">
-                {{STATUS_TEXT[ticketData.status]}}
-              </el-tag>
-            </div>
-            <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
-              <span class="han">操作：</span>
-              <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
-              <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-              <div v-if="showinput" class="action">
-                <el-radio-group v-model="radio_status">
-                  <el-radio label="0">不操作</el-radio>
-                  <el-radio label="2">关闭任务</el-radio>
-                  <el-radio label="1">更改指派人</el-radio>
-                </el-radio-group>
-                <div class="action" v-if="radio_status==1">
-                  <el-select v-model="rowdata.action_user" filterable placeholder="请选择指派人">
-                    <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                  </el-select>
-                </div>
-                <a class="tips" style="display: block;margin: 5px 160px -20px"> Tip：请在下方回复内容并提交</a>
               </div>
+              <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
+                <span class="han">操作：</span>
+                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
+                <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
+                <div v-if="showinput" class="action">
+                  <el-radio-group v-model="radio_status">
+                    <el-radio label="0">不操作</el-radio>
+                    <el-radio label="2">关闭任务</el-radio>
+                  </el-radio-group>
+                  <a class="tips" style="display: block;margin: 5px 160px -20px"> Tip：请在下方回复内容并提交</a>
+                </div>
 
+              </div>
             </div>
+            <vue-markdown :source="ticketData.content"></vue-markdown>
+          </el-card>
+
+          <div v-if="ticketData.ticket_status!=2&&showinput">
+            <el-form :model="commentForm" ref="mailcontent" label-width="80px" class="demo-ruleForm">
+              <hr class="heng"/>
+              <el-form-item label="问题处理" prop="content">
+                <mavon-editor style="z-index: 1" v-model="mailcontent" code_style="monokai" :toolbars="toolbars"
+                              @imgAdd="imgAdd" ref="md"></mavon-editor>
+                <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+              </el-form-item>
+            </el-form>
           </div>
-          <vue-markdown :source="ticketData.content"></vue-markdown>
-        </el-card>
-      </div>
 
-      <div v-if="ticketData.ticket_status!=2&&showinput">
-        <el-form :model="commentForm" ref="mailcontent" label-width="80px" class="demo-ruleForm">
-          <hr class="heng"/>
-          <el-form-item label="问题处理" prop="content">
-            <mavon-editor style="z-index: 1" v-model="mailcontent" code_style="monokai" :toolbars="toolbars"
-                          @imgAdd="imgAdd" ref="md"></mavon-editor>
-            <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+          <el-card class="ticketcomment" v-if="commentData.length>0">
+            处理历史记录
+            <div v-for="item in commentData" :key="item.id">
+              <hr class="heng"/>
+              <el-row>
+                <el-col :span="1">
+                  <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
+                </el-col>
+                <el-col :span="14">
+                  <div class="dialog-box">
+                    <span class="bot"></span>
+                    <span class="top"></span>
+                    <div class="comment">
+                      <vue-markdown :source="item.content"></vue-markdown>
+                      <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
+        </el-col>
+        <el-col :span="6">
+          <el-card>
+            <div slot="header" class="clearfix">
+              <a class="right-title">关联bug</a>
+              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
+            </div>
+            <el-table :data="bugData" stripe style="width: 100%">
+              <el-table-column prop="id" label="Id" width="60">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="名称">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-button type="text" @click="showBug(scope.row)">{{scope.row.name}}</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
+            </el-table>
+          </el-card>
 
-      <el-card class="ticketcomment" v-if="commentData.length>0">
-        处理历史记录
-        <div v-for="item in commentData" :key="item.id">
-          <hr class="heng"/>
-          <el-row>
-            <el-col :span="1">
-              <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
-            </el-col>
-            <el-col :span="14">
-              <div class="dialog-box">
-                <span class="bot"></span>
-                <span class="top"></span>
-                <div class="comment">
-                  <vue-markdown :source="item.content"></vue-markdown>
-                  <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
+          <el-card>
+            <div slot="header" class="clearfix">
+              <a class="right-title">测试用例</a>
+              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addTestFrom=true"></el-button>
+            </div>
+            <el-table :data="testData" stripe style="width: 100%">
+              <el-table-column prop="id" label="Id" width="60">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="名称">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-button type="text" @click="showTest(scope.row)">{{scope.row.name}}</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
+            </el-table>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>
     </el-tooltip>
+
+    <el-dialog :visible.sync="addBugFrom">
+      <add-bug :pid="ticketData.pid"></add-bug>
+    </el-dialog>
+
+    <el-dialog :visible.sync="addTestFrom">
+      <add-test :pid="ticketData.pid"></add-test>
+    </el-dialog>
+
+    <el-dialog :visible.sync="showBugForm">
+      <div>bug详情</div>
+    </el-dialog>
+
+    <el-dialog :visible.sync="showTestForm">
+      <div>test详情</div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getProject, patchProject, getProjectComment, postProjectComment } from '@/api/project'
+import {
+  getProject,
+  patchProject,
+  getProjectComment,
+  postProjectComment,
+  getBugManager,
+  getTestManager
+} from '@/api/project'
 import { postUpload } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
@@ -102,10 +170,12 @@ import { getUser } from 'api/user'
 import BackToTop from '@/components/BackToTop'
 import { mapGetters } from 'vuex'
 import { getConversionTime } from '@/utils'
+import addBug from './addbug.vue'
+import addTest from './addtest.vue'
 
 export default {
   components: {
-    VueMarkdown, BackToTop
+    VueMarkdown, BackToTop, addBug, addTest
   },
 
   data() {
@@ -160,8 +230,21 @@ export default {
       STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       showinput: false,
       radio_status: '0',
-      mailmsg: '',
-      mailcontent: ''
+      mailcontent: '',
+      addBugFrom: false,
+      addTestFrom: false,
+      bugData: [],
+      testData: [],
+      bugquery: {
+        project: '',
+        id: ''
+      },
+      testquery: {
+        project: '',
+        id: ''
+      },
+      showBugForm: false,
+      showTestForm: false
     }
   },
 
@@ -175,6 +258,8 @@ export default {
   created() {
     this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
+    this.fetchBugData()
+    this.fetchTestData()
     this.CommentData()
     this.getTicketUsers()
   },
@@ -183,8 +268,14 @@ export default {
       const query = null
       getProject(query, this.pid).then(response => {
         this.ticketData = response.data
-        this.rowdata.action_user = this.ticketData.action_user
+        this.bugquery.project = this.testquery.project = 1
       })
+    },
+    getDialogStatus(data) {
+      this.addBugFrom = data
+      this.addTestFrom = data
+      this.fetchBugData()
+      this.fetchTestData()
     },
     CommentData() {
       const parms = {
@@ -194,6 +285,16 @@ export default {
         this.commentData = response.data
       })
       this.commentForm.content = ''
+    },
+    fetchBugData() {
+      getBugManager(this.bugquery, this.pid).then(response => {
+        this.bugData = response.data
+      })
+    },
+    fetchTestData() {
+      getTestManager(this.testquery, this.pid).then(response => {
+        this.testData = response.data
+      })
     },
     submitForm(formName) {
       postProjectComment(this.commentForm).then(response => {
@@ -224,6 +325,16 @@ export default {
       getUser().then(response => {
         this.users = response.data
       })
+    },
+    showBug(row) {
+      this.showBugForm = true
+      this.bugquery.id = row.id
+      this.fetchBugData()
+    },
+    showTest(row) {
+      this.showTestForm = true
+      this.testquery.id = row.id
+      this.fetchTestData()
     }
   }
 }
@@ -239,6 +350,17 @@ export default {
     font-size: 28px;
     font-weight: 700;
     padding-left: 10px;
+  }
+
+  .right-title {
+    font-size: 20px;
+    font-weight: 600;
+    padding-left: 10px;
+  }
+
+  .card-head-btn {
+    float: right;
+    padding: 3px 0;
   }
 
   .appendInfo {

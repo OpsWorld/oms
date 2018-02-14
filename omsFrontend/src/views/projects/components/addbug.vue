@@ -60,8 +60,9 @@
 </template>
 <script>
 import { getUser } from 'api/user'
-import { getProject } from '@/api/project'
+import { getProject, postBugManager } from '@/api/project'
 export default {
+  props: ['pid'],
   data() {
     return {
       ruleForm: {
@@ -91,6 +92,9 @@ export default {
     }
   },
   created() {
+    if (this.pid) {
+      this.ruleForm.project = this.pid
+    }
     this.getUsers()
     this.getProjects()
   },
@@ -98,11 +102,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          this.ruleForm = {
-            name: '',
-            desc: ''
-          }
+          postBugManager(this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false

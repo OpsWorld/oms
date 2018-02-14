@@ -35,7 +35,13 @@
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='expect_result' label='预期结果'></el-table-column>
           <el-table-column prop='actual_result' label='实际结果'></el-table-column>
-          <el-table-column prop='status' label='执行状态'></el-table-column>
+          <el-table-column prop='status' label='执行状态'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag>{{TEST_STATUS[scope.row.status]}}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column prop='bug' label='关联bug'></el-table-column>
           <el-table-column label="操作">
@@ -59,7 +65,7 @@
       </div>
     </el-card>
     <el-dialog :visible.sync="addForm">
-      <add-group @formdata="addGroupSubmit"></add-group>
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
       <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
@@ -68,13 +74,17 @@
 </template>
 
 <script>
-import { getTestManager, postTestManager, putTestManager, deleteTestManager } from '@/api/project'
+import { getTestManager, putTestManager, deleteTestManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addtest.vue'
 import editGroup from './components/edittest.vue'
+import ElTabPane from '../../../../../../git/lucifer-frontend/node_modules/element-ui/packages/tabs/src/tab-pane'
 
 export default {
-  components: { addGroup, editGroup },
+  components: {
+    ElTabPane,
+    addGroup, editGroup
+  },
   data() {
     return {
       tableData: [],
@@ -87,7 +97,8 @@ export default {
       pageformat: pageformat,
       addForm: false,
       editForm: false,
-      rowdata: {}
+      rowdata: {},
+      TEST_STATUS: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' }
     }
   },
 
@@ -107,18 +118,9 @@ export default {
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postTestManager(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
+    getDialogStatus(data) {
+      this.addForm = data
+      setTimeout(this.fetchData, 1000)
     },
     editGroupSubmit(formdata) {
       putTestManager(this.rowdata.id, formdata).then(response => {

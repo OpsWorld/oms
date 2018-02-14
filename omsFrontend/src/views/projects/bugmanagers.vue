@@ -73,7 +73,7 @@
       </div>
     </el-card>
     <el-dialog :visible.sync="addForm">
-      <add-group @formdata="addGroupSubmit"></add-group>
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
       <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getBugManager, postBugManager, putBugManager, deleteBugManager } from '@/api/project'
+import { getBugManager, putBugManager, deleteBugManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addbug.vue'
 import editGroup from './components/editbug.vue'
@@ -121,18 +121,9 @@ export default {
         this.tabletotal = response.data.count
       })
     },
-    addGroupSubmit(formdata) {
-      postBugManager(formdata).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.addForm = false
-      }).catch(error => {
-        this.$message.error('添加失败')
-        console.log(error)
-      })
+    getDialogStatus(data) {
+      this.addForm = data
+      setTimeout(this.fetchData, 1000)
     },
     editGroupSubmit(formdata) {
       putBugManager(this.rowdata.id, formdata).then(response => {

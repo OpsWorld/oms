@@ -7,7 +7,7 @@
     </el-form-item>
     <el-form-item label="关联bug" prop="bug">
       <el-select v-model="ruleForm.bug" filterable placeholder="请选择关联bug">
-        <el-option v-for="item in bugs" :key="item.id" :value="item.id"></el-option>
+        <el-option v-for="item in bugs" :key="item.id" :value="item.name"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
@@ -20,7 +20,9 @@
       <el-input v-model="ruleForm.actual_result" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
     <el-form-item label="执行状态" prop="status">
-      <el-input v-model="ruleForm.status"></el-input>
+      <el-select v-model="ruleForm.status" placeholder="请选择状态码">
+        <el-option v-for="item in TEST_STATUS" :key="item.id" :label="item.label" :value="item.value"></el-option>
+      </el-select>
     </el-form-item>
     <el-form-item label="测试人员" prop="test_user">
       <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
@@ -48,8 +50,9 @@
 <script>
 import { getUser } from 'api/user'
 import { getProject } from '@/api/project'
-import { getBugManager } from '@/api/project'
+import { getBugManager, postTestManager } from '@/api/project'
 export default {
+  props: ['pid'],
   data() {
     return {
       ruleForm: {
@@ -70,16 +73,20 @@ export default {
         ]
       },
       projects: [],
-      nices: [
-        { 'label': '低', value: '0' },
-        { 'label': '中', value: '1' },
-        { 'label': '高', value: '2' }
-      ],
       users: [],
-      bugs: []
+      bugs: [],
+      TEST_STATUS: [
+        { 'label': 'Passed', value: '0' },
+        { 'label': 'Failed', value: '1' },
+        { 'label': 'Block', value: '2' },
+        { 'label': 'N/A', value: '3' }
+      ]
     }
   },
   created() {
+    if (this.pid) {
+      this.ruleForm.project = this.pid
+    }
     this.getUsers()
     this.getProjects()
     this.getBugs()
@@ -88,11 +95,17 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
-          this.ruleForm = {
-            name: '',
-            desc: ''
-          }
+          postTestManager(this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('添加失败')
+            console.log(error)
+          })
+          this.$emit('DialogStatus', false)
         } else {
           console.log('error submit!!')
           return false
