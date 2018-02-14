@@ -25,7 +25,7 @@ admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
 
 class Project(models.Model):
     pid = models.BigIntegerField(unique=True, verbose_name=u'编号')
-    title = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
+    name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'类型')
     level = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'等级')
     status = models.CharField(max_length=3, choices=Project_Status.items(), default=0, verbose_name=u'状态')
@@ -129,7 +129,6 @@ class BugManager(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='bug_project', verbose_name=u'bug工单')
     test = models.ForeignKey('TestManager', related_name='test_bug', verbose_name=u'test')
     name = models.CharField(max_length=100, unique=True, verbose_name=u'名称')
-    summary = models.TextField(null=True, blank=True, verbose_name=u'摘要')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
     degree = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'严重程度')
     nice = models.CharField(max_length=3, choices=Bug_Nice.items(), default=0, verbose_name=u'优先级')
