@@ -84,30 +84,6 @@
         <el-col :span="6">
           <el-card>
             <div slot="header" class="clearfix">
-              <a class="right-title">关联bug</a>
-              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
-            </div>
-            <el-table :data="bugData" stripe style="width: 100%">
-              <el-table-column prop="id" label="Id" width="60">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="name" label="名称">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-button type="text" @click="showBug(scope.row)">{{scope.row.name}}</el-button>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
-            </el-table>
-          </el-card>
-
-          <el-card>
-            <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addTestFrom=true"></el-button>
             </div>
@@ -123,6 +99,29 @@
                 <template slot-scope="scope">
                   <div slot="reference">
                     <el-button type="text" @click="showTest(scope.row)">{{scope.row.name}}</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
+            </el-table>
+          </el-card>
+          <el-card>
+            <div slot="header" class="clearfix">
+              <a class="right-title">关联bug</a>
+              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
+            </div>
+            <el-table :data="bugData" stripe style="width: 100%">
+              <el-table-column prop="id" label="Id" width="60">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="name" label="名称">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-button type="text" @click="showBug(scope.row)">{{scope.row.name}}</el-button>
                   </div>
                 </template>
               </el-table-column>

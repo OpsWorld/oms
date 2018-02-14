@@ -103,7 +103,7 @@ export default {
     }
     this.getUsers()
     this.getProjects()
-    this.getTests()
+    this.getTest()
   },
   methods: {
     submitForm(formName) {
@@ -137,12 +137,12 @@ export default {
       getProject().then(response => {
         this.projects = response.data
       })
+    },
+    getTest() {
+      getTestManager().then(response => {
+        this.tests = response.data
+      })
     }
-  },
-  getTests() {
-    getTestManager().then(response => {
-      this.tests = response.data
-    })
   }
 }
 </script>
