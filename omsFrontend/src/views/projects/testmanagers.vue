@@ -42,7 +42,13 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='project' label='关联任务'></el-table-column>
+          <el-table-column prop='project' label='关联任务'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-button type="text" @click="showProject(scope.row.project)">{{scope.row.project}}</el-button>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button @click="handleEdit(scope.row)" type="success" size="small">修改</el-button>
@@ -69,20 +75,22 @@
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
       <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
     </el-dialog>
+    <el-dialog :visible.sync="showprojectForm">
+      <show-project :ruleForm="project"></show-project>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getTestManager, putTestManager, deleteTestManager } from '@/api/project'
+import { getTestManager, putTestManager, deleteTestManager, getProject } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addtest.vue'
 import editGroup from './components/edittest.vue'
-import ElTabPane from '../../../../../../git/lucifer-frontend/node_modules/element-ui/packages/tabs/src/tab-pane'
+import showProject from './components/showproject.vue'
 
 export default {
   components: {
-    ElTabPane,
-    addGroup, editGroup
+    addGroup, editGroup, showProject
   },
   data() {
     return {
@@ -97,7 +105,9 @@ export default {
       addForm: false,
       editForm: false,
       rowdata: {},
-      TEST_STATUS: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' }
+      TEST_STATUS: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
+      project: '',
+      showprojectForm: false
     }
   },
 
@@ -163,6 +173,15 @@ export default {
     handleCurrentChange(val) {
       this.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    showProject(pid) {
+      this.showprojectForm = true
+      const query = {
+        pid: pid
+      }
+      getProject(query).then(response => {
+        this.project = response.data[0]
+      })
     }
   }
 }
