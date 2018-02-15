@@ -84,7 +84,6 @@ export default {
         underline: true, // 下划线
         strikethrough: true, // 中划线
         ol: true, // 有序列表
-        fullscreen: true, // 全屏编辑
         help: true
       },
       uploadurl: uploadurl,

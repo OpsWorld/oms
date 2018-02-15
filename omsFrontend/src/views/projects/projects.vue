@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addproject'">
+          <router-link :to="'addproject'">
             <el-button type="primary" icon="el-icon-plus">新建任务</el-button>
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
@@ -172,39 +172,27 @@
 <script>
 import { getProject, patchProject, deleteProject } from '@/api/project'
 import { LIMIT, pagesize } from '@/config'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   data() {
     return {
-      radio: '',
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
-      ticket_status: '',
       pagesize: pagesize,
-      rowdata: {
-        status: 0,
-        action_user: localStorage.getItem('username')
-      },
       STATUS_TEXT: { '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
       STATUS_TYPE: { '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       listQuery: {
         limit: LIMIT,
         offset: '',
         pid: '',
-        status: 1,
+        status: '',
         create_user__username: '',
         action_user__username: '',
         search: '',
         ordering: ''
       },
-      workticketlist_btn_add: false,
-      workticketlist_btn_change_status: false,
-      btnstatus: true,
-      select_status: 1,
-      show_status: false,
       TaskCompleteForm: false,
       TestCompleteForm: false,
       updateform: {
@@ -214,18 +202,8 @@ export default {
       }
     }
   },
-
-  computed: {
-    ...mapGetters([
-      'role',
-      'elements'
-    ])
-  },
-
   created() {
     this.fetchData()
-    this.workticketlist_btn_add = this.elements['工单列表-新建工单按钮']
-    this.workticketlist_btn_change_status = this.elements['工单列表-更改工单状态按钮']
   },
 
   methods: {
@@ -260,16 +238,6 @@ export default {
     },
     changeStatus(val) {
       this.listQuery.status = val
-      this.fetchData()
-    },
-    showMeCreate() {
-      this.listQuery.create_user__username = localStorage.getItem('username')
-      this.listQuery.action_user__username = ''
-      this.fetchData()
-    },
-    showMeAction() {
-      this.listQuery.action_user__username = localStorage.getItem('username')
-      this.listQuery.create_user__username = ''
       this.fetchData()
     },
     showAllTicket() {

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from projects.models import Project, admin_groups, admin_users
+from projects.models import admin_groups, admin_users
 from users.models import User
 from django.db.models import Q
 from dry_rest_permissions.generics import DRYPermissionFiltersBase

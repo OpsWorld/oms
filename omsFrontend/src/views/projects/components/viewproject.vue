@@ -29,13 +29,14 @@
                   {{STATUS_TEXT[ticketData.status]}}
                 </el-tag>
               </div>
-              <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
+              <div class="appendInfo" v-if="ticketData.status!=4">
                 <span class="han">操作：</span>
                 <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
                 <div v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="请选择状态">
-                    <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                    <el-option v-for="item in status" :key="item.id" :label="item.label"
+                               :value="item.value"></el-option>
                   </el-select>
                   <el-button type="primary" plain @click="patchForm">确定</el-button>
                 </div>
@@ -45,13 +46,19 @@
             <vue-markdown :source="ticketData.content"></vue-markdown>
           </el-card>
 
-          <div v-if="ticketData.ticket_status!=2&&showinput">
+          <div v-if="ticketData.status!=4">
             <el-form :model="commentForm" ref="content" label-width="80px" class="demo-ruleForm">
               <hr class="heng"/>
               <el-form-item label="问题处理" prop="content">
                 <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
                               @imgAdd="imgAdd" ref="md"></mavon-editor>
                 <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
+              </el-form-item>
+              <el-form-item label="通知人" prop="action_user">
+                <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
+                  <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                </el-select>
+                <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -141,11 +148,11 @@
     </el-tooltip>
 
     <el-dialog :visible.sync="addBugFrom">
-      <add-bug :pname="ticketData.name" @DialogStatus="getDialogStatus"></add-bug>
+      <add-bug :project="ticketData.pid" @DialogStatus="getDialogStatus"></add-bug>
     </el-dialog>
 
     <el-dialog :visible.sync="addTestFrom">
-      <add-test :pname="ticketData.name" @DialogStatus="getDialogStatus"></add-test>
+      <add-test :project="ticketData.pid" @DialogStatus="getDialogStatus"></add-test>
     </el-dialog>
 
     <el-dialog :visible.sync="showBugForm">
@@ -166,15 +173,13 @@ import {
   getBugManager,
   getTestManager
 } from '@/api/project'
-import { postUpload } from 'api/tool'
-import { apiUrl, uploadurl } from '@/config'
+import { postUpload, postSendmessage } from 'api/tool'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
-import { getUser } from 'api/user'
 import BackToTop from '@/components/BackToTop'
-import { mapGetters } from 'vuex'
 import { getConversionTime } from '@/utils'
 import addBug from './addbug.vue'
 import addTest from './addtest.vue'
+import { getUser } from 'api/user'
 
 export default {
   components: {
@@ -185,25 +190,16 @@ export default {
     return {
       route_path: this.$route.path.split('/'),
       pid: this.$route.params.id,
-      ticket_id: '',
       ticketData: {},
       commentData: {},
-      enclosureData: {},
-      apiurl: apiUrl,
       commentForm: {
         project: '',
         create_user: localStorage.getItem('username'),
         content: ''
       },
-      enclosureForm: {
-        ticket: '',
-        create_user: localStorage.getItem('username'),
-        file: ''
-      },
       rowdata: {
         status: ''
       },
-      count: 0,
       toolbars: {
         preview: true, // 预览
         bold: true, // 粗体
@@ -212,21 +208,17 @@ export default {
         underline: true, // 下划线
         strikethrough: true, // 中划线
         ol: true, // 有序列表
-        fullscreen: true, // 全屏编辑
         help: true
       },
-      users: [],
       BackToTopStyle: {
         right: '50px',
         bottom: '50px',
         width: '40px',
         height: '40px',
-        'border-radius': '4px',
+        'border-radius': '50px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
-      workticketlist_btn_edit: false,
-      uploadurl: uploadurl,
       status: [
         { label: '已指派', value: '1' },
         { label: '处理中', value: '2' },
@@ -236,7 +228,6 @@ export default {
       STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
       STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       showinput: false,
-      radio_status: '0',
       addBugFrom: false,
       addTestFrom: false,
       bugData: [],
@@ -254,25 +245,19 @@ export default {
         project__id: ''
       },
       showBugForm: false,
-      showTestForm: false
+      showTestForm: false,
+      sendnotice: false,
+      users: []
     }
-  },
-
-  computed: {
-    ...mapGetters([
-      'role',
-      'elements'
-    ])
   },
 
   created() {
     this.bugquery.project__id = this.testquery.project__id = this.commentquery.project__id = this.commentForm.project = this.pid
-    this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.fetchBugData()
     this.fetchTestData()
     this.CommentData()
-    this.getTicketUsers()
+    this.getProjectUsers()
   },
   methods: {
     fetchData() {
@@ -306,6 +291,14 @@ export default {
     submitForm(formName) {
       postProjectComment(this.commentForm).then(response => {
         this.CommentData()
+        if (this.sendnotice) {
+          const messageForm = {
+            action_user: this.ticketData.create_user + ',' + this.ticketData.follow_user.join(),
+            title: '【任务有新回复】' + this.ticketData.title,
+            message: `回复人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
+        }
       }).catch(() => {
         this.$message({
           type: 'error',
@@ -314,8 +307,10 @@ export default {
       })
     },
     patchForm() {
-      patchProject(this.pid, this.rowdata)
-      this.fetchData()
+      patchProject(this.pid, this.rowdata).then(() => {
+        this.fetchData()
+        this.showinput = false
+      })
     },
     imgAdd(pos, file) {
       var md = this.$refs.md
@@ -329,11 +324,6 @@ export default {
         md.$imglst2Url([[pos, response.data.file]])
       })
     },
-    getTicketUsers() {
-      getUser().then(response => {
-        this.users = response.data
-      })
-    },
     showBug(row) {
       this.showBugForm = true
     },
@@ -343,6 +333,14 @@ export default {
     clicktestTable(row) {
       this.bugquery.test_id = row.id
       this.fetchBugData()
+    },
+    getProjectUsers() {
+      const query = {
+        groups__name: 'ITDept'
+      }
+      getUser(query).then(response => {
+        this.users = response.data
+      })
     }
   }
 }
