@@ -19,7 +19,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time', 'start_time',
-            'desc')
+            'end_time', 'is_public', 'desc')
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):
@@ -37,8 +37,7 @@ class ProjectTypeSerializer(serializers.ModelSerializer):
 
 
 class BugManagerSerializer(serializers.ModelSerializer):
-    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='name', allow_null=True)
-    test = serializers.SlugRelatedField(queryset=TestManager.objects.all(), slug_field='name')
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
     test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
@@ -50,7 +49,7 @@ class BugManagerSerializer(serializers.ModelSerializer):
 
 
 class TestManagerSerializer(serializers.ModelSerializer):
-    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='name', allow_null=True)
+    project = serializers.SlugRelatedField(queryset=Project.objects.all(), slug_field='pid', allow_null=True)
     test_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 

@@ -3,11 +3,13 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link v-if="role==='super'||workticketlist_btn_add" :to="'addproject'">
+          <router-link :to="'addproject'">
             <el-button type="primary" icon="el-icon-plus">新建任务</el-button>
           </router-link>
+          <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in [0,1,2,3,4]" :key="item" :type="STATUS_TYPE[item]">
+            <el-button plain size="mini" v-for="item in [1,2,3,4]" :key="item" :type="STATUS_TYPE[item]"
+                       @click="changeStatus(item)">
               {{STATUS_TEXT[item]}}
             </el-button>
           </el-button-group>
@@ -110,7 +112,7 @@
               <router-link :to="'editproject/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
-              <el-button type="danger" size="small">删除</el-button>
+              <el-button type="danger" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -168,41 +170,29 @@
 </template>
 
 <script>
-import { getProject, patchProject } from '@/api/project'
+import { getProject, patchProject, deleteProject } from '@/api/project'
 import { LIMIT, pagesize } from '@/config'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {},
   data() {
     return {
-      radio: '',
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
-      ticket_status: '',
       pagesize: pagesize,
-      rowdata: {
-        status: 0,
-        action_user: localStorage.getItem('username')
-      },
-      STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
-      STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
+      STATUS_TEXT: { '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
+      STATUS_TYPE: { '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
       listQuery: {
         limit: LIMIT,
         offset: '',
         pid: '',
-        status: 1,
+        status: '',
         create_user__username: '',
         action_user__username: '',
         search: '',
         ordering: ''
       },
-      workticketlist_btn_add: false,
-      workticketlist_btn_change_status: false,
-      btnstatus: true,
-      select_status: 1,
-      show_status: false,
       TaskCompleteForm: false,
       TestCompleteForm: false,
       updateform: {
@@ -212,18 +202,8 @@ export default {
       }
     }
   },
-
-  computed: {
-    ...mapGetters([
-      'role',
-      'elements'
-    ])
-  },
-
   created() {
     this.fetchData()
-    this.workticketlist_btn_add = this.elements['工单列表-新建工单按钮']
-    this.workticketlist_btn_change_status = this.elements['工单列表-更改工单状态按钮']
   },
 
   methods: {
@@ -231,6 +211,18 @@ export default {
       getProject(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+      })
+    },
+    deleteGroup(id) {
+      deleteProject(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
       })
     },
     searchClick() {
@@ -245,24 +237,15 @@ export default {
       this.fetchData()
     },
     changeStatus(val) {
-      this.listQuery.ticket_status = val
-      this.fetchData()
-    },
-    showMeCreate() {
-      this.listQuery.create_user__username = localStorage.getItem('username')
-      this.listQuery.action_user__username = ''
-      this.fetchData()
-    },
-    showMeAction() {
-      this.listQuery.action_user__username = localStorage.getItem('username')
-      this.listQuery.create_user__username = ''
+      this.listQuery.status = val
       this.fetchData()
     },
     showAllTicket() {
       this.listQuery.create_user__username = ''
       this.listQuery.action_user__username = ''
+      this.listQuery.pid = ''
       this.listQuery.search = ''
-      this.listQuery.ticket_status = ''
+      this.listQuery.status = ''
       this.fetchData()
     },
     handleSortChange(val) {
@@ -297,7 +280,6 @@ export default {
         this.fetchData()
       })
     }
-
   }
 }
 </script>

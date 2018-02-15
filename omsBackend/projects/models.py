@@ -21,6 +21,7 @@ Project_Status = {
 }
 
 admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
+admin_users = ['admin', 'kiven', 'leon', 'omar', 'larry']
 
 
 class Project(models.Model):
@@ -28,7 +29,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'类型')
     level = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'等级')
-    status = models.CharField(max_length=3, choices=Project_Status.items(), default=0, verbose_name=u'状态')
+    status = models.CharField(max_length=3, choices=Project_Status.items(), default=1, verbose_name=u'状态')
     task_complete = models.IntegerField(default=0, blank=True, verbose_name=u'任务进度')
     test_complete = models.IntegerField(default=0, blank=True, verbose_name=u'测试进度')
     content = models.TextField(verbose_name=u'内容')
@@ -40,7 +41,9 @@ class Project(models.Model):
     from_user = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'需求人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
-    start_time = models.DateTimeField(auto_now=True, verbose_name=u'开始时间')
+    start_time = models.DateField(null=True,blank=True, verbose_name=u'开始时间')
+    end_time = models.DateField(null=True,blank=True, verbose_name=u'计划完成时间')
+    is_public = models.BooleanField(default=True, verbose_name=u'是否公开')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
@@ -49,30 +52,6 @@ class Project(models.Model):
     class Meta:
         verbose_name = u'项目'
         verbose_name_plural = u'项目'
-
-    @staticmethod
-    def has_read_permission(request):
-        return True
-
-    @staticmethod
-    def has_object_read_permission(self, request):
-        return True
-
-    @staticmethod
-    def has_write_permission(request):
-        return True
-
-    @staticmethod
-    def has_object_write_permission(self, request):
-        return True
-
-    @staticmethod
-    def has_update_permission(request):
-        return True
-
-    @staticmethod
-    def has_object_update_permission(self, request):
-        return True
 
 
 class ProjectComment(models.Model):

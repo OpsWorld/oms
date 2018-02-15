@@ -11,4 +11,5 @@ class PlatformPayChannelFilter(filters.FilterSet):
         fields = {
             'platform__name': ['exact'],
             'complete': ['gt', 'lt', 'exact'],
+            'type__name': ['exact'],
         }

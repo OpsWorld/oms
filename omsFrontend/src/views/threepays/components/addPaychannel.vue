@@ -11,9 +11,10 @@
       </el-select>
     </el-form-item>
     <el-form-item label="类型" prop="type">
-      <el-select v-model="ruleForm.type" filterable placeholder="请选择通道类型">
+      <el-select v-model="ruleForm.type" filterable placeholder="请选择通道类型" @change="getPayChannelComplete">
         <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
       </el-select>
+      <a v-if="showtip" style="color: #ff2e61">{{showtiptext}}</a>
     </el-form-item>
     <el-form-item label="费率" prop="rate">
       <el-input v-model="ruleForm.rate"></el-input>
@@ -42,13 +43,13 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')" :disabled="showtip">立即创建</el-button>
       <el-button @click="resetForm('ruleForm')">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
 <script>
-import { getPlatform, getMerchant, postPayChannel, getPayChannelName } from 'api/threeticket'
+import { getPlatform, getMerchant, postPayChannel, getPayChannelName, getPlatformPayChannel } from 'api/threeticket'
 import { postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 
@@ -90,7 +91,9 @@ export default {
       platforms: [],
       merchants: [],
       paychannelnames: [],
-      users: []
+      users: [],
+      showtip: false,
+      showtiptext: ''
     }
   },
   created() {
@@ -145,6 +148,27 @@ export default {
     getTicketUsers() {
       getUser().then(response => {
         this.users = response.data
+      })
+    },
+    getPayChannelComplete() {
+      const query = {
+        platform__name: this.ruleForm.platform,
+        type__name: this.ruleForm.type
+      }
+      getPlatformPayChannel(query).then(response => {
+        if (response.data.length > 0) {
+          this.showtip = true
+          const complete = response.data[0].complete
+          if (complete === 0) {
+            this.showtiptext = 'Tip：该通道已添加，但未开始对接'
+          } else if (complete === 100) {
+            this.showtiptext = 'Tip：该通道已添加，并已对接完成'
+          } else {
+            this.showtiptext = 'Tip：该通道已添加，正在对接中，对接进度为' + complete + '%'
+          }
+        } else {
+          this.showtip = false
+        }
       })
     }
   }

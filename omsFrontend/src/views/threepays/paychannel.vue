@@ -488,7 +488,7 @@ export default {
       }).then(() => {
         deletePayChannel(row.id)
         this.dynamicChannels.remove(row)
-        setTimeout(this.fetchPayChannelData(), 500)
+        setTimeout(this.fetchPayChannelData(), 1000)
         this.$message({
           type: 'success',
           message: '删除成功!'

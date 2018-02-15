@@ -130,6 +130,14 @@ export function putBugManager(id, data) {
   })
 }
 
+export function patchBugManager(id, data) {
+  return request({
+    url: apiURL.bugmanagers + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
 export function deleteBugManager(id) {
   return request({
     url: apiURL.bugmanagers + id + '/',

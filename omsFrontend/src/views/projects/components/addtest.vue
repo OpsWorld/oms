@@ -2,7 +2,7 @@
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
     <el-form-item label="关联任务" prop="project">
       <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务">
-        <el-option v-for="item in projects" :key="item.id" :value="item.name"></el-option>
+        <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
@@ -48,7 +48,7 @@ import { getUser } from 'api/user'
 import { getProject } from '@/api/project'
 import { postTestManager } from '@/api/project'
 export default {
-  props: ['pname'],
+  props: ['project'],
   data() {
     return {
       ruleForm: {
@@ -79,8 +79,8 @@ export default {
     }
   },
   created() {
-    if (this.pname) {
-      this.ruleForm.project = this.pname
+    if (this.project) {
+      this.ruleForm.project = this.project
     }
     this.getUsers()
     this.getProjects()

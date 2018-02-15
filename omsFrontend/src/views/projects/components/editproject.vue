@@ -2,7 +2,7 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-        <el-form-item label="名称" prop="title">
+        <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
@@ -37,6 +37,9 @@
           </el-rate>
           <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
         </el-form-item>
+        <el-form-item label="是否公开" prop="is_public">
+          <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
@@ -62,7 +65,7 @@ export default {
       pid: this.$route.params.id,
       ruleForm: {},
       rules: {
-        title: [
+        name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         content: [
@@ -81,7 +84,6 @@ export default {
         underline: true, // 下划线
         strikethrough: true, // 中划线
         ol: true, // 有序列表
-        fullscreen: true, // 全屏编辑
         help: true
       },
       uploadurl: uploadurl,

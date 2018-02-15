@@ -50,8 +50,29 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='nice' label='优先级'></el-table-column>
-          <el-table-column prop='status' label='状态'></el-table-column>
+          <el-table-column prop='nice' label='优先级'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag>{{Bug_Nice[scope.row.nice]}}</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='status' label='状态'>
+            <template slot-scope="scope">
+              <div v-if="changestatus" slot="reference">
+                <el-tag>{{Bug_Status[scope.row.status]}}</el-tag>
+                <el-button @click="changestatus=false" type="text" size="medium" icon="el-icon-edit"></el-button>
+              </div>
+              <div v-else slot="reference">
+                <el-select v-model="scope.row.status" placeholder="请选择状态">
+                  <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                </el-select>
+                <el-button @click="UpdateStatus(scope.row)" type="text" icon="el-icon-check"></el-button>
+                <el-button @click="changestatus=true" type="text" icon="el-icon-close"></el-button>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='is_public' label='是否公开'></el-table-column>
           <el-table-column prop='project' label='关联任务'></el-table-column>
           <el-table-column prop='test' label='关联test'></el-table-column>
           <el-table-column label="操作">
@@ -84,7 +105,7 @@
 </template>
 
 <script>
-import { getBugManager, putBugManager, deleteBugManager } from '@/api/project'
+import { getBugManager, putBugManager, patchBugManager, deleteBugManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addbug.vue'
 import editGroup from './components/editbug.vue'
@@ -103,7 +124,29 @@ export default {
       pageformat: pageformat,
       addForm: false,
       editForm: false,
-      rowdata: {}
+      rowdata: {},
+      Bug_Nice: {
+        0: '低',
+        1: '中',
+        2: '高'
+      },
+      Bug_Status: {
+        0: '新建',
+        1: '打开',
+        2: '关闭',
+        3: '已修复',
+        4: '暂不处理',
+        5: '重新打开'
+      },
+      status: [
+        { 'label': '新建', value: '0' },
+        { 'label': '打开', value: '1' },
+        { 'label': '关闭', value: '2' },
+        { 'label': '已修复', value: '3' },
+        { 'label': '暂不处理', value: '4' },
+        { 'label': '重新打开', value: '5' }
+      ],
+      changestatus: true
     }
   },
 
@@ -169,6 +212,15 @@ export default {
     handleCurrentChange(val) {
       this.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    UpdateStatus(row) {
+      const data = {
+        status: row.status
+      }
+      patchBugManager(row.id, data).then(() => {
+        this.changestatus = true
+        this.fetchData()
+      })
     }
   }
 }

@@ -186,7 +186,6 @@ export default {
         underline: true, // 下划线
         strikethrough: true, // 中划线
         ol: true, // 有序列表
-        fullscreen: true, // 全屏编辑
         help: true
       },
       users: [],
@@ -195,7 +194,7 @@ export default {
         bottom: '50px',
         width: '40px',
         height: '40px',
-        'border-radius': '4px',
+        'border-radius': '50px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
