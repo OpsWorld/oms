@@ -126,7 +126,6 @@ export default {
 
   computed: {
     ...mapGetters([
-      'username',
       'groups'
     ])
   },
