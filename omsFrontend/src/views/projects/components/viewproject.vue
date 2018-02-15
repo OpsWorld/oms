@@ -156,11 +156,11 @@
     </el-dialog>
 
     <el-dialog :visible.sync="showBugForm">
-      <div>bug详情</div>
+      <show-bug :ruleForm="selectBug"></show-bug>
     </el-dialog>
 
     <el-dialog :visible.sync="showTestForm">
-      <div>test详情</div>
+      <show-test :ruleForm="selectTest"></show-test>
     </el-dialog>
   </div>
 </template>
@@ -179,11 +179,13 @@ import BackToTop from '@/components/BackToTop'
 import { getConversionTime } from '@/utils'
 import addBug from './addbug.vue'
 import addTest from './addtest.vue'
+import showBug from './showbug.vue'
+import showTest from './showtest.vue'
 import { getUser } from 'api/user'
 
 export default {
   components: {
-    VueMarkdown, BackToTop, addBug, addTest
+    VueMarkdown, BackToTop, addBug, addTest, showBug, showTest
   },
 
   data() {
@@ -247,7 +249,9 @@ export default {
       showBugForm: false,
       showTestForm: false,
       sendnotice: false,
-      users: []
+      users: [],
+      selectBug: {},
+      selectTest: {}
     }
   },
 
@@ -326,9 +330,11 @@ export default {
     },
     showBug(row) {
       this.showBugForm = true
+      this.selectBug = row
     },
     showTest(row) {
       this.showTestForm = true
+      this.selectTest = row
     },
     clicktestTable(row) {
       this.bugquery.test_id = row.id

@@ -72,8 +72,13 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='is_public' label='是否公开'></el-table-column>
-          <el-table-column prop='project' label='关联任务'></el-table-column>
+          <el-table-column prop='project' label='关联任务'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-button type="text" @click="showProject(scope.row.project)">{{scope.row.project}}</el-button>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='test' label='关联test'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -101,17 +106,22 @@
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
       <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
     </el-dialog>
+
+    <el-dialog :visible.sync="showprojectForm">
+      <show-project :ruleForm="project"></show-project>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getBugManager, putBugManager, patchBugManager, deleteBugManager } from '@/api/project'
+import { getBugManager, putBugManager, patchBugManager, deleteBugManager, getProject } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addbug.vue'
 import editGroup from './components/editbug.vue'
+import showProject from './components/showproject.vue'
 
 export default {
-  components: { addGroup, editGroup },
+  components: { addGroup, editGroup, getProject, showProject },
   data() {
     return {
       tableData: [],
@@ -146,7 +156,9 @@ export default {
         { 'label': '暂不处理', value: '4' },
         { 'label': '重新打开', value: '5' }
       ],
-      changestatus: true
+      changestatus: true,
+      project: '',
+      showprojectForm: false
     }
   },
 
@@ -220,6 +232,15 @@ export default {
       patchBugManager(row.id, data).then(() => {
         this.changestatus = true
         this.fetchData()
+      })
+    },
+    showProject(pid) {
+      this.showprojectForm = true
+      const query = {
+        pid: pid
+      }
+      getProject(query).then(response => {
+        this.project = response.data[0]
       })
     }
   }
