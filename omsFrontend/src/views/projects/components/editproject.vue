@@ -41,8 +41,7 @@
           <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
-          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -50,10 +49,9 @@
 </template>
 <script>
 import { getProject, putProject, getProjectType } from '@/api/project'
-import { postUpload, postSendmessage } from 'api/tool'
+import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
-import { mapGetters } from 'vuex'
 import { getConversionTime } from '@/utils'
 
 export default {
@@ -92,11 +90,6 @@ export default {
     }
   },
 
-  computed: {
-    ...mapGetters([
-      'username'
-    ])
-  },
   created() {
     this.fetchData()
     this.getProjectUsers()
@@ -109,23 +102,16 @@ export default {
         this.ruleForm = response.data
       })
     },
-    postForm(formName) {
+    submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.pid = getConversionTime()
-          putProject(this.ruleForm).then(response => {
+          putProject(this.ruleForm.id, this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
-                message: '恭喜你，新建成功'
+                message: '恭喜你，更新成功'
               })
             }
-            const messageForm = {
-              action_user: this.ruleForm.action_user,
-              title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
-              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
-            }
-            postSendmessage(messageForm)
             this.$router.push('/projects/projects')
           })
         } else {
@@ -155,7 +141,7 @@ export default {
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
-      formData.append('username', this.enclosureForm.create_user)
+      formData.append('username', localStorage.getItem('username'))
       formData.append('file', file)
       formData.append('create_time', getConversionTime(file.lastModified))
       formData.append('type', file.type)

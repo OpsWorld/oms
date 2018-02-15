@@ -53,7 +53,6 @@ import { postProject, getProjectType } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
-import { mapGetters } from 'vuex'
 import { getConversionTime } from '@/utils'
 
 export default {
@@ -100,15 +99,11 @@ export default {
       },
       uploadurl: uploadurl,
       types: [],
-      img_file: {}
+      img_file: {},
+      sendnotice: false
     }
   },
 
-  computed: {
-    ...mapGetters([
-      'username'
-    ])
-  },
   created() {
     this.getProjectUsers()
     this.getTicketType()
@@ -125,12 +120,14 @@ export default {
                 message: '恭喜你，新建成功'
               })
             }
-            const messageForm = {
-              action_user: this.ruleForm.action_user,
-              title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
-              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
+            if (this.sendnotice) {
+              const messageForm = {
+                action_user: this.ruleForm.action_user.join(),
+                title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
+                message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
+              }
+              postSendmessage(messageForm)
             }
-            postSendmessage(messageForm)
             this.$router.push('/projects/projects')
           })
         } else {
@@ -160,7 +157,7 @@ export default {
     imgAdd(pos, file) {
       var md = this.$refs.md
       const formData = new FormData()
-      formData.append('username', this.enclosureForm.create_user)
+      formData.append('username', this.ruleForm.create_user)
       formData.append('file', file)
       formData.append('create_time', getConversionTime(file.lastModified))
       formData.append('type', file.type)
