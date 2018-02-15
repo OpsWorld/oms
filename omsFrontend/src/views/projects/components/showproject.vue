@@ -23,7 +23,7 @@
       <el-form-item label="任务进度" prop="task_complete">
         <span>{{ ruleForm.task_complete }}</span>
       </el-form-item>
-      <el-form-item label="任务进度" prop="test_complete">
+      <el-form-item label="测试进度" prop="test_complete">
         <span>{{ ruleForm.test_complete }}</span>
       </el-form-item>
       <el-form-item label="描述" prop="desc">
