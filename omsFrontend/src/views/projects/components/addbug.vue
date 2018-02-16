@@ -77,8 +77,8 @@ export default {
         nice: '',
         test_user: '',
         action_user: '',
-        test_time: '',
-        end_time: '',
+        test_time: null,
+        end_time: null,
         desc: ''
       },
       rules: {

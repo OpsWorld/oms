@@ -59,9 +59,10 @@ router.register(r'deploycmds', DeploycmdViewSet)
 from records.views import RecordViewSet
 router.register(r'records', RecordViewSet)
 
-from projects.views import ProjectViewSet, ProjectCommentViewSet, ProjectTypeViewSet, BugManagerViewSet, TestManagerViewSet
+from projects.views import ProjectViewSet, ProjectCommentViewSet, ProjectEnclosureViewSet, ProjectTypeViewSet, BugManagerViewSet, TestManagerViewSet
 router.register(r'projects', ProjectViewSet)
 router.register(r'projectcomments', ProjectCommentViewSet)
+router.register(r'projectenclosures', ProjectEnclosureViewSet)
 router.register(r'projecttypes', ProjectTypeViewSet)
 router.register(r'bugmanagers', BugManagerViewSet)
 router.register(r'testmanagers', TestManagerViewSet)

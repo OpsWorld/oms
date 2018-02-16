@@ -14,17 +14,17 @@
       <el-form-item label="等级" prop="level">
         <span>{{ ruleForm.level }}</span>
       </el-form-item>
-      <el-form-item label="关闭时间" prop="end_time">
-        <span>{{ ruleForm.end_time }}</span>
+      <el-form-item label="任务开始时间" prop="start_time">
+        <span>{{ ruleForm.start_time }}</span>
       </el-form-item>
-      <el-form-item label="关闭时间" prop="end_time">
+      <el-form-item label="计划完成时间" prop="end_time">
         <span>{{ ruleForm.end_time }}</span>
       </el-form-item>
       <el-form-item label="任务进度" prop="task_complete">
-        <span>{{ ruleForm.task_complete }}</span>
+        <span>{{ ruleForm.task_complete }}%</span>
       </el-form-item>
       <el-form-item label="测试进度" prop="test_complete">
-        <span>{{ ruleForm.test_complete }}</span>
+        <span>{{ ruleForm.test_complete }}%</span>
       </el-form-item>
       <el-form-item label="描述" prop="desc">
         <span>{{ ruleForm.desc }}</span>

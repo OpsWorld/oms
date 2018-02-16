@@ -1,8 +1,8 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card>
-      <el-row :gutter="20">
-        <el-col :span="18">
+      <el-row :gutter="10">
+        <el-col :span="17">
 
           <el-card>
             <div slot="header" class="clearfix">
@@ -89,7 +89,7 @@
           </el-card>
 
         </el-col>
-        <el-col :span="6">
+        <el-col :span="7">
 
           <el-card>
             <div slot="header" class="clearfix">
@@ -111,7 +111,14 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
+              <el-table-column prop="status" label="状态" width="70">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-tag>{{Test_Status[scope.row.status]}}</el-tag>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
             </el-table>
           </el-card>
 
@@ -135,7 +142,14 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column prop="action_user" label="开发" width="100"></el-table-column>
+              <el-table-column prop="status" label="状态" width="70">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-tag>{{Bug_Status[scope.row.status]}}</el-tag>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
             </el-table>
           </el-card>
 
@@ -229,6 +243,15 @@ export default {
       ],
       STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
       STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
+      Bug_Status: {
+        0: '新建',
+        1: '打开',
+        2: '关闭',
+        3: '已修复',
+        4: '暂不处理',
+        5: '重新打开'
+      },
+      Test_Status: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
       showinput: false,
       addBugFrom: false,
       addTestFrom: false,
