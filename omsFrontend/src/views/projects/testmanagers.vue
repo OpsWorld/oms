@@ -105,7 +105,12 @@ export default {
       addForm: false,
       editForm: false,
       rowdata: {},
-      Test_Status: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
+      Test_Status: {
+        0: 'Passed',
+        1: 'Failed',
+        2: 'Block',
+        3: 'N/A'
+      },
       project: '',
       showprojectForm: false
     }

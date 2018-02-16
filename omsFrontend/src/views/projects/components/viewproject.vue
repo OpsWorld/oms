@@ -269,10 +269,10 @@ export default {
         5: '重新打开'
       },
       Test_Status: {
-        '0': 'Passed',
-        '1': 'Failed',
-        '2': 'Block',
-        '3': 'N/A'
+        0: 'Passed',
+        1: 'Failed',
+        2: 'Block',
+        3: 'N/A'
       },
       showinput: false,
       addBugFrom: false,
