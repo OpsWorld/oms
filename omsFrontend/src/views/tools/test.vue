@@ -1,178 +1,34 @@
 <template>
   <div>
-    <full-calendar :events="calenderData" first-day='1' locale="zh" @eventClick="eventClick">
-      <template slot="fc-header-left">
-        <el-button type="primary" plain size="mini" icon="el-icon-plus" @click="addEvent=true">增加事件</el-button>
-      </template>
-    </full-calendar>
-    <el-dialog :visible.sync="addEvent">
-      <el-form :model="ruleForm" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title"></el-input>
-        </el-form-item>
-        <el-form-item label="选择日期" firstDayOfWeek="1">
-          <el-date-picker
-            v-model="selectdate"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            @change="chooseDate"
-            value-format="yyyy-MM-dd"
-            :picker-options="{
-              firstDayOfWeek: 1
-            }">
-          </el-date-picker>
-        </el-form-item>
-        <!--<el-form-item label="选择时间" firstDayOfWeek="1">-->
-        <!--<el-time-select-->
-        <!--placeholder="起始时间"-->
-        <!--v-model="startTime"-->
-        <!--:picker-options="{-->
-        <!--start: '08:00',-->
-        <!--step: '01:00',-->
-        <!--end: '24:00',-->
-        <!--}">-->
-        <!--</el-time-select>-->
-        <!--<el-time-select-->
-        <!--placeholder="结束时间"-->
-        <!--v-model="endTime"-->
-        <!--:picker-options="{-->
-        <!--start: '08:00',-->
-        <!--step: '01:00',-->
-        <!--end: '24:00',-->
-        <!--minTime: startTime-->
-        <!--}">-->
-        <!--</el-time-select>-->
-        <!--</el-form-item>-->
-        <el-form-item label="内容" prop="content">
-          <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-        </el-form-item>
-        <el-form-item label="显示颜色" prop="cssClass">
-          <el-select v-model="ruleForm.cssClass" placeholder="请选择显示颜色">
-            <el-option
-              v-for="item in cssClasss"
-              :key="item"
-              :value="item">
-            </el-option>
-          </el-select>
-          <!--<div :class="`${ruleForm.cssClass} showcolor`">cool</div>-->
-          <i :class="`${ruleForm.cssClass} showcolor fa fa-github fa-3x `"></i>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addSubmit('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+    <el-popover
+      ref="popover5"
+      placement="top"
+      width="160"
+      v-model="visible2">
+      <p>这是一段内容这是一段内容确定删除吗？</p>
+      <div style="text-align: right; margin: 0">
+        <el-button size="mini" type="text" @click="visible2 = false">取消</el-button>
+        <el-button type="primary" size="mini" @click="visible2 = false">确定</el-button>
+      </div>
+    </el-popover>
+    <el-button v-popover:popover5>删除</el-button>
   </div>
 </template>
 
 <script>
-import { getCalender, postCalender } from 'api/tool'
-
 export default {
   components: {},
   data() {
     return {
-      addEvent: false,
-      ruleForm: {
-        title: '',
-        start: '',
-        end: '',
-        content: '',
-        cssClass: 'violet'
-      },
-      calenderData: [],
-      selectdate: '',
-      startTime: '',
-      endTime: '',
-      cssClasss: ['yellow', 'green', 'pink', 'violet', 'blue', 'red', 'tiffany'],
-      listQuery: {
-        title: ''
-      }
+      visible2: false
     }
   },
   created() {
-    this.fetchData()
   },
 
-  methods: {
-    fetchData() {
-      getCalender(this.listQuery).then(response => {
-        this.calenderData = response.data
-      })
-    },
-    eventClick(event, jsEvent, pos) {
-      console.log('eventClick', event, pos)
-    },
-    addSubmit(formName) {
-      postCalender(this.ruleForm).then(response => {
-        this.$message({
-          message: '添加成功',
-          type: 'success'
-        })
-        this.addEvent = false
-        this.fetchData()
-        this.resetForm(formName)
-      }).catch(error => {
-        this.$message.error('添加失败')
-        this.resetForm(formName)
-        console.log(error)
-      })
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
-    },
-    chooseDate(res) {
-      this.ruleForm.start = res[0]
-      this.ruleForm.end = res[1]
-    }
-  }
+  methods: {}
 }
 </script>
 
 <style lang="scss">
-  @import "src/styles/variables.scss";
-
-  .showcolor {
-    position: absolute;
-    color: #ffffff;
-    width: 36px;
-    height: 36px;
-    line-height: 36px; // 文字垂直居中
-    // overflow:hidden;  // 文字垂直居中
-    // display: inline-block;
-    // text-align:center;
-    border-radius: 50%;
-    margin-left: 20px;
-  }
-
-  .yellow {
-    background-color: $yellow !important;
-  }
-
-  .green {
-    background-color: $green !important;
-  }
-
-  .pink {
-    background-color: $pink !important;
-  }
-
-  .violet {
-    background-color: $violet !important;
-  }
-
-  .blue {
-    background-color: $blue !important;
-  }
-
-  .red {
-    background-color: $red !important;
-  }
-
-  .tiffany {
-    background-color: $tiffany !important;
-  }
 </style>
