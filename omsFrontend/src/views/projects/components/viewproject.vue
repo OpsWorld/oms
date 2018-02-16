@@ -25,8 +25,8 @@
                 <a>{{ticketData.type}}</a>
                 <a class="shu"></a>
                 <span class="han">当前状态：</span>
-                <el-tag :type="STATUS_TYPE[ticketData.status]">
-                  {{STATUS_TEXT[ticketData.status]}}
+                <el-tag>
+                  {{Project_Status[ticketData.status]}}
                 </el-tag>
               </div>
               <div class="appendInfo" v-if="ticketData.status!=4">
@@ -35,8 +35,8 @@
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
                 <div v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="请选择状态">
-                    <el-option v-for="item in status" :key="item.id" :label="item.label"
-                               :value="item.value"></el-option>
+                    <el-option v-for="(item, index) in Project_Status" :key="item.id" :label="item" :value="index">
+                    </el-option>
                   </el-select>
                   <el-button type="primary" plain @click="patchForm">确定</el-button>
                 </div>
@@ -235,14 +235,16 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
-      status: [
-        { label: '已指派', value: '1' },
-        { label: '处理中', value: '2' },
-        { label: '待审核', value: '3' },
-        { label: '已完成', value: '4' }
-      ],
-      STATUS_TEXT: { '0': '未指派', '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
-      STATUS_TYPE: { '0': 'danger', '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
+      Project_Status: {
+        0: '未指派',
+        1: '已指派',
+        2: '处理中',
+        3: '待测试',
+        4: '测试中',
+        5: '已测试',
+        6: '待上线',
+        7: '已上线'
+      },
       Bug_Status: {
         0: '新建',
         1: '打开',
@@ -251,7 +253,12 @@ export default {
         4: '暂不处理',
         5: '重新打开'
       },
-      Test_Status: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
+      Test_Status: {
+        '0': 'Passed',
+        '1': 'Failed',
+        '2': 'Block',
+        '3': 'N/A'
+      },
       showinput: false,
       addBugFrom: false,
       addTestFrom: false,
