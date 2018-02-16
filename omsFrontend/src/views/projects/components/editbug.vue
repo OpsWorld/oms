@@ -63,7 +63,7 @@
 </template>
 <script>
 import { getUser } from 'api/user'
-import { getProject, getTestManager } from '@/api/project'
+import { getProject, getTestManager, putBugManager } from '@/api/project'
 export default {
   props: ['ruleForm'],
   data() {
@@ -92,7 +92,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
+          putBugManager(this.ruleForm.id, this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，更新成功',
+              type: 'success'
+            })
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('更新失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false
