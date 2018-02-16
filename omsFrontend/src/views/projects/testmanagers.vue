@@ -73,7 +73,7 @@
       <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
     <el-dialog :visible.sync="editForm" @close="closeEditForm">
-      <edit-group :ruleForm="rowdata" @formdata="editGroupSubmit"></edit-group>
+      <edit-group :ruleForm="rowdata" @DialogStatus="getDialogStatus"></edit-group>
     </el-dialog>
     <el-dialog :visible.sync="showprojectForm">
       <show-project :ruleForm="project"></show-project>
@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getTestManager, putTestManager, deleteTestManager, getProject } from '@/api/project'
+import { getTestManager, deleteTestManager, getProject } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addtest.vue'
 import editGroup from './components/edittest.vue'
@@ -129,20 +129,8 @@ export default {
     },
     getDialogStatus(data) {
       this.addForm = data
+      this.editForm = data
       setTimeout(this.fetchData, 1000)
-    },
-    editGroupSubmit(formdata) {
-      putTestManager(this.rowdata.id, formdata).then(response => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
-        this.fetchData()
-        this.editForm = false
-      }).catch(error => {
-        this.$message.error('更新失败')
-        console.log(error)
-      })
     },
     deleteGroup(id) {
       deleteTestManager(id).then(response => {

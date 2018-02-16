@@ -9,10 +9,12 @@
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
     <el-form-item label="预期结果" prop="expect_result">
-      <el-input v-model="ruleForm.expect_result" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+      <el-input v-model="ruleForm.expect_result" type="textarea"
+                :autosize="{ minRows: 3, maxRows: 5}"></el-input>
     </el-form-item>
     <el-form-item label="实际结果" prop="actual_result">
-      <el-input v-model="ruleForm.actual_result" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+      <el-input v-model="ruleForm.actual_result" type="textarea"
+                :autosize="{ minRows: 3, maxRows: 5}"></el-input>
     </el-form-item>
     <el-form-item label="执行状态" prop="status">
       <el-select v-model="ruleForm.status" placeholder="请选择状态码">
@@ -34,7 +36,8 @@
         v-model="ruleForm.test_time"
         type="date"
         value-format="yyyy-MM-dd"
-        placeholder="选择日期时间">
+        placeholder="选择日期时间"
+       >
       </el-date-picker>
     </el-form-item>
     <el-form-item>
@@ -44,7 +47,7 @@
 </template>
 <script>
 import { getUser } from 'api/user'
-import { getProject } from '@/api/project'
+import { getProject, putTestManager } from '@/api/project'
 export default {
   props: ['ruleForm'],
   data() {
@@ -72,7 +75,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit('formdata', this.ruleForm)
+          putTestManager(this.ruleForm.id, this.ruleForm).then(response => {
+            this.$message({
+              message: '恭喜你，更新成功',
+              type: 'success'
+            })
+            this.$emit('DialogStatus', false)
+          }).catch(error => {
+            this.$message.error('更新失败')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false

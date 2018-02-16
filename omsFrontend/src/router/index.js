@@ -83,7 +83,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: '研发管理',
+    name: '系统研发',
     path: '/projects',
     component: Layout,
     icon: 'bug',

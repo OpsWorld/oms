@@ -103,14 +103,16 @@
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                    <el-button type="text" @click="showTest(false, scope.row)"><i
+                      class="fa fa-hashtag"></i>{{scope.row.id}}
+                    </el-button>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="name" label="名称">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-button type="text" @click="showTest(scope.row)">{{scope.row.name}}</el-button>
+                    <el-button type="text" @click="showTest(true, scope.row)">{{scope.row.name}}</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -134,14 +136,16 @@
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                    <el-button type="text" @click="showBug(false, scope.row)"><i
+                      class="fa fa-hashtag"></i>{{scope.row.id}}
+                    </el-button>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column prop="name" label="名称">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-button type="text" @click="showBug(scope.row)">{{scope.row.name}}</el-button>
+                    <el-button type="text" @click="showBug(true, scope.row)">{{scope.row.name}}</el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -167,16 +171,21 @@
     <el-dialog :visible.sync="addBugFrom">
       <add-bug :project="ticketData.pid" @DialogStatus="getDialogStatus"></add-bug>
     </el-dialog>
-
     <el-dialog :visible.sync="addTestFrom">
       <add-test :project="ticketData.pid" @DialogStatus="getDialogStatus"></add-test>
     </el-dialog>
 
-    <el-dialog :visible.sync="showBugForm">
-      <show-bug :ruleForm="selectBug"></show-bug>
+    <el-dialog :visible.sync="editBugForm" @close="fetchBugData">
+      <edit-bug :ruleForm="selectBug" @DialogStatus="getDialogStatus"></edit-bug>
+    </el-dialog>
+    <el-dialog :visible.sync="editTestForm" @close="fetchTestData">
+      <edit-test :ruleForm="selectTest" @DialogStatus="getDialogStatus"></edit-test>
     </el-dialog>
 
-    <el-dialog :visible.sync="showTestForm">
+    <el-dialog :visible.sync="showBugForm" @close="fetchBugData">
+      <show-bug :ruleForm="selectBug"></show-bug>
+    </el-dialog>
+    <el-dialog :visible.sync="showTestForm" @close="fetchTestData">
       <show-test :ruleForm="selectTest"></show-test>
     </el-dialog>
   </div>
@@ -196,13 +205,15 @@ import BackToTop from '@/components/BackToTop'
 import { getConversionTime } from '@/utils'
 import addBug from './addbug.vue'
 import addTest from './addtest.vue'
+import editBug from './editbug.vue'
+import editTest from './edittest.vue'
 import showBug from './showbug.vue'
 import showTest from './showtest.vue'
 import { getUser } from 'api/user'
 
 export default {
   components: {
-    VueMarkdown, BackToTop, addBug, addTest, showBug, showTest
+    VueMarkdown, BackToTop, addBug, addTest, showBug, showTest, editTest, editBug
   },
 
   data() {
@@ -281,6 +292,8 @@ export default {
       },
       showBugForm: false,
       showTestForm: false,
+      editBugForm: false,
+      editTestForm: false,
       sendpeople: false,
       sendgroup: false,
       users: [],
@@ -307,6 +320,8 @@ export default {
     getDialogStatus(data) {
       this.addBugFrom = data
       this.addTestFrom = data
+      this.editBugForm = data
+      this.editTestForm = data
       this.fetchBugData()
       this.fetchTestData()
     },
@@ -370,12 +385,20 @@ export default {
         md.$imglst2Url([[pos, response.data.file]])
       })
     },
-    showBug(row) {
-      this.showBugForm = true
+    showBug(show, row) {
+      if (show) {
+        this.showBugForm = true
+      } else {
+        this.editBugForm = true
+      }
       this.selectBug = row
     },
-    showTest(row) {
-      this.showTestForm = true
+    showTest(show, row) {
+      if (show) {
+        this.showTestForm = true
+      } else {
+        this.editTestForm = true
+      }
       this.selectTest = row
     },
     clicktestTable(row) {
