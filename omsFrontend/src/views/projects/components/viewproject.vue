@@ -34,11 +34,11 @@
                 <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
                 <div v-if="showinput" class="action">
-                  <el-select v-model="rowdata.status" filterable placeholder="请选择状态">
-                    <el-option v-for="(item, index) in Project_Status" :key="item.id" :label="item" :value="index">
+                  <el-select v-model="rowdata.status" filterable placeholder="请选择状态" @change="selectStatus=true">
+                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index" :disabled="index<=ticketData.status">
                     </el-option>
                   </el-select>
-                  <el-button type="primary" plain @click="patchForm">确定</el-button>
+                  <el-button v-if="selectStatus" type="primary" plain @click="patchForm">确定</el-button>
                 </div>
 
               </div>
@@ -130,6 +130,7 @@
           <el-card>
             <div slot="header" class="clearfix">
               <a class="right-title">关联bug</a>
+              <el-button size="mini" type="primary" plain @click="showAllBug">all</el-button>
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
             </div>
             <el-table :data="bugData" stripe style="width: 100%">
@@ -298,7 +299,8 @@ export default {
       sendgroup: false,
       users: [],
       selectBug: {},
-      selectTest: {}
+      selectTest: {},
+      selectStatus: false
     }
   },
 
@@ -371,6 +373,7 @@ export default {
       patchProject(this.pid, this.rowdata).then(() => {
         this.fetchData()
         this.showinput = false
+        this.selectStatus = false
       })
     },
     imgAdd(pos, file) {
@@ -412,6 +415,10 @@ export default {
       getUser(query).then(response => {
         this.users = response.data
       })
+    },
+    showAllBug() {
+      this.bugquery.test_id = ''
+      this.fetchBugData()
     }
   }
 }
