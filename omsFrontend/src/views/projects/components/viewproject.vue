@@ -333,7 +333,7 @@ export default {
           const messageForm = {
             action_user: this.ticketData.create_user + ',' + this.ticketData.follow_user.join(),
             title: '【任务有新回复】' + this.ticketData.title,
-            message: `操作人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
+            message: `操作人: ${this.commentForm.create_user}\n内容: ${this.commentForm.content}\n地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         }
@@ -341,7 +341,7 @@ export default {
           const messageForm = {
             action_user: 'ITDept_SkypeID',
             title: '【任务有新回复】' + this.ticketData.title,
-            message: `操作人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
+            message: `操作人: ${this.commentForm.create_user}\n内容: ${this.commentForm.content}\n地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         }
