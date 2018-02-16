@@ -143,7 +143,7 @@
         <el-form-item :model="updateform" label="当前状态">
           <span>{{Project_Status[updateform.status]}}</span>
         </el-form-item>
-        <el-form-item :model="updateform" label="状态修改">
+        <el-form-item :model="updateform" label="状态">
           <el-select v-model="updateform.status" placeholder="请选择状态">
             <el-option v-for="(item, index) in Project_Status" :key="item.id" :label="item" :value="index"></el-option>
           </el-select>

@@ -111,7 +111,7 @@ Bug_Status = {
 class BugManager(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='bug_project', verbose_name=u'bug工单')
     test = models.ForeignKey('TestManager', related_name='test_bug', verbose_name=u'test')
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'名称')
+    name = models.CharField(max_length=100, verbose_name=u'名称')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
     degree = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'严重程度')
     nice = models.CharField(max_length=3, choices=Bug_Nice.items(), default=0, verbose_name=u'优先级')
@@ -139,7 +139,7 @@ Test_Status = {
 
 class TestManager(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True, blank=True, related_name='test_project', verbose_name=u'测试工单')
-    name = models.CharField(max_length=100, unique=True, verbose_name=u'名称')
+    name = models.CharField(max_length=100, verbose_name=u'名称')
     expect_result = models.TextField(null=True, blank=True, verbose_name=u'预期结果')
     actual_result = models.TextField(null=True, blank=True, verbose_name=u'实际结果')
     status = models.CharField(max_length=3, choices=Test_Status.items(), null=True, blank=True, verbose_name=u'执行状态')

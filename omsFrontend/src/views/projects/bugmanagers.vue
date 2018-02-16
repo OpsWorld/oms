@@ -104,19 +104,7 @@
     </el-dialog>
 
     <el-dialog :visible.sync="changestatusForm">
-      <el-form>
-        <el-form-item :model="bugdata" label="当前状态">
-          <span>{{Bug_Status[bugdata.status]}}</span>
-        </el-form-item>
-        <el-form-item :model="bugdata" label="状态修改">
-          <el-select v-model="bugdata.status" placeholder="请选择状态">
-            <el-option v-for="(item,index) in Bug_Status" :key="item.id" :label="item" :value="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="UpdateStatus" type="primary" icon="el-icon-check"></el-button>
-        </el-form-item>
-      </el-form>
+      <ch-status :Status="Bug_Status" :statusdata="bugdata" @formdata="UpdateStatus"></ch-status>
     </el-dialog>
   </div>
 </template>
@@ -127,10 +115,11 @@ import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from './components/addbug.vue'
 import editGroup from './components/editbug.vue'
 import showProject from './components/showproject.vue'
+import chStatus from './components/changestatus.vue'
 
 export default {
   components: {
-    addGroup, editGroup, getProject, showProject
+    addGroup, editGroup, getProject, showProject, chStatus
   },
   data() {
     return {
@@ -245,8 +234,8 @@ export default {
       this.bugdata.status = row.status
       this.changestatusForm = true
     },
-    UpdateStatus() {
-      patchBugManager(this.bugdata.id, this.bugdata).then(() => {
+    UpdateStatus(formdata) {
+      patchBugManager(this.bugdata.id, formdata).then(() => {
         this.changestatusForm = false
         this.fetchData()
       })
