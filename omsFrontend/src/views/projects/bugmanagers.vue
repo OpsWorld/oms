@@ -53,22 +53,26 @@
           <el-table-column prop='nice' label='优先级'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag>{{Bug_Nice[scope.row.nice]}}</el-tag>
+                <el-tag size="mini">{{Bug_Nice[scope.row.nice]}}</el-tag>
               </div>
             </template>
           </el-table-column>
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
-              <div v-if="changestatus" slot="reference">
-                <el-tag>{{Bug_Status[scope.row.status]}}</el-tag>
-                <el-button @click="changestatus=false" type="text" size="medium" icon="el-icon-edit"></el-button>
-              </div>
-              <div v-else slot="reference">
-                <el-select v-model="scope.row.status" placeholder="请选择状态">
-                  <el-option v-for="item in status" :key="item.id" :label="item.label" :value="item.value"></el-option>
-                </el-select>
-                <el-button @click="UpdateStatus(scope.row)" type="text" icon="el-icon-check"></el-button>
-                <el-button @click="changestatus=true" type="text" icon="el-icon-close"></el-button>
+              <div slot="reference">
+                <el-popover
+                  ref="popover5"
+                  placement="top"
+                  width="160"
+                  v-model="visible">
+                  <el-select v-model="scope.row.status" placeholder="请选择状态">
+                    <el-option v-for="item in status" :key="item.id" :label="item.label"
+                               :value="item.value"></el-option>
+                  </el-select>
+                  <el-button @click="UpdateStatus(scope.row)" type="text" icon="el-icon-check"></el-button>
+                  <el-button @click="changestatus=true" type="text" icon="el-icon-close"></el-button>
+                </el-popover>
+                <el-tag size="mini">{{Bug_Status[scope.row.status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -158,7 +162,8 @@ export default {
       ],
       changestatus: true,
       project: '',
-      showprojectForm: false
+      showprojectForm: false,
+      visible: ''
     }
   },
 

@@ -110,7 +110,7 @@
             <el-col :span="1">
               <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
             </el-col>
-            <el-col :span="14">
+            <el-col :span="21">
               <div class="dialog-box">
                 <span class="bot"></span>
                 <span class="top"></span>
@@ -194,7 +194,7 @@ export default {
         bottom: '50px',
         width: '40px',
         height: '40px',
-        'border-radius': '50px',
+        'border-radius': '4px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
@@ -389,7 +389,7 @@ export default {
     .dialog-box {
       position: relative;
       left: 100px;
-      margin-left: -20px;
+      margin-left: -30px;
       span {
         width: 0;
         height: 0;
@@ -409,8 +409,6 @@ export default {
         padding: 6px;
         margin-bottom: 10px;
         min-height: 50px;
-        max-width: 600px;
-        width: 50rem;
         .commenttime {
           float: right;
         }
