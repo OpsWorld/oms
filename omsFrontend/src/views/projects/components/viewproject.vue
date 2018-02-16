@@ -33,6 +33,7 @@
                 <span class="han">操作：</span>
                 <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
+                <el-button v-if="showinput" type="primary" size="small" @click="showinput=false">确定</el-button>
                 <div v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="请选择状态" @change="selectStatus=true">
                     <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index" :disabled="index<=ticketData.status">
@@ -453,8 +454,7 @@ export default {
   }
 
   .action {
-    display: inline;
-    margin-left: 20px;
+    margin: 5px;
   }
 
   .han {
