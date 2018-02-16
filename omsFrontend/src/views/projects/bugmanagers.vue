@@ -60,21 +60,7 @@
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference">
-
-                <el-popover
-                  ref="statuspopover"
-                  placement="top"
-                  width="160"
-                  trigger="click"
-                  v-model="changestatus">
-                  <el-select v-model="scope.row.status" placeholder="请选择状态">
-                    <el-option v-for="item in status" :key="item.id" :label="item.label"
-                               :value="item.value"></el-option>
-                  </el-select>
-                  <el-button @click="UpdateStatus(scope.row)" type="text" icon="el-icon-check"></el-button>
-                  <el-button @click="changestatus=false" type="text" icon="el-icon-close"></el-button>
-                </el-popover>
-                <el-button size="mini" v-popover:statuspopover>{{Bug_Status[scope.row.status]}}</el-button>
+                <el-button size="mini" @click="changeStatus(scope.row)">{{Bug_Status[scope.row.status]}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -116,6 +102,22 @@
     <el-dialog :visible.sync="showprojectForm">
       <show-project :ruleForm="project"></show-project>
     </el-dialog>
+
+    <el-dialog :visible.sync="changestatusForm">
+      <el-form>
+        <el-form-item :model="bugdata" label="当前状态">
+          <span>{{Bug_Status[bugdata.status]}}</span>
+        </el-form-item>
+        <el-form-item :model="bugdata" label="状态修改">
+          <el-select v-model="bugdata.status" placeholder="请选择状态">
+            <el-option v-for="(item,index) in Bug_Status" :key="item.id" :label="item" :value="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="UpdateStatus" type="primary" icon="el-icon-check"></el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -127,7 +129,9 @@ import editGroup from './components/editbug.vue'
 import showProject from './components/showproject.vue'
 
 export default {
-  components: { addGroup, editGroup, getProject, showProject },
+  components: {
+    addGroup, editGroup, getProject, showProject
+  },
   data() {
     return {
       tableData: [],
@@ -154,17 +158,13 @@ export default {
         4: '暂不处理',
         5: '重新打开'
       },
-      status: [
-        { 'label': '新建', value: '0' },
-        { 'label': '打开', value: '1' },
-        { 'label': '关闭', value: '2' },
-        { 'label': '已修复', value: '3' },
-        { 'label': '暂不处理', value: '4' },
-        { 'label': '重新打开', value: '5' }
-      ],
-      changestatus: false,
+      showprojectForm: false,
+      changestatusForm: false,
       project: '',
-      showprojectForm: false
+      bugdata: {
+        id: '',
+        status: ''
+      }
     }
   },
 
@@ -231,15 +231,6 @@ export default {
       this.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    UpdateStatus(row) {
-      const data = {
-        status: row.status
-      }
-      patchBugManager(row.id, data).then(() => {
-        this.changestatus = false
-        this.fetchData()
-      })
-    },
     showProject(pid) {
       this.showprojectForm = true
       const query = {
@@ -247,6 +238,17 @@ export default {
       }
       getProject(query).then(response => {
         this.project = response.data[0]
+      })
+    },
+    changeStatus(row) {
+      this.bugdata.id = row.id
+      this.bugdata.status = row.status
+      this.changestatusForm = true
+    },
+    UpdateStatus() {
+      patchBugManager(this.bugdata.id, this.bugdata).then(() => {
+        this.changestatusForm = false
+        this.fetchData()
       })
     }
   }

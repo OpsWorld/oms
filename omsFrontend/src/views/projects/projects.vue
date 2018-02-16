@@ -45,10 +45,14 @@
           </el-table-column>
           <el-table-column prop='status' label='状态' sortable="custom">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+              <div slot="reference" class="name-wrapper">
                 <el-tag size="mini">
                   {{Project_Status[scope.row.status]}}
                 </el-tag>
+                <el-tooltip class="item" effect="dark" content="更新状态" placement="top">
+                  <el-button @click="updateStatus(scope.row)" type="text" icon="el-icon-edit"
+                             class="modifychange"></el-button>
+                </el-tooltip>
               </div>
             </template>
           </el-table-column>
@@ -56,7 +60,7 @@
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.task_complete}}%
-                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
+                <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
                   <el-button @click="updateTaskComplete(scope.row)" type="text" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
@@ -67,7 +71,7 @@
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.test_complete}}%
-                <el-tooltip class="item" effect="dark" content="更新进度" placement="top">
+                <el-tooltip class="item" effect="dark" content="更新测试进度" placement="top">
                   <el-button @click="updateTestComplete(scope.row)" type="text" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
@@ -133,6 +137,22 @@
         </div>
       </div>
     </el-card>
+
+    <el-dialog title="更新任务状态" :visible.sync="StatusForm">
+      <el-form label-width="90px">
+        <el-form-item :model="updateform" label="当前状态">
+          <span>{{Project_Status[updateform.status]}}</span>
+        </el-form-item>
+        <el-form-item :model="updateform" label="状态修改">
+          <el-select v-model="updateform.status" placeholder="请选择状态">
+            <el-option v-for="(item, index) in Project_Status" :key="item.id" :label="item" :value="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
 
     <el-dialog title="更新任务进度" :visible.sync="TaskCompleteForm">
       <el-form label-width="90px">
@@ -200,10 +220,12 @@ export default {
         search: '',
         ordering: ''
       },
+      StatusForm: false,
       TaskCompleteForm: false,
       TestCompleteForm: false,
       updateform: {
         id: '',
+        status: '',
         task_complete: '',
         test_complete: ''
       }
@@ -265,15 +287,24 @@ export default {
       }
       this.fetchData()
     },
+    updateStatus(row) {
+      this.StatusForm = true
+      this.updateform.id = row.id
+      this.updateform.status = row.status
+      this.updateform.task_complete = row.task_complete
+      this.updateform.test_complete = row.test_complete
+    },
     updateTaskComplete(row) {
       this.TaskCompleteForm = true
       this.updateform.id = row.id
+      this.updateform.status = row.status
       this.updateform.task_complete = row.task_complete
       this.updateform.test_complete = row.test_complete
     },
     updateTestComplete(row) {
       this.TestCompleteForm = true
       this.updateform.id = row.id
+      this.updateform.status = row.status
       this.updateform.task_complete = row.task_complete
       this.updateform.test_complete = row.test_complete
     },
@@ -283,7 +314,7 @@ export default {
           type: 'success',
           message: '更新成功!'
         })
-        this.TaskCompleteForm = this.TestCompleteForm = false
+        this.StatusForm = this.TaskCompleteForm = this.TestCompleteForm = false
         this.fetchData()
       })
     }
