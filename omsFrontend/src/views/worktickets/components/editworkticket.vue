@@ -110,7 +110,7 @@
             <el-col :span="1">
               <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
             </el-col>
-            <el-col :span="21">
+            <el-col :span="20">
               <div class="dialog-box">
                 <span class="bot"></span>
                 <span class="top"></span>
