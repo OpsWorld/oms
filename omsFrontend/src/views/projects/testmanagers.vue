@@ -38,7 +38,7 @@
           <el-table-column prop='status' label='执行状态'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag>{{Test_Status[scope.row.status]}}</el-tag>
+                <el-tag size="mini">{{Test_Status[scope.row.status]}}</el-tag>
               </div>
             </template>
           </el-table-column>

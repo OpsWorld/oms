@@ -74,7 +74,7 @@
                 <el-col :span="1">
                   <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
                 </el-col>
-                <el-col :span="14">
+                <el-col :span="21">
                   <div class="dialog-box">
                     <span class="bot"></span>
                     <span class="top"></span>
@@ -114,7 +114,7 @@
               <el-table-column prop="status" label="状态" width="70">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-tag>{{Test_Status[scope.row.status]}}</el-tag>
+                    <el-tag size="mini">{{Test_Status[scope.row.status]}}</el-tag>
                   </div>
                 </template>
               </el-table-column>
@@ -145,7 +145,7 @@
               <el-table-column prop="status" label="状态" width="70">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-tag>{{Bug_Status[scope.row.status]}}</el-tag>
+                    <el-tag size="mini">{{Bug_Status[scope.row.status]}}</el-tag>
                   </div>
                 </template>
               </el-table-column>
@@ -442,8 +442,6 @@ export default {
         padding: 6px;
         margin-bottom: 10px;
         min-height: 50px;
-        max-width: 600px;
-        width: 50rem;
         .commenttime {
           float: right;
         }

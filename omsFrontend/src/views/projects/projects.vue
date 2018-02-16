@@ -8,9 +8,8 @@
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in [1,2,3,4]" :key="item" :type="STATUS_TYPE[item]"
-                       @click="changeStatus(item)">
-              {{STATUS_TEXT[item]}}
+            <el-button plain size="mini" v-for="item in [0,1,2,3,4,5,6,7]" :key="item" @click="changeStatus(item)">
+              {{Project_Status[item]}}
             </el-button>
           </el-button-group>
         </div>
@@ -47,8 +46,8 @@
           <el-table-column prop='status' label='状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-tag :type="STATUS_TYPE[scope.row.status]">
-                  {{STATUS_TEXT[scope.row.status]}}
+                <el-tag size="mini">
+                  {{Project_Status[scope.row.status]}}
                 </el-tag>
               </div>
             </template>
@@ -79,7 +78,7 @@
           <el-table-column prop='action_user' label='指派人' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
-                <el-tag v-for="item in scope.row.action_user" :key="item">
+                <el-tag size="mini" v-for="item in scope.row.action_user" :key="item">
                   {{item}}
                 </el-tag>
               </div>
@@ -181,8 +180,16 @@ export default {
       tabletotal: 0,
       currentPage: 1,
       pagesize: pagesize,
-      STATUS_TEXT: { '1': '已指派', '2': '处理中', '3': '待审核', '4': '已完成' },
-      STATUS_TYPE: { '1': 'primary', '2': 'success', '3': 'warning', '4': 'info' },
+      Project_Status: {
+        0: '未指派',
+        1: '已指派',
+        2: '处理中',
+        3: '待测试',
+        4: '测试中',
+        5: '已测试',
+        6: '待上线',
+        7: '已上线'
+      },
       listQuery: {
         limit: LIMIT,
         offset: '',
