@@ -2,15 +2,17 @@
 # author: kiven
 
 from rest_framework import viewsets
-from projects.models import Project, ProjectComment, ProjectType, BugManager, TestManager
+from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager
 from projects.serializers import (ProjectSerializer,
                                   ProjectCommentSerializer,
+ProjectEnclosureSerializer,
                                   ProjectTypeSerializer,
                                   BugManagerSerializer,
                                   TestManagerSerializer)
 from projects.filters import ProjectFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by('create_time')
@@ -23,6 +25,12 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class ProjectCommentViewSet(viewsets.ModelViewSet):
     queryset = ProjectComment.objects.all().order_by('create_time')
     serializer_class = ProjectCommentSerializer
+    filter_fields = ['project__id']
+
+
+class ProjectEnclosureViewSet(viewsets.ModelViewSet):
+    queryset = ProjectEnclosure.objects.all()
+    serializer_class = ProjectEnclosureSerializer
     filter_fields = ['project__id']
 
 

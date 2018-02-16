@@ -38,7 +38,7 @@
           <el-table-column prop='status' label='执行状态'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag>{{TEST_STATUS[scope.row.status]}}</el-tag>
+                <el-tag>{{Test_Status[scope.row.status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -105,7 +105,7 @@ export default {
       addForm: false,
       editForm: false,
       rowdata: {},
-      TEST_STATUS: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
+      Test_Status: { '0': 'Passed', '1': 'Failed', '2': 'Block', '3': 'N/A' },
       project: '',
       showprojectForm: false
     }
