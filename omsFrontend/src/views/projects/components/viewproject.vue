@@ -47,18 +47,21 @@
           </el-card>
 
           <div v-if="ticketData.status!=4">
-            <el-form :model="commentForm" ref="content" label-width="80px" class="demo-ruleForm">
+            <el-form :model="commentForm" ref="content" label-width="90px" class="demo-ruleForm">
               <hr class="heng"/>
               <el-form-item label="问题处理" prop="content">
                 <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
                               @imgAdd="imgAdd" ref="md"></mavon-editor>
                 <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
               </el-form-item>
-              <el-form-item label="通知人" prop="action_user">
+              <el-form-item label="通知个人" prop="action_user">
                 <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
                   <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
                 </el-select>
-                <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
+                <el-checkbox v-model="sendpeople">发送通知</el-checkbox>
+              </el-form-item>
+              <el-form-item label="通知技术部" prop="action_user">
+                <el-checkbox v-model="sendgroup">发送通知</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
@@ -278,7 +281,8 @@ export default {
       },
       showBugForm: false,
       showTestForm: false,
-      sendnotice: false,
+      sendpeople: false,
+      sendgroup: false,
       users: [],
       selectBug: {},
       selectTest: {}
@@ -325,11 +329,19 @@ export default {
     submitForm(formName) {
       postProjectComment(this.commentForm).then(response => {
         this.CommentData()
-        if (this.sendnotice) {
+        if (this.sendpeople) {
           const messageForm = {
             action_user: this.ticketData.create_user + ',' + this.ticketData.follow_user.join(),
             title: '【任务有新回复】' + this.ticketData.title,
-            message: `回复人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
+            message: `操作人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
+        }
+        if (this.sendgroup) {
+          const messageForm = {
+            action_user: 'ITDept_SkypeID',
+            title: '【任务有新回复】' + this.ticketData.title,
+            message: `操作人: ${this.commentForm.create_user}\n地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         }
