@@ -60,19 +60,21 @@
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference">
+
                 <el-popover
-                  ref="popover5"
+                  ref="statuspopover"
                   placement="top"
                   width="160"
-                  v-model="visible">
+                  trigger="click"
+                  v-model="changestatus">
                   <el-select v-model="scope.row.status" placeholder="请选择状态">
                     <el-option v-for="item in status" :key="item.id" :label="item.label"
                                :value="item.value"></el-option>
                   </el-select>
                   <el-button @click="UpdateStatus(scope.row)" type="text" icon="el-icon-check"></el-button>
-                  <el-button @click="changestatus=true" type="text" icon="el-icon-close"></el-button>
+                  <el-button @click="changestatus=false" type="text" icon="el-icon-close"></el-button>
                 </el-popover>
-                <el-tag size="mini">{{Bug_Status[scope.row.status]}}</el-tag>
+                <el-button size="mini" v-popover:statuspopover>{{Bug_Status[scope.row.status]}}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -160,10 +162,9 @@ export default {
         { 'label': '暂不处理', value: '4' },
         { 'label': '重新打开', value: '5' }
       ],
-      changestatus: true,
+      changestatus: false,
       project: '',
-      showprojectForm: false,
-      visible: ''
+      showprojectForm: false
     }
   },
 
@@ -235,7 +236,7 @@ export default {
         status: row.status
       }
       patchBugManager(row.id, data).then(() => {
-        this.changestatus = true
+        this.changestatus = false
         this.fetchData()
       })
     },
