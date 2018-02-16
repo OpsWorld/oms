@@ -239,11 +239,11 @@ li {
   .table-expand {
     font-size: 0;
     .el-form-item {
-      margin-right: 0;
+      margin-right: 0!important;
       margin-bottom: 0;
-      width: 50%;
+      width: 50%!important;
       .el-form-item__label {
-        width: 90px;
+        width: 120px;
         color: #99a9bf;
       }
     }
