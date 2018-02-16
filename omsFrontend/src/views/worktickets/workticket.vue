@@ -121,7 +121,7 @@
 
 <script>
 import { getWorkticket, patchWorkticket } from 'api/workticket'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize } from '@/config'
 import addWorkticket from './components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
@@ -134,7 +134,7 @@ export default {
       tabletotal: 0,
       currentPage: 1,
       ticket_status: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
       rowdata: {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
