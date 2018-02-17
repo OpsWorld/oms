@@ -54,7 +54,7 @@
               <p><a style="color: red">最多只能上传5个文件</a></p>
             </div>
           </el-upload>
-
+          <hr class="heng"/>
           <div v-if='enclosureData.length>0' class="ticketenclosure">
             <ul>
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">

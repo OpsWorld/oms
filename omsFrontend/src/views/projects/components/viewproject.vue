@@ -64,6 +64,15 @@
               </div>
             </div>
             <vue-markdown :source="ticketData.content"></vue-markdown>
+            <hr class="heng"/>
+            <div v-if='enclosureData.length>0'>
+              <ul>
+                <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                  <i class="fa fa-paperclip"></i>
+                  <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                </li>
+              </ul>
+            </div>
           </el-card>
 
           <div v-if="ticketData.status!=4">
@@ -218,7 +227,8 @@ import {
   getProjectComment,
   postProjectComment,
   getBugManager,
-  getTestManager
+  getTestManager,
+  getProjectEnclosure
 } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
@@ -232,6 +242,7 @@ import showBug from './showbug.vue'
 import showTest from './showtest.vue'
 import { getUser } from 'api/user'
 import { getCreatedate } from '@/utils'
+import { apiUrl } from '@/config'
 
 export default {
   components: {
@@ -323,7 +334,9 @@ export default {
       users: [],
       selectBug: {},
       selectTest: {},
-      errortime: false
+      errortime: false,
+      apiurl: apiUrl,
+      enclosureData: []
     }
   },
 
@@ -334,6 +347,7 @@ export default {
     this.fetchTestData()
     this.CommentData()
     this.getProjectUsers()
+    this.fetchEnclosureData()
   },
   methods: {
     fetchData() {
@@ -471,6 +485,14 @@ export default {
       } else {
         this.errortime = false
       }
+    },
+    fetchEnclosureData() {
+      const parms = {
+        project__id: this.pid
+      }
+      getProjectEnclosure(parms).then(response => {
+        this.enclosureData = response.data
+      })
     }
   }
 }
