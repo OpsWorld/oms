@@ -40,6 +40,33 @@
         <el-form-item label="是否公开" prop="is_public">
           <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
+        <el-form-item label="附件">
+          <el-upload
+            ref="upload"
+            :action="uploadurl"
+            :show-file-list="false"
+            :disabled="count>4"
+            :before-upload="beforeAvatarUpload">
+            <el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">
+              上传
+            </el-button>
+            <div slot="tip" class="el-upload__tip">
+              <p><a style="color: red">最多只能上传5个文件</a></p>
+            </div>
+          </el-upload>
+
+          <div v-if='enclosureData.length>0' class="ticketenclosure">
+            <ul>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                <i class="fa fa-paperclip"></i>
+                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
+                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                </el-tooltip>
+              </li>
+            </ul>
+          </div>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
         </el-form-item>
@@ -49,9 +76,10 @@
 </template>
 <script>
 import { getProject, putProject, getProjectType } from '@/api/project'
+import { getProjectEnclosure, postProjectEnclosure, deleteProjectEnclosure } from '@/api/project'
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
-import { uploadurl } from '@/config'
+import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
 
 export default {
@@ -84,9 +112,17 @@ export default {
         ol: true, // 有序列表
         help: true
       },
+      apiurl: apiUrl,
       uploadurl: uploadurl,
       types: [],
-      img_file: {}
+      img_file: {},
+      count: 0,
+      enclosureData: [],
+      enclosureForm: {
+        project: '',
+        create_user: localStorage.getItem('username'),
+        file: ''
+      }
     }
   },
 
@@ -94,12 +130,15 @@ export default {
     this.fetchData()
     this.getProjectUsers()
     this.getTicketType()
+    this.fetchEnclosureData()
   },
   methods: {
     fetchData() {
       const query = null
       getProject(query, this.pid).then(response => {
         this.ruleForm = response.data
+        this.enclosureForm.project = this.ruleForm.id
+        this.count = response.data.length
       })
     },
     submitForm(formName) {
@@ -149,6 +188,43 @@ export default {
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
+    },
+    beforeAvatarUpload(file) {
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', file)
+      formData.append('create_time', getConversionTime())
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        this.enclosureForm.file = response.data.filepath
+        postProjectEnclosure(this.enclosureForm)
+        setTimeout(this.fetchEnclosureData(), 500)
+        if (response.statusText === 'Created') {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
+      return true
+    },
+    fetchEnclosureData() {
+      const parms = {
+        project__id: this.pid
+      }
+      getProjectEnclosure(parms).then(response => {
+        this.enclosureData = response.data
+        this.count = response.data.length
+      })
+    },
+    deleteEnclosure(id) {
+      deleteProjectEnclosure(id)
+      setTimeout(this.fetchEnclosureData(), 500)
     }
   }
 }

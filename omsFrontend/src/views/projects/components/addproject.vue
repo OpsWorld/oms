@@ -40,6 +40,22 @@
         <el-form-item label="是否公开" prop="is_public">
           <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
+        <el-form-item label="附件">
+          <el-upload
+            ref="upload"
+            :action="uploadurl"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :file-list="fileList">
+            <el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">
+              上传
+            </el-button>
+            <div slot="tip" class="el-upload__tip">
+              <p>上传文件不超过10m，<a style="color: red">最多只能上传5个文件</a></p>
+            </div>
+          </el-upload>
+          <hr class="heng"/>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
@@ -50,6 +66,7 @@
 </template>
 <script>
 import { postProject, getProjectType } from '@/api/project'
+import { postProjectEnclosure } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
@@ -100,7 +117,15 @@ export default {
       uploadurl: uploadurl,
       types: [],
       img_file: {},
-      sendnotice: false
+      sendnotice: false,
+      fileList: [],
+      count: 0,
+      enclosureData: [],
+      enclosureForm: {
+        project: '',
+        create_user: localStorage.getItem('username'),
+        file: ''
+      }
     }
   },
 
@@ -118,6 +143,19 @@ export default {
               this.$message({
                 type: 'success',
                 message: '恭喜你，新建成功'
+              })
+            }
+            for (var fileList of this.fileList) {
+              const formData = new FormData()
+              formData.append('username', this.enclosureForm.create_user)
+              formData.append('file', fileList)
+              formData.append('create_time', getConversionTime(fileList.uid))
+              formData.append('type', fileList.type)
+              formData.append('archive', this.route_path[1])
+              postUpload(formData).then(res => {
+                this.enclosureForm.file = res.data.filepath
+                this.enclosureForm.project = response.data.id
+                postProjectEnclosure(this.enclosureForm)
               })
             }
             if (this.sendnotice) {
@@ -165,6 +203,14 @@ export default {
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
+    },
+    handleSuccess(file, fileList) {
+      this.fileList.push(fileList.raw)
+      this.count += 1
+    },
+    handleRemove(file, fileList) {
+      this.fileList.remove(file)
+      this.count -= 1
     }
   }
 }
