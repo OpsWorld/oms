@@ -9,7 +9,7 @@
               <pan-thumb class="panThumb" :image="img">
                 <span style="color: #fa43ff">TB</span>
               </pan-thumb>
-              <mallki className='mallki-text' text='协同办公系统'></mallki>
+              <mallki className='mallki-text' text='OA协同办公系统'></mallki>
             </div>
           </div>
 
