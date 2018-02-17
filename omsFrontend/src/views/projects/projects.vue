@@ -43,7 +43,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='status' label='状态' sortable="custom">
+          <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag size="mini">
@@ -52,7 +52,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='task_complete' label='任务进度'>
+          <el-table-column prop='task_complete' label='任务进度' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.task_complete}}%
@@ -63,7 +63,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='test_complete' label='测试进度'>
+          <el-table-column prop='test_complete' label='测试进度' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.test_complete}}%
