@@ -117,6 +117,7 @@ module.exports = {
   // 项目
   projects: `${url}/api/projects/`,
   projectcomments: `${url}/api/projectcomments/`,
+  projectenclosures: `${url}/api/projectenclosures/`,
   projecttypes: `${url}/api/projecttypes/`,
   bugmanagers: `${url}/api/bugmanagers/`,
   testmanagers: `${url}/api/testmanagers/`

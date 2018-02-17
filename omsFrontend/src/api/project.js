@@ -68,7 +68,31 @@ export function putProjectType(id, data) {
 
 export function deleteProjectType(id) {
   return request({
-    url: apiURL.tickettypes + id + '/',
+    url: apiURL.projecttypes + id + '/',
+    method: 'delete'
+  })
+}
+
+// projectenclosures
+export function postProjectEnclosure(data) {
+  return request({
+    url: apiURL.projectenclosures,
+    method: 'post',
+    data
+  })
+}
+
+export function getProjectEnclosure(query) {
+  return request({
+    url: apiURL.projectenclosures,
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteProjectEnclosure(id) {
+  return request({
+    url: apiURL.projectenclosures + id + '/',
     method: 'delete'
   })
 }

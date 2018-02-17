@@ -36,31 +36,33 @@
         <el-card v-if="showenclosure" class="card-box">
           <el-tabs v-model="activeName" type="card">
             <el-tab-pane label="上传附件" name="upload">
-              <el-upload
-                ref="upload"
-                :action="uploadurl"
-                :show-file-list="false"
-                :disabled="count>10?true:false"
-                :before-upload="beforeAvatarUpload">
-                <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
-                           :disabled="count>10?true:false">
-                  上传
-                </el-button>
-                <div slot="tip" class="el-upload__tip">
-                  <p><a style="color: red">最多只能上传10个文件</a></p>
-                </div>
-              </el-upload>
+              <div>
+                <el-upload
+                  ref="upload"
+                  :action="uploadurl"
+                  :show-file-list="false"
+                  :disabled="count>10?true:false"
+                  :before-upload="beforeAvatarUpload">
+                  <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
+                             :disabled="count>10?true:false">
+                    上传
+                  </el-button>
+                  <div slot="tip" class="el-upload__tip">
+                    <p><a style="color: red">最多只能上传10个文件</a></p>
+                  </div>
+                </el-upload>
 
-              <div v-if='enclosureData.length>0' class="ticketenclosure">
-                <ul>
-                  <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                    <i class="fa fa-paperclip"></i>
-                    <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                    <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
-                      <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
-                    </el-tooltip>
-                  </li>
-                </ul>
+                <div v-if='enclosureData.length>0' class="ticketenclosure">
+                  <ul>
+                    <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                      <i class="fa fa-paperclip"></i>
+                      <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                      <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
+                        <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                      </el-tooltip>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </el-tab-pane>
             <el-tab-pane label="通道测试" name="testpay">
