@@ -29,16 +29,35 @@
                   {{Project_Status[ticketData.status]}}
                 </el-tag>
               </div>
-              <div class="appendInfo" v-if="ticketData.status!=4">
+              <div class="appendInfo">
+                任务开始时间：
+                <a v-if="ticketData.start_time" class="ticketinfo">{{ticketData.start_time}}</a>
+                <a v-else class="ticketinfo">未设置</a>
+                <a class="shu"></a>
+                计划结束时间：
+                <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
+                <a v-else class="ticketinfo">未设置</a>
+              </div>
+              <div class="appendInfo" v-if="ticketData.status!=7">
                 <span class="han">操作：</span>
-                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
+                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
+                <el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定
+                </el-button>
                 <div v-if="showinput" class="action">
-                  <el-select v-model="rowdata.status" filterable placeholder="请选择状态" @change="selectStatus=true">
-                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index" :disabled="index<=ticketData.status">
+                  <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
+                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index"
+                               :disabled="index<=ticketData.status">
                     </el-option>
                   </el-select>
-                  <el-button v-if="selectStatus" type="primary" plain @click="patchForm">确定</el-button>
+                  <el-date-picker
+                    v-if="rowdata.status === '2'&&!ticketData.end_time"
+                    v-model="rowdata.end_time"
+                    type="date"
+                    value-format="yyyy-MM-dd"
+                    placeholder="设置计划结束时间"
+                    @change="changeProjectendtime">
+                  </el-date-picker>
                 </div>
 
               </div>
@@ -211,6 +230,7 @@ import editTest from './edittest.vue'
 import showBug from './showbug.vue'
 import showTest from './showtest.vue'
 import { getUser } from 'api/user'
+import { getCreatedate } from '@/utils'
 
 export default {
   components: {
@@ -229,7 +249,9 @@ export default {
         content: ''
       },
       rowdata: {
-        status: ''
+        status: '',
+        start_time: '',
+        end_time: ''
       },
       toolbars: {
         preview: true, // 预览
@@ -300,7 +322,7 @@ export default {
       users: [],
       selectBug: {},
       selectTest: {},
-      selectStatus: false
+      errortime: false
     }
   },
 
@@ -317,6 +339,8 @@ export default {
       const query = null
       getProject(query, this.pid).then(response => {
         this.ticketData = response.data
+        this.rowdata.start_time = response.data.start_time
+        this.rowdata.end_time = response.data.end_time
       })
     },
     getDialogStatus(data) {
@@ -370,10 +394,19 @@ export default {
       })
     },
     patchForm() {
+      if (!this.rowdata.status) {
+        this.rowdata.status = this.ticketData.status
+      }
       patchProject(this.pid, this.rowdata).then(() => {
+        this.$message({
+          message: '恭喜你，编辑成功',
+          type: 'success'
+        })
         this.fetchData()
         this.showinput = false
-        this.selectStatus = false
+      }).catch(error => {
+        this.$message.error('计划结束时间必须大于开始时间！')
+        console.log(error)
       })
     },
     imgAdd(pos, file) {
@@ -419,6 +452,24 @@ export default {
     showAllBug() {
       this.bugquery.test_id = ''
       this.fetchBugData()
+    },
+    changeProjectstatus() {
+      if (this.rowdata.status === '2') {
+        this.rowdata.start_time = getCreatedate()
+      }
+    },
+    changeProjectendtime() {
+      const d1 = new Date(this.rowdata.start_time)
+      const d2 = new Date(this.rowdata.end_time)
+      // 获取他们的距离1970年以来的毫秒
+      const time1 = d1.getTime()
+      const time2 = d2.getTime()
+      if (time2 < time1) {
+        this.$message.error('计划结束时间必须大于开始时间！')
+        this.errortime = true
+      } else {
+        this.errortime = false
+      }
     }
   }
 }
@@ -453,8 +504,7 @@ export default {
   }
 
   .action {
-    display: inline;
-    margin-left: 20px;
+    margin: 5px;
   }
 
   .han {
