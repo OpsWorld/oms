@@ -11,15 +11,16 @@ ProjectEnclosureSerializer,
                                   TestManagerSerializer)
 from projects.filters import ProjectFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all().order_by('create_time')
+    queryset = Project.objects.all().order_by('status', '-create_time')
     serializer_class = ProjectSerializer
-    filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter)
+    filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
     filter_fields = ['pid', 'status']
     search_fields = ['name', 'content', 'type__name']
+    ordering_fields = ('level', 'task_complete', 'test_complete', 'create_time')
 
 
 class ProjectCommentViewSet(viewsets.ModelViewSet):
