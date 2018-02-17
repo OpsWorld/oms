@@ -199,13 +199,13 @@ export default {
       postUpload(formData).then(response => {
         this.enclosureForm.file = response.data.filepath
         postProjectEnclosure(this.enclosureForm)
-        setTimeout(this.fetchEnclosureData(), 500)
         if (response.statusText === 'Created') {
           this.$message({
             type: 'success',
             message: '恭喜你，上传成功'
           })
         }
+        this.fetchEnclosureData()
       }).catch(error => {
         this.$message.error('上传失败')
         this.$refs.upload.clearFiles()
@@ -224,7 +224,7 @@ export default {
     },
     deleteEnclosure(id) {
       deleteProjectEnclosure(id)
-      setTimeout(this.fetchEnclosureData(), 500)
+      this.fetchEnclosureData()
     }
   }
 }
