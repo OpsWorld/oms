@@ -51,12 +51,13 @@
                     </el-option>
                   </el-select>
                   <el-date-picker
-                    v-if="rowdata.status === '2'&&!ticketData.end_time"
+                    v-if="rowdata.status === '2' && !ticketData.end_time"
                     v-model="rowdata.end_time"
                     type="date"
                     value-format="yyyy-MM-dd"
                     placeholder="设置计划结束时间"
-                    @change="changeProjectendtime">
+                    @change="changeProjectendtime"
+                    disable="have_endtime">
                   </el-date-picker>
                 </div>
 
