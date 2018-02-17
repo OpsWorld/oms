@@ -30,11 +30,11 @@
                 </el-tag>
               </div>
               <div class="appendInfo">
-                任务开始时间：
+                <span class="han">任务开始时间：</span>
                 <a v-if="ticketData.start_time" class="ticketinfo">{{ticketData.start_time}}</a>
                 <a v-else class="ticketinfo">未设置</a>
                 <a class="shu"></a>
-                计划结束时间：
+                <span class="han">计划结束时间：</span>
                 <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
                 <a v-else class="ticketinfo">未设置</a>
               </div>
@@ -46,8 +46,10 @@
                 </el-button>
                 <div v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
-                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index"
-                               :disabled="index<=ticketData.status">
+                    <!--<el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index"-->
+                    <!--:disabled="index<=ticketData.status">-->
+                    <!--</el-option>-->
+                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index">
                     </el-option>
                   </el-select>
                   <el-date-picker
