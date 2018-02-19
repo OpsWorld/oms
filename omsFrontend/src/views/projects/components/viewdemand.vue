@@ -14,14 +14,10 @@
                 <a class="ticketinfo create_user"><span class="han">
                               <a class="shu"></a>
                                 发起人：</span>{{ticketData.create_user}}</a>
-                <a class="ticketinfo action_user">
-                  <span class="han"><a class="shu"></a>指派人：</span>
-                  <el-tag size="mini" v-for="item in ticketData.action_user" :key="item.id" style="margin-right: 3px">{{item}}
-                  </el-tag>
-                </a>
                 <a class="shu"></a>
                 <span class="han">类型：</span>
-                <a>{{ticketData.type}}</a>
+                <a v-if="ticketData.type">{{ticketData.type}}</a>
+                <a v-else class="ticketinfo">未设置</a>
                 <a class="shu"></a>
                 <span class="han">当前状态：</span>
                 <el-tag>
