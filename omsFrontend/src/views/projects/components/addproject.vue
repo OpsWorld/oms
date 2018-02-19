@@ -65,8 +65,7 @@
   </div>
 </template>
 <script>
-import { postProject, getProjectType } from '@/api/project'
-import { postProjectEnclosure } from '@/api/project'
+import { postProject, getProjectType, postProjectEnclosure } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
@@ -89,8 +88,7 @@ export default {
         follow_user: '',
         from_user: '',
         pid: '',
-        is_public: true,
-        desc: ''
+        is_public: true
       },
       rules: {
         name: [
@@ -131,7 +129,8 @@ export default {
 
   created() {
     this.getProjectUsers()
-    this.getTicketType()
+    this.getUsers()
+    this.getTypes()
   },
   methods: {
     postForm(formName) {
@@ -178,7 +177,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getProjectUsers() {
+    getUsers() {
       const query = {
         groups__name: 'ITDept'
       }
@@ -187,7 +186,7 @@ export default {
       })
     },
 
-    getTicketType() {
+    getTypes() {
       getProjectType().then(response => {
         this.types = response.data
       })

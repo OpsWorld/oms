@@ -2,8 +2,8 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="ruleForm.title" placeholder="请输入标题"></el-input>
+        <el-form-item label="标题" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
           <!--<el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">-->
@@ -72,18 +72,18 @@ export default {
     return {
       route_path: this.$route.path.split('/'),
       ruleForm: {
-        title: '',
+        name: '',
         type: '',
         content: '',
         create_user: localStorage.getItem('username'),
         level: 2,
-        action_user: 'itsupport',
+        action_user: 'admin',
         edit_user: '',
         create_group: [],
-        ticketid: ''
+        pid: ''
       },
       rules: {
-        title: [
+        name: [
           { required: true, message: '请输入工单标题', trigger: 'blur' }
         ],
         content: [
@@ -137,7 +137,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.ticketid = getConversionTime()
+          this.ruleForm.pid = getConversionTime()
           this.ruleForm.create_group = this.groups
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
@@ -161,8 +161,8 @@ export default {
             }
             const messageForm = {
               action_user: this.ruleForm.action_user,
-              title: '【新工单】' + this.ruleForm.title,
-              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.ticketid}`
+              title: '【新工单】' + this.ruleForm.name,
+              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.pid}`
             }
             postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')

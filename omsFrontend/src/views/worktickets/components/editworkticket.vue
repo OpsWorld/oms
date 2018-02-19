@@ -4,7 +4,7 @@
       <div class="workticket">
         <el-card>
           <div slot="header" class="clearfix">
-            <a class="title">{{ticketData.title}}</a>
+            <a class="title">{{ticketData.name}}</a>
             <hr class="heng"/>
 
             <div class="appendInfo">
@@ -156,7 +156,7 @@ export default {
   data() {
     return {
       route_path: this.$route.path.split('/'),
-      ticketid: this.$route.params.ticketid,
+      pid: this.$route.params.pid,
       ticket_id: '',
       ticketData: {},
       commentData: {},
@@ -194,7 +194,7 @@ export default {
         bottom: '50px',
         width: '40px',
         height: '40px',
-        'border-radius': '4px',
+        'border-radius': '50px',
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
@@ -226,7 +226,7 @@ export default {
   methods: {
     fetchData() {
       const parms = {
-        ticketid: this.ticketid
+        pid: this.pid
       }
       getWorkticket(parms).then(response => {
         this.ticketData = response.data[0]
@@ -237,7 +237,7 @@ export default {
     },
     CommentData() {
       const parms = {
-        ticket__ticketid: this.ticketid
+        ticket__pid: this.pid
       }
       getTicketcomment(parms).then(response => {
         this.commentData = response.data
@@ -246,7 +246,7 @@ export default {
     },
     EnclosureData() {
       const parms = {
-        ticket__ticketid: this.ticketid
+        ticket__pid: this.pid
       }
       getTicketenclosure(parms).then(response => {
         this.enclosureData = response.data
@@ -269,7 +269,7 @@ export default {
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
           const messageForm = {
             action_user: this.rowdata.action_user,
-            title: '【工单更换指派人】' + this.ticketData.title,
+            title: '【工单更换指派人】' + this.ticketData.name,
             message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.rowdata.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
@@ -279,7 +279,7 @@ export default {
 
           const messageForm = {
             action_user: this.ticketData.create_user,
-            title: '【工单处理完成】' + this.ticketData.title,
+            title: '【工单处理完成】' + this.ticketData.name,
             message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
@@ -288,7 +288,7 @@ export default {
           if (this.sendnotice) {
             const messageForm = {
               action_user: this.ticketData.create_user,
-              title: '【工单有新回复】' + this.ticketData.title,
+              title: '【工单有新回复】' + this.ticketData.name,
               message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
             }
             postSendmessage(messageForm)

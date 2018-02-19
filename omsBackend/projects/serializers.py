@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager
+from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, DemandManager, DemandEnclosure
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -20,7 +20,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time', 'start_time',
-            'end_time', 'is_public', 'desc')
+            'end_time', 'is_public')
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):
@@ -68,3 +68,22 @@ class TestManagerSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'project', 'name', 'expect_result', 'actual_result', 'status', 'test_user',
             'action_user', 'test_time')
+
+
+class DemandManagerSerializer(serializers.ModelSerializer):
+    type = serializers.SlugRelatedField(queryset=ProjectType.objects.all(), slug_field='name', allow_null=True)
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
+    class Meta:
+        model = DemandManager
+        fields = (
+            'url', 'id', 'pid', 'name', 'type', 'content', 'create_user', 'status', 'create_time', 'end_time')
+
+
+class DemandEnclosureSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
+
+    class Meta:
+        model = DemandEnclosure
+        fields = ('url', 'id', 'project', 'file', 'create_user', 'create_time')

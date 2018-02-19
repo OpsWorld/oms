@@ -128,8 +128,8 @@ export default {
 
   created() {
     this.fetchData()
-    this.getProjectUsers()
-    this.getTicketType()
+    this.getUsers()
+    this.getTypes()
     this.fetchEnclosureData()
   },
   methods: {
@@ -163,7 +163,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getProjectUsers() {
+    getUsers() {
       const query = {
         groups__name: 'ITDept'
       }
@@ -172,7 +172,7 @@ export default {
       })
     },
 
-    getTicketType() {
+    getTypes() {
       getProjectType().then(response => {
         this.types = response.data
       })
@@ -231,8 +231,4 @@ export default {
 </script>
 
 <style lang='scss'>
-  .addticket {
-    margin: 50px;
-    width: 80%;
-  }
 </style>

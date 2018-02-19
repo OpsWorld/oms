@@ -200,3 +200,67 @@ export function deleteTestManager(id) {
     method: 'delete'
   })
 }
+
+// demandmanagers
+export function postDemandManager(data) {
+  return request({
+    url: apiURL.demandmanagers,
+    method: 'post',
+    data
+  })
+}
+
+export function getDemandManager(query) {
+  return request({
+    url: apiURL.demandmanagers,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putDemandManager(id, data) {
+  return request({
+    url: apiURL.demandmanagers + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function patchDemandManager(id, data) {
+  return request({
+    url: apiURL.demandmanagers + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
+export function deleteDemandManager(id) {
+  return request({
+    url: apiURL.demandmanagers + id + '/',
+    method: 'delete'
+  })
+}
+
+// demandenclosures
+export function postDemandEnclosure(data) {
+  return request({
+    url: apiURL.demandenclosures,
+    method: 'post',
+    data
+  })
+}
+
+export function getDemandEnclosure(query) {
+  return request({
+    url: apiURL.demandenclosures,
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteDemandEnclosure(id) {
+  return request({
+    url: apiURL.demandenclosures + id + '/',
+    method: 'delete'
+  })
+}

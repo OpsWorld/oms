@@ -14,14 +14,14 @@ Level = {
 }
 
 Project_Status = {
-    0: u'未指派',
-    1: u'已指派',
-    2: u'处理中',
-    3: u'待测试',
-    4: u'测试中',
-    5: u'已测试',
-    6: u'待上线',
-    7: u'已上线',
+    0: '未指派',
+    1: '已指派',
+    2: '处理中',
+    3: '待测试',
+    4: '测试中',
+    5: '已测试',
+    6: '待上线',
+    7: '已上线',
 }
 
 admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
@@ -48,7 +48,6 @@ class Project(models.Model):
     start_time = models.DateField(null=True,blank=True, verbose_name=u'开始时间')
     end_time = models.DateField(null=True,blank=True, verbose_name=u'计划完成时间')
     is_public = models.BooleanField(default=True, verbose_name=u'是否公开')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
@@ -91,20 +90,55 @@ class ProjectType(models.Model):
         verbose_name = u'项目类型'
         verbose_name_plural = u'项目类型'
 
+TicketStatus = {
+    0: '未审核',
+    1: '已通过',
+    2: '未通过'
+}
+
+
+class DemandManager(models.Model):
+    pid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
+    name = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
+    type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
+    content = models.TextField(verbose_name=u'工单内容')
+    create_user = models.ForeignKey(User, related_name='demand_create_user', verbose_name=u'创建者')
+    status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'工单状态')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
+    end_time = models.DateField(null=True, blank=True, verbose_name=u'计划完成时间')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'需求'
+        verbose_name_plural = u'需求'
+
+
+class DemandEnclosure(models.Model):
+    project = models.ForeignKey(DemandManager, verbose_name=u'项目')
+    file = models.ForeignKey(Upload, verbose_name=u'附件')
+    create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
+
+    class Meta:
+        verbose_name = u'附件'
+        verbose_name_plural = u'附件'
+
 
 Bug_Nice = {
-    0: u'低',
-    1: u'中',
-    2: u'高'
+    0: '低',
+    1: '中',
+    2: '高'
 }
 
 Bug_Status = {
-    0: u'新建',
-    1: u'打开',
-    2: u'关闭',
-    3: u'已修复',
-    4: u'暂不处理',
-    5: u'重新打开'
+    0: '新建',
+    1: '打开',
+    2: '关闭',
+    3: '已修复',
+    4: '暂不处理',
+    5: '重新打开'
 }
 
 
@@ -130,10 +164,10 @@ class BugManager(models.Model):
 
 
 Test_Status = {
-    0: u'Passed',
-    1: u'Failed',
-    2: u'Block',
-    3: u'N/A'
+    0: 'Passed',
+    1: 'Failed',
+    2: 'Block',
+    3: 'N/A'
 }
 
 

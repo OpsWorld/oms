@@ -66,7 +66,7 @@ export const asyncRouterMap = [
       { path: 'workticket', component: _import('worktickets/workticket'), name: '工单列表' },
       { path: 'tickettype', component: _import('worktickets/tickettype'), name: '工单类型' },
       { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: '添加工单' },
-      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: '编辑工单' }
+      { path: 'editworkticket/:pid', hidden: true, component: _import('worktickets/components/editworkticket'), name: '编辑工单' }
     ]
   },
   {
@@ -89,6 +89,10 @@ export const asyncRouterMap = [
     icon: 'bug',
     redirect: 'projects',
     children: [
+      { path: 'demands', component: _import('projects/demands'), name: '需求列表' },
+      { path: 'adddemand', hidden: true, component: _import('projects/components/adddemand'), name: '添加需求' },
+      { path: 'editdemand/:id', hidden: true, component: _import('projects/components/editdemand'), name: '编辑需求' },
+      { path: 'viewdemand/:id', hidden: true, component: _import('projects/components/viewdemand'), name: '查看需求' },
       { path: 'projects', component: _import('projects/projects'), name: '任务列表' },
       { path: 'projecttypes', component: _import('projects/projecttypes'), name: '任务类型' },
       { path: 'addproject', hidden: true, component: _import('projects/components/addproject'), name: '添加任务' },
