@@ -120,5 +120,7 @@ module.exports = {
   projectenclosures: `${url}/api/projectenclosures/`,
   projecttypes: `${url}/api/projecttypes/`,
   bugmanagers: `${url}/api/bugmanagers/`,
-  testmanagers: `${url}/api/testmanagers/`
+  testmanagers: `${url}/api/testmanagers/`,
+  demandmanagers: `${url}/api/demandmanagers/`,
+  demandenclosures: `${url}/api/demandenclosures/`
 }

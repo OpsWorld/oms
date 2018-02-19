@@ -5,19 +5,6 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="指派人" prop="action_user">
-          <el-select v-model="ruleForm.action_user" filterable multiple placeholder="请选择指派人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="抄送人" prop="follow_user">
-          <el-select v-model="ruleForm.follow_user" filterable multiple placeholder="请选择跟踪人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="需求人" prop="from_user">
-          <el-input v-model="ruleForm.from_user" placeholder="请输入需求人"></el-input>
-        </el-form-item>
         <el-form-item label="类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择类型">
             <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
@@ -27,18 +14,6 @@
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
-        </el-form-item>
-        <el-form-item label="等级" prop="level">
-          <el-rate
-            v-model="ruleForm.level"
-            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-            show-text
-            :texts="['E', 'D', 'C', 'B', 'A']">
-          </el-rate>
-          <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
-        </el-form-item>
-        <el-form-item label="是否公开" prop="is_public">
-          <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
         <el-form-item label="附件">
           <el-upload
@@ -65,9 +40,8 @@
   </div>
 </template>
 <script>
-import { postProject, getProjectType, postProjectEnclosure } from '@/api/project'
+import { postDemandManager, getProjectType, postDemandEnclosure } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
-import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
 
@@ -82,13 +56,7 @@ export default {
         type: '',
         content: '',
         create_user: localStorage.getItem('username'),
-        level: 1,
-        complete: 0,
-        action_user: '',
-        follow_user: '',
-        from_user: '',
         pid: '',
-        is_public: true,
         desc: ''
       },
       rules: {
@@ -129,8 +97,6 @@ export default {
   },
 
   created() {
-    this.getProjectUsers()
-    this.getUsers()
     this.getTypes()
   },
   methods: {
@@ -138,7 +104,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.ruleForm.pid = getConversionTime()
-          postProject(this.ruleForm).then(response => {
+          postDemandManager(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
@@ -155,7 +121,7 @@ export default {
               postUpload(formData).then(res => {
                 this.enclosureForm.file = res.data.filepath
                 this.enclosureForm.project = response.data.id
-                postProjectEnclosure(this.enclosureForm)
+                postDemandEnclosure(this.enclosureForm)
               })
             }
             if (this.sendnotice) {
@@ -178,15 +144,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getUsers() {
-      const query = {
-        groups__name: 'ITDept'
-      }
-      getUser(query).then(response => {
-        this.users = response.data
-      })
-    },
-
     getTypes() {
       getProjectType().then(response => {
         this.types = response.data

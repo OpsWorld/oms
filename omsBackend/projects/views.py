@@ -2,14 +2,16 @@
 # author: kiven
 
 from rest_framework import viewsets
-from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, Demand
+from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, \
+    DemandManager, DemandEnclosure
 from projects.serializers import (ProjectSerializer,
                                   ProjectCommentSerializer,
                                   ProjectEnclosureSerializer,
                                   ProjectTypeSerializer,
                                   BugManagerSerializer,
                                   TestManagerSerializer,
-                                  DemandSerializer)
+                                  DemandManagerSerializer,
+                                  DemandEnclosureSerializer)
 from projects.filters import ProjectFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -53,9 +55,15 @@ class TestManagerViewSet(viewsets.ModelViewSet):
     filter_fields = ['id', 'project__id']
 
 
-class DemandViewSet(viewsets.ModelViewSet):
-    queryset = Demand.objects.all().order_by('-create_time')
-    serializer_class = DemandSerializer
+class DemandManagerViewSet(viewsets.ModelViewSet):
+    queryset = DemandManager.objects.all().order_by('-create_time')
+    serializer_class = DemandManagerSerializer
     search_fields = ['title', 'content']
     ordering_fields = ['ticket_status', 'create_time']
     filter_fields = ['ticket_status', 'ticketid', 'create_user__username']
+
+
+class DemandEnclosureViewSet(viewsets.ModelViewSet):
+    queryset = DemandEnclosure.objects.all()
+    serializer_class = DemandEnclosureSerializer
+    filter_fields = ['project__id']

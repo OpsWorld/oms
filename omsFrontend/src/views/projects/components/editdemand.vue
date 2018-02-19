@@ -5,19 +5,6 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="指派人" prop="action_user">
-          <el-select v-model="ruleForm.action_user" filterable multiple placeholder="请选择指派人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="抄送人" prop="follow_user">
-          <el-select v-model="ruleForm.follow_user" filterable multiple placeholder="请选择跟踪人">
-            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="需求人" prop="from_user">
-          <el-input v-model="ruleForm.from_user" placeholder="请输入需求人"></el-input>
-        </el-form-item>
         <el-form-item label="类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择类型">
             <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
@@ -28,57 +15,34 @@
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
         </el-form-item>
-        <el-form-item label="等级" prop="level">
-          <el-rate
-            v-model="ruleForm.level"
-            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-            show-text
-            :texts="['E', 'D', 'C', 'B', 'A']">
-          </el-rate>
-          <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
-        </el-form-item>
-        <el-form-item label="是否公开" prop="is_public">
-          <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
-        </el-form-item>
         <el-form-item label="附件">
           <el-upload
             ref="upload"
             :action="uploadurl"
-            :show-file-list="false"
-            :disabled="count>4"
-            :before-upload="beforeAvatarUpload">
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :file-list="fileList">
             <el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">
               上传
             </el-button>
             <div slot="tip" class="el-upload__tip">
-              <p><a style="color: red">最多只能上传5个文件</a></p>
+              <p>上传文件不超过10m，<a style="color: red">最多只能上传5个文件</a></p>
             </div>
           </el-upload>
           <hr class="heng"/>
-          <div v-if='enclosureData.length>0' class="ticketenclosure">
-            <ul>
-              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                <i class="fa fa-paperclip"></i>
-                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
-                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
-                </el-tooltip>
-              </li>
-            </ul>
-          </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
+          <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
         </el-form-item>
       </el-form>
     </el-card>
   </div>
 </template>
 <script>
-import { getProject, putProject, getProjectType } from '@/api/project'
-import { getProjectEnclosure, postProjectEnclosure, deleteProjectEnclosure } from '@/api/project'
+import { getDemandManager, getProjectType, putDemandManager } from '@/api/project'
+import { postDemandEnclosure, getDemandEnclosure, deleteDemandEnclosure } from '@/api/project'
 import { postUpload } from 'api/tool'
-import { getUser } from 'api/user'
 import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
 
@@ -128,14 +92,13 @@ export default {
 
   created() {
     this.fetchData()
-    this.getUsers()
     this.getTypes()
     this.fetchEnclosureData()
   },
   methods: {
     fetchData() {
       const query = null
-      getProject(query, this.pid).then(response => {
+      getDemandManager(query, this.pid).then(response => {
         this.ruleForm = response.data
         this.enclosureForm.project = this.ruleForm.id
         this.count = response.data.length
@@ -144,7 +107,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          putProject(this.ruleForm.id, this.ruleForm).then(response => {
+          putDemandManager(this.ruleForm.id, this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
@@ -163,15 +126,6 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getUsers() {
-      const query = {
-        groups__name: 'ITDept'
-      }
-      getUser(query).then(response => {
-        this.users = response.data
-      })
-    },
-
     getTypes() {
       getProjectType().then(response => {
         this.types = response.data
@@ -198,7 +152,7 @@ export default {
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         this.enclosureForm.file = response.data.filepath
-        postProjectEnclosure(this.enclosureForm)
+        postDemandEnclosure(this.enclosureForm)
         if (response.statusText === 'Created') {
           this.$message({
             type: 'success',
@@ -217,13 +171,13 @@ export default {
       const parms = {
         project__id: this.pid
       }
-      getProjectEnclosure(parms).then(response => {
+      getDemandEnclosure(parms).then(response => {
         this.enclosureData = response.data
         this.count = response.data.length
       })
     },
     deleteEnclosure(id) {
-      deleteProjectEnclosure(id)
+      deleteDemandEnclosure(id)
       this.fetchEnclosureData()
     }
   }

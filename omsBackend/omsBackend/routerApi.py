@@ -70,7 +70,7 @@ from records.views import RecordViewSet
 router.register(r'records', RecordViewSet)
 
 from projects.views import ProjectViewSet, ProjectCommentViewSet, ProjectEnclosureViewSet, ProjectTypeViewSet, \
-    BugManagerViewSet, TestManagerViewSet, DemandViewSet
+    BugManagerViewSet, TestManagerViewSet, DemandManagerViewSet, DemandEnclosureViewSet
 
 router.register(r'projects', ProjectViewSet)
 router.register(r'projectcomments', ProjectCommentViewSet)
@@ -78,4 +78,5 @@ router.register(r'projectenclosures', ProjectEnclosureViewSet)
 router.register(r'projecttypes', ProjectTypeViewSet)
 router.register(r'bugmanagers', BugManagerViewSet)
 router.register(r'testmanagers', TestManagerViewSet)
-router.register(r'demands', DemandViewSet)
+router.register(r'demandmanagers', DemandManagerViewSet)
+router.register(r'demandenclosures', DemandEnclosureViewSet)

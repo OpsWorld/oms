@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, Demand
+from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, DemandManager, DemandEnclosure
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -70,13 +70,21 @@ class TestManagerSerializer(serializers.ModelSerializer):
             'action_user', 'test_time')
 
 
-class DemandSerializer(serializers.ModelSerializer):
+class DemandManagerSerializer(serializers.ModelSerializer):
     type = serializers.SlugRelatedField(queryset=ProjectType.objects.all(), slug_field='name', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
-    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
     class Meta:
-        model = Demand
+        model = DemandManager
         fields = (
-            'url', 'id', 'ticketid', 'title', 'type', 'content', 'create_user', 'action_user', 'ticket_status',
-            'create_time', 'end_time')
+            'url', 'id', 'ticketid', 'title', 'type', 'content', 'create_user', 'ticket_status',
+            'create_time', 'end_time', 'desc')
+
+
+class DemandEnclosureSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
+
+    class Meta:
+        model = ProjectEnclosure
+        fields = ('url', 'id', 'project', 'file', 'create_user', 'create_time')

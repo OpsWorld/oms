@@ -4,12 +4,12 @@
       <div class="head-lavel">
         <div class="table-button">
           <router-link :to="'addproject'">
-            <el-button type="primary" icon="el-icon-plus">新建任务</el-button>
+            <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in [0,1,2,3,4,5,6,7]" :key="item" @click="changeStatus(item)">
-              {{Project_Status[item]}}
+            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index" @click="changeStatus(index)">
+              {{Project_Status[index]}}
             </el-button>
           </el-button-group>
         </div>
@@ -127,7 +127,7 @@
             :current-page.sync="currentPage"
             :page-sizes="pagesize"
             :page-size="listQuery.limit"
-            layout="total, sizes, prev, pager, next, jumper"
+            :layout="pageformat"
             :total="tabletotal">
           </el-pagination>
         </div>
@@ -169,7 +169,7 @@
 
 <script>
 import { getProject, patchProject, deleteProject } from '@/api/project'
-import { LIMIT, pagesize } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
   components: {},
@@ -179,6 +179,7 @@ export default {
       tabletotal: 0,
       currentPage: 1,
       pagesize: pagesize,
+      pageformat: pageformat,
       Project_Status: {
         0: '未指派',
         1: '已指派',

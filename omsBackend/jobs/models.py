@@ -6,9 +6,9 @@ from hosts.models import Host
 from users.models import User
 
 DEPLOY_STATUS = {
-    "deploy": u"发布中",
-    "success": u"发布成功",
-    "failed": u"发布失败"
+    "deploy": "发布中",
+    "success": "发布成功",
+    "failed": "发布失败"
 }
 
 admin_groups = ['admin', 'OMS_Super_Admin']

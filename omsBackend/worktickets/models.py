@@ -15,9 +15,9 @@ TicketLevel = {
 }
 
 TicketStatus = {
-    0: u'未接收',
-    1: u'正在处理',
-    2: u'已解决',
+    0: '未接收',
+    1: '正在处理',
+    2: '已解决',
 }
 
 admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
