@@ -85,5 +85,5 @@ class DemandEnclosureSerializer(serializers.ModelSerializer):
     file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
 
     class Meta:
-        model = ProjectEnclosure
+        model = DemandEnclosure
         fields = ('url', 'id', 'project', 'file', 'create_user', 'create_time')

@@ -108,7 +108,7 @@ class DemandManager(models.Model):
     end_time = models.DateField(null=True, blank=True, verbose_name=u'计划完成时间')
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = u'需求'

@@ -22,13 +22,7 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
-          <el-table-column prop='pid' label='编号'>
-            <template slot-scope="scope">
-              <router-link :to="'viewproject/' + scope.row.id">
-                <a style="color: #257cff">{{scope.row.pid}}</a>
-              </router-link>
-            </template>
-          </el-table-column>
+          <el-table-column prop='pid' label='编号'></el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='status' label='状态'>
