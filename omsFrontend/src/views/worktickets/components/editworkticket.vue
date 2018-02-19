@@ -32,7 +32,7 @@
               <span class="han">工单操作：</span>
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-              <el-button v-if="role==='super'" type="primary" size="small" @click="copyWorkticket">乾坤大挪移</el-button>
+              <!--<el-button v-if="role==='super'" type="primary" size="small" @click="copyWorkticket">乾坤大挪移</el-button>-->
               <div v-if="showinput" class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
