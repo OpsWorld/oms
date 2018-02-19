@@ -8,8 +8,7 @@
 
       <el-dropdown class="avatar-container right-menu-item">
         <div class="avatar-wrapper">
-          <el-button type="success" round size="mini">{{username}}</el-button>
-          <i class="el-icon-caret-bottom"></i>
+          <el-button type="success" round size="mini">{{username}} <i class="el-icon-arrow-down"></i></el-button>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">

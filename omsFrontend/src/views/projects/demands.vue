@@ -30,7 +30,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='type' label='类型' width="100"></el-table-column>
+          <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
@@ -40,7 +40,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='需求人' width="100"></el-table-column>
+          <el-table-column prop='create_user' label='需求人'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -48,13 +48,15 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='end_time' label='计划完成时间' sortable="custom"></el-table-column>
+          <el-table-column prop='end_time' label='计划完成时间'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <router-link :to="'editproject/' + scope.row.id">
+              <router-link :to="'editdemand/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
-              <el-button type="danger" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
+              <router-link :to="'viewdemand/' + scope.row.id">
+                <el-button type="primary" size="small">查看</el-button>
+              </router-link>
             </template>
           </el-table-column>
         </el-table>
@@ -80,7 +82,7 @@
 </template>
 
 <script>
-import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/project'
+import { getDemandManager, patchDemandManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -122,18 +124,6 @@ export default {
       getDemandManager(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
-      })
-    },
-    deleteGroup(id) {
-      deleteDemandManager(id).then(response => {
-        this.$message({
-          message: '恭喜你，删除成功',
-          type: 'success'
-        })
-        this.fetchData()
-      }).catch(error => {
-        this.$message.error('删除失败')
-        console.log(error)
       })
     },
     searchClick() {

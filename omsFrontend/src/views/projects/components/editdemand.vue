@@ -19,17 +19,28 @@
           <el-upload
             ref="upload"
             :action="uploadurl"
-            :on-success="handleSuccess"
-            :on-remove="handleRemove"
-            :file-list="fileList">
+            :show-file-list="false"
+            :disabled="count>4"
+            :before-upload="beforeAvatarUpload">
             <el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">
               上传
             </el-button>
             <div slot="tip" class="el-upload__tip">
-              <p>上传文件不超过10m，<a style="color: red">最多只能上传5个文件</a></p>
+              <p><a style="color: red">最多只能上传5个文件</a></p>
             </div>
           </el-upload>
           <hr class="heng"/>
+          <div v-if='enclosureData.length>0' class="ticketenclosure">
+            <ul>
+              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                <i class="fa fa-paperclip"></i>
+                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
+                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
+                </el-tooltip>
+              </li>
+            </ul>
+          </div>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
@@ -99,7 +110,7 @@ export default {
     fetchData() {
       const query = null
       getDemandManager(query, this.pid).then(response => {
-        this.ruleForm = response.data
+        this.ruleForm = response.data[0]
         this.enclosureForm.project = this.ruleForm.id
         this.count = response.data.length
       })
@@ -114,7 +125,7 @@ export default {
                 message: '恭喜你，更新成功'
               })
             }
-            this.$router.push('/projects/projects')
+            this.$router.push('/projects/demands')
           })
         } else {
           console.log('error submit!!')

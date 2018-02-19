@@ -48,7 +48,6 @@ class Project(models.Model):
     start_time = models.DateField(null=True,blank=True, verbose_name=u'开始时间')
     end_time = models.DateField(null=True,blank=True, verbose_name=u'计划完成时间')
     is_public = models.BooleanField(default=True, verbose_name=u'是否公开')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.name
@@ -99,15 +98,14 @@ TicketStatus = {
 
 
 class DemandManager(models.Model):
-    ticketid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
-    title = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
+    pid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
+    name = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')
     create_user = models.ForeignKey(User, related_name='demand_create_user', verbose_name=u'创建者')
-    ticket_status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'工单状态')
+    status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'工单状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'工单创建时间')
     end_time = models.DateField(null=True, blank=True, verbose_name=u'计划完成时间')
-    desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
     def __str__(self):
         return self.title

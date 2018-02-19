@@ -88,8 +88,7 @@ export default {
         follow_user: '',
         from_user: '',
         pid: '',
-        is_public: true,
-        desc: ''
+        is_public: true
       },
       rules: {
         name: [

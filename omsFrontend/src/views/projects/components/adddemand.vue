@@ -56,8 +56,7 @@ export default {
         type: '',
         content: '',
         create_user: localStorage.getItem('username'),
-        pid: '',
-        desc: ''
+        pid: ''
       },
       rules: {
         name: [
@@ -132,7 +131,7 @@ export default {
               }
               postSendmessage(messageForm)
             }
-            this.$router.push('/projects/projects')
+            this.$router.push('/projects/demands')
           })
         } else {
           console.log('error submit!!')

@@ -92,6 +92,7 @@ export const asyncRouterMap = [
       { path: 'demands', component: _import('projects/demands'), name: '需求列表' },
       { path: 'adddemand', hidden: true, component: _import('projects/components/adddemand'), name: '添加需求' },
       { path: 'editdemand/:id', hidden: true, component: _import('projects/components/editdemand'), name: '编辑需求' },
+      { path: 'viewdemand/:id', hidden: true, component: _import('projects/components/viewdemand'), name: '查看任务' },
       { path: 'projects', component: _import('projects/projects'), name: '任务列表' },
       { path: 'projecttypes', component: _import('projects/projecttypes'), name: '任务类型' },
       { path: 'addproject', hidden: true, component: _import('projects/components/addproject'), name: '添加任务' },

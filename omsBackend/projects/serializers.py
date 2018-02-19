@@ -20,7 +20,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time', 'start_time',
-            'end_time', 'is_public', 'desc')
+            'end_time', 'is_public')
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):
@@ -77,8 +77,7 @@ class DemandManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = DemandManager
         fields = (
-            'url', 'id', 'ticketid', 'title', 'type', 'content', 'create_user', 'ticket_status',
-            'create_time', 'end_time', 'desc')
+            'url', 'id', 'pid', 'name', 'type', 'content', 'create_user', 'status', 'create_time', 'end_time')
 
 
 class DemandEnclosureSerializer(serializers.ModelSerializer):
