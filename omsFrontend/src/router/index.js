@@ -66,7 +66,7 @@ export const asyncRouterMap = [
       { path: 'workticket', component: _import('worktickets/workticket'), name: '工单列表' },
       { path: 'tickettype', component: _import('worktickets/tickettype'), name: '工单类型' },
       { path: 'addworkticket', hidden: true, component: _import('worktickets/components/addworkticket'), name: '添加工单' },
-      { path: 'editworkticket/:ticketid', hidden: true, component: _import('worktickets/components/editworkticket'), name: '编辑工单' }
+      { path: 'editworkticket/:pid', hidden: true, component: _import('worktickets/components/editworkticket'), name: '编辑工单' }
     ]
   },
   {

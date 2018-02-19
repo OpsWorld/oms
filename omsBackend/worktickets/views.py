@@ -17,22 +17,22 @@ class WorkTicketViewSet(viewsets.ModelViewSet):
     queryset = WorkTicket.objects.all().order_by('ticket_status', '-create_time', '-update_time')
     serializer_class = WorkTicketSerializer
     filter_backends = (WorkTicketFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
-    search_fields = ('title', 'content', 'type__name')
+    search_fields = ('name', 'content', 'type__name')
     ordering_fields = ('level', 'ticket_status', 'create_time', 'update_time')
-    filter_fields = ('ticket_status', 'ticketid', 'create_user__username', 'action_user__username')
+    filter_fields = ('ticket_status', 'pid', 'create_user__username', 'action_user__username')
     permission_classes = (DRYPermissions,)
 
 
 class TicketCommentViewSet(viewsets.ModelViewSet):
     queryset = TicketComment.objects.all().order_by('create_time')
     serializer_class = TicketCommentSerializer
-    filter_fields = ('ticket__ticketid',)
+    filter_fields = ('ticket__pid',)
 
 
 class TicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = TicketEnclosure.objects.all()
     serializer_class = TicketEnclosureSerializer
-    filter_fields = ('ticket__ticketid',)
+    filter_fields = ('ticket__pid',)
 
 
 class TicketTypeViewSet(viewsets.ModelViewSet):

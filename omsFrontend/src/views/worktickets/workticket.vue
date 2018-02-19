@@ -27,7 +27,7 @@
           <el-input style="width: 110px;" class="filter-item" placeholder="工单发起人" @keyup.enter.native="searchClick"
                     v-model="listQuery.create_user__username"></el-input>
           <el-input style="width: 160px;" class="filter-item" placeholder="工单编号" @keyup.enter.native="searchClick"
-                    v-model="listQuery.ticketid"></el-input>
+                    v-model="listQuery.pid"></el-input>
           <el-input style="width: 180px;" class="filter-item" placeholder="工单标题、内容或类型" @keyup.enter.native="searchClick"
                     v-model="listQuery.search"></el-input>
           <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
@@ -37,14 +37,14 @@
         <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange"
                   @sort-change="handleSortChange">
           <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
-          <el-table-column prop='ticketid' label='工单编号'>
+          <el-table-column prop='pid' label='工单编号'>
             <template slot-scope="scope">
-              <router-link :to="'editworkticket/' + scope.row.ticketid">
-                <a style="color: #257cff">{{scope.row.ticketid}}</a>
+              <router-link :to="'editworkticket/' + scope.row.pid">
+                <a style="color: #257cff">{{scope.row.pid}}</a>
               </router-link>
             </template>
           </el-table-column>
-          <el-table-column prop='title' label='标题'></el-table-column>
+          <el-table-column prop='name' label='标题'></el-table-column>
           <el-table-column prop='type' label='工单类型'></el-table-column>
           <el-table-column prop='level' label='工单等级' sortable="custom">
             <template slot-scope="scope">
@@ -144,7 +144,7 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        ticketid: '',
+        pid: '',
         ticket_status: '',
         create_user__username: '',
         action_user__username: '',
