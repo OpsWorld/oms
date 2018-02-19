@@ -32,6 +32,7 @@
               <span class="han">工单操作：</span>
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
+              <!--<el-button v-if="role==='super'" type="primary" size="small" @click="copyWorkticket">乾坤大挪移</el-button>-->
               <div v-if="showinput" class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
@@ -43,7 +44,6 @@
                     <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
                   </el-select>
                 </div>
-                <a class="tips" style="display: block;margin: 5px 160px -20px"> Tip：请在下方回复内容并提交</a>
               </div>
 
             </div>
@@ -140,6 +140,7 @@ import {
   getTicketenclosure,
   deleteTicketenclosure
 } from 'api/workticket'
+import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
@@ -347,6 +348,33 @@ export default {
     getTicketUsers() {
       getUser().then(response => {
         this.users = response.data
+      })
+    },
+    copyWorkticket() {
+      const DemandForm = {
+        pid: this.ticketData.pid,
+        name: this.ticketData.name,
+        content: this.ticketData.content,
+        type: null,
+        create_user: this.ticketData.create_user,
+        create_time: this.ticketData.create_time
+      }
+      postDemandManager(DemandForm).then(response => {
+        this.$message({
+          type: 'success',
+          message: '恭喜你，转移成功'
+        })
+        if (this.enclosureData.length > 0) {
+          for (const item of this.enclosureData) {
+            const Demandenclosure = {
+              project: response.data.id,
+              file: item.file,
+              create_user: item.create_user,
+              create_time: item.create_time
+            }
+            postDemandEnclosure(Demandenclosure)
+          }
+        }
       })
     }
   }
