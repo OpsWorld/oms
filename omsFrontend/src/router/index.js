@@ -103,6 +103,19 @@ export const asyncRouterMap = [
     ]
   },
   {
+    name: '发布系统',
+    path: '/jobs',
+    component: Layout,
+    icon: 'tasks',
+    redirect: 'jobs',
+    children: [
+      { path: 'jobs', component: _import('jobs/jobs'), name: '项目列表' },
+      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: '新建项目' },
+      { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: '编辑项目' },
+      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' }
+    ]
+  },
+  {
     name: '用户管理',
     path: '/users',
     component: Layout,
@@ -137,19 +150,6 @@ export const asyncRouterMap = [
       { path: 'hosts', component: _import('hosts/hosts'), name: '主机列表' },
       { path: 'assetrecords', component: _import('hosts/assetrecords'), name: '资产修改记录' },
       { path: 'idcs', component: _import('hosts/idcs'), name: '机房列表' }
-    ]
-  },
-  {
-    name: '发布系统',
-    path: '/jobs',
-    component: Layout,
-    icon: 'tasks',
-    redirect: 'jobs',
-    children: [
-      { path: 'jobs', component: _import('jobs/jobs'), name: '项目列表' },
-      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: '新建项目' },
-      { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: '编辑项目' },
-      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' }
     ]
   },
   {

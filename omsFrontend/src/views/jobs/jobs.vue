@@ -33,13 +33,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='code_url' label='代码地址'></el-table-column>
-          <!--<el-table-column prop='create_time' label='创建时间' sortable>-->
-          <!--<template slot-scope="scope">-->
-          <!--<div slot="reference">-->
-          <!--{{scope.row.create_time | formatTime}}-->
-          <!--</div>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
           <el-table-column prop='desc' label='描述'></el-table-column>
           <el-table-column label="操作" v-if="role==='super'">
             <template slot-scope="scope">

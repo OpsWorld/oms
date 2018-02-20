@@ -2,8 +2,8 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, DeployJobs, Deploycmd
-from jobs.serializers import JobsSerializer, DeployJobsSerializer, DeploycmdSerializer
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs
+from jobs.serializers import JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter, DjangoFilterBackend
@@ -19,10 +19,16 @@ class JobsViewSet(viewsets.ModelViewSet):
     search_fields = ('name', 'code_url')
 
 
-# class DeployenvViewSet(viewsets.ModelViewSet):
-#     queryset = Deployenv.objects.all()
-#     serializer_class = DeployenvSerializer
-#     filter_fields = ['job__name']
+class DeployenvViewSet(viewsets.ModelViewSet):
+    queryset = Deployenv.objects.all()
+    serializer_class = DeployenvSerializer
+    filter_fields = ['job__name']
+
+
+class DeploycmdViewSet(viewsets.ModelViewSet):
+    queryset = Deploycmd.objects.all().order_by('id')
+    serializer_class = DeploycmdSerializer
+    filter_fields = ['env__name']
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
@@ -32,19 +38,12 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
     search_fields = ['version', 'content']
 
 
-class DeploycmdViewSet(viewsets.ModelViewSet):
-    queryset = Deploycmd.objects.all().order_by('id')
-    serializer_class = DeploycmdSerializer
-    filter_fields = ['job__name']
-
-
 @api_view()
 def update_jobs_status(request):
     try:
         job__name = request.GET['job__name']
         jobs = DeployJobs.objects.filter(job__name=job__name).filter(deploy_status='deploy')
         count = len(jobs)
-        print(count)
         for job in jobs:
             print(job)
             j_id = job.j_id

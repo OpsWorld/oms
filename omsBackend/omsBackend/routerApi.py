@@ -59,11 +59,12 @@ router.register(r'hosts', HostViewSet)
 router.register(r'idcs', IdcViewSet)
 router.register(r'hostgroups', HostGroupViewSet)
 
-from jobs.views import JobsViewSet, DeployJobsViewSet, DeploycmdViewSet
+from jobs.views import JobsViewSet, DeployenvViewSet, DeploycmdViewSet, DeployJobsViewSet
 
 router.register(r'jobs', JobsViewSet)
-router.register(r'deployjobs', DeployJobsViewSet)
+router.register(r'deployenvs', DeployenvViewSet)
 router.register(r'deploycmds', DeploycmdViewSet)
+router.register(r'deployjobs', DeployJobsViewSet)
 
 from records.views import RecordViewSet
 

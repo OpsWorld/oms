@@ -8,15 +8,6 @@
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
-        <el-form-item label="svn命令" prop="repo_cmd">
-          <el-input v-model="ruleForm.repo_cmd" placeholder="请输入正确的内容"></el-input>
-        </el-form-item>
-        <el-form-item label="发布路径" prop="deploy_path">
-          <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
-        </el-form-item>
-        <el-form-item label="发布主机" prop="deploy_hosts">
-          <sesect-hosts :selecthost="envForm.hosts" @gethosts="getHosts"></sesect-hosts>
-        </el-form-item>
         <el-form-item label="扩展命令">
           <el-tabs v-model="actioncmdTab" type="card" editable @tab-add="addcmdForm=true" @tab-remove="removecmdTab">
             <el-tab-pane v-for="item in cmdTabValues" :key="item.name" :label="item.title" :name="item.name">
