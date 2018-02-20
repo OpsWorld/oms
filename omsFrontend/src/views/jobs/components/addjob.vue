@@ -120,7 +120,7 @@ export default {
         name: '',
         code_repo: 'svn',
         code_url: '',
-        repo_cmd: '"C:\Program Files\TortoiseSVN\bin\svn.exe"',
+        repo_cmd: '\"C:\\Program Files\\TortoiseSVN\\bin\\svn.exe\"',
         showdev: false,
         deploy_hosts: [],
         deploy_path: '',
