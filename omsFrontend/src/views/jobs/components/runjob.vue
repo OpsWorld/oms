@@ -62,9 +62,7 @@
         <el-card>
           <div class="table-button">
             <a class="jobname">发布记录</a>
-            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh"
-                       @click="fetchDeployJobData">刷新
-            </el-button>
+            <el-button style="padding: 3px 0;margin-left: 20px" type="danger" plain icon="el-icon-refresh" @click="fetchDeployJobData">刷新</el-button>
           </div>
           <div class="table-search">
             <el-input

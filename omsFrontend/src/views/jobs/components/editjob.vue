@@ -30,8 +30,25 @@
               </el-table-column>
               <el-table-column label="操作" width="180">
                 <template slot-scope="scope">
-                  <el-button type="success" size="mini">修改</el-button>
+                  <el-button type="success" size="mini" @click="updateenvForm(scope.row)">修改</el-button>
                   <el-button type="danger" size="mini" @click="deleteenvForm(scope.row.id)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </el-form-item>
+        <el-form-item v-if="showcmd" label="配置命令">
+          <el-card>
+            <div slot="header">
+              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addcmdForm=true"></el-button>
+            </div>
+            <el-table :data="cmdsData" stripe style="width: 100%">
+              <el-table-column prop="name" label="名称" width="80"></el-table-column>
+              <el-table-column prop="deploy_cmd" label="发布命令"></el-table-column>
+              <el-table-column label="操作" width="180">
+                <template slot-scope="scope">
+                  <el-button type="success" size="mini" @click="updatecmdForm(scope.row)">修改</el-button>
+                  <el-button type="danger" size="mini" @click="deletecmdForm(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -52,29 +69,70 @@
           <el-input v-model="envForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
         <el-form-item label="选择主机" prop="hosts">
-          <sesect-hosts :selecthost="envForm.hosts" @gethosts="getHosts"></sesect-hosts>
+          <sesect-hosts :selecthost="envForm.deploy_hosts" @gethosts="getaddHosts"></sesect-hosts>
         </el-form-item>
         <el-form-item label="描述" prop="desc">
           <el-input v-model="envForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postenvForm">确 定</el-button>
+        </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-    <el-button type="primary" @click="postenvForm">确 定</el-button>
-    </span>
+    </el-dialog>
+
+    <el-dialog :visible.sync="editenvForm">
+      <el-form v-model="envdata" ref="envForm" label-width="70px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="envdata.name" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="选择主机" prop="hosts">
+          <sesect-hosts :selecthost="envdata.deploy_hosts" @gethosts="geteditHosts"></sesect-hosts>
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="envdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="putenvForm">确 定</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
 
     <el-dialog :visible.sync="addcmdForm">
       <el-form v-model="cmdForm" ref="cmdForm" label-width="70px">
+        <el-form-item label="环境" prop="env">
+          <el-select v-model="cmdForm.env" placeholder="请选择环境">
+            <el-option v-for="item in envsData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="cmdForm.name" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
         <el-form-item label="发布命令" prop="deploy_cmd">
           <el-input v-model="cmdForm.deploy_cmd" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postcmdForm">确 定</el-button>
+        </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="postcmdForm">确 定</el-button>
-      </span>
+    </el-dialog>
+
+    <el-dialog :visible.sync="editcmdForm">
+      <el-form v-model="cmddata" ref="cmdForm" label-width="70px">
+        <el-form-item label="环境" prop="env">
+          <el-select v-model="cmddata.env" placeholder="请选择环境">
+            <el-option v-for="item in envsData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="cmddata.name" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="发布命令" prop="deploy_cmd">
+          <el-input v-model="cmddata.deploy_cmd" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="putcmdForm">确 定</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -84,9 +142,11 @@ import {
   putJob,
   getDeployenv,
   postDeployenv,
+  putDeployenv,
   deleteDeployenv,
   getDeploycmd,
   postDeploycmd,
+  putDeploycmd,
   deleteDeploycmd
 } from '@/api/job'
 import sesectHosts from 'views/components/hosttransfer.vue'
@@ -114,7 +174,9 @@ export default {
         ]
       },
       addenvForm: false,
+      editenvForm: false,
       addcmdForm: false,
+      editcmdForm: false,
       envsData: [],
       envForm: {
         job: this.$route.params.job_id,
@@ -127,7 +189,10 @@ export default {
         env: '',
         name: 'svn',
         deploy_cmd: ''
-      }
+      },
+      showcmd: false,
+      envdata: {},
+      cmddata: {}
     }
   },
 
@@ -144,7 +209,7 @@ export default {
     },
     fetchJobenvData() {
       const parms = {
-        job: this.job_id
+        job__id: this.job_id
       }
       getDeployenv(parms).then(response => {
         this.envsData = response.data
@@ -152,7 +217,7 @@ export default {
     },
     fetchJobcmdData() {
       const parms = {
-        env: this.env_id
+        env__id: this.env_id
       }
       getDeploycmd(parms).then(response => {
         this.cmdsData = response.data
@@ -160,6 +225,8 @@ export default {
     },
     clickenvTable(row) {
       this.env_id = row.id
+      this.showcmd = true
+      this.fetchJobcmdData()
     },
     postenvForm() {
       postDeployenv(this.envForm).then(response => {
@@ -171,22 +238,30 @@ export default {
         this.fetchJobenvData()
       })
     },
+    putenvForm() {
+      putDeployenv(this.envdata.id, this.envdata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.editenvForm = false
+        this.fetchJobenvData()
+      })
+    },
+    updateenvForm(row) {
+      this.envdata = row
+      this.editenvForm = true
+    },
+    updatecmdForm(row) {
+      this.cmddata = row
+      this.editcmdForm = true
+    },
     deleteenvForm(id) {
       deleteDeployenv(id).then(response => {
         this.$message({
           message: '恭喜你，删除成功',
           type: 'success'
         })
-        this.fetchJobenvData()
-      })
-    },
-    putenvForm() {
-      postDeployenv(this.envForm).then(response => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
-        this.addenvForm = false
         this.fetchJobenvData()
       })
     },
@@ -197,6 +272,16 @@ export default {
           type: 'success'
         })
         this.addcmdForm = false
+        this.fetchJobcmdData()
+      })
+    },
+    putcmdForm() {
+      putDeploycmd(this.cmddata.id, this.cmddata).then(response => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.editcmdForm = false
         this.fetchJobcmdData()
       })
     },
@@ -221,8 +306,11 @@ export default {
         console.log(error)
       })
     },
-    getHosts(data) {
+    getaddHosts(data) {
       this.envForm.deploy_hosts = data
+    },
+    geteditHosts(data) {
+      this.envdata.deploy_hosts = data
     }
   }
 }

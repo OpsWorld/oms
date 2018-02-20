@@ -22,19 +22,19 @@ class JobsViewSet(viewsets.ModelViewSet):
 class DeployenvViewSet(viewsets.ModelViewSet):
     queryset = Deployenv.objects.all()
     serializer_class = DeployenvSerializer
-    filter_fields = ['job__name']
+    filter_fields = ['job__id']
 
 
 class DeploycmdViewSet(viewsets.ModelViewSet):
     queryset = Deploycmd.objects.all().order_by('id')
     serializer_class = DeploycmdSerializer
-    filter_fields = ['env__name']
+    filter_fields = ['env__id']
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
-    filter_fields = ['job__name']
+    filter_fields = ['job__id']
     search_fields = ['version', 'content']
 
 

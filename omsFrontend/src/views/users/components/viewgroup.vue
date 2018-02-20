@@ -23,9 +23,9 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+            :page-sizes="pagesize"
+            :page-size="listQuery.limit"
+            :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -35,7 +35,7 @@
 
 <script>
 import { getUser } from 'api/user'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
   props: ['rowdata'],
@@ -45,7 +45,8 @@ export default {
       tabletotal: 0,
       searchdata: '',
       currentPage: 1,
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       listQuery: {
         limit: LIMIT,
         offset: '',
