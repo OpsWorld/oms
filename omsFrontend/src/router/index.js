@@ -110,7 +110,6 @@ export const asyncRouterMap = [
     redirect: 'jobs',
     children: [
       { path: 'jobs', component: _import('jobs/jobs'), name: '项目列表' },
-      { path: 'addjob', hidden: true, component: _import('jobs/components/addjob'), name: '新建项目' },
       { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: '编辑项目' },
       { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' }
     ]

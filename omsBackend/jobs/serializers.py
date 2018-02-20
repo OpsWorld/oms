@@ -15,7 +15,6 @@ class JobsSerializer(serializers.ModelSerializer):
 
 
 class DeployenvSerializer(serializers.ModelSerializer):
-    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
     deploy_hosts = serializers.SlugRelatedField(many=True, queryset=Host.objects.all(), slug_field='hostname')
 
     class Meta:
@@ -24,15 +23,12 @@ class DeployenvSerializer(serializers.ModelSerializer):
 
 
 class DeploycmdSerializer(serializers.ModelSerializer):
-    env = serializers.SlugRelatedField(queryset=Deployenv.objects.all(), slug_field='name')
-
     class Meta:
         model = Deploycmd
         fields = ['url', 'id', 'env', 'name', 'deploy_cmd']
 
 
 class DeployJobsSerializer(serializers.ModelSerializer):
-    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
     class Meta:
