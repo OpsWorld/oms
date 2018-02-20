@@ -101,7 +101,7 @@ export default {
         border-color: #42b983;
         &::before {
           content: '';
-          background: #fff;
+          background: #f7a0ff;
           display: inline-block;
           width: 8px;
           height: 8px;
@@ -122,6 +122,7 @@ export default {
         height: 16px;
         line-height: 10px;
         vertical-align: 2px;
+        color: #ff2e61;
         border-radius: 50%;
         text-align: center;
         transition: all .3s cubic-bezier(.645, .045, .355, 1);
