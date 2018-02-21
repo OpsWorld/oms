@@ -30,6 +30,7 @@ class DeploycmdSerializer(serializers.ModelSerializer):
 
 class DeployJobsSerializer(serializers.ModelSerializer):
     action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
 
     class Meta:
         model = DeployJobs

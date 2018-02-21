@@ -34,15 +34,15 @@ class DeploycmdViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
-    filter_fields = ['job']
+    filter_fields = ['job__name']
     search_fields = ['version', 'content']
 
 
 @api_view()
 def update_jobs_status(request):
     try:
-        job = request.GET['job']
-        jobs = DeployJobs.objects.filter(job=job).filter(deploy_status='deploy')
+        job = request.GET['job__name']
+        jobs = DeployJobs.objects.filter(job__name=job).filter(deploy_status='deploy')
         count = len(jobs)
         for job in jobs:
             print(job)
@@ -61,4 +61,4 @@ def update_jobs_status(request):
             j.save()
         return Response({"results": 'success', "count": count})
     except Exception as e:
-        return Response({"results": '?job=wtf', "count": 1024})
+        return Response({"results": '?job__name=wtf', "count": 1024})

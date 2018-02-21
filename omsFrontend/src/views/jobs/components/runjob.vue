@@ -150,7 +150,7 @@ export default {
       route_path: this.$route.path.split('/'),
       job_id: this.$route.params.job_id,
       ruleForm: {
-        job: this.$route.params.job_id,
+        job: '',
         env: '',
         deploy_hosts: [],
         version: '',
@@ -174,7 +174,7 @@ export default {
         limit: LIMIT,
         offset: '',
         search: '',
-        job__id: this.$route.params.job_id
+        job__name: ''
       },
       pagesize: pagesize,
       pageformat: pageformat,
@@ -207,6 +207,7 @@ export default {
       const parmas = null
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
+        this.ruleForm.job = this.listQuery.job__name = this.jobs.name
         this.fetchDeployJobData()
       })
     },
@@ -243,7 +244,7 @@ export default {
         if (job_status.indexOf('deploy') > -1) {
           this.check_job_status = setInterval(() => {
             const pramas = {
-              job: this.job_id
+              job__name: this.jobs.name
             }
             getUpdateJobsStatus(pramas).then(response => {
               if (response.data.count === 0) {
