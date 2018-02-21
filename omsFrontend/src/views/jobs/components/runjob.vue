@@ -36,7 +36,7 @@
             </el-form-item>
           </el-form>
 
-          <el-form v-else :model="otherForm" ref="otherForm" label-width="90px">
+          <el-form v-else :model="otherForm" :rules="svnrules" ref="otherForm" label-width="90px">
             <el-form-item label="发布命令" prop="env">
               <el-select v-model="otherForm.deploy_cmd" placeholder="请选择发布命令">
                 <el-option v-for="item in cmds" :key="item.id" :label="item.name"
@@ -248,12 +248,11 @@ export default {
       }
       getDeployenv(parmas).then(response => {
         this.envs = response.data
-        this.fetchDeploycmdData(this.envs[0].id)
       })
     },
-    fetchDeploycmdData(id) {
+    fetchDeploycmdData(env) {
       const parmas = {
-        env__id: id
+        env__name: env
       }
       getDeploycmd(parmas).then(response => {
         this.cmds = response.data
@@ -268,7 +267,7 @@ export default {
       } else {
         this.showsvn = false
       }
-      this.fetchDeploycmdData(selectenv.id)
+      this.fetchDeploycmdData(selectenv.name)
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {

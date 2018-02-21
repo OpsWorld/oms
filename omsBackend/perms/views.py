@@ -38,10 +38,10 @@ def routers(request, username=None):
 
 
 class UserHostPermsViewSet(viewsets.ModelViewSet):
-    queryset = UserHostPerms.objects.all()
+    queryset = UserHostPerms.objects.all().order_by('id')
     serializer_class = UserHostPermsSerializer
 
 
 class UserWikiPermsViewSet(viewsets.ModelViewSet):
-    queryset = UserWikiPerms.objects.all()
+    queryset = UserWikiPerms.objects.all().order_by('id')
     serializer_class = UserWikiPermsSerializer
