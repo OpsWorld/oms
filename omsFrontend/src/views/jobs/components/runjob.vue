@@ -7,15 +7,21 @@
             <a class="jobname">{{jobs.name}}</a>
           </div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px">
-            <el-form-item label="发布环境" prop="env">
-              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="发布命令" prop="env">
-              <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
-                <el-option v-for="item in cmds" :key="item.id" :label="item.name" :value="item.deploy_cmd"></el-option>
-              </el-select>
+            <template v-if="!jobs.showdev">
+              <el-form-item label="发布环境" prop="env">
+                <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
+                  <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="发布命令" prop="env">
+                <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
+                  <el-option v-for="item in cmds" :key="item.id" :label="item.name"
+                             :value="item.deploy_cmd"></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <el-form-item label="代码路径">
+              <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
             <el-form-item label="发布版本" prop="version">
               <el-input v-model="ruleForm.version"></el-input>
@@ -28,20 +34,6 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')">开始构建</el-button>
-            </el-form-item>
-          </el-form>
-
-          <el-form v-if="selectext" ref="extForm" label-width="90px">
-            <el-form-item label="勾选主机">
-              <el-checkbox-group v-model="selectexthosts" @change="selectExthosts">
-                <el-checkbox v-for="item in exthosts.split('|')" :key="item" :label="item"></el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-            <el-form-item label="通知skype">
-              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="extsubmitForm">开始构建</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -57,7 +49,7 @@
           <div class="table-search">
             <el-input
               placeholder="search"
-              v-model="searchdata"
+              v-model="listQuery.search"
               @keyup.enter.native="searchClick">
               <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
             </el-input>
@@ -176,9 +168,6 @@ export default {
       },
       envs: [],
       cmds: [],
-      deploy_envs: [],
-      hosts: [],
-      versions: [],
       jobs: {},
       currentPage: 1,
       listQuery: {
@@ -201,14 +190,7 @@ export default {
       showresult: false,
       job_results: [],
       check_job_status: '',
-      searchdata: '',
-      sendnotice: true,
-      deploy_cmd: 'svn',
-      deploy_cmds: '',
-      selectext: false,
-      exthosts: '',
-      selectexthosts: [],
-      selecthosts: []
+      sendnotice: true
     }
   },
   computed: {
@@ -234,6 +216,7 @@ export default {
       }
       getDeployenv(parmas).then(response => {
         this.envs = response.data
+        this.fetchDeploycmdData(this.envs[0].id)
       })
     },
     fetchDeploycmdData(id) {
@@ -247,15 +230,8 @@ export default {
     selectEnv(env) {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
       this.ruleForm.deploy_hosts = selectenv.deploy_hosts
+      this.ruleForm.deploy_cmd = ''
       this.fetchDeploycmdData(selectenv.id)
-    },
-    fetchJobcmdData(job) {
-      const parms = {
-        job__name: job
-      }
-      getDeploycmd(parms).then(response => {
-        this.deploy_cmds = [{ 'name': 'svn' }].concat(response.data)
-      })
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {
@@ -294,11 +270,16 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
+          if (this.jobs.showdev) {
+            this.ruleForm.deploy_hosts = this.envs[0].deploy_hosts
+            this.ruleForm.deploy_cmd = this.cmds[0].deploy_cmd
+          }
+          console.log(this.ruleForm)
           if ((typeof this.ruleForm.deploy_hosts) === 'string') {
             this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
           }
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
-          console.log(this.ruleForm)
+          this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path)
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -315,7 +296,7 @@ export default {
               }
               postSendmessage(messageForm)
             }
-            // this.resetForm('ruleForm')
+            this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             console.log(error)
@@ -359,8 +340,7 @@ export default {
       this.job_results = a
     },
     searchClick() {
-      this.listQuery.search = this.searchdata
-      setTimeout(this.fetchDeployJobData(), 500)
+      this.fetchDeployJobData()
     }
   }
 }
@@ -370,24 +350,5 @@ export default {
   .jobname {
     font-weight: 600;
     margin-left: 20px;
-  }
-
-  .head-lavel {
-    padding-bottom: 50px;
-  }
-
-  .table-button {
-    padding: 10px 0;
-    float: left;
-  }
-
-  .table-search {
-    float: right;
-    padding: 10px 0;
-  }
-
-  .table-pagination {
-    padding: 10px 0;
-    float: right;
   }
 </style>

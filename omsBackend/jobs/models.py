@@ -17,6 +17,7 @@ admin_groups = ['admin', 'OMS_Super_Admin']
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
+    deploy_path = models.CharField(max_length=150, null=True, blank=True, verbose_name=u'发布路径')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')

@@ -8,6 +8,9 @@
         <el-form-item label="代码地址" prop="code_url">
           <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
+        <el-form-item label="发布路径" prop="deploy_path">
+          <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
         <el-form-item label="研发可见" prop="showdev">
           <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
@@ -162,6 +165,7 @@ export default {
       ruleForm: {
         name: '',
         code_url: '',
+        deploy_path: '',
         showdev: false,
         desc: ''
       },
