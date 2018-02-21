@@ -6,12 +6,13 @@
           <div slot="header">
             <a class="jobname">{{jobs.name}}</a>
           </div>
-          <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px">
-            <el-form-item label="发布环境" prop="env">
-              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-              </el-select>
-            </el-form-item>
+          <div class="deploycmd">
+            <a class="lable-text">发布步骤</a>
+            <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
+              <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
+            </el-select>
+          </div>
+          <el-form v-if="showsvn" :model="ruleForm" :rules="svnrules" ref="ruleForm" label-width="90px">
             <el-form-item label="发布命令" prop="env">
               <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
                 <el-option v-for="item in cmds" :key="item.id" :label="item.name"
@@ -31,9 +32,28 @@
               <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')">开始构建</el-button>
+              <el-button type="primary" @click="svnsubmitForm('ruleForm')">svn更新</el-button>
             </el-form-item>
           </el-form>
+
+          <el-form v-else :model="otherForm" ref="otherForm" label-width="90px">
+            <el-form-item label="发布命令" prop="env">
+              <el-select v-model="otherForm.deploy_cmd" placeholder="请选择发布命令">
+                <el-option v-for="item in cmds" :key="item.id" :label="item.name"
+                           :value="item.deploy_cmd"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="代码路径">
+              <el-input v-model="jobs.code_url" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="通知skype">
+              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="othersubmitForm('otherForm')">开始构建</el-button>
+            </el-form-item>
+          </el-form>
+
         </el-card>
       </el-col>
       <el-col :span="16">
@@ -156,7 +176,19 @@ export default {
         content: '',
         action_user: localStorage.getItem('username')
       },
-      rules: {
+      otherForm: {
+        job: '',
+        env: '',
+        deploy_hosts: [],
+        version: '',
+        deploy_cmd: '',
+        content: '',
+        action_user: localStorage.getItem('username')
+      },
+      svnrules: {
+        deploy_cmd: [
+          { required: true, message: '请输入正确的内容', trigger: 'change' }
+        ],
         version: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -184,11 +216,12 @@ export default {
         failed: { text: '发布失败', type: 'danger', icon: 'el-icon-error' }
       },
       selectId: [],
-      butstatus: false,
+      butstatus: true,
       showresult: false,
       job_results: [],
       check_job_status: '',
-      sendnotice: true
+      sendnotice: true,
+      showsvn: false
     }
   },
   computed: {
@@ -205,7 +238,7 @@ export default {
       const parmas = null
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
-        this.ruleForm.job = this.listQuery.job__name = this.jobs.name
+        this.otherForm.job = this.ruleForm.job = this.listQuery.job__name = this.jobs.name
         this.fetchDeployJobData()
       })
     },
@@ -228,8 +261,13 @@ export default {
     },
     selectEnv(env) {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
-      this.ruleForm.deploy_hosts = selectenv.deploy_hosts
-      this.ruleForm.deploy_cmd = ''
+      this.otherForm.deploy_hosts = this.ruleForm.deploy_hosts = selectenv.deploy_hosts
+      this.ruleForm.version = this.ruleForm.content = this.ruleForm.deploy_cmd = this.otherForm.deploy_cmd = ''
+      if (this.ruleForm.env === 'svn') {
+        this.showsvn = true
+      } else {
+        this.showsvn = false
+      }
       this.fetchDeploycmdData(selectenv.id)
     },
     fetchDeployJobData() {
@@ -266,18 +304,14 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchDeployJobData()
     },
-    submitForm(formdata) {
+    svnsubmitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          if (this.ruleForm.deploy_hosts || this.ruleForm.deploy_cmd) {
-            this.ruleForm.deploy_hosts = this.envs[0].deploy_hosts
-            this.ruleForm.deploy_cmd = this.cmds[0].deploy_cmd
-          }
           if ((typeof this.ruleForm.deploy_hosts) === 'string') {
             this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
           }
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
-          this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path)
+          this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
@@ -294,7 +328,6 @@ export default {
               }
               postSendmessage(messageForm)
             }
-            this.resetForm('ruleForm')
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
             console.log(error)
@@ -305,8 +338,40 @@ export default {
         }
       })
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields()
+    othersubmitForm(formdata) {
+      this.otherForm.env = this.otherForm.version = this.otherForm.content = this.ruleForm.env
+
+      this.$refs[formdata].validate((valid) => {
+        if (valid) {
+          if ((typeof this.otherForm.deploy_hosts) === 'string') {
+            this.otherForm.deploy_hosts = this.otherForm.deploy_hosts.split(',')
+          }
+          this.otherForm.deploy_hosts = this.otherForm.deploy_hosts.join()
+          postDeployJob(this.otherForm).then(response => {
+            console.log(response.data.j_id)
+            this.$message({
+              message: '构建成功，系统正在玩命发布中 ...',
+              type: 'success'
+            })
+            this.fetchDeployJobData()
+
+            if (this.sendnotice) {
+              const messageForm = {
+                action_user: 'ITDept_SkypeID',
+                title: `【${this.otherForm.job}】更新`,
+                message: `版本号: ${this.otherForm.version}\n更新内容: ${this.otherForm.content}\n操作人: ${this.otherForm.action_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          }).catch(error => {
+            this.$message.error('构建失败，请检查参数是否正确！')
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     handleSelectionChange(val) {
       this.selectId = []
@@ -348,5 +413,14 @@ export default {
   .jobname {
     font-weight: 600;
     margin-left: 20px;
+  }
+
+  .deploycmd {
+    margin-bottom: 25px;
+    .lable-text {
+      margin-left: 25px;
+      font-weight: 600;
+      margin-right: 5px;
+    }
   }
 </style>
