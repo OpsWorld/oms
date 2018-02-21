@@ -19,7 +19,7 @@
           <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
             <el-radio label="0">未接收</el-radio>
             <el-radio label="1">正在处理</el-radio>
-            <el-radio label="2">已解决</el-radio>
+            <el-radio label="2">已完成</el-radio>
           </el-radio-group>
 
         </div>
@@ -67,8 +67,8 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
-          <el-table-column prop='action_user' label='工单指派者'></el-table-column>
-          <el-table-column prop='edit_user' label='最新回复人'></el-table-column>
+          <!--<el-table-column prop='action_user' label='工单指派者'></el-table-column>-->
+          <!--<el-table-column prop='edit_user' label='最新回复人'></el-table-column>-->
           <el-table-column prop='create_time' label='工单创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
