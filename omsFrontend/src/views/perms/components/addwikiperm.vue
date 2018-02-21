@@ -6,7 +6,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="选择文档" prop="hosts">
-      <sesect-datas :selectdata="ruleForm.objs" :alldata="allwikis" @getDatas="getWikis"></sesect-datas>
+      <sesect-datas :selectdata="ruleForm.objs" @getDatas="getWikis"></sesect-datas>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -14,9 +14,8 @@
   </el-form>
 </template>
 <script>
-import sesectDatas from 'views/components/datatransfer.vue'
+import sesectDatas from './wikitransfer.vue'
 import { getGroup } from 'api/user'
-import { getWiki } from 'api/wiki'
 import { postWikiPerm } from '@/api/perm'
 
 export default {
@@ -39,7 +38,6 @@ export default {
   },
   created() {
     this.getGroups()
-    this.getAllwikis()
   },
   methods: {
     submitForm(formName) {
@@ -71,17 +69,6 @@ export default {
     getGroups() {
       getGroup().then(response => {
         this.groups = response.data
-      })
-    },
-    getAllwikis() {
-      getWiki().then(response => {
-        this.allwikis = []
-        const results = response.data
-        for (var i = 0, len = results.length; i < len; i++) {
-          this.allwikis.push({
-            key: results[i].title
-          })
-        }
       })
     }
   }

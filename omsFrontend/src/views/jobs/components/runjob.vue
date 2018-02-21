@@ -13,7 +13,7 @@
             </el-select>
           </div>
           <el-form v-if="showsvn" :model="ruleForm" :rules="svnrules" ref="ruleForm" label-width="90px">
-            <el-form-item label="发布命令" prop="env">
+            <el-form-item label="发布命令" prop="deploy_cmd">
               <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
                 <el-option v-for="item in cmds" :key="item.id" :label="item.name"
                            :value="item.deploy_cmd"></el-option>
@@ -37,7 +37,7 @@
           </el-form>
 
           <el-form v-else :model="otherForm" :rules="svnrules" ref="otherForm" label-width="90px">
-            <el-form-item label="发布命令" prop="env">
+            <el-form-item label="发布命令" prop="deploy_cmd">
               <el-select v-model="otherForm.deploy_cmd" placeholder="请选择发布命令">
                 <el-option v-for="item in cmds" :key="item.id" :label="item.name"
                            :value="item.deploy_cmd"></el-option>
@@ -221,7 +221,7 @@ export default {
       job_results: [],
       check_job_status: '',
       sendnotice: true,
-      showsvn: false
+      showsvn: true
     }
   },
   computed: {
@@ -266,6 +266,7 @@ export default {
         this.showsvn = true
       } else {
         this.showsvn = false
+        this.$refs['ruleForm'].clearValidate()
       }
       this.fetchDeploycmdData(selectenv.name)
     },
