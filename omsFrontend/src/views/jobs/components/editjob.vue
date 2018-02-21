@@ -175,6 +175,9 @@ export default {
         ],
         code_url: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        deploy_path: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       addenvForm: false,
