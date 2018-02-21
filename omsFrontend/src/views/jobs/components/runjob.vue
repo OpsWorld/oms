@@ -243,7 +243,7 @@ export default {
         if (job_status.indexOf('deploy') > -1) {
           this.check_job_status = setInterval(() => {
             const pramas = {
-              job__id: this.listQuery.job__id
+              job: this.job_id
             }
             getUpdateJobsStatus(pramas).then(response => {
               if (response.data.count === 0) {
@@ -274,7 +274,6 @@ export default {
             this.ruleForm.deploy_hosts = this.envs[0].deploy_hosts
             this.ruleForm.deploy_cmd = this.cmds[0].deploy_cmd
           }
-          console.log(this.ruleForm)
           if ((typeof this.ruleForm.deploy_hosts) === 'string') {
             this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
           }
