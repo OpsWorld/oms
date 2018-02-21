@@ -23,8 +23,6 @@ class DeployenvSerializer(serializers.ModelSerializer):
 
 
 class DeploycmdSerializer(serializers.ModelSerializer):
-    env = serializers.SlugRelatedField(queryset=Deployenv.objects.all(), slug_field='name')
-
     class Meta:
         model = Deploycmd
         fields = ['url', 'id', 'env', 'name', 'deploy_cmd']

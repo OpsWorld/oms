@@ -104,7 +104,7 @@
       <el-form v-model="cmdForm" ref="cmdForm" label-width="70px">
         <el-form-item label="环境" prop="env">
           <el-select v-model="cmdForm.env" placeholder="请选择环境">
-            <el-option v-for="item in envsData" :key="item.id" :value="item.name"></el-option>
+            <el-option v-for="item in envsData" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="name">
@@ -224,7 +224,7 @@ export default {
     },
     fetchJobcmdData() {
       const parms = {
-        env__name: this.cmdForm.env
+        env__id: this.cmdForm.env
       }
       getDeploycmd(parms).then(response => {
         this.cmdsData = response.data
@@ -232,7 +232,7 @@ export default {
     },
     clickenvTable(row) {
       this.showcmd = true
-      this.cmdForm.env = row.name
+      this.cmdForm.env = row.id
       this.fetchJobcmdData()
     },
     postenvForm() {
