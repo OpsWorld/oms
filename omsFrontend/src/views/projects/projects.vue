@@ -91,21 +91,6 @@
               </div>
             </template>
           </el-table-column>
-          <!--<el-table-column prop='update_time' label='更新时间' sortable="custom">-->
-          <!--<template slot-scope="scope">-->
-          <!--<div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">-->
-          <!--<span>{{scope.row.update_time | parseDate}}</span>-->
-          <!--</div>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
-          <!--<el-table-column prop='start_time' label='开始时间' sortable="custom">-->
-          <!--<template slot-scope="scope">-->
-          <!--<div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">-->
-          <!--<span v-if="scope.row.start_time">{{scope.row.start_time | parseDate}}</span>-->
-          <!--<span v-else>无</span>-->
-          <!--</div>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
           <el-table-column label="操作">
             <template slot-scope="scope">
               <router-link :to="'editproject/' + scope.row.id">

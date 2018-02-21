@@ -3,9 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link :to="'addjob'" v-if="role==='super'">
-            <el-button type="primary" icon="el-icon-plus">新建</el-button>
-          </router-link>
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
 
           <el-radio-group v-model="listQuery.showdev" @change="changeStatus" style="margin-left: 20px">
             <el-radio label="">全部</el-radio>
@@ -33,13 +31,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='code_url' label='代码地址'></el-table-column>
-          <!--<el-table-column prop='create_time' label='创建时间' sortable>-->
-          <!--<template slot-scope="scope">-->
-          <!--<div slot="reference">-->
-          <!--{{scope.row.create_time | formatTime}}-->
-          <!--</div>-->
-          <!--</template>-->
-          <!--</el-table-column>-->
           <el-table-column prop='desc' label='描述'></el-table-column>
           <el-table-column label="操作" v-if="role==='super'">
             <template slot-scope="scope">
@@ -64,11 +55,35 @@
         </el-pagination>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="addForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="ruleForm.name" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="代码地址" prop="code_url">
+          <el-input v-model="ruleForm.code_url" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="发布路径" prop="deploy_path">
+          <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
+        </el-form-item>
+        <el-form-item label="研发可见" prop="showdev">
+          <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </el-form-item>
+        <el-form-item label="描述" prop="desc">
+          <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getJob, deleteJob } from '@/api/job'
+import { getJob, postJob, deleteJob } from '@/api/job'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
 
@@ -86,7 +101,26 @@ export default {
         search: ''
       },
       pagesize: pagesize,
-      pageformat: pageformat
+      pageformat: pageformat,
+      addForm: false,
+      ruleForm: {
+        name: '',
+        code_url: '',
+        deploy_path: '',
+        showdev: false,
+        desc: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        code_url: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        deploy_path: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ]
+      }
     }
   },
   computed: {
@@ -104,6 +138,26 @@ export default {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postJob(this.ruleForm).then(response => {
+            this.$message({
+              type: 'success',
+              message: '恭喜你，新建成功'
+            })
+            this.$router.push('/jobs/editjob/' + response.data.id)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     },
     deleteGroup(id) {
       deleteJob(id).then(response => {

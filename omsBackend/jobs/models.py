@@ -16,11 +16,8 @@ admin_groups = ['admin', 'OMS_Super_Admin']
 
 class Jobs(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
-    code_repo = models.CharField(max_length=30, default='svn', verbose_name=u'代码仓库')
-    repo_cmd = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'仓库命令')
     code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
-    deploy_hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
-    deploy_path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
+    deploy_path = models.CharField(max_length=150, null=True, blank=True, verbose_name=u'发布路径')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -63,19 +60,30 @@ class Jobs(models.Model):
         return True
 
 
-# class Deployenv(models.Model):
-#     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-#     name = models.CharField(max_length=10, verbose_name=u'名称')
-#     hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
-#     path = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布路径')
-#     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         verbose_name = u'发布环境'
-#         verbose_name_plural = u'发布环境'
+class Deployenv(models.Model):
+    job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
+    name = models.CharField(max_length=10, verbose_name=u'名称')
+    deploy_hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'发布环境'
+        verbose_name_plural = u'发布环境'
+
+
+class Deploycmd(models.Model):
+    env = models.ForeignKey(Deployenv, verbose_name=u'发布环境')
+    name = models.CharField(max_length=10, verbose_name=u'名称')
+    deploy_cmd = models.TextField(null=True, blank=True, verbose_name=u'发布命令')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'发布命令'
+        verbose_name_plural = u'发布命令'
 
 
 class DeployJobs(models.Model):
@@ -97,17 +105,3 @@ class DeployJobs(models.Model):
     class Meta:
         verbose_name = u'执行发布'
         verbose_name_plural = u'执行发布'
-
-
-class Deploycmd(models.Model):
-    job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
-    name = models.CharField(max_length=10, default='svn更新', verbose_name=u'名称')
-    hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
-    deploy_cmd = models.TextField(null=True, blank=True, verbose_name=u'发布命令')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = u'发布命令'
-        verbose_name_plural = u'发布命令'
