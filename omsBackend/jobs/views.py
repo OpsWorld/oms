@@ -28,7 +28,7 @@ class DeployenvViewSet(viewsets.ModelViewSet):
 class DeploycmdViewSet(viewsets.ModelViewSet):
     queryset = Deploycmd.objects.all().order_by('id')
     serializer_class = DeploycmdSerializer
-    filter_fields = ['env__id']
+    filter_fields = ['env__name']
 
 
 class DeployJobsViewSet(viewsets.ModelViewSet):

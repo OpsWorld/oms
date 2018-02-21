@@ -14,7 +14,7 @@
         <el-form-item label="研发可见" prop="showdev">
           <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </el-form-item>
-        <el-form-item label="配置环境">
+        <el-form-item label="发布步骤">
           <el-card>
             <div slot="header">
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addenvForm=true"></el-button>
@@ -104,7 +104,7 @@
       <el-form v-model="cmdForm" ref="cmdForm" label-width="70px">
         <el-form-item label="环境" prop="env">
           <el-select v-model="cmdForm.env" placeholder="请选择环境">
-            <el-option v-for="item in envsData" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-option v-for="item in envsData" :key="item.id" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="name">
@@ -224,15 +224,15 @@ export default {
     },
     fetchJobcmdData() {
       const parms = {
-        env__id: this.env_id
+        env__name: this.cmdForm.env
       }
       getDeploycmd(parms).then(response => {
         this.cmdsData = response.data
       })
     },
     clickenvTable(row) {
-      this.env_id = row.id
       this.showcmd = true
+      this.cmdForm.env = row.name
       this.fetchJobcmdData()
     },
     postenvForm() {
