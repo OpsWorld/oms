@@ -12,8 +12,8 @@
           </el-select>
 
           <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
-            <el-radio label="0">未进行</el-radio>
-            <el-radio label="1">正在进行</el-radio>
+            <el-radio label="0">未接收</el-radio>
+            <el-radio label="1">正在处理</el-radio>
             <el-radio label="2">已完成</el-radio>
           </el-radio-group>
         </div>
@@ -28,12 +28,27 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
+          <el-table-column prop='pid' label='编号'></el-table-column>
           <el-table-column prop='platform' label='平台'></el-table-column>
           <el-table-column prop='type' label='通道类型'></el-table-column>
-          <el-table-column prop='complete' label='完成百分比' sortable="custom">
+          <el-table-column prop='level' label='紧急度'>
             <template slot-scope="scope">
-              <el-progress :text-inside="true" :status="complete_status" :percentage="scope.row.complete"
-                           :stroke-width="18"></el-progress>
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-rate
+                  v-model="scope.row.level"
+                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                  disabled>
+                </el-rate>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='status' label='状态' sortable="custom">
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag :type="TICKET_STATUS_TYPE[scope.row.status]">
+                  {{TICKET_STATUS_TEXT[scope.row.status]}}
+                </el-tag>
+              </div>
             </template>
           </el-table-column>
           <el-table-column label="操作">
@@ -114,7 +129,9 @@ export default {
       platform: '',
       platforms: [],
       radio: '1',
-      complete_status: 'exception'
+      complete_status: 'exception',
+      TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
+      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' }
     }
   },
 

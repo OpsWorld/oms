@@ -109,7 +109,7 @@
       <el-radio-group v-model="select_status">
         <el-radio :label="0">未接收</el-radio>
         <el-radio :label="1">正在处理</el-radio>
-        <el-radio :label="2">已关闭</el-radio>
+        <el-radio :label="2">已完成</el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
     <el-button @click="show_status=false">取 消</el-button>

@@ -176,12 +176,12 @@ class SaltAPI(object):
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     jid = '20180221113323607348'
-    tgt = sapi.minions_status()['up']
+    tgt = ['ph-it-sql-prod-02']
     arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
     # print(sapi.sync_remote_server(tgt, arg))
-    print(sapi.get_result(jid))
+    print(sapi.sync_remote_server(tgt, arg))
 
 
 if __name__ == '__main__':
