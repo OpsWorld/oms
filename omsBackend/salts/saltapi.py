@@ -175,7 +175,7 @@ class SaltAPI(object):
 
 def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
-    jid = '20180221102509233964'
+    jid = '20180221113323607348'
     tgt = sapi.minions_status()['up']
     arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
