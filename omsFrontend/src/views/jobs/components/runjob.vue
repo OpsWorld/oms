@@ -7,19 +7,17 @@
             <a class="jobname">{{jobs.name}}</a>
           </div>
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="90px">
-            <template v-if="!jobs.showdev">
-              <el-form-item label="发布环境" prop="env">
-                <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-                  <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="发布命令" prop="env">
-                <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
-                  <el-option v-for="item in cmds" :key="item.id" :label="item.name"
-                             :value="item.deploy_cmd"></el-option>
-                </el-select>
-              </el-form-item>
-            </template>
+            <el-form-item label="发布环境" prop="env">
+              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
+                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="发布命令" prop="env">
+              <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
+                <el-option v-for="item in cmds" :key="item.id" :label="item.name"
+                           :value="item.deploy_cmd"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="代码路径">
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
@@ -271,7 +269,7 @@ export default {
     submitForm(formdata) {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
-          if (this.jobs.showdev) {
+          if (this.ruleForm.deploy_hosts || this.ruleForm.deploy_cmd) {
             this.ruleForm.deploy_hosts = this.envs[0].deploy_hosts
             this.ruleForm.deploy_cmd = this.cmds[0].deploy_cmd
           }
