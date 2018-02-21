@@ -252,7 +252,7 @@ export default {
     },
     fetchDeploycmdData(env) {
       const parmas = {
-        env__name: env
+        env__id: env
       }
       getDeploycmd(parmas).then(response => {
         this.cmds = response.data
@@ -268,7 +268,7 @@ export default {
         this.showsvn = false
         this.$refs['ruleForm'].clearValidate()
       }
-      this.fetchDeploycmdData(selectenv.name)
+      this.fetchDeploycmdData(selectenv.id)
     },
     fetchDeployJobData() {
       getDeployJob(this.listQuery).then(response => {

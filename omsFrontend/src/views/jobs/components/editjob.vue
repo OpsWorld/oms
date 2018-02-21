@@ -161,7 +161,6 @@ export default {
     return {
       route_path: this.$route.path.split('/'),
       job_id: this.$route.params.job_id,
-      env_id: '',
       ruleForm: {
         name: '',
         code_url: '',
