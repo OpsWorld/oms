@@ -12,9 +12,8 @@
           </el-select>
 
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
-            <el-radio label="0">未接收</el-radio>
-            <el-radio label="1">正在处理</el-radio>
-            <el-radio label="2">已完成</el-radio>
+            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
           </el-radio-group>
         </div>
         <div class="table-search">
@@ -92,10 +91,10 @@
           </el-rate>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="ruleForm.status" filterable placeholder="更新状态">
-            <el-option v-for="(item, index) in STATUS_TEXT" :key="index" :label="item" :value="index">
-            </el-option>
-          </el-select>
+          <el-radio-group v-model="ruleForm.status">
+            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
