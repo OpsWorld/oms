@@ -7,12 +7,10 @@
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
           <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
-          <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index"
-                       @click="changeStatus(index)">
-              {{Project_Status[index]}}
-            </el-button>
-          </el-button-group>
+          <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
+            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
+          </el-radio-group>
         </div>
         <div class="table-search">
           <el-input style="width: 160px;" class="filter-item" placeholder="编号" @keyup.enter.native="searchClick"
@@ -41,7 +39,7 @@
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag size="mini">
-                  {{Project_Status[scope.row.status]}}
+                  {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
               </div>
             </template>
@@ -87,9 +85,8 @@
       title="更改状态"
       :visible.sync="show_status">
       <el-radio-group v-model="updateform.status">
-        <el-radio :label="0">未接收</el-radio>
-        <el-radio :label="1">已通过</el-radio>
-        <el-radio :label="2">未通过</el-radio>
+        <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+        </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
     <el-button @click="show_status=false">取 消</el-button>
@@ -112,7 +109,7 @@ export default {
       currentPage: 1,
       pagesize: pagesize,
       pageformat: pageformat,
-      Project_Status: {
+      STATUS_TEXT: {
         0: '未审核',
         1: '已通过',
         2: '未通过'
@@ -121,7 +118,7 @@ export default {
         limit: LIMIT,
         offset: '',
         pid: '',
-        status: 0,
+        status: '0',
         create_user__username: '',
         action_user__username: '',
         search: '',
@@ -129,7 +126,7 @@ export default {
       },
       updateform: {
         id: '',
-        status: 1
+        status: '1'
       },
       btnstatus: true,
       show_status: false
@@ -157,8 +154,7 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    changeStatus(val) {
-      this.listQuery.status = val
+    changeStatus() {
       this.fetchData()
     },
     handleSortChange(val) {
@@ -200,7 +196,7 @@ export default {
           delete this.selectId[i]
         })
       }
-      setTimeout(this.fetchData(), 1000)
+      setTimeout(this.fetchData(), 500)
       this.show_status = false
     }
   }

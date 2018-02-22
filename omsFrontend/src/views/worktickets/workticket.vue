@@ -16,10 +16,9 @@
             <el-button type="warning" plain size="small" @click="showMeAction">我处理的工单</el-button>
           </el-button-group>
 
-          <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
-            <el-radio label="0">未接收</el-radio>
-            <el-radio label="1">正在处理</el-radio>
-            <el-radio label="2">已完成</el-radio>
+          <el-radio-group v-model="listQuery.ticket_status" @change="changeStatus" style="margin-left: 20px">
+            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
           </el-radio-group>
 
         </div>
@@ -60,8 +59,8 @@
           <el-table-column prop='ticket_status' label='工单状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-tag :type="TICKET_STATUS_TYPE[scope.row.ticket_status]">
-                  {{TICKET_STATUS_TEXT[scope.row.ticket_status]}}
+                <el-tag :type="STATUS_TYPE[scope.row.ticket_status]">
+                  {{STATUS_TEXT[scope.row.ticket_status]}}
                 </el-tag>
               </div>
             </template>
@@ -105,9 +104,8 @@
       title="更改状态"
       :visible.sync="show_status">
       <el-radio-group v-model="select_status">
-        <el-radio :label="0">未接收</el-radio>
-        <el-radio :label="1">正在处理</el-radio>
-        <el-radio :label="2">已完成</el-radio>
+        <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+        </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
     <el-button @click="show_status=false">取 消</el-button>
@@ -127,7 +125,6 @@ export default {
   components: { addWorkticket },
   data() {
     return {
-      radio: '',
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
@@ -137,8 +134,8 @@ export default {
         ticket_status: 0,
         action_user: localStorage.getItem('username')
       },
-      TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
-      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
+      STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成' },
+      STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
       listQuery: {
         limit: LIMIT,
         offset: '',
@@ -188,8 +185,7 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    changeStatus(val) {
-      this.listQuery.ticket_status = val
+    changeStatus() {
       this.fetchData()
     },
     showMeCreate() {
