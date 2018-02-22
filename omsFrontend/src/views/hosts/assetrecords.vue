@@ -64,7 +64,7 @@
           <el-table-column prop='diff' label='前后数据对比'>
             <template slot-scope="scope">
               <div slot="reference" v-for="item in strToJson(scope.row.diff)" :key="item.id">
-                <el-tag type="danger">{{item.replace.replace('/', '')}}</el-tag>
+                <el-tag type="danger" size="mini">{{item.replace.replace('/', '')}}</el-tag>
                 ：
                 <div class="prevalue">
                   前：
@@ -92,9 +92,9 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="listQuery.limit"
-          layout="prev, pager, next, sizes"
+            :page-sizes="pagesize"
+            :page-size="listQuery.limit"
+            :layout="pageformat"
           :total="tabletotal">
         </el-pagination>
       </div>
@@ -108,7 +108,7 @@
 
 <script>
 import { getRecord, postRecord } from '@/api/tool'
-import { LIMIT } from '@/config'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import addObj from './components/addrecord.vue'
 import formatDate from '@/utils/dateformat'
 
@@ -126,9 +126,8 @@ export default {
         create_time_0: '',
         create_time_1: ''
       },
-      limit: LIMIT,
-      offset: '',
-      pagesize: [10, 25, 50, 100],
+      pagesize: pagesize,
+      pageformat: pageformat,
       AddTypes: { 0: '手动', 1: '自动' },
       addForm: false,
       selectdatatime: ''
@@ -209,6 +208,6 @@ export default {
   }
 
   .prevalue {
-    margin-left: 20px;
+    margin-left: 18px;
   }
 </style>
