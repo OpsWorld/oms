@@ -29,7 +29,7 @@ admin_users = ['admin', 'kiven', 'leon', 'omar', 'larry']
 
 
 class Project(models.Model):
-    pid = models.BigIntegerField(unique=True, verbose_name=u'编号')
+    pid = models.CharField(max_length=100, unique=True, verbose_name=u'编号')
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'类型')
     level = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'等级')
@@ -98,7 +98,7 @@ TicketStatus = {
 
 
 class DemandManager(models.Model):
-    pid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
+    pid = models.CharField(max_length=100, unique=True, verbose_name=u'工单编号')
     name = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')

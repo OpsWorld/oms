@@ -110,7 +110,7 @@ class ThreePayComment(models.Model):
 
 
 class PlatformPayChannel(models.Model):
-    pid = models.BigIntegerField(null=True, blank=True, verbose_name=u'工单编号')
+    pid = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'工单编号')
     name = models.CharField(max_length=100, unique=True, blank=True, verbose_name=u'名称')
     platform = models.ForeignKey('Platform', verbose_name=u'依附平台')
     type = models.ForeignKey('PayChannelName', verbose_name=u'通道类型')

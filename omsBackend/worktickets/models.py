@@ -24,7 +24,7 @@ admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
 
 
 class WorkTicket(models.Model):
-    pid = models.BigIntegerField(unique=True, verbose_name=u'工单编号')
+    pid = models.CharField(max_length=100, unique=True, verbose_name=u'工单编号')
     name = models.CharField(max_length=100, blank=True, verbose_name=u'工单标题')
     type = models.ForeignKey('TicketType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'工单类型')
     content = models.TextField(verbose_name=u'工单内容')
