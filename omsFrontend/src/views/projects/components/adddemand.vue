@@ -102,7 +102,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.pid = getConversionTime()
+          this.ruleForm.pid = 'dm' + getConversionTime()
           postDemandManager(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({

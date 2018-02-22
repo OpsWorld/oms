@@ -51,7 +51,7 @@ class PayChannelSerializer(serializers.ModelSerializer):
             platformpaychannel = PlatformPayChannel.objects.get(name=name)
         except:
             import datetime
-            pid = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            pid = 'tp' + datetime.datetime.now().strftime('%Y%m%d%H%M%S')
             platformpaychannel = PlatformPayChannel.objects.create(pid=pid,
                                                                    name=name,
                                                                    platform=platform,

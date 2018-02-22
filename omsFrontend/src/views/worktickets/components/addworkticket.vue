@@ -6,10 +6,6 @@
           <el-input v-model="ruleForm.name" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="指派人" prop="action_user">
-          <!--<el-select v-model="ruleForm.action_user" filterable placeholder="请选择指派人">-->
-            <!--<el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>-->
-          <!--</el-select>-->
-          <!--<a class="tips"> Tip：当前工单处理人，默认是指派给ITSupport群组</a>-->
           <el-input v-model="ruleForm.action_user" disabled></el-input>
         </el-form-item>
         <el-form-item label="工单类型" prop="type">
@@ -137,7 +133,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.pid = getConversionTime()
+          this.ruleForm.pid = 'wt' + getConversionTime()
           this.ruleForm.create_group = this.groups
           postWorkticket(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
