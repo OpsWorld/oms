@@ -21,15 +21,6 @@
     <el-form-item label="key信息" prop="keyinfo">
       <el-input v-model="rowdata.keyinfo" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
-    <el-form-item label="紧急度" prop="m_backurl">
-      <el-rate
-        v-model="rowdata.level"
-        :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-        show-text
-        :texts="['E', 'D', 'C', 'B', 'A']">
-      </el-rate>
-      <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
-    </el-form-item>
     <el-form-item label="转发域名" prop="m_forwardurl">
       <el-input v-model="rowdata.m_forwardurl"></el-input>
     </el-form-item>
@@ -63,9 +54,6 @@ export default {
         ],
         m_id: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        level: [
-          { required: true, type: 'number', message: '请输入正确的内容', trigger: 'blur' }
         ],
         action_user: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
