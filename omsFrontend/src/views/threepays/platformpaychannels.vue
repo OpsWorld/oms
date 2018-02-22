@@ -235,6 +235,8 @@ export default {
               postDemandEnclosure(Demandenclosure)
             }
           }
+          row.status = 1
+          putPlatformPayChannel(row.id, row)
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
           this.$message.error(errordata[0])
