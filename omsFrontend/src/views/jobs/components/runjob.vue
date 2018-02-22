@@ -262,7 +262,7 @@ export default {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
       this.otherForm.deploy_hosts = this.ruleForm.deploy_hosts = selectenv.deploy_hosts
       this.ruleForm.version = this.ruleForm.content = this.ruleForm.deploy_cmd = this.otherForm.deploy_cmd = ''
-      if (this.ruleForm.env === 'svn') {
+      if (this.ruleForm.env.toLowerCase() === 'svn') {
         this.showsvn = true
       } else {
         this.showsvn = false

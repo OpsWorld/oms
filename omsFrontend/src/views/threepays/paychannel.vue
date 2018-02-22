@@ -162,7 +162,7 @@
           <el-table ref="channelsTable" :data="dynamicChannels" border style="width: 100%"
                     @row-click="clickPayChannel" @sort-change="handleSortChange">
             <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column label='查看明细' type="expand" width="50">
+            <el-table-column label='查看明细' type="expand" width="80">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
                   <el-form-item label="key信息" prop="keyinfo">
@@ -178,9 +178,9 @@
                 </el-form>
               </template>
             </el-table-column>
-            <el-table-column prop='platform' label='平台' width="50"></el-table-column>
-            <el-table-column prop='type' label='通道类型' width="130"></el-table-column>
-            <el-table-column prop='rate' label='费率' width="80"></el-table-column>
+            <el-table-column prop='platform' label='平台'></el-table-column>
+            <el-table-column prop='type' label='通道类型'></el-table-column>
+            <el-table-column prop='rate' label='费率'></el-table-column>
             <el-table-column prop='create_time' label='创建时间' sortable>
               <template slot-scope="scope">
                 <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -188,7 +188,7 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" width="280">
+            <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
                 <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
