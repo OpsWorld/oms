@@ -40,19 +40,23 @@ class PayChannelSerializer(serializers.ModelSerializer):
         model = PayChannel
         fields = (
             'url', 'id', 'name', 'platform', 'merchant', 'type', 'rate', 'keyinfo', 'm_forwardurl', 'm_submiturl',
-            'complete', 'level', 'status', 'create_user', 'action_user', 'create_time')
+            'create_user', 'action_user', 'create_time')
 
     def create(self, validated_data):
         platform = validated_data["platform"]
         type = validated_data["type"]
         create_user = validated_data["create_user"]
-        print(create_user)
         name = '{}-{}'.format(platform, type)
         try:
             platformpaychannel = PlatformPayChannel.objects.get(name=name)
         except:
-            platformpaychannel = PlatformPayChannel.objects.update_or_create(platform=platform, type=type,
-                                                                             create_user=create_user)
+            import datetime
+            pid = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+            platformpaychannel = PlatformPayChannel.objects.create(pid=pid,
+                                                                   name=name,
+                                                                   platform=platform,
+                                                                   type=type,
+                                                                   create_user=create_user)
             platformpaychannel.save()
         paychannel = PayChannel.objects.create(**validated_data)
         paychannel.save()
@@ -85,4 +89,4 @@ class PlatformPayChannelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PlatformPayChannel
-        fields = ('url', 'id', 'name', 'platform', 'type', 'complete', 'create_user')
+        fields = ('url', 'id', 'pid', 'name', 'platform', 'type', 'level', 'status', 'create_user', 'create_time')

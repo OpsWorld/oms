@@ -11,16 +11,16 @@
             </el-option>
           </el-select>
 
-          <el-radio-group v-model="radio" @change="changeStatus" style="margin-left: 20px">
-            <el-radio label="0">未进行</el-radio>
-            <el-radio label="1">正在进行</el-radio>
+          <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
+            <el-radio label="0">未接收</el-radio>
+            <el-radio label="1">正在处理</el-radio>
             <el-radio label="2">已完成</el-radio>
           </el-radio-group>
         </div>
         <div class="table-search">
           <el-input
-            placeholder="搜索 ..."
-            v-model="searchdata"
+            placeholder="搜索编号"
+            v-model="listQuery.pid"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -28,19 +28,35 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
+          <el-table-column prop='pid' label='编号'></el-table-column>
           <el-table-column prop='platform' label='平台'></el-table-column>
           <el-table-column prop='type' label='通道类型'></el-table-column>
-          <el-table-column prop='complete' label='完成百分比' sortable="custom">
+          <el-table-column prop='level' label='紧急度'>
             <template slot-scope="scope">
-              <el-progress :text-inside="true" :status="complete_status" :percentage="scope.row.complete"
-                           :stroke-width="18"></el-progress>
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-rate
+                  v-model="scope.row.level"
+                  :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+                  disabled>
+                </el-rate>
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column prop='status' label='状态' sortable="custom">
             <template slot-scope="scope">
-              <el-button @click="editComplete(scope.row)" type="primary" size="mini"
-                         v-if="platformpaychannels_btn_change_complete||role==='super'">
-                更新进度
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag :type="STATUS_TYPE[scope.row.status]">
+                  {{STATUS_TEXT[scope.row.status]}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="200">
+            <template slot-scope="scope">
+              <el-button type="success" size="mini" @click="updateForm(scope.row)">修改</el-button>
+              <el-button v-if="role==='super' && scope.row.status === 0" type="primary" size="mini"
+                         @click="copyPaychannel(scope.row)">
+                乾坤大挪移
               </el-button>
             </template>
           </el-table-column>
@@ -59,18 +75,30 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="completeForm" width="30%" @close="fetchData">
-      <el-form label-width="90px">
-        <el-form-item :model="CompleteForm" label="完成百分比">
-          <el-slider
-            style="margin-right: 50px"
-            v-model="CompleteForm.complete"
-            :step="10">
-          </el-slider>
-          <a>{{CompleteForm.complete}}%</a>
+    <el-dialog :visible.sync="editForm" width="30%" @close="fetchData">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
+        <el-form-item label="编号" prop="pid">
+          <el-input v-model="ruleForm.pid" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="ruleForm.name" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="紧急度" prop="level">
+          <el-rate
+            v-model="ruleForm.level"
+            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
+            show-text
+            :texts="['E', 'D', 'C', 'B', 'A']">
+          </el-rate>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="ruleForm.status" filterable placeholder="更新状态">
+            <el-option v-for="(item, index) in STATUS_TEXT" :key="index" :label="item" :value="index">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -78,10 +106,10 @@
 </template>
 
 <script>
-import { getPlatformPayChannel, putPlatformPayChannel, getPlatform } from 'api/threeticket'
+import { getPlatformPayChannel, getPlatform, putPlatformPayChannel, getThreePayEnclosure } from 'api/threeticket'
+import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
-import { postSendmessage } from 'api/tool'
 
 export default {
   components: {},
@@ -89,43 +117,33 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
       listQuery: {
         limit: LIMIT,
         offset: '',
         platform__name: '',
         ordering: '',
-        complete: '',
-        complete__gt: 0,
-        complete__lt: 100
+        status: '0',
+        pid: ''
       },
       pagesize: pagesize,
       pageformat: pageformat,
-      platformpaychannels_btn_change_complete: false,
-      completeForm: false,
-      CompleteForm: {
-        id: '',
-        platform: '',
-        type: '',
-        complete: 0,
-        create_user: ''
-      },
+      editForm: false,
+      ruleForm: {},
       platform: '',
       platforms: [],
-      radio: '1',
-      complete_status: 'exception'
+      STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成' },
+      STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
+      enclosureData: []
     }
   },
 
   computed: {
     ...mapGetters([
-      'elements',
       'role'
     ])
   },
   created() {
-    this.platformpaychannels_btn_change_complete = this.elements['对接通道进度-更新进度']
     this.fetchData()
     this.fetchPlatformData()
   },
@@ -142,35 +160,6 @@ export default {
       getPlatform().then(response => {
         this.platforms = [{ 'name': '全部' }].concat(response.data)
       })
-    },
-
-    changeComplete() {
-      putPlatformPayChannel(this.CompleteForm.id, this.CompleteForm).then(response => {
-        this.$message({
-          type: 'success',
-          message: '更新成功!'
-        })
-        if (this.CompleteForm.complete === 100) {
-          const messageForm = {
-            action_user: `${this.CompleteForm.create_user}`,
-            title: '【通道完成进度】',
-            message: `平台: ${this.CompleteForm.platform}\n通道类型: ${this.CompleteForm.type}\n完成度: ${this.CompleteForm.complete}%`
-          }
-          postSendmessage(messageForm)
-          console.log('通道完成100')
-        }
-        this.completeForm = false
-        this.fetchData()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '更新失败'
-        })
-      })
-    },
-    editComplete(row) {
-      this.completeForm = true
-      this.CompleteForm = row
     },
     changePlatform(val) {
       if (val === '全部') {
@@ -202,23 +191,58 @@ export default {
       this.fetchData()
     },
     changeStatus(val) {
-      if (val === '0') {
-        this.listQuery.complete = 0
-        this.listQuery.complete__gt = ''
-        this.listQuery.complete__lt = ''
-        this.complete_status = 'exception'
-      } else if (val === '2') {
-        this.listQuery.complete = 100
-        this.listQuery.complete__gt = ''
-        this.listQuery.complete__lt = ''
-        this.complete_status = 'success'
-      } else {
-        this.listQuery.complete = ''
-        this.listQuery.complete__gt = 0
-        this.listQuery.complete__lt = 100
-        this.complete_status = 'exception'
-      }
       this.fetchData()
+    },
+    updateForm(row) {
+      this.editForm = true
+      this.ruleForm = row
+    },
+    submitForm() {
+      putPlatformPayChannel(this.ruleForm.id, this.ruleForm).then(response => {
+        this.$message({
+          type: 'success',
+          message: '恭喜你，更新成功'
+        })
+        this.editForm = false
+      })
+    },
+    copyPaychannel(row) {
+      const DemandForm = {
+        pid: row.pid,
+        name: row.name,
+        content: row.name,
+        type: '来自第三方支付对接',
+        create_user: row.create_user,
+        create_time: row.create_time
+      }
+      const parms = {
+        ticket__name: row.platform
+      }
+      getThreePayEnclosure(parms).then(res => {
+        postDemandManager(DemandForm).then(response => {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，转移成功'
+          })
+          if (res.data.length > 0) {
+            for (const item of res.data) {
+              const Demandenclosure = {
+                project: response.data.id,
+                file: item.file,
+                create_user: item.create_user,
+                create_time: item.create_time
+              }
+              postDemandEnclosure(Demandenclosure)
+            }
+          }
+          row.status = 1
+          putPlatformPayChannel(row.id, row)
+        }).catch(error => {
+          const errordata = Object.values(error.response.data)[0]
+          this.$message.error(errordata[0])
+          console.log(errordata)
+        })
+      })
     }
   }
 }
