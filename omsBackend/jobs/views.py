@@ -20,7 +20,7 @@ class JobsViewSet(viewsets.ModelViewSet):
 
 
 class DeployenvViewSet(viewsets.ModelViewSet):
-    queryset = Deployenv.objects.all()
+    queryset = Deployenv.objects.all().order_by('id')
     serializer_class = DeployenvSerializer
     filter_fields = ['job__id']
 
