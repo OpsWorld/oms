@@ -112,7 +112,6 @@ export default {
         project__id: this.pid
       }
       getDemandEnclosure(parms).then(response => {
-        console.log(response)
         this.enclosureData = response.data
       })
     }

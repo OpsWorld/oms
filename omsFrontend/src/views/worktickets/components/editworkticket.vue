@@ -355,7 +355,7 @@ export default {
         pid: this.ticketData.pid,
         name: this.ticketData.name,
         content: this.ticketData.content,
-        type: null,
+        type: '来自工单',
         create_user: this.ticketData.create_user,
         create_time: this.ticketData.create_time
       }
@@ -375,6 +375,10 @@ export default {
             postDemandEnclosure(Demandenclosure)
           }
         }
+      }).catch(error => {
+        const errordata = Object.values(error.response.data)[0]
+        this.$message.error(errordata[0])
+        console.log(errordata)
       })
     }
   }

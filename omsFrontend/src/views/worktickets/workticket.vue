@@ -67,8 +67,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='工单创建人'></el-table-column>
-          <!--<el-table-column prop='action_user' label='工单指派者'></el-table-column>-->
-          <!--<el-table-column prop='edit_user' label='最新回复人'></el-table-column>-->
           <el-table-column prop='create_time' label='工单创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">

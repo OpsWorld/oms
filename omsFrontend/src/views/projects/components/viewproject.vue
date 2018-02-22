@@ -46,9 +46,6 @@
                 </el-button>
                 <div v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
-                    <!--<el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index"-->
-                    <!--:disabled="index<=ticketData.status">-->
-                    <!--</el-option>-->
                     <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index">
                     </el-option>
                   </el-select>

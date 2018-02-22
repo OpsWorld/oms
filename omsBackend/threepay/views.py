@@ -51,5 +51,5 @@ class ThreePayCommentViewSet(viewsets.ModelViewSet):
 class PlatformPayChannelViewSet(viewsets.ModelViewSet):
     queryset = PlatformPayChannel.objects.all().order_by('-status')
     serializer_class = PlatformPayChannelSerializer
-    filter_fields = ['platform__name', 'type__name', 'status']
+    filter_fields = ['platform__name', 'type__name', 'status', 'pid']
     ordering_fields = ('type', 'status')

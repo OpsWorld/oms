@@ -7,7 +7,8 @@
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index" @click="changeStatus(index)">
+            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index"
+                       @click="changeStatus(index)">
               {{Project_Status[index]}}
             </el-button>
           </el-button-group>
@@ -22,7 +23,15 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
-          <el-table-column prop='pid' label='编号'></el-table-column>
+          <el-table-column prop='pid' label='编号'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <router-link :to="'viewdemand/' + scope.row.id">
+                  <a style="color: #257cff">{{scope.row.pid}}</a>
+                </router-link>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='status' label='状态'>
@@ -48,9 +57,7 @@
               <router-link :to="'editdemand/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
-              <router-link :to="'viewdemand/' + scope.row.id">
-                <el-button type="primary" size="small">查看</el-button>
-              </router-link>
+              <el-button type="danger" size="small" @click="deleteDemand(scope.row.id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -76,7 +83,7 @@
 </template>
 
 <script>
-import { getDemandManager, patchDemandManager } from '@/api/project'
+import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -152,6 +159,18 @@ export default {
           message: '更新成功!'
         })
         this.fetchData()
+      })
+    },
+    deleteDemand(id) {
+      deleteDemandManager(id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
       })
     }
   }
