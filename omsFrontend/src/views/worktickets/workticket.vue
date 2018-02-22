@@ -131,7 +131,7 @@ export default {
       ticket_status: '',
       pagesize: pagesize,
       rowdata: {
-        ticket_status: 0,
+        ticket_status: '1',
         action_user: localStorage.getItem('username')
       },
       STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成' },
