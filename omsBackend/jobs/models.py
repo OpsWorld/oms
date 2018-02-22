@@ -15,9 +15,9 @@ admin_groups = ['admin', 'OMS_Super_Admin']
 
 
 class Jobs(models.Model):
-    name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
-    code_url = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'代码地址')
-    deploy_path = models.CharField(max_length=150, null=True, blank=True, verbose_name=u'发布路径')
+    name = models.CharField(max_length=200, unique=True, verbose_name=u'名称')
+    code_url = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'代码地址')
+    deploy_path = models.CharField(max_length=250, null=True, blank=True, verbose_name=u'发布路径')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -75,7 +75,7 @@ class Deployenv(models.Model):
 
 class Deploycmd(models.Model):
     env = models.ForeignKey(Deployenv, verbose_name=u'发布环境')
-    name = models.CharField(max_length=10, verbose_name=u'名称')
+    name = models.CharField(max_length=20, verbose_name=u'名称')
     deploy_cmd = models.TextField(null=True, blank=True, verbose_name=u'发布命令')
 
     def __str__(self):
@@ -88,8 +88,8 @@ class Deploycmd(models.Model):
 
 class DeployJobs(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务', related_name='deploy_job')
-    j_id = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'任务ID')
-    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=30,
+    j_id = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'任务ID')
+    deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=10,
                                      verbose_name=u'发布状态')
     deploy_hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')

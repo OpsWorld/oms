@@ -6,6 +6,7 @@
           <router-link :to="'adddemand'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
+          <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
           <el-button-group v-model="listQuery.status">
             <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index"
                        @click="changeStatus(index)">
@@ -22,7 +23,9 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
+        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange"
+                  @selection-change="handleSelectionChange">
+          <el-table-column type="selection"></el-table-column>
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
@@ -79,6 +82,20 @@
         </div>
       </div>
     </el-card>
+
+    <el-dialog
+      title="更改状态"
+      :visible.sync="show_status">
+      <el-radio-group v-model="updateform.status">
+        <el-radio :label="0">未接收</el-radio>
+        <el-radio :label="1">已通过</el-radio>
+        <el-radio :label="2">未通过</el-radio>
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="show_status=false">取 消</el-button>
+    <el-button type="primary" @click="changeDemand">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -112,8 +129,10 @@ export default {
       },
       updateform: {
         id: '',
-        status: ''
-      }
+        status: 1
+      },
+      btnstatus: true,
+      show_status: false
     }
   },
   created() {
@@ -152,14 +171,16 @@ export default {
       }
       this.fetchData()
     },
-    changeComplete() {
-      patchDemandManager(this.updateform.id, this.updateform).then(response => {
-        this.$message({
-          type: 'success',
-          message: '更新成功!'
-        })
-        this.fetchData()
-      })
+    handleSelectionChange(val) {
+      this.selectId = []
+      for (var i = 0, len = val.length; i < len; i++) {
+        this.selectId.push(val[i].id)
+      }
+      if (this.selectId.length > 0) {
+        this.btnstatus = false
+      } else {
+        this.btnstatus = true
+      }
     },
     deleteDemand(id) {
       deleteDemandManager(id).then(response => {
@@ -172,6 +193,15 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
+    },
+    changeDemand() {
+      for (var i = 0, len = this.selectId.length; i < len; i++) {
+        patchDemandManager(this.selectId[i], this.updateform).then(response => {
+          delete this.selectId[i]
+        })
+      }
+      setTimeout(this.fetchData(), 1000)
+      this.show_status = false
     }
   }
 }
