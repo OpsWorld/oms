@@ -103,7 +103,7 @@
     <el-dialog
       title="更改状态"
       :visible.sync="show_status">
-      <el-radio-group v-model="select_status">
+      <el-radio-group v-model="rowdata.ticket_status">
         <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
         </el-radio>
       </el-radio-group>
@@ -149,7 +149,6 @@ export default {
       workticketlist_btn_add: false,
       workticketlist_btn_change_status: false,
       btnstatus: true,
-      select_status: 1,
       show_status: false
     }
   },
@@ -218,7 +217,6 @@ export default {
     },
     changeForm() {
       for (var i = 0, len = this.selectId.length; i < len; i++) {
-        this.rowdata.ticket_status = this.select_status
         patchWorkticket(this.selectId[i], this.rowdata).then(response => {
           delete this.selectId[i]
         })
