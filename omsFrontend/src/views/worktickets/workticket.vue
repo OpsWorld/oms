@@ -17,7 +17,7 @@
           </el-button-group>
 
           <el-radio-group v-model="listQuery.ticket_status" @change="changeStatus" style="margin-left: 20px">
-            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
           </el-radio-group>
 
@@ -104,7 +104,7 @@
       title="更改状态"
       :visible.sync="show_status">
       <el-radio-group v-model="rowdata.ticket_status">
-        <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+        <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
         </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">

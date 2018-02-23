@@ -8,7 +8,7 @@
           </router-link>
           <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
-            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
           </el-radio-group>
         </div>
@@ -85,7 +85,7 @@
       title="更改状态"
       :visible.sync="show_status">
       <el-radio-group v-model="updateform.status">
-        <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+        <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
         </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">

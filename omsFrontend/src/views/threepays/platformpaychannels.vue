@@ -12,7 +12,7 @@
           </el-select>
 
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
-            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
           </el-radio-group>
         </div>
@@ -92,7 +92,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="ruleForm.status">
-            <el-radio v-for="(item, index) in Object.keys(STATUS_TEXT)" :key="index" :label="item">{{STATUS_TEXT[item]}}
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
           </el-radio-group>
         </el-form-item>
