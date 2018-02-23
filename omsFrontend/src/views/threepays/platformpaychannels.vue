@@ -109,6 +109,7 @@ import { getPlatformPayChannel, getPlatform, putPlatformPayChannel, getThreePayE
 import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
+import { postSendmessage } from 'api/tool'
 
 export default {
   components: {},
@@ -203,6 +204,14 @@ export default {
           message: '恭喜你，更新成功'
         })
         this.editForm = false
+        if (this.ruleForm.status === '2') {
+          const messageForm = {
+            action_user: this.ruleForm.create_user,
+            title: '【通道已完成】' + this.ruleForm.name,
+            message: `平台: ${this.ruleForm.platform}\n通道类型: ${this.ruleForm.type}\n完成情况: ${this.STATUS_TEXT[this.ruleForm.status]}`
+          }
+          postSendmessage(messageForm)
+        }
       })
     },
     copyPaychannel(row) {
