@@ -11,8 +11,11 @@
         <el-form-item label="发布路径" prop="deploy_path">
           <el-input v-model="ruleForm.deploy_path" placeholder="请输入正确的内容"></el-input>
         </el-form-item>
-        <el-form-item label="研发可见" prop="showdev">
-          <el-switch v-model="ruleForm.showdev" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        <el-form-item label="发布环境" prop="showdev">
+          <el-radio-group v-model="ruleForm.showdev">
+            <el-radio :label="true">测试</el-radio>
+            <el-radio :label="false">正式</el-radio>
+          </el-radio-group>
         </el-form-item>
         <el-form-item label="发布步骤">
           <el-card>
