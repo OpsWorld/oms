@@ -81,3 +81,10 @@ router.register(r'bugmanagers', BugManagerViewSet)
 router.register(r'testmanagers', TestManagerViewSet)
 router.register(r'demandmanagers', DemandManagerViewSet)
 router.register(r'demandenclosures', DemandEnclosureViewSet)
+
+from optasks.views import ProjectViewSet, ProjectEnclosureViewSet, ProjectTypeViewSet, DemandManagerViewSet
+
+router.register(r'projects', ProjectViewSet)
+router.register(r'projectenclosures', ProjectEnclosureViewSet)
+router.register(r'projecttypes', ProjectTypeViewSet)
+router.register(r'demandmanagers', DemandManagerViewSet)

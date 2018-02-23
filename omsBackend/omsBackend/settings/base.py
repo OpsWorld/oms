@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'jobs',
     'records',
     'projects',
+    'optasks',
 ]
 
 MIDDLEWARE = [
