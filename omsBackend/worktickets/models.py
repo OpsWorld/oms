@@ -18,6 +18,7 @@ TicketStatus = {
     0: '未接收',
     1: '正在处理',
     2: '已解决',
+    3: '搁置',
 }
 
 admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']

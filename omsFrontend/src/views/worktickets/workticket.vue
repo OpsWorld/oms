@@ -134,8 +134,8 @@ export default {
         ticket_status: '1',
         action_user: localStorage.getItem('username')
       },
-      STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成' },
-      STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
+      STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成', '3': '搁置' },
+      STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info', '3': 'warning' },
       listQuery: {
         limit: LIMIT,
         offset: '',

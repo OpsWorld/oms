@@ -122,5 +122,12 @@ module.exports = {
   bugmanagers: `${url}/api/bugmanagers/`,
   testmanagers: `${url}/api/testmanagers/`,
   demandmanagers: `${url}/api/demandmanagers/`,
-  demandenclosures: `${url}/api/demandenclosures/`
+  demandenclosures: `${url}/api/demandenclosures/`,
+
+  // 运维项目
+  opsprojects: `${url}/api/opsprojects/`,
+  opsprojectenclosures: `${url}/api/opsprojectenclosures/`,
+  opsprojecttypes: `${url}/api/opsprojecttypes/`,
+  opsdemandmanagers: `${url}/api/opsdemandmanagers/`,
+  opsdemandenclosures: `${url}/api/opsdemandenclosures/`
 }
