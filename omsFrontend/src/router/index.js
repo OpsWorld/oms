@@ -115,18 +115,18 @@ export const asyncRouterMap = [
     ]
   },
   {
-    name: '运维任务',
+    name: '运维管理',
     path: '/opstasks',
     component: Layout,
     icon: 'angellist',
     redirect: 'demands',
     children: [
-      { path: 'opsdemands', component: _import('opstasks/demands'), name: '运维项目列表' },
-      { path: 'addopsdemand', hidden: true, component: _import('opstasks/components/adddemand'), name: '添加运维项目' },
+      { path: 'opsdemands', component: _import('opstasks/demands'), name: '项目列表' },
+      { path: 'addopsdemand', hidden: true, component: _import('opstasks/components/adddemand'), name: '添加项目' },
       { path: 'editopsdemand/:id', hidden: true, component: _import('opstasks/components/editdemand'), name: '编辑运维项目' },
       { path: 'viewopsdemand/:id', hidden: true, component: _import('opstasks/components/viewdemand'), name: '查看运维项目' },
-      { path: 'opsprojects', component: _import('opstasks/projects'), name: '运维任务列表' },
-      { path: 'opsprojecttypes', component: _import('opstasks/projecttypes'), name: '运维任务类型' },
+      { path: 'opsprojects', component: _import('opstasks/projects'), name: '任务列表' },
+      { path: 'opsprojecttypes', component: _import('opstasks/projecttypes'), name: '任务类型' },
       { path: 'addopsproject', hidden: true, component: _import('opstasks/components/addproject'), name: '添加运维任务' },
       { path: 'editopsproject/:id', hidden: true, component: _import('opstasks/components/editproject'), name: '编辑运维任务' },
       { path: 'viewopsproject/:id', hidden: true, component: _import('opstasks/components/viewproject'), name: '查看运维任务' }
