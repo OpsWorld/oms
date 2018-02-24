@@ -75,7 +75,7 @@
   </div>
 </template>
 <script>
-import { getProject, patchProject, getProjectEnclosure } from '@/api/opstask'
+import { getProject, patchProject, getProjectEnclosure } from '@/api/optask'
 import { postUpload } from 'api/tool'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'

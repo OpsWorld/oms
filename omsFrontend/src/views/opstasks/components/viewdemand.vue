@@ -50,7 +50,7 @@
   </div>
 </template>
 <script>
-import { getDemandManager } from '@/api/opstask'
+import { getDemandManager, getDemandEnclosure } from '@/api/optask'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
 import { apiUrl } from '@/config'
@@ -98,12 +98,21 @@ export default {
 
   created() {
     this.fetchData()
+    this.fetchEnclosureData()
   },
   methods: {
     fetchData() {
       const query = null
       getDemandManager(query, this.pid).then(response => {
         this.ticketData = response.data[0]
+      })
+    },
+    fetchEnclosureData() {
+      const parms = {
+        project__id: this.pid
+      }
+      getDemandEnclosure(parms).then(response => {
+        this.enclosureData = response.data
       })
     }
   }

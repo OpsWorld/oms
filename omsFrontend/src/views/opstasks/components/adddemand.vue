@@ -40,7 +40,7 @@
   </div>
 </template>
 <script>
-import { postDemandManager, getProjectType } from '@/api/opstask'
+import { postopsDemandManager, postopsDemandEnclosure, getProjectType } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
@@ -103,11 +103,24 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.ruleForm.pid = 'dm' + getConversionTime()
-          postDemandManager(this.ruleForm).then(response => {
+          postopsDemandManager(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
                 type: 'success',
                 message: '恭喜你，新建成功'
+              })
+            }
+            for (var fileList of this.fileList) {
+              const formData = new FormData()
+              formData.append('username', this.enclosureForm.create_user)
+              formData.append('file', fileList)
+              formData.append('create_time', getConversionTime(fileList.uid))
+              formData.append('type', fileList.type)
+              formData.append('archive', this.route_path[1])
+              postUpload(formData).then(res => {
+                this.enclosureForm.file = res.data.filepath
+                this.enclosureForm.project = response.data.id
+                postopsDemandEnclosure(this.enclosureForm)
               })
             }
             if (this.sendnotice) {

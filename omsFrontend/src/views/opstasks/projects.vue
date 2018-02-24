@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { getProject, patchProject, deleteProject } from '@/api/opstask'
+import { getProject, patchProject, deleteProject } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {

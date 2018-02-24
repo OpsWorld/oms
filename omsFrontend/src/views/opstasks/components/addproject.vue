@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import { postProject, getProjectType, postProjectEnclosure } from '@/api/opstask'
+import { postProject, getProjectType, postProjectEnclosure } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'

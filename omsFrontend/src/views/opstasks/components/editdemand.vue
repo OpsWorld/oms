@@ -51,7 +51,8 @@
   </div>
 </template>
 <script>
-import { getDemandManager, getProjectType, putDemandManager } from '@/api/opstask'
+import { getDemandManager, getProjectType, putDemandManager } from '@/api/optask'
+import { postopsDemandEnclosure, getDemandEnclosure, deleteDemandEnclosure } from '@/api/optask'
 import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
 import { postUpload } from 'api/tool'
@@ -152,6 +153,43 @@ export default {
       postUpload(formData).then(response => {
         md.$imglst2Url([[pos, response.data.file]])
       })
+    },
+    beforeAvatarUpload(file) {
+      const formData = new FormData()
+      formData.append('username', this.enclosureForm.create_user)
+      formData.append('file', file)
+      formData.append('create_time', getConversionTime())
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        this.enclosureForm.file = response.data.filepath
+        postopsDemandEnclosure(this.enclosureForm)
+        if (response.statusText === 'Created') {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，上传成功'
+          })
+        }
+        this.fetchEnclosureData()
+      }).catch(error => {
+        this.$message.error('上传失败')
+        this.$refs.upload.clearFiles()
+        console.log(error)
+      })
+      return true
+    },
+    fetchEnclosureData() {
+      const parms = {
+        project__id: this.pid
+      }
+      getDemandEnclosure(parms).then(response => {
+        this.enclosureData = response.data
+        this.count = response.data.length
+      })
+    },
+    deleteEnclosure(id) {
+      deleteDemandEnclosure(id)
+      this.fetchEnclosureData()
     }
   }
 }

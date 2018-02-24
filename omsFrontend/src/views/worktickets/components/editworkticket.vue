@@ -24,15 +24,26 @@
               <a>{{ticketData.type}}</a>
               <a class="shu"></a>
               <span class="han">工单当前状态：</span>
-              <el-tag :type="TICKET_STATUS_TYPE[ticketData.ticket_status]">
-                {{TICKET_STATUS_TEXT[ticketData.ticket_status]}}
+              <el-tag :type="STATUS_TYPE[ticketData.ticket_status]">
+                {{STATUS_TEXT[ticketData.ticket_status]}}
               </el-tag>
             </div>
             <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-              <el-button v-if="role==='super'" type="primary" size="small" @click="copyWorkticket">乾坤大挪移</el-button>
+              <el-popover
+                v-if="role==='super'"
+                ref="popover"
+                placement="right"
+                width="160"
+                v-model="selectcopy">
+                <div>
+                  <el-button type="warning" size="mini" plain @click="copyWorkticket('ops')">运维</el-button>
+                  <el-button type="danger" size="mini" plain @click="copyWorkticket('dev')">研发</el-button>
+                </div>
+              </el-popover>
+              <el-button type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
               <div v-if="showinput" class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
@@ -141,6 +152,7 @@ import {
   deleteTicketenclosure
 } from 'api/workticket'
 import { postDemandManager, postDemandEnclosure } from '@/api/project'
+import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
@@ -201,12 +213,13 @@ export default {
       },
       workticketlist_btn_edit: false,
       uploadurl: uploadurl,
-      TICKET_STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已解决' },
-      TICKET_STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
+      STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成', '3': '搁置' },
+      STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info', '3': 'warning' },
       showinput: false,
       radio_status: '0',
       mailcontent: '',
-      sendnotice: false
+      sendnotice: false,
+      selectcopy: false
     }
   },
 
@@ -350,7 +363,7 @@ export default {
         this.users = response.data
       })
     },
-    copyWorkticket() {
+    copyWorkticket(type) {
       const DemandForm = {
         pid: this.ticketData.pid,
         name: this.ticketData.name,
@@ -359,29 +372,55 @@ export default {
         create_user: this.ticketData.create_user,
         create_time: this.ticketData.create_time
       }
-      postDemandManager(DemandForm).then(response => {
-        this.$message({
-          type: 'success',
-          message: '恭喜你，转移成功'
-        })
-        if (this.enclosureData.length > 0) {
-          for (const item of this.enclosureData) {
-            const Demandenclosure = {
-              project: response.data.id,
-              file: item.file,
-              create_user: item.create_user,
-              create_time: item.create_time
+      if (type === 'ops') {
+        postopsDemandManager(DemandForm).then(response => {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，转移成功'
+          })
+          if (this.enclosureData.length > 0) {
+            for (const item of this.enclosureData) {
+              const Demandenclosure = {
+                project: response.data.id,
+                file: item.file,
+                create_user: item.create_user,
+                create_time: item.create_time
+              }
+              postopsDemandEnclosure(Demandenclosure)
             }
-            postDemandEnclosure(Demandenclosure)
           }
-        }
-        this.patchForm(this.rowdata)
-        this.fetchData()
-      }).catch(error => {
-        const errordata = Object.values(error.response.data)[0]
-        this.$message.error(errordata[0])
-        console.log(errordata)
-      })
+          this.patchForm(this.rowdata)
+          this.fetchData()
+        }).catch(error => {
+          const errordata = Object.values(error.response.data)[0]
+          this.$message.error(errordata[0])
+          console.log(errordata)
+        })
+      } else {
+        postDemandManager(DemandForm).then(response => {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，转移成功'
+          })
+          if (this.enclosureData.length > 0) {
+            for (const item of this.enclosureData) {
+              const Demandenclosure = {
+                project: response.data.id,
+                file: item.file,
+                create_user: item.create_user,
+                create_time: item.create_time
+              }
+              postDemandEnclosure(Demandenclosure)
+            }
+          }
+          this.patchForm(this.rowdata)
+          this.fetchData()
+        }).catch(error => {
+          const errordata = Object.values(error.response.data)[0]
+          this.$message.error(errordata[0])
+          console.log(errordata)
+        })
+      }
     }
   }
 }

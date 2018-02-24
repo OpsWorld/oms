@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { getProjectType, postProjectType, putProjectType, deleteProjectType } from '@/api/opstask'
+import { getProjectType, postProjectType, putProjectType, deleteProjectType } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addGroup from '../components/addgroup.vue'
 import editGroup from '../components/editgroup.vue'

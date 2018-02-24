@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from optasks.models import OpsProject, OpsProjectEnclosure, OpsProjectType, OpsDemandManager
+from optasks.models import OpsProject, OpsProjectEnclosure, OpsProjectType, OpsDemandManager, OpsDemandEnclosure
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -42,3 +42,12 @@ class OpsDemandManagerSerializer(serializers.ModelSerializer):
         model = OpsDemandManager
         fields = (
             'url', 'id', 'pid', 'name', 'type', 'content', 'create_user', 'status', 'create_time', 'end_time')
+
+
+class OpsDemandEnclosureSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
+
+    class Meta:
+        model = OpsDemandEnclosure
+        fields = ('url', 'id', 'project', 'file', 'create_user', 'create_time')

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/opstask'
+import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {

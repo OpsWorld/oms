@@ -82,9 +82,10 @@ router.register(r'testmanagers', TestManagerViewSet)
 router.register(r'demandmanagers', DemandManagerViewSet)
 router.register(r'demandenclosures', DemandEnclosureViewSet)
 
-from optasks.views import OpsProjectViewSet, OpsProjectEnclosureViewSet, OpsProjectTypeViewSet, OpsDemandManagerViewSet
+from optasks.views import OpsProjectViewSet, OpsProjectEnclosureViewSet, OpsProjectTypeViewSet, OpsDemandManagerViewSet, OpsDemandEnclosureViewSet
 
 router.register(r'opsprojects', OpsProjectViewSet)
 router.register(r'opsprojectenclosures', OpsProjectEnclosureViewSet)
 router.register(r'opsprojecttypes', OpsProjectTypeViewSet)
 router.register(r'opsdemandmanagers', OpsDemandManagerViewSet)
+router.register(r'opsdemandenclosures', OpsDemandEnclosureViewSet)

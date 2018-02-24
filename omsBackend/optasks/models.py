@@ -89,3 +89,14 @@ class OpsDemandManager(models.Model):
     class Meta:
         verbose_name = u'需求'
         verbose_name_plural = u'需求'
+
+
+class OpsDemandEnclosure(models.Model):
+    project = models.ForeignKey(OpsDemandManager, verbose_name=u'项目')
+    file = models.ForeignKey(Upload, verbose_name=u'附件')
+    create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
+
+    class Meta:
+        verbose_name = u'附件'
+        verbose_name_plural = u'附件'

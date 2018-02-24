@@ -128,5 +128,6 @@ module.exports = {
   opsprojects: `${url}/api/opsprojects/`,
   opsprojectenclosures: `${url}/api/opsprojectenclosures/`,
   opsprojecttypes: `${url}/api/opsprojecttypes/`,
-  opsdemandmanagers: `${url}/api/opsdemandmanagers/`
+  opsdemandmanagers: `${url}/api/opsdemandmanagers/`,
+  opsdemandenclosures: `${url}/api/opsdemandenclosures/`
 }

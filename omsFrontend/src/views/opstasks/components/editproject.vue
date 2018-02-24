@@ -67,8 +67,8 @@
   </div>
 </template>
 <script>
-import { getProject, putProject, getProjectType } from '@/api/opstask'
-import { getProjectEnclosure, postProjectEnclosure, deleteProjectEnclosure } from '@/api/opstask'
+import { getProject, putProject, getProjectType } from '@/api/optask'
+import { getProjectEnclosure, postProjectEnclosure, deleteProjectEnclosure } from '@/api/optask'
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
 import { apiUrl, uploadurl } from '@/config'
