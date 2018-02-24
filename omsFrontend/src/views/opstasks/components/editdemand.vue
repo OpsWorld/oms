@@ -124,7 +124,7 @@ export default {
                 message: '恭喜你，更新成功'
               })
             }
-            this.$router.push('/projects/demands')
+            this.$router.push('/opstasks/opsdemands')
           })
         } else {
           console.log('error submit!!')

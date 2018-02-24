@@ -155,7 +155,7 @@ export default {
               }
               postSendmessage(messageForm)
             }
-            this.$router.push('/projects/projects')
+            this.$router.push('/opstasks/opsprojects')
           })
         } else {
           console.log('error submit!!')

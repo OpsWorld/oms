@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link :to="'addproject'">
+          <router-link :to="'addopsproject'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
@@ -25,7 +25,7 @@
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
-              <router-link :to="'viewproject/' + scope.row.id">
+              <router-link :to="'viewopsproject/' + scope.row.id">
                 <a style="color: #257cff">{{scope.row.pid}}</a>
               </router-link>
             </template>
@@ -82,7 +82,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <router-link :to="'editproject/' + scope.row.id">
+              <router-link :to="'editopsproject/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
               <el-button type="danger" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>

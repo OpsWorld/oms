@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <router-link :to="'adddemand'">
+          <router-link :to="'addopsdemand'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
           <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
@@ -27,7 +27,7 @@
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
-                <router-link :to="'viewdemand/' + scope.row.id">
+                <router-link :to="'viewopsdemand/' + scope.row.id">
                   <a style="color: #257cff">{{scope.row.pid}}</a>
                 </router-link>
               </div>
@@ -55,7 +55,7 @@
           <el-table-column prop='end_time' label='计划完成时间'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <router-link :to="'editdemand/' + scope.row.id">
+              <router-link :to="'editopsdemand/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
               </router-link>
               <el-button type="danger" size="small" @click="deleteDemand(scope.row.id)">删除</el-button>
