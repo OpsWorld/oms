@@ -1,19 +1,13 @@
 <template>
   <el-form :model="rowdata" :rules="rules" ref="ruleForm" label-width="100px">
     <el-form-item label="平台" prop="platform">
-      <el-select v-model="rowdata.platform" filterable placeholder="请选择平台" @change="getMerchants">
-        <el-option v-for="item in platforms" :key="item.id" :value="item.name"></el-option>
-      </el-select>
+      <el-input v-model="rowdata.platform" disabled></el-input>
     </el-form-item>
     <el-form-item label="商户" prop="merchant">
-      <el-select v-model="rowdata.merchant" filterable placeholder="请选择商户">
-        <el-option v-for="item in merchants" :key="item.id" :value="item.name"></el-option>
-      </el-select>
+      <el-input v-model="rowdata.merchant" disabled></el-input>
     </el-form-item>
     <el-form-item label="类型" prop="type">
-      <el-select v-model="rowdata.type" filterable placeholder="请选择类型">
-        <el-option v-for="item in paychannelnames" :key="item.id" :value="item.name"></el-option>
-      </el-select>
+      <el-input v-model="rowdata.type" disabled></el-input>
     </el-form-item>
     <el-form-item label="费率" prop="rate">
       <el-input v-model="rowdata.rate"></el-input>
@@ -39,7 +33,7 @@
   </el-form>
 </template>
 <script>
-import { getPlatform, getMerchant, putPayChannel, getPayChannelName } from 'api/threeticket'
+import { putPayChannel } from 'api/threeticket'
 import { getUser } from 'api/user'
 import { postSendmessage } from 'api/tool'
 
@@ -59,23 +53,12 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
-      platforms: [],
-      merchants: [],
-      paychannelnames: [],
-      props: {
-        label: 'name',
-        value: 'name',
-        children: 'merchants'
-      },
       users: [],
       sendnotice: false
     }
   },
   created() {
-    this.getPlatforms()
-    this.getPayChannelNames()
     this.getTicketUsers()
-    this.getMerchants()
   },
   methods: {
     submitForm(formName) {
@@ -100,24 +83,6 @@ export default {
           console.log('error submit!!')
           return false
         }
-      })
-    },
-    getPlatforms() {
-      getPlatform().then(response => {
-        this.platforms = response.data
-      })
-    },
-    getMerchants() {
-      const parmas = {
-        platform__name: this.rowdata.platform
-      }
-      getMerchant(parmas).then(response => {
-        this.merchants = response.data
-      })
-    },
-    getPayChannelNames() {
-      getPayChannelName().then(response => {
-        this.paychannelnames = response.data
       })
     },
     getTicketUsers() {
