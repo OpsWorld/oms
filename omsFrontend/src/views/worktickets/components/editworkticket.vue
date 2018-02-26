@@ -28,10 +28,8 @@
                 {{STATUS_TEXT[ticketData.ticket_status]}}
               </el-tag>
             </div>
-            <div class="appendInfo" v-if="(workticketlist_btn_edit||role==='super')&&ticketData.ticket_status!=2">
+            <div class="appendInfo" v-if="role==='super'&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
-              <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
               <el-popover
                 ref="popover"
                 placement="right"
@@ -42,8 +40,8 @@
                   <el-button type="danger" size="mini" plain @click="copyWorkticket('dev')">研发</el-button>
                 </div>
               </el-popover>
-              <el-button v-if="role==='super'" type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
-              <div v-if="showinput" class="action">
+              <el-button type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
+              <div class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
                   <el-radio label="2">关闭工单</el-radio>
@@ -62,7 +60,7 @@
 
           <hr class="heng"/>
 
-          <div v-if="showinput">
+          <div>
             <el-upload
               ref="upload"
               :action="uploadurl"
@@ -84,7 +82,7 @@
               <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
                 <i class="fa fa-paperclip"></i>
                 <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-button v-if="showinput" type="text" icon="el-icon-delete"
+                <el-button type="text" icon="el-icon-delete"
                            @click="deleteEnclosure(item.id)"></el-button>
               </li>
             </ul>
@@ -92,7 +90,7 @@
         </el-card>
       </div>
 
-      <div v-if="ticketData.ticket_status!=2&&showinput">
+      <div>
         <el-form :model="commentForm" ref="mailcontent" label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
           <el-form-item label="问题处理" prop="content">
@@ -210,11 +208,9 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
-      workticketlist_btn_edit: false,
       uploadurl: uploadurl,
       STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成', '3': '搁置' },
       STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info', '3': 'warning' },
-      showinput: false,
       radio_status: '0',
       mailcontent: '',
       sendnotice: false,
@@ -230,7 +226,6 @@ export default {
   },
 
   created() {
-    this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.CommentData()
     this.EnclosureData()
