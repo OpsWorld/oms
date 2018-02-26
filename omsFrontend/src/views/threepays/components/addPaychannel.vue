@@ -147,11 +147,11 @@ export default {
           this.showtip = true
           const status = response.data[0].status
           if (status === 0) {
-            this.showtiptext = 'Tip：该通道已添加，但未开始对接'
+            this.showtiptext = 'Tip：该通道类型已添加，但未开始对接'
           } else if (status === 2) {
-            this.showtiptext = 'Tip：该通道已添加，并已对接完成'
+            this.showtiptext = 'Tip：该通道类型已添加，并已对接完成'
           } else {
-            this.showtiptext = 'Tip：该通道已添加，正在对接中'
+            this.showtiptext = 'Tip：该通道类型已添加，正在对接中'
           }
         } else {
           this.showtip = false
