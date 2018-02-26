@@ -145,13 +145,13 @@ export default {
       getPlatformPayChannel(query).then(response => {
         if (response.data.length > 0) {
           this.showtip = true
-          const complete = response.data[0].complete
-          if (complete === 0) {
+          const status = response.data[0].status
+          if (status === 0) {
             this.showtiptext = 'Tip：该通道已添加，但未开始对接'
-          } else if (complete === 100) {
+          } else if (status === 2) {
             this.showtiptext = 'Tip：该通道已添加，并已对接完成'
           } else {
-            this.showtiptext = 'Tip：该通道已添加，正在对接中，对接进度为' + complete + '%'
+            this.showtiptext = 'Tip：该通道已添加，正在对接中'
           }
         } else {
           this.showtip = false
