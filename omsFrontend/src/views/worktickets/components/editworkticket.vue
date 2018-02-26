@@ -33,7 +33,6 @@
               <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
               <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
               <el-popover
-                v-if="role==='super'"
                 ref="popover"
                 placement="right"
                 width="160"
@@ -43,7 +42,7 @@
                   <el-button type="danger" size="mini" plain @click="copyWorkticket('dev')">研发</el-button>
                 </div>
               </el-popover>
-              <el-button type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
+              <el-button v-if="role==='super'" type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
               <div v-if="showinput" class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
