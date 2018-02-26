@@ -57,7 +57,9 @@ export default {
           this.$store.dispatch('Login', this.loginForm).then(() => {
             this.loading = false
             this.$router.push(this.$route.query.redirect || '/')
-          }).catch(() => {
+          }).catch(error => {
+            const errordata = Object.values(error.response.data)[0]
+            this.$message.error(errordata[0])
             this.loading = false
           })
         } else {

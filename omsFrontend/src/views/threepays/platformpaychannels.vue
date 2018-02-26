@@ -248,7 +248,6 @@ export default {
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
           this.$message.error(errordata[0])
-          console.log(errordata)
         })
       })
     }
