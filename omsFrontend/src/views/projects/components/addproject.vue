@@ -84,8 +84,8 @@ export default {
         create_user: localStorage.getItem('username'),
         level: 1,
         complete: 0,
-        action_user: '',
-        follow_user: '',
+        action_user: [],
+        follow_user: [],
         from_user: '',
         pid: '',
         is_public: true
@@ -128,7 +128,6 @@ export default {
   },
 
   created() {
-    this.getProjectUsers()
     this.getUsers()
     this.getTypes()
   },
@@ -138,12 +137,10 @@ export default {
         if (valid) {
           this.ruleForm.pid = 'po' + getConversionTime()
           postProject(this.ruleForm).then(response => {
-            if (response.statusText === '"Created"') {
-              this.$message({
-                type: 'success',
-                message: '恭喜你，新建成功'
-              })
-            }
+            this.$message({
+              type: 'success',
+              message: '恭喜你，新建成功'
+            })
             for (var fileList of this.fileList) {
               const formData = new FormData()
               formData.append('username', this.enclosureForm.create_user)
@@ -157,14 +154,12 @@ export default {
                 postProjectEnclosure(this.enclosureForm)
               })
             }
-            if (this.sendnotice) {
-              const messageForm = {
-                action_user: this.ruleForm.action_user.join(),
-                title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
-                message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
-              }
-              postSendmessage(messageForm)
+            const messageForm = {
+              action_user: this.ruleForm.action_user.join() + this.ruleForm.follow_user.join(),
+              title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
+              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user.join()}\n任务地址: http://${window.location.host}/#/projects/viewproject/${response.data.id}`
             }
+            postSendmessage(messageForm)
             this.$router.push('/projects/projects')
           })
         } else {
@@ -185,7 +180,6 @@ export default {
         this.users = response.data
       })
     },
-
     getTypes() {
       getProjectType().then(response => {
         this.types = response.data

@@ -69,7 +69,6 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
-      users: [],
       toolbars: {
         preview: true, // 预览
         bold: true, // 粗体
@@ -139,7 +138,6 @@ export default {
         }
       })
     },
-
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
