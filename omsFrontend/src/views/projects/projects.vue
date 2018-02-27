@@ -8,7 +8,8 @@
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index" @click="changeStatus(index)">
+            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index"
+                       @click="changeStatus(index)">
               {{Project_Status[index]}}
             </el-button>
           </el-button-group>
@@ -32,6 +33,11 @@
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='type' label='类型' width="100"></el-table-column>
+          <el-table-column v-if="role==='super'" prop='is_public' label='是否公开'>
+            <template slot-scope="scope">
+              <a>{{scope.row.is_public}}</a>
+            </template>
+          </el-table-column>
           <el-table-column prop='level' label='等级' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -155,6 +161,7 @@
 <script>
 import { getProject, patchProject, deleteProject } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {},
@@ -194,6 +201,13 @@ export default {
       }
     }
   },
+
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
+  },
+
   created() {
     this.fetchData()
   },
