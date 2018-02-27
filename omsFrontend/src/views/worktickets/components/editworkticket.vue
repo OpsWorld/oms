@@ -231,7 +231,7 @@ export default {
     this.fetchData()
     this.CommentData()
     this.EnclosureData()
-    this.getTicketUsers()
+    this.getUsers()
   },
   methods: {
     fetchData() {
@@ -354,7 +354,7 @@ export default {
         md.$imglst2Url([[pos, response.data.file]])
       })
     },
-    getTicketUsers() {
+    getUsers() {
       getUser().then(response => {
         this.users = response.data
       })
@@ -385,6 +385,20 @@ export default {
               postopsDemandEnclosure(Demandenclosure)
             }
           }
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
+          }
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
           this.patchForm(this.rowdata)
           this.fetchData()
         }).catch(error => {
@@ -409,6 +423,20 @@ export default {
               postDemandEnclosure(Demandenclosure)
             }
           }
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
+          }
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
           this.patchForm(this.rowdata)
           this.fetchData()
         }).catch(error => {
