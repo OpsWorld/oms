@@ -1,34 +1,33 @@
 <template>
   <div>
-    <el-popover
-      ref="statuspopover"
-      placement="top"
-      width="160"
-      v-model="changestatus">
-      <p>这是一段内容这是一段内容确定删除吗？</p>
-      <div style="text-align: right; margin: 0">
-        <el-button size="mini" type="text" @click="changestatus = false">取消</el-button>
-        <el-button type="primary" size="mini" @click="changestatus = false">确定</el-button>
-      </div>
-    </el-popover>
-    <el-button v-popover:statuspopover>删除</el-button>
+    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+    <div style="margin: 15px 0;"></div>
+    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+      <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
+    </el-checkbox-group>
   </div>
 </template>
 
 <script>
 export default {
-  components: {},
   data() {
     return {
-      changestatus: false
+      checkAll: false,
+      checkedCities: [],
+      cities: ['上海', '北京', '广州', '深圳'],
+      isIndeterminate: true
     }
   },
-  created() {
-  },
-
-  methods: {}
+  methods: {
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? this.cities : []
+      this.isIndeterminate = false
+    },
+    handleCheckedCitiesChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.cities.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+    }
+  }
 }
 </script>
-
-<style lang="scss">
-</style>

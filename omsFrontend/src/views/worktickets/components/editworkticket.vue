@@ -28,7 +28,7 @@
                 {{STATUS_TEXT[ticketData.ticket_status]}}
               </el-tag>
             </div>
-            <div class="appendInfo" v-if="role==='super'&&ticketData.ticket_status!=2">
+            <div class="appendInfo" v-if="workticketlist_btn_edit||role==='super'&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
               <el-popover
                 ref="popover"
@@ -214,7 +214,8 @@ export default {
       radio_status: '0',
       mailcontent: '',
       sendnotice: false,
-      selectcopy: false
+      selectcopy: false,
+      workticketlist_btn_edit: false
     }
   },
 
@@ -226,6 +227,7 @@ export default {
   },
 
   created() {
+    this.workticketlist_btn_edit = this.elements['编辑工单-编辑工单按钮']
     this.fetchData()
     this.CommentData()
     this.EnclosureData()

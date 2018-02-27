@@ -2,17 +2,32 @@
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
       <el-col :span="8">
+
+        <el-card>
+          <div slot="header">
+            <a class="jobname">【{{jobs.name}}】更新信息</a>
+          </div>
+          <el-form :model="versionForm" :rules="svnrules" ref="versionForm" label-width="90px">
+            <el-form-item label="发布版本" prop="version">
+              <el-input v-model="versionForm.version"></el-input>
+            </el-form-item>
+            <el-form-item label="更新内容" prop="content">
+              <el-input v-model="versionForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+            </el-form-item>
+          </el-form>
+        </el-card>
+
         <el-card>
           <div slot="header">
             <a class="jobname">{{jobs.name}}</a>
           </div>
-          <div class="deploycmd">
-            <a class="lable-text">发布步骤</a>
-            <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-              <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-            </el-select>
-          </div>
-          <el-form v-if="showsvn" :model="ruleForm" :rules="svnrules" ref="ruleForm" label-width="90px">
+
+          <el-form :model="ruleForm" :rules="svnrules" ref="ruleForm" label-width="90px">
+            <el-form-item label="发布步骤" prop="env">
+              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
+                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="发布命令" prop="deploy_cmd">
               <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
                 <el-option v-for="item in cmds" :key="item.id" :label="item.name"
@@ -22,38 +37,13 @@
             <el-form-item label="代码路径">
               <el-input v-model="jobs.code_url" disabled></el-input>
             </el-form-item>
-            <el-form-item label="发布版本" prop="version">
-              <el-input v-model="ruleForm.version"></el-input>
-            </el-form-item>
-            <el-form-item label="更新内容" prop="content">
-              <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-            </el-form-item>
             <el-form-item label="通知skype">
               <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="svnsubmitForm('ruleForm')">svn更新</el-button>
+              <el-button type="primary" @click="submitForm('versionForm')">svn更新</el-button>
             </el-form-item>
           </el-form>
-
-          <el-form v-else :model="otherForm" :rules="svnrules" ref="otherForm" label-width="90px">
-            <el-form-item label="发布命令" prop="deploy_cmd">
-              <el-select v-model="otherForm.deploy_cmd" placeholder="请选择发布命令">
-                <el-option v-for="item in cmds" :key="item.id" :label="item.name"
-                           :value="item.deploy_cmd"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="代码路径">
-              <el-input v-model="jobs.code_url" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="通知skype">
-              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="othersubmitForm('otherForm')">开始构建</el-button>
-            </el-form-item>
-          </el-form>
-
         </el-card>
       </el-col>
       <el-col :span="16">
@@ -98,6 +88,7 @@
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column prop='env' label='发布步骤'></el-table-column>
               <el-table-column prop='action_user' label='发布人'></el-table-column>
               <el-table-column prop='create_time' label='发布时间' sortable>
                 <template slot-scope="scope">
@@ -109,7 +100,7 @@
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button @click="showJobResult(scope.row.result)" type="success" size="mini"
-                             :disabled="!scope.row.result">查看结果
+                             :disabled="!scope.row.result">结果
                   </el-button>
                 </template>
               </el-table-column>
@@ -154,7 +145,10 @@ import {
   deleteDeployJob,
   getUpdateJobsStatus,
   getDeployenv,
-  getDeploycmd
+  getDeploycmd,
+  postDeployVersion,
+  putDeployVersion,
+  getDeployVersion
 } from '@/api/job'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
@@ -167,28 +161,19 @@ export default {
     return {
       route_path: this.$route.path.split('/'),
       job_id: this.$route.params.job_id,
+      versionForm: {
+        job: '',
+        version: '',
+        content: ''
+      },
       ruleForm: {
         job: '',
         env: '',
         deploy_hosts: [],
-        version: '',
         deploy_cmd: '',
-        content: '',
-        action_user: localStorage.getItem('username')
-      },
-      otherForm: {
-        job: '',
-        env: '',
-        deploy_hosts: [],
-        version: '',
-        deploy_cmd: '',
-        content: '',
         action_user: localStorage.getItem('username')
       },
       svnrules: {
-        deploy_cmd: [
-          { required: true, message: '请输入正确的内容', trigger: 'change' }
-        ],
         version: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
@@ -221,7 +206,7 @@ export default {
       job_results: [],
       check_job_status: '',
       sendnotice: true,
-      showsvn: true
+      hasversion: false
     }
   },
   computed: {
@@ -232,13 +217,14 @@ export default {
   created() {
     this.fetchJobData()
     this.fetchJobenvData()
+    this.fetchDeployversionData()
   },
   methods: {
     fetchJobData() {
       const parmas = null
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
-        this.otherForm.job = this.ruleForm.job = this.listQuery.job__name = this.jobs.name
+        this.ruleForm.job = this.listQuery.job__name = this.jobs.name
         this.fetchDeployJobData()
       })
     },
@@ -258,16 +244,28 @@ export default {
         this.cmds = response.data
       })
     },
+    fetchDeployversionData() {
+      const parmas = {
+        job__name: this.jobs.name
+      }
+      getDeployVersion(parmas).then(response => {
+        this.versionForm = response.data[0]
+        if (response.data.length > 0) {
+          this.hasversion = true
+        } else {
+          this.versionForm = {
+            job: this.jobs.name,
+            version: '',
+            content: ''
+          }
+          this.hasversion = false
+        }
+      })
+    },
     selectEnv(env) {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
-      this.otherForm.deploy_hosts = this.ruleForm.deploy_hosts = selectenv.deploy_hosts
-      this.ruleForm.version = this.ruleForm.content = this.ruleForm.deploy_cmd = this.otherForm.deploy_cmd = ''
-      if (this.ruleForm.env.toLowerCase() === 'svn') {
-        this.showsvn = true
-      } else {
-        this.showsvn = false
-        this.$refs['ruleForm'].clearValidate()
-      }
+      this.ruleForm.deploy_hosts = selectenv.deploy_hosts
+      this.ruleForm.deploy_cmd = ''
       this.fetchDeploycmdData(selectenv.id)
     },
     fetchDeployJobData() {
@@ -304,8 +302,15 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchDeployJobData()
     },
-    svnsubmitForm(formdata) {
+    submitForm(formdata) {
+      if (this.hasversion) {
+        putDeployVersion(this.versionForm.id, this.versionForm)
+      } else {
+        console.log(this.hasversion)
+        postDeployVersion(this.versionForm)
+      }
       this.$refs[formdata].validate((valid) => {
+        this.ruleForm = Object.assign(this.ruleForm, this.versionForm)
         if (valid) {
           if ((typeof this.ruleForm.deploy_hosts) === 'string') {
             this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
@@ -325,41 +330,6 @@ export default {
                 action_user: 'ITDept_SkypeID',
                 title: `【${this.ruleForm.job}】更新`,
                 message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
-              }
-              postSendmessage(messageForm)
-            }
-          }).catch(error => {
-            this.$message.error('构建失败，请检查参数是否正确！')
-            console.log(error)
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    othersubmitForm(formdata) {
-      this.otherForm.env = this.otherForm.version = this.otherForm.content = this.ruleForm.env
-
-      this.$refs[formdata].validate((valid) => {
-        if (valid) {
-          if ((typeof this.otherForm.deploy_hosts) === 'string') {
-            this.otherForm.deploy_hosts = this.otherForm.deploy_hosts.split(',')
-          }
-          this.otherForm.deploy_hosts = this.otherForm.deploy_hosts.join()
-          postDeployJob(this.otherForm).then(response => {
-            console.log(response.data.j_id)
-            this.$message({
-              message: '构建成功，系统正在玩命发布中 ...',
-              type: 'success'
-            })
-            this.fetchDeployJobData()
-
-            if (this.sendnotice) {
-              const messageForm = {
-                action_user: 'ITDept_SkypeID',
-                title: `【${this.otherForm.job}】更新`,
-                message: `版本号: ${this.otherForm.version}\n更新内容: ${this.otherForm.content}\n操作人: ${this.otherForm.action_user}`
               }
               postSendmessage(messageForm)
             }
@@ -413,14 +383,5 @@ export default {
   .jobname {
     font-weight: 600;
     margin-left: 20px;
-  }
-
-  .deploycmd {
-    margin-bottom: 25px;
-    .lable-text {
-      margin-left: 25px;
-      font-weight: 600;
-      margin-right: 5px;
-    }
   }
 </style>

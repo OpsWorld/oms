@@ -18,6 +18,7 @@ class Jobs(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name=u'名称')
     code_url = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'代码地址')
     deploy_path = models.CharField(max_length=250, null=True, blank=True, verbose_name=u'发布路径')
+    cur_step = models.IntegerField(default=0, verbose_name=u'当前步骤')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
@@ -92,9 +93,10 @@ class DeployJobs(models.Model):
     deploy_status = models.CharField(choices=DEPLOY_STATUS.items(), default="deploy", max_length=10,
                                      verbose_name=u'发布状态')
     deploy_hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
+    env = models.CharField(max_length=10, verbose_name=u'发布环境')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
     content = models.TextField(verbose_name=u'更新内容')
-    deploy_cmd = models.TextField( verbose_name=u'发布命令')
+    deploy_cmd = models.TextField(verbose_name=u'发布命令')
     action_user = models.ForeignKey(User, verbose_name=u'操作人')
     result = models.TextField(null=True, blank=True, verbose_name=u'发布结果')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
@@ -105,3 +107,13 @@ class DeployJobs(models.Model):
     class Meta:
         verbose_name = u'执行发布'
         verbose_name_plural = u'执行发布'
+
+
+class DeployVersion(models.Model):
+    job = models.OneToOneField(Jobs, verbose_name=u'发布任务')
+    version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
+    content = models.TextField(verbose_name=u'更新内容')
+
+    class Meta:
+        verbose_name = u'执行版本'
+        verbose_name_plural = u'执行版本'
