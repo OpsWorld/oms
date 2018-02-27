@@ -40,7 +40,7 @@
               </div>
               <div class="appendInfo" v-if="ticketData.status!=7">
                 <span class="han">操作：</span>
-                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">编辑</el-button>
+                <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
                 <el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定
                 </el-button>
