@@ -2,8 +2,8 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs
-from jobs.serializers import JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion
+from jobs.serializers import JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer, DeployVersionSerializer
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter, DjangoFilterBackend
@@ -36,6 +36,12 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
     serializer_class = DeployJobsSerializer
     filter_fields = ['job__name']
     search_fields = ['version', 'content']
+
+
+class DeployVersionViewSet(viewsets.ModelViewSet):
+    queryset = DeployVersion.objects.all()
+    serializer_class = DeployVersionSerializer
+    filter_fields = ['job__name']
 
 
 @api_view()
