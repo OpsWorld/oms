@@ -24,8 +24,7 @@ Project_Status = {
     7: '已上线',
 }
 
-admin_groups = ['admin', 'Tb_Development', 'OMS_Super_Admin']
-admin_users = ['admin', 'kiven', 'leon', 'omar', 'larry']
+admin_groups = ['admin', 'OMS_Dev_Manager', 'OMS_Test_Manager', 'OMS_Super_Admin']
 
 
 class Project(models.Model):

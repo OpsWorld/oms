@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from projects.models import admin_groups, admin_users
+from projects.models import admin_groups
 from users.models import User
 from django.db.models import Q
 from dry_rest_permissions.generics import DRYPermissionFiltersBase
@@ -13,13 +13,12 @@ class ProjectFilterBackend(DRYPermissionFiltersBase):
         Limits all list requests to only be seen by the create_groups.
         admin groups can get all().
         """
-        # groups = User.objects.get(username=request.user).groups.all()
-        # admin_list = [group.name for group in groups]
-        #
-        # # 求交集
-        # is_admin = [i for i in admin_list if i in admin_groups]
-        # if len(is_admin) > 0:
-        if request.user in admin_users:
+        groups = User.objects.get(username=request.user).groups.all()
+        group_list = [group.name for group in groups]
+
+        # 求交集
+        is_admin = [i for i in group_list if i in admin_groups]
+        if len(is_admin) > 0:
             return queryset
         else:
             return queryset.filter(
