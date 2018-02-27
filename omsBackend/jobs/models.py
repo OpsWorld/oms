@@ -18,6 +18,7 @@ class Jobs(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name=u'名称')
     code_url = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'代码地址')
     deploy_path = models.CharField(max_length=250, null=True, blank=True, verbose_name=u'发布路径')
+    cur_step = models.IntegerField(default=0, verbose_name=u'当前步骤')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')

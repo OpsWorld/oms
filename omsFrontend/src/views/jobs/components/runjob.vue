@@ -5,7 +5,7 @@
 
         <el-card>
           <div slot="header">
-            <a class="jobname">【{{jobs.name}}更新信息</a>
+            <a class="jobname">【{{jobs.name}}】更新信息</a>
           </div>
           <el-form :model="versionForm" :rules="svnrules" ref="versionForm" label-width="90px">
             <el-form-item label="发布版本" prop="version">
@@ -41,7 +41,7 @@
               <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="svnsubmitForm('versionForm')">svn更新</el-button>
+              <el-button type="primary" @click="submitForm('versionForm')">svn更新</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -155,7 +155,7 @@ import { mapGetters } from 'vuex'
 import { postSendmessage } from '@/api/tool'
 
 export default {
-  components: { },
+  components: {},
 
   data() {
     return {
@@ -265,7 +265,7 @@ export default {
     selectEnv(env) {
       const selectenv = this.envs.filter(envs => envs.name === env)[0]
       this.ruleForm.deploy_hosts = selectenv.deploy_hosts
-      this.ruleForm.version = this.ruleForm.content = this.ruleForm.deploy_cmd = ''
+      this.ruleForm.deploy_cmd = ''
       this.fetchDeploycmdData(selectenv.id)
     },
     fetchDeployJobData() {
@@ -302,14 +302,14 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchDeployJobData()
     },
-    svnsubmitForm(formdata) {
+    submitForm(formdata) {
+      if (this.hasversion) {
+        putDeployVersion(this.versionForm.id, this.versionForm)
+      } else {
+        console.log(this.hasversion)
+        postDeployVersion(this.versionForm)
+      }
       this.$refs[formdata].validate((valid) => {
-        if (this.hasversion) {
-          putDeployVersion(this.versionForm.id, this.versionForm)
-        } else {
-          console.log(this.hasversion)
-          postDeployVersion(this.versionForm)
-        }
         this.ruleForm = Object.assign(this.ruleForm, this.versionForm)
         if (valid) {
           if ((typeof this.ruleForm.deploy_hosts) === 'string') {
