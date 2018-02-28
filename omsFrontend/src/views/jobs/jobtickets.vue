@@ -21,7 +21,19 @@
           <el-table-column type="selection"></el-table-column>
           <el-table-column prop='id' label='ID'></el-table-column>
           <el-table-column prop='name' label='标题'></el-table-column>
-          <el-table-column prop='content' label='内容'></el-table-column>
+          <el-table-column prop='content' label='内容'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-popover
+                  placement="top"
+                  width="300"
+                  trigger="hover"
+                  :content="scope.row.content">
+                  <el-button size="mini" slot="reference">{{scope.row.content.slice(0, 10)}}...</el-button>
+                </el-popover>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='status' label='工单状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -37,6 +49,12 @@
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button @click="getEncloseur(scope.row.id)" type="success" size="small">附件</el-button>
+              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,9 +83,9 @@
         </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="show_status=false">取 消</el-button>
-    <el-button type="primary" @click="changeForm">确 定</el-button>
-  </span>
+        <el-button @click="show_status=false">取 消</el-button>
+        <el-button type="primary" @click="changeForm">确 定</el-button>
+      </span>
     </el-dialog>
 
     <el-dialog :visible.sync="addForm">
@@ -81,22 +99,66 @@
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到工单内容里面</a>
         </el-form-item>
         <el-form-item>
+          <hr class="heng"/>
+          <el-upload
+            ref="upload"
+            :action="uploadurl"
+            :on-success="handleSuccess"
+            :on-remove="handleRemove"
+            :file-list="fileList">
+            <el-button slot="trigger" size="small" type="primary" :disabled="count>2?true:false">
+              上传文件
+            </el-button>
+            (可以不用上传)
+            <div slot="tip" class="el-upload__tip">
+              <p>上传文件不超过10m，<a style="color: red">最多只能上传3个文件</a></p>
+            </div>
+          </el-upload>
+          <hr class="heng"/>
+        </el-form-item>
+        <el-form-item>
           <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
           <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog :visible.sync="showForm">
+      <div v-if='enclosureData.length>0' class="ticketenclosure">
+        <ul>
+          <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+            <i class="fa fa-paperclip"></i>
+            <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+            <el-button type="text" icon="el-icon-delete"
+                       @click="deleteEnclosure(item.id)"></el-button>
+          </li>
+        </ul>
+      </div>
+      <div>
+        没有上传附件
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getDeployTicket, patchDeployTicket, postDeployTicket } from '@/api/job'
-import { LIMIT, pagesize, pageformat } from '@/config'
-import { postSendmessage } from 'api/tool'
+import {
+  getDeployTicket,
+  patchDeployTicket,
+  postDeployTicket,
+  postDeployTicketEnclosur,
+  getDeployTicketEnclosur,
+  deleteDeployTicketEnclosur
+} from '@/api/job'
+import { LIMIT, pagesize, pageformat, uploadurl, apiUrl } from '@/config'
+import { postUpload, postSendmessage } from 'api/tool'
+import { getConversionTime } from '@/utils'
 
 export default {
   data() {
     return {
+      route_path: this.$route.path.split('/'),
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
@@ -139,7 +201,18 @@ export default {
         content: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }
         ]
-      }
+      },
+      uploadurl: uploadurl,
+      apiurl: apiUrl,
+      fileList: [],
+      count: 0,
+      enclosureForm: {
+        ticket: '',
+        create_user: localStorage.getItem('username'),
+        file: ''
+      },
+      enclosureData: [],
+      showForm: false
     }
   },
 
@@ -154,6 +227,18 @@ export default {
         this.tabletotal = response.data.count
       })
     },
+    EnclosureData(id) {
+      const parms = {
+        ticket__id: id
+      }
+      getDeployTicketEnclosur(parms).then(response => {
+        this.enclosureData = response.data
+      })
+    },
+    getEncloseur(id) {
+      this.showForm = true
+      this.EnclosureData(id)
+    },
     searchClick() {
       this.fetchData()
     },
@@ -164,6 +249,14 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    handleSuccess(file, fileList) {
+      this.fileList.push(fileList.raw)
+      this.count += 1
+    },
+    handleRemove(file, fileList) {
+      this.fileList.remove(file)
+      this.count -= 1
     },
     changeStatus() {
       this.fetchData()
@@ -206,6 +299,19 @@ export default {
               type: 'success',
               message: '恭喜你，新建成功'
             })
+            for (var fileList of this.fileList) {
+              const formData = new FormData()
+              formData.append('username', this.enclosureForm.create_user)
+              formData.append('file', fileList)
+              formData.append('create_time', getConversionTime(fileList.uid))
+              formData.append('type', fileList.type)
+              formData.append('archive', this.route_path[1])
+              postUpload(formData).then(res => {
+                this.enclosureForm.file = res.data.filepath
+                this.enclosureForm.ticket = response.data.id
+                postDeployTicketEnclosur(this.enclosureForm)
+              })
+            }
             const messageForm = {
               action_user: 'itsupport',
               title: '【上线申请】' + this.ruleForm.name,
@@ -213,12 +319,17 @@ export default {
             }
             postSendmessage(messageForm)
             this.addForm = false
+            this.fetchData()
           })
         } else {
           console.log('error submit!!')
           return false
         }
       })
+    },
+    deleteEnclosure(id) {
+      deleteDeployTicketEnclosur(id)
+      this.EnclosureData(id)
     }
   }
 }

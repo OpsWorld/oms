@@ -107,6 +107,7 @@ module.exports = {
   deploycmds: `${url}/api/deploycmds/`,
   deployversions: `${url}/api/deployversions/`,
   deploytickets: `${url}/api/deploytickets/`,
+  deployticketenclosures: `${url}/api/deployticketenclosures/`,
 
   // salt
   get_all_key: `${url}/api/salts/get_all_key/`,

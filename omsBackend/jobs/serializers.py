@@ -2,9 +2,10 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket, DeployTicketEnclosure
 from hosts.models import Host
 from users.models import User
+from tools.models import Upload
 from omsBackend.settings import sapi
 
 
@@ -61,3 +62,12 @@ class DeployTicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeployTicket
         fields = ['url', 'id', 'name', 'create_user', 'content', 'status', 'create_time']
+
+
+class DeployTicketEnclosureSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    file = serializers.SlugRelatedField(queryset=Upload.objects.all(), slug_field='filepath')
+
+    class Meta:
+        model = DeployTicketEnclosure
+        fields = ('url', 'id', 'ticket', 'file', 'create_user', 'create_time')
