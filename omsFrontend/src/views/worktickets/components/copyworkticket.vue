@@ -131,8 +131,9 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.status = 1
           putWorkticket(this.ruleForm.id, this.ruleForm).then(response => {
-            this.$router.push('/projects/demands')
+            this.copyWorkticket(response.data)
           })
         } else {
           console.log('error submit!!')
@@ -198,14 +199,14 @@ export default {
       deleteTicketenclosure(id)
       this.fetchEnclosureData()
     },
-    copyWorkticket() {
+    copyWorkticket(ticketData) {
       const DemandForm = {
-        pid: this.ticketData.pid,
-        name: this.ticketData.name,
-        content: this.ticketData.content,
+        pid: ticketData.pid,
+        name: ticketData.name,
+        content: ticketData.content,
         type: '来自工单',
-        create_user: this.ticketData.create_user,
-        create_time: this.ticketData.create_time
+        create_user: ticketData.create_user,
+        create_time: ticketData.create_time
       }
       if (this.copy === 'op') {
         postopsDemandManager(DemandForm).then(response => {
@@ -238,8 +239,7 @@ export default {
               postSendmessage(messageForm)
             }
           })
-          this.patchForm(this.rowdata)
-          this.fetchData()
+          this.$router.push('/opstasks/opsdemands')
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
           this.$message.error(errordata[0])
@@ -276,8 +276,7 @@ export default {
               postSendmessage(messageForm)
             }
           })
-          this.patchForm(this.rowdata)
-          this.fetchData()
+          this.$router.push('/projects/demands')
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
           this.$message.error(errordata[0])
