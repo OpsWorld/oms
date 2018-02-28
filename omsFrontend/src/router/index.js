@@ -120,7 +120,7 @@ export const asyncRouterMap = [
     path: '/opstasks',
     component: Layout,
     icon: 'angellist',
-    redirect: 'demands',
+    redirect: 'opsdemands',
     children: [
       { path: 'opsdemands', component: _import('opstasks/demands'), name: '问题列表' },
       { path: 'addopsdemand', hidden: true, component: _import('opstasks/components/adddemand'), name: '添加问题' },

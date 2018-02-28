@@ -210,9 +210,9 @@ export function postDemandManager(data) {
   })
 }
 
-export function getDemandManager(query) {
+export function getDemandManager(query, id) {
   return request({
-    url: apiURL.demandmanagers,
+    url: id ? apiURL.demandmanagers + id + '/' : apiURL.demandmanagers,
     method: 'get',
     params: query
   })

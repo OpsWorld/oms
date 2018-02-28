@@ -104,7 +104,7 @@ export default {
     fetchData() {
       const query = null
       getDemandManager(query, this.pid).then(response => {
-        this.ticketData = response.data[0]
+        this.ticketData = response.data
       })
     },
     fetchEnclosureData() {

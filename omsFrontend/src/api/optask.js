@@ -106,9 +106,9 @@ export function postopsDemandManager(data) {
   })
 }
 
-export function getDemandManager(query) {
+export function getDemandManager(query, id) {
   return request({
-    url: apiURL.opsdemandmanagers,
+    url: id ? apiURL.opsdemandmanagers + id + '/' : apiURL.opsdemandmanagers,
     method: 'get',
     params: query
   })
