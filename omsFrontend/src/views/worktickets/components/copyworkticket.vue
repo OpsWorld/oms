@@ -51,10 +51,21 @@
   </div>
 </template>
 <script>
-import { getDemandManager, getProjectType, putDemandManager } from '@/api/project'
-import { postDemandEnclosure, getDemandEnclosure, deleteDemandEnclosure } from '@/api/project'
-import { postUpload } from 'api/tool'
+import {
+  getWorkticket,
+  patchWorkticket,
+  getTicketcomment,
+  postTicketcomment,
+  postTicketenclosure,
+  getTicketenclosure,
+  deleteTicketenclosure
+} from 'api/workticket'
+import { postDemandManager, postDemandEnclosure } from '@/api/project'
+import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
+import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
+import VueMarkdown from 'vue-markdown' // 前端解析markdown
+import { getUser } from 'api/user'
 import { getConversionTime } from '@/utils'
 
 export default {
@@ -63,7 +74,7 @@ export default {
   data() {
     return {
       route_path: this.$route.path.split('/'),
-      pid: this.$route.params.id,
+      pid: this.$route.params.pid,
       ruleForm: {},
       rules: {
         name: [
@@ -108,11 +119,14 @@ export default {
   },
   methods: {
     fetchData() {
-      const query = null
-      getDemandManager(query, this.pid).then(response => {
-        this.ruleForm = response.data[0]
-        this.enclosureForm.project = this.ruleForm.id
-        this.count = response.data.length
+      const parms = {
+        pid: this.pid
+      }
+      getWorkticket(parms).then(response => {
+        this.ticketData = response.data[0]
+        this.ticket_id = this.ticketData.id
+        this.rowdata.action_user = this.ticketData.action_user
+        this.rowdata.edit_user = this.ticketData.edit_user
       })
     },
     submitForm(formName) {

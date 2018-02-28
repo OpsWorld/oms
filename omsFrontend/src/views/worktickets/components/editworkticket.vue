@@ -30,17 +30,9 @@
             </div>
             <div class="appendInfo" v-if="workticketlist_btn_edit||role==='super'&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <el-popover
-                ref="popover"
-                placement="right"
-                width="160"
-                v-model="selectcopy">
-                <div>
-                  <el-button type="warning" size="mini" plain @click="copyWorkticket('ops')">运维</el-button>
-                  <el-button type="danger" size="mini" plain @click="copyWorkticket('dev')">研发</el-button>
-                </div>
-              </el-popover>
-              <el-button type="primary" size="small" v-popover:popover>乾坤大挪移</el-button>
+              <router-link :to="'copyworkticket/' + scope.row.pid">
+                <el-button type="primary" size="small">乾坤大挪移</el-button>
+              </router-link>
               <div class="action">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
