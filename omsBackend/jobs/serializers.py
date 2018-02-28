@@ -56,6 +56,8 @@ class DeployVersionSerializer(serializers.ModelSerializer):
 
 
 class DeployTicketSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
     class Meta:
         model = DeployTicket
-        fields = ['url', 'id', 'name', 'create_user', 'content', 'ticket_status', 'create_time']
+        fields = ['url', 'id', 'name', 'create_user', 'content', 'status', 'create_time']
