@@ -30,7 +30,7 @@
             </div>
             <div class="appendInfo" v-if="workticketlist_btn_edit||role==='super'&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <router-link :to="'copyworkticket/' + scope.row.pid">
+              <router-link :to="'/worktickets/copyworkticket/' + pid">
                 <el-button type="primary" size="small">乾坤大挪移</el-button>
               </router-link>
               <div class="action">
@@ -140,8 +140,6 @@ import {
   getTicketenclosure,
   deleteTicketenclosure
 } from 'api/workticket'
-import { postDemandManager, postDemandEnclosure } from '@/api/project'
-import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
@@ -350,94 +348,8 @@ export default {
       getUser().then(response => {
         this.users = response.data
       })
-    },
-    copyWorkticket(type) {
-      const DemandForm = {
-        pid: this.ticketData.pid,
-        name: this.ticketData.name,
-        content: this.ticketData.content,
-        type: '来自工单',
-        create_user: this.ticketData.create_user,
-        create_time: this.ticketData.create_time
-      }
-      if (type === 'ops') {
-        postopsDemandManager(DemandForm).then(response => {
-          this.$message({
-            type: 'success',
-            message: '恭喜你，转移成功'
-          })
-          if (this.enclosureData.length > 0) {
-            for (const item of this.enclosureData) {
-              const Demandenclosure = {
-                project: response.data.id,
-                file: item.file,
-                create_user: item.create_user,
-                create_time: item.create_time
-              }
-              postopsDemandEnclosure(Demandenclosure)
-            }
-          }
-          const pramas = {
-            groups__name: 'OMS_Dev_Manager'
-          }
-          getUser(pramas).then(response => {
-            const users = response.data
-            for (const user of users) {
-              const messageForm = {
-                action_user: user,
-                title: '【新需求】' + DemandForm.name,
-                message: `操作人: ${DemandForm.create_user}`
-              }
-              postSendmessage(messageForm)
-            }
-          })
-          this.patchForm(this.rowdata)
-          this.fetchData()
-        }).catch(error => {
-          const errordata = Object.values(error.response.data)[0]
-          this.$message.error(errordata[0])
-          console.log(errordata)
-        })
-      } else {
-        postDemandManager(DemandForm).then(response => {
-          this.$message({
-            type: 'success',
-            message: '恭喜你，转移成功'
-          })
-          if (this.enclosureData.length > 0) {
-            for (const item of this.enclosureData) {
-              const Demandenclosure = {
-                project: response.data.id,
-                file: item.file,
-                create_user: item.create_user,
-                create_time: item.create_time
-              }
-              postDemandEnclosure(Demandenclosure)
-            }
-          }
-          const pramas = {
-            groups__name: 'OMS_Dev_Manager'
-          }
-          getUser(pramas).then(response => {
-            const users = response.data
-            for (const user of users) {
-              const messageForm = {
-                action_user: user,
-                title: '【新需求】' + DemandForm.name,
-                message: `操作人: ${DemandForm.create_user}`
-              }
-              postSendmessage(messageForm)
-            }
-          })
-          this.patchForm(this.rowdata)
-          this.fetchData()
-        }).catch(error => {
-          const errordata = Object.values(error.response.data)[0]
-          this.$message.error(errordata[0])
-          console.log(errordata)
-        })
-      }
     }
+
   }
 }
 </script>

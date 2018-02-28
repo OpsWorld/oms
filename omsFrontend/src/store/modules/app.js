@@ -20,12 +20,10 @@ const app = {
     ADD_VISITED_VIEWS: (state, view) => {
       if (state.visitedViews.some(v => v.path === view.path)) return
 
-      if (view.path.split('/').length < 4) {
-        state.visitedViews.push({
-          name: view.name,
-          path: view.path
-        })
-      }
+      state.visitedViews.push({
+        name: view.name,
+        path: view.path
+      })
       if (!view.meta.noCache) {
         state.cachedViews.push(view.name)
       }

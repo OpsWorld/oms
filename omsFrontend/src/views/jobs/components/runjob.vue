@@ -217,7 +217,6 @@ export default {
   created() {
     this.fetchJobData()
     this.fetchJobenvData()
-    this.fetchDeployversionData()
   },
   methods: {
     fetchJobData() {
@@ -226,6 +225,7 @@ export default {
         this.jobs = response.data
         this.ruleForm.job = this.listQuery.job__name = this.jobs.name
         this.fetchDeployJobData()
+        this.fetchDeployversionData()
       })
     },
     fetchJobenvData() {
