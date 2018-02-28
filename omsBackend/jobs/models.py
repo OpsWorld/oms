@@ -4,6 +4,7 @@
 from django.db import models
 from hosts.models import Host
 from users.models import User
+from tools.models import Upload
 
 DEPLOY_STATUS = {
     "deploy": "发布中",
@@ -138,3 +139,14 @@ class DeployTicket(models.Model):
     class Meta:
         verbose_name = u'上线工单'
         verbose_name_plural = u'上线工单'
+
+
+class DeployTicketEnclosure(models.Model):
+    ticket = models.ForeignKey(DeployTicket, verbose_name=u'工单')
+    file = models.ForeignKey(Upload, verbose_name=u'附件')
+    create_user = models.ForeignKey(User, verbose_name=u'附件上传人')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'附件上传时间')
+
+    class Meta:
+        verbose_name = u'工单附件'
+        verbose_name_plural = u'工单附件'

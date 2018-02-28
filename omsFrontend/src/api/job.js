@@ -179,3 +179,27 @@ export function patchDeployTicket(id, data) {
     data
   })
 }
+
+// deployticketenclosures
+export function postDeployTicketEnclosur(data) {
+  return request({
+    url: apiURL.deployticketenclosures,
+    method: 'post',
+    data
+  })
+}
+
+export function getDeployTicketEnclosur(query) {
+  return request({
+    url: apiURL.deployticketenclosures,
+    method: 'get',
+    params: query
+  })
+}
+
+export function deleteDeployTicketEnclosur(id) {
+  return request({
+    url: apiURL.deployticketenclosures + id + '/',
+    method: 'delete'
+  })
+}

@@ -2,8 +2,9 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket
-from jobs.serializers import JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer, DeployVersionSerializer, DeployTicketSerializer
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket, DeployTicketEnclosure
+from jobs.serializers import (JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer,
+                              DeployVersionSerializer, DeployTicketSerializer, DeployTicketEnclosureSerializer)
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter, DjangoFilterBackend
@@ -47,6 +48,12 @@ class DeployVersionViewSet(viewsets.ModelViewSet):
 class DeployTicketViewSet(viewsets.ModelViewSet):
     queryset = DeployTicket.objects.all().order_by('id')
     serializer_class = DeployTicketSerializer
+
+
+class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
+    queryset = DeployTicketEnclosure.objects.all()
+    serializer_class = DeployTicketEnclosureSerializer
+    filter_fields = ('ticket__id',)
 
 
 @api_view()
