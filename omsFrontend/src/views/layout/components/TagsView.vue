@@ -1,10 +1,11 @@
 <template>
   <scroll-pane class='tags-view-container' ref='scrollPane'>
-    <a v-for="tag in Array.from(visitedViews)" :key="tag.path" class="tags-view-item" :class="isActive(tag)?'active':''">
+    <a v-for="tag in Array.from(visitedViews)" :key="tag.path" class="tags-view-item"
+       :class="isActive(tag)?'active':''">
       <router-link ref='tag' :to="tag.path">
         {{tag.name}}
-        <span class='el-icon-close' @click='closeViewTags(tag,$event)'></span>
       </router-link>
+      <span class='el-icon-close' @click='closeViewTags(tag,$event)'></span>
     </a>
   </scroll-pane>
 </template>
