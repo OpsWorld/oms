@@ -154,3 +154,28 @@ export function putDeployVersion(id, data) {
     data
   })
 }
+
+// deploytickets
+export function postDeployTicket(data) {
+  return request({
+    url: apiURL.deploytickets,
+    method: 'post',
+    data
+  })
+}
+
+export function getDeployTicket(query) {
+  return request({
+    url: apiURL.deploytickets,
+    method: 'get',
+    params: query
+  })
+}
+
+export function patchDeployTicket(id, data) {
+  return request({
+    url: apiURL.deploytickets + id + '/',
+    method: 'patch',
+    data
+  })
+}

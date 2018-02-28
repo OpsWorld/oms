@@ -118,11 +118,10 @@
 <script>
 import { getWorkticket, patchWorkticket } from 'api/workticket'
 import { LIMIT, pagesize } from '@/config'
-import addWorkticket from './components/addworkticket.vue'
 import { mapGetters } from 'vuex'
 
 export default {
-  components: { addWorkticket },
+  components: { },
   data() {
     return {
       tableData: [],
