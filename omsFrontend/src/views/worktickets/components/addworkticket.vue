@@ -112,9 +112,6 @@ export default {
         help: true
       },
       img_file: {},
-      formDataList: [],
-      to_list: '',
-      cc_list: '',
       uploadurl: uploadurl,
       types: []
     }

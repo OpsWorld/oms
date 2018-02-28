@@ -129,7 +129,7 @@ class DeployTicket(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     content = models.TextField(verbose_name=u'内容')
     create_user = models.ForeignKey(User, related_name='deployticket_create_user', verbose_name=u'创建者')
-    ticket_status = models.CharField(max_length=3, choices=Status.items(), default=0, verbose_name=u'状态')
+    status = models.CharField(max_length=3, choices=Status.items(), default=0, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     def __str__(self):

@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus">新建</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
           <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
         </div>
         <div class="table-search">
@@ -26,7 +26,7 @@
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-tag>
-                  {{STATUS_TEXT[scope.row.ticket_status]}}
+                  {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
               </div>
             </template>
@@ -59,10 +59,8 @@
       </div>
     </el-card>
 
-    <el-dialog
-      title="更改状态"
-      :visible.sync="show_status">
-      <el-radio-group v-model="rowdata.ticket_status">
+    <el-dialog :visible.sync="show_status">
+      <el-radio-group v-model="rowdata.status">
         <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
         </el-radio>
       </el-radio-group>
@@ -71,12 +69,30 @@
     <el-button type="primary" @click="changeForm">确 定</el-button>
   </span>
     </el-dialog>
+
+    <el-dialog :visible.sync="addForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="标题" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="内容" prop="content">
+          <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
+                        :toolbars="toolbars"></mavon-editor>
+          <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到工单内容里面</a>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
+          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDeployTicket, patchDeployTicket } from '@/api/job'
+import { getDeployTicket, patchDeployTicket, postDeployTicket } from '@/api/job'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import { postSendmessage } from 'api/tool'
 
 export default {
   data() {
@@ -88,7 +104,7 @@ export default {
       pagesize: pagesize,
       pageformat: pageformat,
       rowdata: {
-        ticket_status: '1'
+        status: '1'
       },
       STATUS_TEXT: { '0': '未上线', '1': '已上线' },
       listQuery: {
@@ -98,8 +114,32 @@ export default {
         search: '',
         ordering: ''
       },
+      toolbars: {
+        preview: true, // 预览
+        bold: true, // 粗体
+        italic: true, // 斜体
+        header: true, // 标题
+        underline: true, // 下划线
+        strikethrough: true, // 中划线
+        ol: true, // 有序列表
+        help: true
+      },
       btnstatus: true,
-      show_status: false
+      show_status: false,
+      addForm: false,
+      ruleForm: {
+        name: '',
+        content: '',
+        create_user: localStorage.getItem('username')
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入工单标题', trigger: 'blur' }
+        ],
+        content: [
+          { required: true, message: '请输入工单内容', trigger: 'blur' }
+        ]
+      }
     }
   },
 
@@ -145,7 +185,7 @@ export default {
           delete this.selectId[i]
         })
       }
-      setTimeout(this.fetchData, 2000)
+      this.fetchData()
       this.show_status = false
     },
     handleSortChange(val) {
@@ -157,6 +197,28 @@ export default {
         this.listQuery.ordering = ''
       }
       this.fetchData()
+    },
+    postForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          postDeployTicket(this.ruleForm).then(response => {
+            this.$message({
+              type: 'success',
+              message: '恭喜你，新建成功'
+            })
+            const messageForm = {
+              action_user: 'itsupport',
+              title: '【上线申请】' + this.ruleForm.name,
+              message: `上线内容: ${this.ruleForm.content}`
+            }
+            postSendmessage(messageForm)
+            this.addForm = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
