@@ -110,7 +110,7 @@ export default {
     fetchData() {
       const query = null
       getDemandManager(query, this.pid).then(response => {
-        this.ruleForm = response.data[0]
+        this.ruleForm = response.data
         this.enclosureForm.project = this.ruleForm.id
         this.count = response.data.length
       })
