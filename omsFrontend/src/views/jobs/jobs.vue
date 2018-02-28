@@ -14,7 +14,7 @@
         <div class="table-search">
           <el-input
             placeholder="search"
-            v-model="searchdata"
+            v-model="listQuery.search"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -96,7 +96,6 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
       listQuery: {
         limit: LIMIT,
@@ -175,7 +174,6 @@ export default {
       })
     },
     searchClick() {
-      this.listQuery.search = this.searchdata
       this.fetchData()
     },
     handleSizeChange(val) {

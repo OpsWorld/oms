@@ -106,6 +106,7 @@ module.exports = {
   updaejobsstatus: `${url}/api/update_jobs_status/`,
   deploycmds: `${url}/api/deploycmds/`,
   deployversions: `${url}/api/deployversions/`,
+  deploytickets: `${url}/api/deploytickets/`,
 
   // salt
   get_all_key: `${url}/api/salts/get_all_key/`,

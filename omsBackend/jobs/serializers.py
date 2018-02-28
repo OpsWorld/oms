@@ -2,7 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket
 from hosts.models import Host
 from users.models import User
 from omsBackend.settings import sapi
@@ -53,3 +53,9 @@ class DeployVersionSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeployVersion
         fields = ['url', 'id', 'job', 'version', 'content']
+
+
+class DeployTicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeployTicket
+        fields = ['url', 'id', 'name', 'create_user', 'content', 'ticket_status', 'create_time']
