@@ -41,7 +41,7 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
     </el-form-item>
   </el-form>
 </template>

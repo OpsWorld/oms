@@ -57,7 +57,7 @@
       <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm('ruleForm')">立即更新</el-button>
+      <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
     </el-form-item>
   </el-form>
 </template>

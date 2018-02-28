@@ -2,6 +2,10 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <el-form-item label="转移">
+          <el-radio v-model="copy" label="op">运维</el-radio>
+          <el-radio v-model="copy" label="dev">研发</el-radio>
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
@@ -44,7 +48,6 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -53,9 +56,8 @@
 <script>
 import {
   getWorkticket,
-  patchWorkticket,
-  getTicketcomment,
-  postTicketcomment,
+  putWorkticket,
+  getTickettype,
   postTicketenclosure,
   getTicketenclosure,
   deleteTicketenclosure
@@ -64,7 +66,6 @@ import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
-import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import { getUser } from 'api/user'
 import { getConversionTime } from '@/utils'
 
@@ -87,6 +88,7 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
+      copy: 'op',
       users: [],
       toolbars: {
         preview: true, // 预览
@@ -123,22 +125,13 @@ export default {
         pid: this.pid
       }
       getWorkticket(parms).then(response => {
-        this.ticketData = response.data[0]
-        this.ticket_id = this.ticketData.id
-        this.rowdata.action_user = this.ticketData.action_user
-        this.rowdata.edit_user = this.ticketData.edit_user
+        this.ruleForm = response.data[0]
       })
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          putDemandManager(this.ruleForm.id, this.ruleForm).then(response => {
-            if (response.statusText === '"Created"') {
-              this.$message({
-                type: 'success',
-                message: '恭喜你，更新成功'
-              })
-            }
+          putWorkticket(this.ruleForm.id, this.ruleForm).then(response => {
             this.$router.push('/projects/demands')
           })
         } else {
@@ -152,7 +145,7 @@ export default {
       this.$refs[formName].resetFields()
     },
     getTypes() {
-      getProjectType().then(response => {
+      getTickettype().then(response => {
         this.types = response.data
       })
     },
@@ -177,7 +170,8 @@ export default {
       formData.append('archive', this.route_path[1])
       postUpload(formData).then(response => {
         this.enclosureForm.file = response.data.filepath
-        postDemandEnclosure(this.enclosureForm)
+        this.enclosureForm.ticket = this.ruleForm.id
+        postTicketenclosure(this.enclosureForm)
         if (response.statusText === 'Created') {
           this.$message({
             type: 'success',
@@ -194,16 +188,102 @@ export default {
     },
     fetchEnclosureData() {
       const parms = {
-        project__id: this.pid
+        ticket__pid: this.pid
       }
-      getDemandEnclosure(parms).then(response => {
+      getTicketenclosure(parms).then(response => {
         this.enclosureData = response.data
-        this.count = response.data.length
       })
     },
     deleteEnclosure(id) {
-      deleteDemandEnclosure(id)
+      deleteTicketenclosure(id)
       this.fetchEnclosureData()
+    },
+    copyWorkticket() {
+      const DemandForm = {
+        pid: this.ticketData.pid,
+        name: this.ticketData.name,
+        content: this.ticketData.content,
+        type: '来自工单',
+        create_user: this.ticketData.create_user,
+        create_time: this.ticketData.create_time
+      }
+      if (this.copy === 'op') {
+        postopsDemandManager(DemandForm).then(response => {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，转移成功'
+          })
+          if (this.enclosureData.length > 0) {
+            for (const item of this.enclosureData) {
+              const Demandenclosure = {
+                project: response.data.id,
+                file: item.file,
+                create_user: item.create_user,
+                create_time: item.create_time
+              }
+              postopsDemandEnclosure(Demandenclosure)
+            }
+          }
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
+          }
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
+          this.patchForm(this.rowdata)
+          this.fetchData()
+        }).catch(error => {
+          const errordata = Object.values(error.response.data)[0]
+          this.$message.error(errordata[0])
+          console.log(errordata)
+        })
+      } else {
+        postDemandManager(DemandForm).then(response => {
+          this.$message({
+            type: 'success',
+            message: '恭喜你，转移成功'
+          })
+          if (this.enclosureData.length > 0) {
+            for (const item of this.enclosureData) {
+              const Demandenclosure = {
+                project: response.data.id,
+                file: item.file,
+                create_user: item.create_user,
+                create_time: item.create_time
+              }
+              postDemandEnclosure(Demandenclosure)
+            }
+          }
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
+          }
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
+          this.patchForm(this.rowdata)
+          this.fetchData()
+        }).catch(error => {
+          const errordata = Object.values(error.response.data)[0]
+          this.$message.error(errordata[0])
+          console.log(errordata)
+        })
+      }
     }
   }
 }

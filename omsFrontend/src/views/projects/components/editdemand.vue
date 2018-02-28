@@ -43,8 +43,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button type="danger" @click="resetForm('ruleForm')">清空</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
         </el-form-item>
       </el-form>
     </el-card>
