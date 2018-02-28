@@ -19,11 +19,6 @@
                 <a v-if="ticketData.type">{{ticketData.type}}</a>
                 <a v-else class="ticketinfo">未设置</a>
                 <a class="shu"></a>
-                <span class="han">当前状态：</span>
-                <el-tag>
-                  {{Project_Status[ticketData.status]}}
-                </el-tag>
-                <a class="shu"></a>
                 <span class="han">计划结束时间：</span>
                 <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
                 <a v-else class="ticketinfo">未设置</a>
