@@ -237,7 +237,7 @@ import {
 import { postUpload, postSendmessage } from 'api/tool'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
-import { getConversionTime } from '@/utils'
+import { getConversionTime, getCreatedate } from '@/utils'
 import addBug from './addbug.vue'
 import addTest from './addtest.vue'
 import editBug from './editbug.vue'
@@ -245,7 +245,6 @@ import editTest from './edittest.vue'
 import showBug from './showbug.vue'
 import showTest from './showtest.vue'
 import { getUser } from 'api/user'
-import { getCreatedate } from '@/utils'
 import { apiUrl } from '@/config'
 import { mapGetters } from 'vuex'
 
