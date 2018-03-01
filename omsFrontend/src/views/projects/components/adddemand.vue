@@ -125,7 +125,7 @@ export default {
             if (this.sendnotice) {
               const messageForm = {
                 action_user: this.ruleForm.action_user.join(),
-                title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
+                title: `【新需求】${this.ruleForm.name}`,
                 message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
               }
               postSendmessage(messageForm)
