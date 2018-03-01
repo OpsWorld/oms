@@ -8,6 +8,7 @@ from utils.sendmail import send_mail
 
 @shared_task
 def send_to_skype(user, content):
+    print(user)
     print(content)
     skype_bot(user, content)
 
