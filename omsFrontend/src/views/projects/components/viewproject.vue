@@ -126,7 +126,7 @@
               <a class="right-title">测试用例</a>
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addTestFrom=true"></el-button>
             </div>
-            <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%">
+            <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%" height="350">
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
@@ -160,7 +160,7 @@
               <el-button size="mini" type="primary" plain @click="showAllBug">all</el-button>
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
             </div>
-            <el-table :data="bugData" stripe style="width: 100%">
+            <el-table :data="bugData" stripe style="width: 100%" height="350">
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
