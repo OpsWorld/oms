@@ -227,7 +227,7 @@ export default {
           const messageForm = {
             action_user: 'itsupport',
             title: '【新需求】' + DemandForm.name,
-            message: `操作人: ${DemandForm.create_user}`
+            message: `需求创建人: ${DemandForm.create_user}`
           }
           postSendmessage(messageForm)
           this.$router.push('/opstasks/opsdemands')
@@ -256,7 +256,7 @@ export default {
           const messageForm = {
             action_user: 'omar',
             title: '【新需求】' + DemandForm.name,
-            message: `操作人: ${DemandForm.create_user}`
+            message: `需求创建人: ${DemandForm.create_user}`
           }
           postSendmessage(messageForm)
           this.$router.push('/projects/demands')
