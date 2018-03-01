@@ -271,7 +271,6 @@ export default {
             title: '【已上线】' + this.rowdata.name,
             message: `上线内容: ${this.rowdata.content}`
           }
-          console.log(messageForm)
           postSendmessage(messageForm)
         }
         this.fetchData()
