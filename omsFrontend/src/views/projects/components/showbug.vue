@@ -27,7 +27,7 @@
         <span>{{ ruleForm.end_time }}</span>
       </el-form-item>
       <el-form-item label="描述" prop="desc">
-        <vue-markdown :source="item.desc"></vue-markdown>
+        <vue-markdown :source="ruleForm.desc"></vue-markdown>
       </el-form-item>
     </el-form>
   </el-card>
