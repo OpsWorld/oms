@@ -225,20 +225,12 @@ export default {
               postopsDemandEnclosure(Demandenclosure)
             }
           }
-          const pramas = {
-            groups__name: 'OMS_Dev_Manager'
+          const messageForm = {
+            action_user: 'omar',
+            title: '【新需求】' + DemandForm.name,
+            message: `操作人: ${DemandForm.create_user}`
           }
-          getUser(pramas).then(response => {
-            const users = response.data
-            for (const user of users) {
-              const messageForm = {
-                action_user: user,
-                title: '【新需求】' + DemandForm.name,
-                message: `操作人: ${DemandForm.create_user}`
-              }
-              postSendmessage(messageForm)
-            }
-          })
+          postSendmessage(messageForm)
           this.$router.push('/opstasks/opsdemands')
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
