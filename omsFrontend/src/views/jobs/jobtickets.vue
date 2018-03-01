@@ -134,7 +134,7 @@
           </li>
         </ul>
       </div>
-      <div>
+      <div v-else>
         没有上传附件
       </div>
     </el-dialog>
