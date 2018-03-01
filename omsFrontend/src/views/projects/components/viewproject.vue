@@ -121,7 +121,7 @@
         </el-col>
         <el-col :span="7">
 
-          <el-card>
+          <el-card v-if="viewproject_btn_add_testbug||role==='super'">
             <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
               <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
@@ -131,11 +131,9 @@
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
-                               @click="showTest(false, scope.row)">
+                    <el-button type="text" @click="showTest(false, scope.row)">
                       <i class="fa fa-hashtag"></i>{{scope.row.id}}
                     </el-button>
-                    <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
                   </div>
                 </template>
               </el-table-column>
@@ -164,7 +162,7 @@
               <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
                          icon="el-icon-plus" @click="addBugFrom=true"></el-button>
             </div>
-            <el-table :data="bugData" stripe style="width: 100%" height="350">
+            <el-table :data="bugData" stripe style="width: 100%">
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope" v-if="viewproject_btn_add_testbug||role==='super'">
                   <div slot="reference">
