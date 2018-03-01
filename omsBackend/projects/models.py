@@ -37,6 +37,7 @@ class Project(models.Model):
     test_complete = models.IntegerField(default=0, blank=True, verbose_name=u'测试进度')
     content = models.TextField(verbose_name=u'内容')
     create_user = models.ForeignKey(User, related_name='project_create_user', verbose_name=u'创建者')
+    test_user = models.CharField(max_length=20, default='edwin', verbose_name=u'测试者')
     action_user = models.ManyToManyField(User, null=True, blank=True, related_name='project_action_user',
                                          verbose_name=u'指派人')
     follow_user = models.ManyToManyField(User, null=True, blank=True, related_name='project_follow_user',

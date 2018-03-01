@@ -158,10 +158,11 @@ export default {
               })
             }
             const messageForm = {
-              action_user: this.ruleForm.action_user.join() + this.ruleForm.follow_user.join(),
+              action_user: this.ruleForm.action_user.join() + this.ruleForm.follow_user.join() + this.ruleForm.test_user,
               title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
               message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user.join()}\n任务地址: http://${window.location.host}/#/projects/viewproject/${response.data.id}`
             }
+            console.log(messageForm.action_user)
             postSendmessage(messageForm)
             this.$router.push('/projects/projects')
           })
