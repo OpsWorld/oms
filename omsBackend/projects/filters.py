@@ -31,4 +31,4 @@ class ProjectFilterBackend(DRYPermissionFiltersBase):
                     Q(is_public=False)
                 ) |
                 Q(is_public=True)
-            )
+            ).distinct()
