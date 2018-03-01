@@ -54,7 +54,9 @@
       </el-date-picker>
     </el-form-item>
     <el-form-item label="描述" prop="desc">
-      <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+      <mavon-editor style="z-index: 1" v-model="ruleForm.desc" code_style="monokai" :toolbars="toolbars"
+                    @imgAdd="imgAdd" ref="md"></mavon-editor>
+      <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -65,6 +67,9 @@
 <script>
 import { getUser } from 'api/user'
 import { getProject, postBugManager, getTestManager } from '@/api/project'
+import { postUpload, postSendmessage } from 'api/tool'
+import { getConversionTime } from '@/utils'
+
 export default {
   props: ['project'],
   data() {
@@ -93,7 +98,17 @@ export default {
         { 'label': '高', value: '2' }
       ],
       users: [],
-      tests: []
+      tests: [],
+      toolbars: {
+        preview: true, // 预览
+        bold: true, // 粗体
+        italic: true, // 斜体
+        header: true, // 标题
+        underline: true, // 下划线
+        strikethrough: true, // 中划线
+        ol: true, // 有序列表
+        help: true
+      }
     }
   },
   created() {
@@ -113,6 +128,12 @@ export default {
               message: '恭喜你，添加成功',
               type: 'success'
             })
+            const messageForm = {
+              action_user: response.data.action_user,
+              title: '【出bug啦】' + response.data.name,
+              message: `地址: ${window.location.href}`
+            }
+            postSendmessage(messageForm)
             this.$emit('DialogStatus', false)
           }).catch(error => {
             this.$message.error('添加失败')
@@ -143,6 +164,18 @@ export default {
     getTest() {
       getTestManager().then(response => {
         this.tests = response.data
+      })
+    },
+    imgAdd(pos, file) {
+      var md = this.$refs.md
+      const formData = new FormData()
+      formData.append('username', this.username)
+      formData.append('file', file)
+      formData.append('create_time', getConversionTime(file.lastModified))
+      formData.append('type', file.type)
+      formData.append('archive', this.route_path[1])
+      postUpload(formData).then(response => {
+        md.$imglst2Url([[pos, response.data.file]])
       })
     }
   }

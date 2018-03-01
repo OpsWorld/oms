@@ -27,14 +27,16 @@
         <span>{{ ruleForm.end_time }}</span>
       </el-form-item>
       <el-form-item label="描述" prop="desc">
-        <span>{{ ruleForm.desc }}</span>
+        <vue-markdown :source="item.desc"></vue-markdown>
       </el-form-item>
     </el-form>
   </el-card>
 </template>
 <script>
+import VueMarkdown from 'vue-markdown' // 前端解析markdown
+
 export default {
-  components: {},
+  components: { VueMarkdown },
   props: ['ruleForm'],
   data() {
     return {
