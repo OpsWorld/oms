@@ -8,7 +8,7 @@
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in Object.values(Project_Status).length" :key="item"
+            <el-button plain size="mini" v-for="item in Object.keys(Project_Status)" :key="item"
                        @click="changeStatus(item)">
               {{Project_Status[item]}}
             </el-button>

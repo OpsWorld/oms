@@ -17,7 +17,7 @@
                                 发起人：</span>{{ticketData.create_user}}</a>
                 <a class="ticketinfo action_user">
                   <span class="han"><a class="shu"></a>指派人：</span>
-                  <el-tag size="mini" v-for="item in ticketData.action_user" :key="item.id" style="margin-right: 3px">{{item}}
+                  <el-tag size="mini" v-for="item in ticketData.action_user" :key="item" style="margin-right: 3px">{{item}}
                   </el-tag>
                 </a>
                 <a class="shu"></a>
@@ -124,6 +124,16 @@
           <el-card v-if="viewproject_btn_add_testbug||role==='super'">
             <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
+              <el-button size="mini" type="primary" plain @click="showAllTest">all</el-button>
+              <el-select style="margin-left: 20px" v-model="testquery.status" placeholder="请选择状态筛选"
+                         @change="changeTeststatus">
+                <el-option
+                  v-for="item in Object.keys(Test_Status)"
+                  :key="item"
+                  :label="Test_Status[item]"
+                  :value="item">
+                </el-option>
+              </el-select>
               <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
                          icon="el-icon-plus" @click="addTestFrom=true"></el-button>
             </div>
@@ -322,6 +332,7 @@ export default {
       },
       testquery: {
         project__id: '',
+        status: '',
         id: ''
       },
       commentquery: {
@@ -514,6 +525,13 @@ export default {
       getProjectEnclosure(parms).then(response => {
         this.enclosureData = response.data
       })
+    },
+    showAllTest() {
+      this.testquery.status = ''
+      this.fetchTestData()
+    },
+    changeTeststatus() {
+      this.fetchTestData()
     }
   }
 }

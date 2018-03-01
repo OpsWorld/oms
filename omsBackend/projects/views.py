@@ -52,7 +52,7 @@ class BugManagerViewSet(viewsets.ModelViewSet):
 class TestManagerViewSet(viewsets.ModelViewSet):
     queryset = TestManager.objects.all()
     serializer_class = TestManagerSerializer
-    filter_fields = ['id', 'project__id']
+    filter_fields = ['id', 'status', 'project__id']
 
 
 class DemandManagerViewSet(viewsets.ModelViewSet):
