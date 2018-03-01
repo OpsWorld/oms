@@ -124,15 +124,18 @@
           <el-card>
             <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
-              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addTestFrom=true"></el-button>
+              <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
+                         icon="el-icon-plus" @click="addTestFrom=true"></el-button>
             </div>
             <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%" height="350">
               <el-table-column prop="id" label="Id" width="60">
                 <template slot-scope="scope">
                   <div slot="reference">
-                    <el-button type="text" @click="showTest(false, scope.row)"><i
-                      class="fa fa-hashtag"></i>{{scope.row.id}}
+                    <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
+                               @click="showTest(false, scope.row)">
+                      <i class="fa fa-hashtag"></i>{{scope.row.id}}
                     </el-button>
+                    <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
                   </div>
                 </template>
               </el-table-column>
@@ -158,15 +161,18 @@
             <div slot="header" class="clearfix">
               <a class="right-title">关联bug</a>
               <el-button size="mini" type="primary" plain @click="showAllBug">all</el-button>
-              <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addBugFrom=true"></el-button>
+              <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
+                         icon="el-icon-plus" @click="addBugFrom=true"></el-button>
             </div>
             <el-table :data="bugData" stripe style="width: 100%" height="350">
               <el-table-column prop="id" label="Id" width="60">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="viewproject_btn_add_testbug||role==='super'">
                   <div slot="reference">
-                    <el-button type="text" @click="showBug(false, scope.row)"><i
-                      class="fa fa-hashtag"></i>{{scope.row.id}}
+                    <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
+                               @click="showTest(false, scope.row)">
+                      <i class="fa fa-hashtag"></i>{{scope.row.id}}
                     </el-button>
+                    <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
                   </div>
                 </template>
               </el-table-column>
@@ -241,6 +247,7 @@ import showTest from './showtest.vue'
 import { getUser } from 'api/user'
 import { getCreatedate } from '@/utils'
 import { apiUrl } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -333,11 +340,18 @@ export default {
       selectTest: {},
       errortime: false,
       apiurl: apiUrl,
-      enclosureData: []
+      enclosureData: [],
+      viewproject_btn_add_testbug: false
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'role',
+      'elements'
+    ])
+  },
   created() {
+    this.viewproject_btn_add_testbug = this.elements['查看任务-添加修改测试用例bug']
     this.bugquery.project__id = this.testquery.project__id = this.commentquery.project__id = this.commentForm.project = this.pid
     this.fetchData()
     this.fetchBugData()
