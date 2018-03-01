@@ -32,8 +32,8 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='type' label='类型' width="100"></el-table-column>
-          <el-table-column v-if="role==='super'" prop='is_public' label='是否公开'>
+          <el-table-column prop='type' label='类型'></el-table-column>
+          <el-table-column v-if="role==='super'" prop='is_public' label='是否公开' width="80">
             <template slot-scope="scope">
               <a>{{scope.row.is_public}}</a>
             </template>
@@ -49,7 +49,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='status' label='状态'>
+          <el-table-column prop='status' label='状态' width="80">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag size="mini">
@@ -58,7 +58,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='task_complete' label='任务进度' sortable="custom">
+          <el-table-column prop='task_complete' label='任务进度' sortable="custom" width="120">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.task_complete}}%
@@ -69,7 +69,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='test_complete' label='测试进度' sortable="custom">
+          <el-table-column prop='test_complete' label='测试进度' sortable="custom" width="120">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.test_complete}}%
@@ -97,7 +97,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="150">
             <template slot-scope="scope">
               <router-link :to="'editproject/' + scope.row.id">
                 <el-button type="success" size="small">修改</el-button>
