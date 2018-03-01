@@ -169,7 +169,7 @@
                 <template slot-scope="scope" v-if="viewproject_btn_add_testbug||role==='super'">
                   <div slot="reference">
                     <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
-                               @click="showTest(false, scope.row)">
+                               @click="showBug(false, scope.row)">
                       <i class="fa fa-hashtag"></i>{{scope.row.id}}
                     </el-button>
                     <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
@@ -212,6 +212,7 @@
     <el-dialog :visible.sync="editBugForm" @close="fetchBugData">
       <edit-bug :ruleForm="selectBug" @DialogStatus="getDialogStatus"></edit-bug>
     </el-dialog>
+
     <el-dialog :visible.sync="editTestForm" @close="fetchTestData">
       <edit-test :ruleForm="selectTest" @DialogStatus="getDialogStatus"></edit-test>
     </el-dialog>
