@@ -401,7 +401,7 @@ export default {
         if (this.ticketData.status === 3) {
           const messageForm = {
             action_user: 'edwin',
-            title: '【任务需要测试】' + this.ticketData.title,
+            title: '【任务需要测试】' + this.ticketData.name,
             message: `地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
@@ -410,7 +410,7 @@ export default {
         if (this.sendpeople) {
           const messageForm = {
             action_user: this.ticketData.create_user + ',' + this.ticketData.follow_user.join(),
-            title: '【任务有新回复】' + this.ticketData.title,
+            title: '【任务有新回复】' + this.ticketData.name,
             message: `操作人: ${this.commentForm.create_user}\n内容: ${this.commentForm.content}\n地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
@@ -418,7 +418,7 @@ export default {
         if (this.sendgroup) {
           const messageForm = {
             action_user: 'ITDept_SkypeID',
-            title: '【任务有新回复】' + this.ticketData.title,
+            title: '【任务有新回复】' + this.ticketData.name,
             message: `操作人: ${this.commentForm.create_user}\n内容: ${this.commentForm.content}\n地址: ${window.location.href}`
           }
           postSendmessage(messageForm)

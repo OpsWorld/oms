@@ -159,7 +159,7 @@ export default {
             }
             const messageForm = {
               action_user: this.ruleForm.action_user.join() + ',' + this.ruleForm.follow_user.join() + ',' + response.data.test_user,
-              title: `【${this.ruleForm.type}】${this.ruleForm.title}`,
+              title: `【新任务】${this.ruleForm.name}`,
               message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user.join()}\n任务地址: http://${window.location.host}/#/projects/viewproject/${response.data.id}`
             }
             postSendmessage(messageForm)
