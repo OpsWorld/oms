@@ -8,9 +8,9 @@
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="(item, index) in Object.keys(Project_Status).length" :key="index"
-                       @click="changeStatus(index)">
-              {{Project_Status[index]}}
+            <el-button plain size="mini" v-for="item in Object.values(Project_Status).length" :key="item"
+                       @click="changeStatus(item)">
+              {{Project_Status[item]}}
             </el-button>
           </el-button-group>
         </div>
@@ -126,7 +126,7 @@
     </el-card>
     <el-dialog title="更新任务进度" :visible.sync="TaskCompleteForm">
       <el-form label-width="90px">
-        <el-form-item :model="updateform" label="完成百分比">
+        <el-form-item label="完成百分比" prop="task_complete">
           <el-slider
             style="margin-right: 50px"
             v-model="updateform.task_complete"
@@ -173,7 +173,6 @@ export default {
       pagesize: pagesize,
       pageformat: pageformat,
       Project_Status: {
-        0: '未指派',
         1: '已指派',
         2: '处理中',
         3: '待测试',
