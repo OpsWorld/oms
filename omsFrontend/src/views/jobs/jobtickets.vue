@@ -4,7 +4,6 @@
       <div class="head-lavel">
         <div class="table-button">
           <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
-          <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
         </div>
         <div class="table-search">
           <el-input
@@ -16,9 +15,7 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" @selection-change="handleSelectionChange"
-                  @sort-change="handleSortChange">
-          <el-table-column type="selection"></el-table-column>
+        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='id' label='ID'></el-table-column>
           <el-table-column prop='name' label='标题'></el-table-column>
           <el-table-column prop='content' label='内容'>
@@ -40,6 +37,10 @@
                 <el-tag>
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
+                <el-tooltip class="item" effect="dark" content="更新状态" placement="top">
+                  <el-button @click="changeStatus(scope.row)" type="text" icon="el-icon-edit"
+                             class="modifychange"></el-button>
+                </el-tooltip>
               </div>
             </template>
           </el-table-column>
@@ -77,14 +78,14 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="show_status">
+    <el-dialog :visible.sync="statusForm">
       <el-radio-group v-model="rowdata.status">
         <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
         </el-radio>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="show_status=false">取 消</el-button>
-        <el-button type="primary" @click="changeForm">确 定</el-button>
+        <el-button @click="statusForm=false">取 消</el-button>
+        <el-button type="primary" @click="updateStatus">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -129,8 +130,8 @@
           <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
             <i class="fa fa-paperclip"></i>
             <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-            <el-button type="text" icon="el-icon-delete"
-                       @click="deleteEnclosure(item.id)"></el-button>
+            <!--<el-button type="text" icon="el-icon-delete"-->
+            <!--@click="deleteEnclosure(item.id)"></el-button>-->
           </li>
         </ul>
       </div>
@@ -166,7 +167,8 @@ export default {
       pagesize: pagesize,
       pageformat: pageformat,
       rowdata: {
-        status: '1'
+        id: '',
+        status: ''
       },
       STATUS_TEXT: { '0': '未上线', '1': '已上线' },
       listQuery: {
@@ -186,8 +188,7 @@ export default {
         ol: true, // 有序列表
         help: true
       },
-      btnstatus: true,
-      show_status: false,
+      statusForm: false,
       addForm: false,
       ruleForm: {
         name: '',
@@ -258,28 +259,23 @@ export default {
       this.fileList.remove(file)
       this.count -= 1
     },
-    changeStatus() {
-      this.fetchData()
+    changeStatus(row) {
+      this.statusForm = true
+      this.rowdata = row
     },
-    handleSelectionChange(val) {
-      this.selectId = []
-      for (var i = 0, len = val.length; i < len; i++) {
-        this.selectId.push(val[i].id)
-      }
-      if (this.selectId.length > 0) {
-        this.btnstatus = false
-      } else {
-        this.btnstatus = true
-      }
-    },
-    changeForm() {
-      for (var i = 0, len = this.selectId.length; i < len; i++) {
-        patchDeployTicket(this.selectId[i], this.rowdata).then(response => {
-          delete this.selectId[i]
-        })
-      }
-      this.fetchData()
-      this.show_status = false
+    updateStatus() {
+      patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
+        if (this.rowdata.status === '1') {
+          const messageForm = {
+            action_user: 'molly,linda',
+            title: '【已上线】' + this.rowdata.name,
+            message: `上线内容: ${this.rowdata.content}`
+          }
+          postSendmessage(messageForm)
+        }
+        this.fetchData()
+        this.statusForm = false
+      })
     },
     handleSortChange(val) {
       if (val.order === 'ascending') {
@@ -336,5 +332,7 @@ export default {
 </script>
 
 <style lang='scss'>
-
+  .modifychange {
+    margin: 5px;
+  }
 </style>
