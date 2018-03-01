@@ -46,7 +46,7 @@ class Sendmail(models.Model):
 
 class Sendmessage(models.Model):
     action_user = models.CharField(max_length=100, verbose_name=u'收件人')
-    title = models.CharField(max_length=30, verbose_name=u'消息标题')
+    title = models.CharField(max_length=200, verbose_name=u'消息标题')
     message = models.TextField(null=True, blank=True, verbose_name=u'消息')
 
     def __str__(self):
