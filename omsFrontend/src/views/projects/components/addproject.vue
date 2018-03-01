@@ -94,6 +94,9 @@ export default {
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
+        action_user: [
+          { required: true, type: 'array', message: '请输入正确的内容', trigger: 'change' }
+        ],
         content: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],

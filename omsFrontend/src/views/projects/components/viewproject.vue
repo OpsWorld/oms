@@ -42,9 +42,7 @@
                 <span class="han">操作：</span>
                 <el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>
                 <el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>
-                <el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定
-                </el-button>
-                <div v-if="showinput" class="action">
+                <a v-if="showinput" class="action">
                   <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
                     <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index">
                     </el-option>
@@ -58,8 +56,9 @@
                     @change="changeProjectendtime"
                     disable="have_endtime">
                   </el-date-picker>
-                </div>
-
+                </a>
+                <el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定
+                </el-button>
               </div>
             </div>
             <vue-markdown :source="ticketData.content"></vue-markdown>
@@ -284,7 +283,6 @@ export default {
         background: '#a2fdff'// 按钮的背景颜色
       },
       Project_Status: {
-        0: '未指派',
         1: '已指派',
         2: '处理中',
         3: '待测试',
@@ -411,12 +409,20 @@ export default {
       if (!this.rowdata.status) {
         this.rowdata.status = this.ticketData.status
       }
-      patchProject(this.pid, this.rowdata).then(() => {
+      patchProject(this.pid, this.rowdata).then(res => {
         this.$message({
           message: '恭喜你，编辑成功',
           type: 'success'
         })
         this.fetchData()
+        if (res.data.status === 3) {
+          const messageForm = {
+            action_user: 'edwin',
+            title: '【任务需要测试】' + this.ticketData.title,
+            message: `地址: ${window.location.href}`
+          }
+          postSendmessage(messageForm)
+        }
         this.showinput = false
       }).catch(error => {
         this.$message.error('计划结束时间必须大于开始时间！')

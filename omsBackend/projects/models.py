@@ -32,7 +32,7 @@ class Project(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     type = models.ForeignKey('ProjectType', on_delete=models.SET_NULL, null=True, blank=True, verbose_name=u'类型')
     level = models.CharField(max_length=3, choices=Level.items(), default=2, verbose_name=u'等级')
-    status = models.CharField(max_length=3, choices=Project_Status.items(), default=0, verbose_name=u'状态')
+    status = models.CharField(max_length=3, choices=Project_Status.items(), default=1, verbose_name=u'状态')
     task_complete = models.IntegerField(default=0, blank=True, verbose_name=u'任务进度')
     test_complete = models.IntegerField(default=0, blank=True, verbose_name=u'测试进度')
     content = models.TextField(verbose_name=u'内容')
