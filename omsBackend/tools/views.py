@@ -53,12 +53,13 @@ class SendmessageViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         content = request.data["title"] + '\n' + request.data["message"]
         action_user = request.data["action_user"]
-        try:
-            to_action_user = User.objects.get(username=action_user).skype
-            print(to_action_user)
-            send_to_skype.delay(to_action_user, content)
-        except Exception as e:
-            print(e)
+        for i in action_user:
+            try:
+                to_action_user = User.objects.get(username=i).skype
+                print(to_action_user)
+                send_to_skype.delay(to_action_user, content)
+            except Exception as e:
+                print(e)
         return Response({"code": "1024"}, status=status.HTTP_201_CREATED)
 
 
