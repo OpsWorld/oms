@@ -69,6 +69,7 @@ import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
 import { postUpload, postSendmessage } from 'api/tool'
 import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
+import { getUser } from 'api/user'
 
 export default {
   components: {},
@@ -260,12 +261,26 @@ export default {
               postDemandEnclosure(Demandenclosure)
             }
           }
-          const messageForm = {
-            action_user: 'omar',
-            title: '【新需求】' + DemandForm.name,
-            message: `需求创建人: ${DemandForm.create_user}`
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
           }
-          postSendmessage(messageForm)
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user.username,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
+          //          const messageForm = {
+          //            action_user: 'omar',
+          //            title: '【新需求】' + DemandForm.name,
+          //            message: `需求创建人: ${DemandForm.create_user}`
+          //          }
+          //          postSendmessage(messageForm)
           this.$router.push('/projects/demands')
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]

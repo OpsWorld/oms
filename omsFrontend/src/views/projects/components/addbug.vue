@@ -1,7 +1,7 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
     <el-form-item label="关联任务" prop="project">
-      <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务">
+      <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务" @change="changeProject">
         <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>
@@ -162,8 +162,14 @@ export default {
         this.projects = response.data
       })
     },
+    changeProject(val) {
+      console.log(val)
+    },
     getTest() {
-      getTestManager().then(response => {
+      const pramas = {
+        project__id: this.project.id
+      }
+      getTestManager(pramas).then(response => {
         this.tests = response.data
       })
     },
