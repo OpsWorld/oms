@@ -3,7 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
-          <el-select v-model="platform" placeholder="请选择平台进行筛选" @change="changePlatform">
+          <el-select v-model="platform" placeholder="请选择平台进行筛选" clearable @change="changePlatform">
             <el-option
               v-for="item in platforms"
               :key="item.id"
@@ -158,7 +158,7 @@ export default {
 
     fetchPlatformData() {
       getPlatform().then(response => {
-        this.platforms = [{ 'name': '全部' }].concat(response.data)
+        this.platforms = response.data
       })
     },
     changePlatform(val) {

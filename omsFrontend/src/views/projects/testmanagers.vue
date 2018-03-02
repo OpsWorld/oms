@@ -4,11 +4,19 @@
       <div class="head-lavel">
         <div class="table-button">
           <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
+          <el-select v-model="listQuery.status" placeholder="请选择状态筛选" clearable @change="changeTeststatus">
+            <el-option
+              v-for="item in Object.keys(Test_Status)"
+              :key="item"
+              :label="Test_Status[item]"
+              :value="item">
+            </el-option>
+          </el-select>
         </div>
         <div class="table-search">
           <el-input
-            placeholder="搜索 ..."
-            v-model="searchdata"
+            placeholder="搜索任务编号 ..."
+            v-model="listQuery.project__pid"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -96,12 +104,15 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
-      limit: LIMIT,
-      offset: '',
       pagesize: pagesize,
       pageformat: pageformat,
+      listQuery: {
+        limit: LIMIT,
+        offset: '',
+        status: '',
+        project__pid: ''
+      },
       addForm: false,
       editForm: false,
       rowdata: {},
@@ -122,12 +133,7 @@ export default {
 
   methods: {
     fetchData() {
-      const parms = {
-        limit: this.limit,
-        offset: this.offset,
-        name__contains: this.searchdata
-      }
-      getTestManager(parms).then(response => {
+      getTestManager(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
@@ -175,6 +181,9 @@ export default {
       getProject(query).then(response => {
         this.project = response.data[0]
       })
+    },
+    changeTeststatus() {
+      this.fetchData()
     }
   }
 }

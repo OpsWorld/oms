@@ -124,8 +124,7 @@
           <el-card v-if="viewproject_btn_add_testbug||role==='super'">
             <div slot="header" class="clearfix">
               <a class="right-title">测试用例</a>
-              <el-button size="mini" type="primary" plain @click="showAllTest">all</el-button>
-              <el-select style="margin-left: 20px" v-model="testquery.status" placeholder="请选择状态筛选"
+              <el-select style="margin-left: 20px" v-model="testquery.status" clearable placeholder="请选择状态筛选"
                          @change="changeTeststatus">
                 <el-option
                   v-for="item in Object.keys(Test_Status)"
@@ -527,10 +526,6 @@ export default {
       getProjectEnclosure(parms).then(response => {
         this.enclosureData = response.data
       })
-    },
-    showAllTest() {
-      this.testquery.status = ''
-      this.fetchTestData()
     },
     changeTeststatus() {
       this.fetchTestData()
