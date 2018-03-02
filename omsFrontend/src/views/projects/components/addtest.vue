@@ -1,7 +1,8 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
     <el-form-item label="关联任务" prop="project">
-      <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务">
+      <el-input v-if="Object.keys(project).length>0" v-model="ruleForm.project" disabled></el-input>
+      <el-select v-else v-model="ruleForm.project" filterable placeholder="请选择关联任务">
         <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>

@@ -1,13 +1,14 @@
 <template>
   <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
     <el-form-item label="关联任务" prop="project">
-      <el-select v-model="ruleForm.project" filterable placeholder="请选择关联任务" @change="changeProject">
+      <el-input v-if="Object.keys(project).length>0" v-model="ruleForm.project" disabled></el-input>
+      <el-select v-else v-model="ruleForm.project" filterable placeholder="请选择关联任务" @change="changeProject">
         <el-option v-for="item in projects" :key="item.id" :value="item.pid"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="关联test" prop="test">
       <el-select v-model="ruleForm.test" filterable placeholder="请选择关联test">
-        <el-option v-for="item in tests" :key="item.id" :value="item.id"></el-option>
+        <el-option v-for="item in testData" :key="item.id" :value="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="名称" prop="name">
@@ -121,16 +122,17 @@ export default {
         strikethrough: true, // 中划线
         ol: true, // 有序列表
         help: true
-      }
+      },
+      testData: []
     }
   },
   created() {
     if (this.project) {
       this.ruleForm.project = this.project.pid
+      this.testData = this.tests
     }
     this.getUsers()
     this.getProjects()
-    this.getTest()
   },
   methods: {
     submitForm(formName) {
@@ -182,7 +184,7 @@ export default {
         project__pid: pid
       }
       getTestManager(pramas).then(response => {
-        this.tests = response.data
+        this.testData = response.data
       })
     },
     imgAdd(pos, file) {
