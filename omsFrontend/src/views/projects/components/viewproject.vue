@@ -319,7 +319,8 @@ export default {
         0: 'Passed',
         1: 'Failed',
         2: 'Block',
-        3: 'N/A'
+        3: 'N/A',
+        4: 'New'
       },
       showinput: false,
       addBugFrom: false,

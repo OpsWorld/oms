@@ -167,7 +167,8 @@ Test_Status = {
     0: 'Passed',
     1: 'Failed',
     2: 'Block',
-    3: 'N/A'
+    3: 'N/A',
+    4: 'New'
 }
 
 
@@ -176,7 +177,7 @@ class TestManager(models.Model):
     name = models.CharField(max_length=100, verbose_name=u'名称')
     expect_result = models.TextField(null=True, blank=True, verbose_name=u'预期结果')
     actual_result = models.TextField(null=True, blank=True, verbose_name=u'实际结果')
-    status = models.CharField(max_length=3, choices=Test_Status.items(), null=True, blank=True, verbose_name=u'执行状态')
+    status = models.CharField(max_length=3, choices=Test_Status.items(), default=4,  verbose_name=u'执行状态')
     test_user = models.ForeignKey(User, related_name='test_test_user', verbose_name=u'测试人员')
     action_user = models.ForeignKey(User, related_name='test_action_user', verbose_name=u'开发人员')
     test_time = models.DateField(blank=True, verbose_name=u'测试时间')

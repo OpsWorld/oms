@@ -38,7 +38,7 @@
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
                 <el-tooltip class="item" effect="dark" content="更新状态" placement="top">
-                  <el-button @click="changeStatus(scope.row)" type="text" icon="el-icon-edit"
+                  <el-button v-if="scope.row.status===0" @click="changeStatus(scope.row)" type="text" icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
               </div>
