@@ -110,6 +110,7 @@ import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
 import { postSendmessage } from 'api/tool'
+import { getUser } from 'api/user'
 
 export default {
   components: {},
@@ -245,6 +246,20 @@ export default {
           }
           row.status = 1
           putPlatformPayChannel(row.id, row)
+          const pramas = {
+            groups__name: 'OMS_Dev_Manager'
+          }
+          getUser(pramas).then(response => {
+            const users = response.data
+            for (const user of users) {
+              const messageForm = {
+                action_user: user.username,
+                title: '【新需求】' + DemandForm.name,
+                message: `操作人: ${DemandForm.create_user}地址: http://${window.location.host}/#/projects/viewdemand/${response.data.id}`
+              }
+              postSendmessage(messageForm)
+            }
+          })
         }).catch(error => {
           const errordata = Object.values(error.response.data)[0]
           this.$message.error(errordata[0])
