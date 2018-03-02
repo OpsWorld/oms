@@ -8,9 +8,9 @@
           </router-link>
           <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
           <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in Object.keys(Project_Status)" :key="item"
+            <el-button plain size="mini" v-for="item in Object.keys(Status_Text)" :key="item"
                        @click="changeStatus(item)">
-              {{Project_Status[item]}}
+              {{Status_Text[item]}}
             </el-button>
           </el-button-group>
         </div>
@@ -52,8 +52,8 @@
           <el-table-column prop='status' label='状态' width="80">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
-                <el-tag size="mini">
-                  {{Project_Status[scope.row.status]}}
+                <el-tag size="mini" :type="Status_Color[scope.row.status]">
+                  {{Status_Text[scope.row.status]}}
                 </el-tag>
               </div>
             </template>
@@ -172,7 +172,7 @@ export default {
       currentPage: 1,
       pagesize: pagesize,
       pageformat: pageformat,
-      Project_Status: {
+      Status_Text: {
         1: '已指派',
         2: '处理中',
         3: '待测试',
@@ -180,6 +180,15 @@ export default {
         5: '已测试',
         6: '待上线',
         7: '已上线'
+      },
+      Status_Color: {
+        1: '',
+        2: '',
+        3: '',
+        4: '',
+        5: '',
+        6: '',
+        7: 'info'
       },
       listQuery: {
         limit: LIMIT,
