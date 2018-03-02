@@ -53,6 +53,7 @@ class TestManagerViewSet(viewsets.ModelViewSet):
     queryset = TestManager.objects.all()
     serializer_class = TestManagerSerializer
     filter_fields = ['id', 'status', 'project__id', 'project__pid']
+    search_fields = ['name', 'project__pid']
 
 
 class DemandManagerViewSet(viewsets.ModelViewSet):

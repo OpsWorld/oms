@@ -15,8 +15,8 @@
         </div>
         <div class="table-search">
           <el-input
-            placeholder="搜索任务编号 ..."
-            v-model="listQuery.project__pid"
+            placeholder="搜索..."
+            v-model="listQuery.search"
             @keyup.enter.native="searchClick">
             <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
           </el-input>
@@ -111,7 +111,7 @@ export default {
         limit: LIMIT,
         offset: '',
         status: '',
-        project__pid: ''
+        search: ''
       },
       addForm: false,
       editForm: false,

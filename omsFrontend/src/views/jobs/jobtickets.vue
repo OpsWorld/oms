@@ -79,18 +79,21 @@
     </el-card>
 
     <el-dialog :visible.sync="statusForm">
-      <el-radio-group v-model="rowdata.status">
-        <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
-        </el-radio>
-      </el-radio-group>
-      <span slot="footer" class="dialog-footer">
+      <el-form :model="rowdata" ref="ruleForm" label-width="100px">
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="rowdata.status">
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <span slot="footer" class="dialog-footer">
         <el-button @click="statusForm=false">取 消</el-button>
         <el-button type="primary" @click="updateStatus">确 定</el-button>
       </span>
     </el-dialog>
 
     <el-dialog :visible.sync="addForm">
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
         <el-form-item label="标题" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
