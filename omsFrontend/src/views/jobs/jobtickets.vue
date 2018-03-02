@@ -81,15 +81,19 @@
     <el-dialog :visible.sync="statusForm">
       <el-form :model="rowdata" ref="ruleForm" label-width="100px">
         <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="rowdata.status">
-            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
-            </el-radio>
-          </el-radio-group>
+          <el-radio v-model="rowdata.status" v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">
+            {{STATUS_TEXT[item]}}
+          </el-radio>
         </el-form-item>
-        <span slot="footer" class="dialog-footer">
-        <el-button @click="statusForm=false">取 消</el-button>
-        <el-button type="primary" @click="updateStatus">确 定</el-button>
-      </span>
+        <el-form-item label="通知对象">
+          <el-checkbox v-model="rowdata.send_acc">财务</el-checkbox>
+          <el-checkbox v-model="rowdata.send_cs">客服</el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="statusForm=false">取 消</el-button>
+          <el-button type="primary" @click="updateStatus">确 定</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
 
     <el-dialog :visible.sync="addForm">
@@ -160,6 +164,7 @@ import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
 
 export default {
+  components: { },
   data() {
     return {
       route_path: this.$route.path.split('/'),
@@ -216,7 +221,9 @@ export default {
         file: ''
       },
       enclosureData: [],
-      showForm: false
+      showForm: false,
+      send_acc: false,
+      send_cs: false
     }
   },
 
