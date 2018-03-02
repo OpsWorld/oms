@@ -8,6 +8,7 @@ from tools.models import Upload
 
 
 class ProjectSerializer(serializers.ModelSerializer):
+    demand = serializers.SlugRelatedField(queryset=DemandManager.objects.all(), slug_field='name')
     type = serializers.SlugRelatedField(queryset=ProjectType.objects.all(), slug_field='name', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username',
@@ -18,7 +19,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
-            'url', 'id', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
+            'url', 'id', 'demand', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
             'create_user', 'test_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time',
             'start_time', 'end_time', 'is_public')
 
