@@ -78,7 +78,7 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="statusForm">
+    <el-dialog :visible.sync="statusForm" @close="cleanForm">
       <el-form :model="rowdata" ref="ruleForm" label-width="100px">
         <el-form-item label="状态" prop="status">
           <el-radio v-model="rowdata.status" v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">
@@ -86,8 +86,8 @@
           </el-radio>
         </el-form-item>
         <el-form-item label="通知对象">
-          <el-checkbox v-model="rowdata.send_acc">财务</el-checkbox>
-          <el-checkbox v-model="rowdata.send_cs">客服</el-checkbox>
+          <el-checkbox v-model="send_acc">财务</el-checkbox>
+          <el-checkbox v-model="send_cs">客服</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-button @click="statusForm=false">取 消</el-button>
@@ -164,7 +164,7 @@ import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
 
 export default {
-  components: { },
+  components: {},
   data() {
     return {
       route_path: this.$route.path.split('/'),
@@ -276,12 +276,22 @@ export default {
     updateStatus() {
       patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
         if (this.rowdata.status === '1') {
-          const messageForm = {
-            action_user: 'molly,linda',
-            title: '【已上线】' + this.rowdata.name,
-            message: `上线内容: ${this.rowdata.content}`
+          if (this.send_acc) {
+            const messageForm = {
+              action_user: 'molly',
+              title: '【已上线】' + this.rowdata.name,
+              message: `上线内容: ${this.rowdata.content}`
+            }
+            postSendmessage(messageForm)
           }
-          postSendmessage(messageForm)
+          if (this.send_cs) {
+            const messageForm = {
+              action_user: 'linda',
+              title: '【已上线】' + this.rowdata.name,
+              message: `上线内容: ${this.rowdata.content}`
+            }
+            postSendmessage(messageForm)
+          }
         }
         this.fetchData()
         this.statusForm = false
@@ -336,6 +346,10 @@ export default {
     deleteEnclosure(id) {
       deleteDeployTicketEnclosur(id)
       this.EnclosureData(id)
+    },
+    cleanForm() {
+      this.send_acc = false
+      this.send_cs = false
     }
   }
 }
