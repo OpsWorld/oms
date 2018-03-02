@@ -48,7 +48,14 @@ import { getUser } from 'api/user'
 import { getProject } from '@/api/project'
 import { postTestManager } from '@/api/project'
 export default {
-  props: ['project'],
+  props: {
+    project: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       ruleForm: {
@@ -80,7 +87,7 @@ export default {
   },
   created() {
     if (this.project) {
-      this.ruleForm.project = this.project
+      this.ruleForm.project = this.project.pid
     }
     this.getUsers()
     this.getProjects()

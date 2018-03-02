@@ -71,7 +71,20 @@ import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
 
 export default {
-  props: ['project'],
+  props: {
+    project: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    tests: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    }
+  },
   data() {
     return {
       route_path: this.$route.path.split('/'),
@@ -99,7 +112,6 @@ export default {
         { 'label': '高', value: '2' }
       ],
       users: [],
-      tests: [],
       toolbars: {
         preview: true, // 预览
         bold: true, // 粗体
@@ -114,7 +126,7 @@ export default {
   },
   created() {
     if (this.project) {
-      this.ruleForm.project = this.project
+      this.ruleForm.project = this.project.pid
     }
     this.getUsers()
     this.getProjects()
@@ -163,11 +175,11 @@ export default {
       })
     },
     changeProject(val) {
-      console.log(val)
+      this.getTest(val)
     },
-    getTest() {
+    getTest(pid) {
       const pramas = {
-        project__id: this.project.id
+        project__pid: pid
       }
       getTestManager(pramas).then(response => {
         this.tests = response.data
