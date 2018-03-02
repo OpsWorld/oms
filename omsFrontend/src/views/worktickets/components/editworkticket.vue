@@ -30,6 +30,8 @@
             </div>
             <div class="appendInfo" v-if="workticketlist_btn_edit||role==='super'&&ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
+              <el-button v-if="ticketData.ticket_status===0" type="success" size="small" @click="changeStatus">接收
+              </el-button>
               <router-link :to="'/worktickets/copyworkticket/' + pid">
                 <el-button type="primary" size="small">乾坤大挪移</el-button>
               </router-link>
@@ -173,7 +175,6 @@ export default {
         file: ''
       },
       rowdata: {
-        ticket_status: 1,
         action_user: '',
         edit_user: ''
       },
@@ -256,6 +257,14 @@ export default {
     deleteEnclosure(id) {
       deleteTicketenclosure(id)
       setTimeout(this.EnclosureData, 1000)
+    },
+    changeStatus() {
+      const data = {
+        ticket_status: 1
+      }
+      patchWorkticket(this.ticket_id, data).then(() => {
+        this.fetchData()
+      })
     },
     submitForm(formName) {
       this.$confirm('你的操作即将提交，提交完成后会立即跳转到工单列表页面!', '提示', {

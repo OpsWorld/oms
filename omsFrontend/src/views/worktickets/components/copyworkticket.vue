@@ -60,7 +60,9 @@ import {
   getTickettype,
   postTicketenclosure,
   getTicketenclosure,
-  deleteTicketenclosure
+  deleteTicketenclosure,
+  postTicketcomment,
+  patchWorkticket
 } from 'api/workticket'
 import { postDemandManager, postDemandEnclosure } from '@/api/project'
 import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
@@ -109,6 +111,11 @@ export default {
         project: '',
         create_user: localStorage.getItem('username'),
         file: ''
+      },
+      commentForm: {
+        ticket: '',
+        create_user: localStorage.getItem('username'),
+        content: '本工单已经被转成需求'
       }
     }
   },
@@ -266,6 +273,12 @@ export default {
           console.log(errordata)
         })
       }
+      this.commentForm.ticket = ticketData.id
+      postTicketcomment(this.commentForm)
+      const data = {
+        ticket_status: 1
+      }
+      patchWorkticket(ticketData.id, data)
     }
   }
 }
