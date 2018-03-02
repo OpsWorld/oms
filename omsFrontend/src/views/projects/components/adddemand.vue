@@ -44,6 +44,7 @@ import { postDemandManager, getProjectType, postDemandEnclosure } from '@/api/pr
 import { postUpload, postSendmessage } from 'api/tool'
 import { uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
+import { getUser } from 'api/user'
 
 export default {
   components: {},
@@ -82,7 +83,6 @@ export default {
       uploadurl: uploadurl,
       types: [],
       img_file: {},
-      sendnotice: false,
       fileList: [],
       count: 0,
       enclosureData: [],
@@ -122,14 +122,20 @@ export default {
                 postDemandEnclosure(this.enclosureForm)
               })
             }
-            if (this.sendnotice) {
-              const messageForm = {
-                action_user: this.ruleForm.action_user.join(),
-                title: `【新需求】${this.ruleForm.name}`,
-                message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n任务地址: http://${window.location.host}/#/projects/editproject/${this.ruleForm.id}`
-              }
-              postSendmessage(messageForm)
+            const pramas = {
+              groups__name: 'OMS_Dev_Manager'
             }
+            getUser(pramas).then(response => {
+              const users = response.data
+              for (const user of users) {
+                const messageForm = {
+                  action_user: user.username,
+                  title: '【新需求】' + this.ruleForm.name,
+                  message: `操作人: ${this.ruleForm.create_user}\n地址: http://${window.location.host}/#/projects/viewdemand/${response.data.id}`
+                }
+                postSendmessage(messageForm)
+              }
+            })
             this.$router.push('/projects/demands')
           })
         } else {

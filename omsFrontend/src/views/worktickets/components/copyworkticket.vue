@@ -270,7 +270,7 @@ export default {
               const messageForm = {
                 action_user: user.username,
                 title: '【新需求】' + DemandForm.name,
-                message: `操作人: ${DemandForm.create_user}`
+                message: `操作人: ${DemandForm.create_user}地址: http://${window.location.host}/#/projects/viewdemand/${response.data.id}`
               }
               postSendmessage(messageForm)
             }
