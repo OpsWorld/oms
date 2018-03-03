@@ -128,7 +128,7 @@ Status = {
 
 class DeployTicket(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
-    version = models.TextField(verbose_name=u'项目版本')
+    version = models.TextField(default='HEAD', verbose_name=u'项目版本')
     content = models.TextField(verbose_name=u'上线内容')
     create_user = models.ForeignKey(User, related_name='deployticket_create_user', verbose_name=u'创建者')
     status = models.CharField(max_length=3, choices=Status.items(), default=0, verbose_name=u'状态')
