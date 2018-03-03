@@ -80,7 +80,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='创建人' width="100"></el-table-column>
+          <el-table-column prop='demand' label='关联需求'></el-table-column>
           <el-table-column prop='action_user' label='指派人' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">

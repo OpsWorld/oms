@@ -2,7 +2,7 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-row :gutter="20">
-        <el-col :span="24">
+        <el-col :span="16">
           <el-card>
             <div slot="header" class="clearfix">
               <a class="title">{{ticketData.name}}</a>
@@ -21,7 +21,7 @@
                 <a class="shu"></a>
                 <span class="han">当前状态：</span>
                 <el-tag>
-                  {{Project_Status[ticketData.status]}}
+                  {{Demand_Status[ticketData.status]}}
                 </el-tag>
                 <a class="shu"></a>
                 <span class="han">计划结束时间：</span>
@@ -41,6 +41,26 @@
             </div>
           </el-card>
         </el-col>
+        <el-col :span="8">
+
+          <el-card>
+            <div slot="header" class="clearfix">
+              <a class="right-title">任务列表</a>
+            </div>
+            <el-table :data="projectData" stripe style="width: 100%">
+              <el-table-column type="index" width="50"></el-table-column>
+              <el-table-column prop="name" label="名称"></el-table-column>
+              <el-table-column prop="status" label="状态" width="70">
+                <template slot-scope="scope">
+                  <div slot="reference">
+                    <el-tag size="mini">{{Status_Text[scope.row.status]}}</el-tag>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
+            </el-table>
+          </el-card>
+        </el-col>
       </el-row>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
@@ -50,10 +70,11 @@
   </div>
 </template>
 <script>
-import { getDemandManager, getDemandEnclosure } from '@/api/project'
+import { getDemandManager, getDemandEnclosure, getProject } from '@/api/project'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
 import { apiUrl } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -84,18 +105,34 @@ export default {
         'line-height': '45px', // 请保持与高度一致以垂直居中
         background: '#a2fdff'// 按钮的背景颜色
       },
-      Project_Status: {
+      Demand_Status: {
         0: '未审核',
         1: '已通过',
         2: '未通过'
       },
+      Status_Text: {
+        1: '已指派',
+        2: '处理中',
+        3: '待测试',
+        4: '测试中',
+        5: '已测试',
+        6: '待上线',
+        7: '已上线'
+      },
       users: [],
       errortime: false,
       apiurl: apiUrl,
-      enclosureData: []
+      enclosureData: [],
+      viewdemand_btn_add_project: false,
+      projectData: []
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'role',
+      'elements'
+    ])
+  },
   created() {
     this.fetchData()
     this.fetchEnclosureData()
@@ -105,6 +142,7 @@ export default {
       const query = null
       getDemandManager(query, this.pid).then(response => {
         this.ticketData = response.data
+        this.fetchProjectData(this.ticketData.name)
       })
     },
     fetchEnclosureData() {
@@ -113,6 +151,14 @@ export default {
       }
       getDemandEnclosure(parms).then(response => {
         this.enclosureData = response.data
+      })
+    },
+    fetchProjectData(demand) {
+      const parms = {
+        demand__name: demand
+      }
+      getProject(parms).then(response => {
+        this.projectData = response.data
       })
     }
   }

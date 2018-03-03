@@ -2,6 +2,12 @@
   <div class="components-container" style='height:100vh'>
     <el-card>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px">
+        <el-form-item label="关联需求" prop="demand">
+          <el-input v-if="Object.keys(demand).length>0" v-model="ruleForm.demand" disabled></el-input>
+          <el-select v-else v-model="ruleForm.demand" filterable placeholder="请选择关联需求">
+            <el-option v-for="item in demands" :key="item.id" :value="item.name"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
@@ -65,7 +71,7 @@
   </div>
 </template>
 <script>
-import { postProject, getProjectType, postProjectEnclosure } from '@/api/project'
+import { postProject, getProjectType, postProjectEnclosure, getDemandManager } from '@/api/project'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
@@ -73,11 +79,19 @@ import { getConversionTime } from '@/utils'
 
 export default {
   components: {},
-
+  props: {
+    demand: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       route_path: this.$route.path.split('/'),
       ruleForm: {
+        demand: '',
         name: '',
         type: '',
         content: '',
@@ -126,15 +140,25 @@ export default {
         project: '',
         create_user: localStorage.getItem('username'),
         file: ''
-      }
+      },
+      demands: []
     }
   },
 
   created() {
+    if (this.demand) {
+      this.ruleForm.demand = this.demand.name
+    }
     this.getUsers()
     this.getTypes()
+    this.fetchDemandData()
   },
   methods: {
+    fetchDemandData() {
+      getDemandManager().then(response => {
+        this.demands = response.data
+      })
+    },
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -163,6 +187,7 @@ export default {
               message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user.join()}\n任务地址: http://${window.location.host}/#/projects/viewproject/${response.data.id}`
             }
             postSendmessage(messageForm)
+            this.$emit('DialogStatus', false)
             this.$router.push('/projects/projects')
           })
         } else {

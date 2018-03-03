@@ -21,7 +21,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by('status', '-create_time')
     serializer_class = ProjectSerializer
     filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filter_fields = ['pid', 'status']
+    filter_fields = ['pid', 'status', 'demand__name']
     search_fields = ['name', 'content', 'type__name']
     ordering_fields = ('level', 'task_complete', 'test_complete', 'create_time')
 
