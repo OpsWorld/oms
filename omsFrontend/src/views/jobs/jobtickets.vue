@@ -18,6 +18,7 @@
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='id' label='ID'></el-table-column>
           <el-table-column prop='name' label='标题'></el-table-column>
+          <el-table-column prop='version' label='项目和版本'></el-table-column>
           <el-table-column prop='content' label='内容'>
             <template slot-scope="scope">
               <div slot="reference">
@@ -38,7 +39,8 @@
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
                 <el-tooltip class="item" effect="dark" content="更新状态" placement="top">
-                  <el-button v-if="scope.row.status===0" @click="changeStatus(scope.row)" type="text" icon="el-icon-edit"
+                  <el-button v-if="scope.row.status===0" @click="changeStatus(scope.row)" type="text"
+                             icon="el-icon-edit"
                              class="modifychange"></el-button>
                 </el-tooltip>
               </div>
@@ -88,6 +90,7 @@
         <el-form-item label="通知对象">
           <el-checkbox v-model="send_acc">财务</el-checkbox>
           <el-checkbox v-model="send_cs">客服</el-checkbox>
+          <el-checkbox v-model="send_it">部门群组</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-button @click="statusForm=false">取 消</el-button>
@@ -101,10 +104,11 @@
         <el-form-item label="标题" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
+        <el-form-item label="项目和版本" prop="version">
+          <el-input v-model="ruleForm.version" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
         <el-form-item label="内容" prop="content">
-          <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
-                        :toolbars="toolbars"></mavon-editor>
-          <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到工单内容里面</a>
+          <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item>
           <hr class="heng"/>
@@ -200,12 +204,16 @@ export default {
       addForm: false,
       ruleForm: {
         name: '',
+        version: '',
         content: '',
         create_user: localStorage.getItem('username')
       },
       rules: {
         name: [
           { required: true, message: '请输入工单标题', trigger: 'blur' }
+        ],
+        version: [
+          { required: true, message: '请输入工单内容', trigger: 'blur' }
         ],
         content: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }
@@ -223,7 +231,8 @@ export default {
       enclosureData: [],
       showForm: false,
       send_acc: false,
-      send_cs: false
+      send_cs: false,
+      send_it: false
     }
   },
 
@@ -287,6 +296,14 @@ export default {
           if (this.send_cs) {
             const messageForm = {
               action_user: 'linda',
+              title: '【已上线】' + this.rowdata.name,
+              message: `上线内容: ${this.rowdata.content}`
+            }
+            postSendmessage(messageForm)
+          }
+          if (this.send_it) {
+            const messageForm = {
+              action_user: 'ITDept_SkypeID',
               title: '【已上线】' + this.rowdata.name,
               message: `上线内容: ${this.rowdata.content}`
             }
