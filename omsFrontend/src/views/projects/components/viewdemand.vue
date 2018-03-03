@@ -49,7 +49,13 @@
             </div>
             <el-table :data="projectData" stripe style="width: 100%">
               <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column prop="name" label="名称"></el-table-column>
+              <el-table-column prop="name" label="名称">
+                <template slot-scope="scope">
+                  <router-link :to="'/projects/viewproject/' + scope.row.id">
+                    <a style="color: #257cff">{{scope.row.name}}</a>
+                  </router-link>
+                </template>
+              </el-table-column>
               <el-table-column prop="status" label="状态" width="70">
                 <template slot-scope="scope">
                   <div slot="reference">
