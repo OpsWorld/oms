@@ -125,8 +125,8 @@ export default {
             const pramas = {
               groups__name: 'OMS_Dev_Manager'
             }
-            getUser(pramas).then(response => {
-              const users = response.data
+            getUser(pramas).then(res => {
+              const users = res.data
               for (const user of users) {
                 const messageForm = {
                   action_user: user.username,
