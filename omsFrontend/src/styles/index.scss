@@ -236,15 +236,22 @@ li {
   }
 }
 
-  .table-expand {
-    font-size: 0;
-    .el-form-item {
-      margin-right: 0!important;
-      margin-bottom: 0;
-      width: 50%!important;
-      .el-form-item__label {
-        width: 120px;
-        color: #99a9bf;
-      }
+.table-expand {
+  font-size: 0;
+  .el-form-item {
+    margin-right: 0 !important;
+    margin-bottom: 0;
+    width: 50% !important;
+    .el-form-item__label {
+      width: 120px;
+      color: #99a9bf;
     }
   }
+}
+
+.right-title {
+  font-size: 20px;
+  font-weight: 600;
+  padding-left: 10px;
+  color: #ff2e61;
+}

@@ -547,12 +547,6 @@ export default {
     padding-left: 10px;
   }
 
-  .right-title {
-    font-size: 20px;
-    font-weight: 600;
-    padding-left: 10px;
-  }
-
   .card-head-btn {
     float: right;
     padding: 3px 0;
