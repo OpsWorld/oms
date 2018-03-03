@@ -38,7 +38,7 @@
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
-                <el-tag size="mini">
+                <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
               </div>
@@ -114,11 +114,16 @@ export default {
         1: '已通过',
         2: '未通过'
       },
+      STATUS_COLOR: {
+        0: 'danger',
+        1: 'success',
+        2: 'info'
+      },
       listQuery: {
         limit: LIMIT,
         offset: '',
         pid: '',
-        status: '0',
+        status: '',
         create_user__username: '',
         action_user__username: '',
         search: '',
