@@ -54,10 +54,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="300">
             <template slot-scope="scope">
-              <el-button @click="getEncloseur(scope.row.id)" type="success" size="small">附件</el-button>
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
+            <el-button-group>
+                            <el-button @click="getEncloseur(scope.row.id)" type="warning" size="mini">附件</el-button>
+              <el-button v-if="scope.row.status===0" @click="changeJobPass(scope.row.id)" type="primary" size="mini">通过</el-button>
+              <el-button v-if="scope.row.status===0" @click="changeJobNopass(scope.row.id)" type="danger" size="mini">未通过</el-button>
+              <el-button v-if="scope.row.status===1" @click="changeJobOnline(scope.row.id)" type="success" size="mini">已上线</el-button>
+            </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -118,7 +122,7 @@
             :on-success="handleSuccess"
             :on-remove="handleRemove"
             :file-list="fileList">
-            <el-button slot="trigger" size="small" type="primary" :disabled="count>2?true:false">
+            <el-button slot="trigger" size="small" type="primary" :disabled="count>3">
               上传文件
             </el-button>
             (可以不用上传)
@@ -168,7 +172,6 @@ import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
 
 export default {
-  components: {},
   data() {
     return {
       route_path: this.$route.path.split('/'),
@@ -348,7 +351,7 @@ export default {
             const messageForm = {
               action_user: 'itsupport',
               title: '【上线申请】' + this.ruleForm.name,
-              message: `上线内容: ${this.ruleForm.version}`
+              message: `上线内容: ${this.ruleForm.content}`
             }
             postSendmessage(messageForm)
             this.addForm = false
@@ -367,6 +370,15 @@ export default {
     cleanForm() {
       this.send_acc = false
       this.send_cs = false
+    },
+    changeJobPass(id) {
+      console.log(id)
+    },
+    changeJobNopass(id) {
+      console.log(id)
+    },
+    changeJobOnline(id) {
+      console.log(id)
     }
   }
 }
