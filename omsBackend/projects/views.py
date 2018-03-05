@@ -58,7 +58,7 @@ class TestManagerViewSet(viewsets.ModelViewSet):
 
 
 class DemandManagerViewSet(viewsets.ModelViewSet):
-    queryset = DemandManager.objects.all().order_by('-create_time')
+    queryset = DemandManager.objects.all().order_by('status', '-create_time')
     serializer_class = DemandManagerSerializer
     search_fields = ['name', 'content']
     ordering_fields = ['status', 'create_time']
