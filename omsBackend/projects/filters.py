@@ -1,10 +1,22 @@
 # -*- coding: utf-8 -*-
 # author: itimor
 
-from projects.models import admin_groups
+from projects.models import admin_groups, Project
 from users.models import User
 from django.db.models import Q
 from dry_rest_permissions.generics import DRYPermissionFiltersBase
+
+from django_filters import rest_framework as filters
+from django_filters import DateFromToRangeFilter
+from projects.models import Project
+
+
+class ProjectFilter(filters.FilterSet):
+    create_date = DateFromToRangeFilter()
+
+    class Meta:
+        model = Project
+        fields = ['pid', 'status', 'demand__name', 'action_user__username', 'create_date']
 
 
 class ProjectFilterBackend(DRYPermissionFiltersBase):

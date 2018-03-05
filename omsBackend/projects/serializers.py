@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # author: kiven
 
-from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, DemandManager, DemandEnclosure
+from projects.models import Project, ProjectComment, ProjectEnclosure, ProjectType, BugManager, TestManager, \
+    DemandManager, DemandEnclosure
 from rest_framework import serializers
 from users.models import User, Group
 from tools.models import Upload
@@ -19,9 +20,9 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
-            'url', 'id', 'demand', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete', 'content',
-            'create_user', 'test_user', 'action_user', 'follow_user', 'from_user', 'create_time', 'update_time',
-            'start_time', 'end_time', 'is_public')
+            'url', 'id', 'demand', 'pid', 'name', 'type', 'level', 'status', 'task_complete', 'test_complete',
+            'content', 'create_user', 'test_user', 'action_user', 'follow_user', 'from_user', 'create_date',
+            'create_time', 'update_time', 'start_time', 'end_time', 'is_public')
 
 
 class ProjectCommentSerializer(serializers.ModelSerializer):

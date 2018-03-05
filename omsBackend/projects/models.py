@@ -79,6 +79,7 @@ class Project(models.Model):
     follow_user = models.ManyToManyField(User, null=True, blank=True, related_name='project_follow_user',
                                          verbose_name=u'跟踪人')
     from_user = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'需求人')
+    create_date = models.DateField(auto_now_add=True, verbose_name=u'创建日期')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
     start_time = models.DateField(null=True, blank=True, verbose_name=u'开始时间')

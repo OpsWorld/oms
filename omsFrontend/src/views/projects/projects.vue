@@ -6,15 +6,29 @@
           <router-link :to="'addproject'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
-          <el-button type="danger" plain size="small" @click="showAllTicket">全部</el-button>
-          <el-button-group v-model="listQuery.status">
-            <el-button plain size="mini" v-for="item in Object.keys(Status_Text)" :key="item"
-                       @click="changeStatus(item)">
-              {{Status_Text[item]}}
-            </el-button>
+          <el-button-group>
+            <el-button type="danger" plain @click="showAllTicket">全部</el-button>
+            <el-button type="success" plain @click="showMeTicket">我的工单</el-button>
           </el-button-group>
         </div>
         <div class="table-search">
+          <el-select v-model="listQuery.status" placeholder="请选择状态筛选" clearable @change="changeStatus">
+            <el-option
+              v-for="item in Object.keys(Status_Text)"
+              :key="item"
+              :label="Status_Text[item]"
+              :value="item">
+            </el-option>
+          </el-select>
+          <el-date-picker
+            v-model="selectdatatime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="selectDatetime"
+            :picker-options="pickerOptions">
+          </el-date-picker>
           <el-input style="width: 160px;" class="filter-item" placeholder="编号" @keyup.enter.native="searchClick"
                     v-model="listQuery.pid"></el-input>
           <el-input style="width: 180px;" class="filter-item" placeholder="标题、内容或类型" @keyup.enter.native="searchClick"
@@ -162,6 +176,7 @@
 import { getProject, patchProject, deleteProject } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import { mapGetters } from 'vuex'
+import formatDate from '@/utils/dateformat'
 
 export default {
   components: {},
@@ -206,6 +221,34 @@ export default {
         id: '',
         task_complete: '',
         test_complete: ''
+      },
+      selectdatatime: '',
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
       }
     }
   },
@@ -262,6 +305,10 @@ export default {
       this.listQuery.status = ''
       this.fetchData()
     },
+    showMeTicket() {
+      this.listQuery.action_user__username = localStorage.getItem('username')
+      this.fetchData()
+    },
     handleSortChange(val) {
       if (val.order === 'ascending') {
         this.listQuery.ordering = val.prop
@@ -295,6 +342,16 @@ export default {
         this.TaskCompleteForm = this.TestCompleteForm = false
         this.fetchData()
       })
+    },
+    selectDatetime(val) {
+      if (val) {
+        this.listQuery.create_date_0 = formatDate(val[0], 'YYYY-MM-DD')
+        this.listQuery.create_date_1 = formatDate(val[1], 'YYYY-MM-DD')
+      } else {
+        this.listQuery.create_date_0 = ''
+        this.listQuery.create_date_1 = ''
+      }
+      this.fetchData()
     }
   }
 }

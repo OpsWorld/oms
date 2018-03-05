@@ -15,13 +15,14 @@ from projects.serializers import (ProjectSerializer,
 from projects.filters import ProjectFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from projects.filters import ProjectFilter
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all().order_by('status', '-create_time')
     serializer_class = ProjectSerializer
     filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
-    filter_fields = ['pid', 'status', 'demand__name']
+    filter_class = ProjectFilter
     search_fields = ['name', 'content', 'type__name']
     ordering_fields = ('level', 'task_complete', 'test_complete', 'create_time')
 
