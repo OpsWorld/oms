@@ -348,7 +348,7 @@ export default {
             const messageForm = {
               action_user: 'itsupport',
               title: '【上线申请】' + this.ruleForm.name,
-              message: `上线内容: ${this.ruleForm.content}`
+              message: `上线内容: ${this.ruleForm.version}`
             }
             postSendmessage(messageForm)
             this.addForm = false
