@@ -316,7 +316,10 @@ export default {
             this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
           }
           this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
-          this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
+          if (this.ruleForm.env === 'svn') {
+            this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
+          }
+          console.log(this.ruleForm.deploy_cmd)
           postDeployJob(this.ruleForm).then(response => {
             console.log(response.data.j_id)
             this.$message({
