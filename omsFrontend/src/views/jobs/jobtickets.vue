@@ -350,6 +350,7 @@ export default {
       this.onlineForm = true
       this.rowdata.id = row.id
       this.rowdata.name = row.name
+      this.rowdata.content = row.content
     },
     updateOnline() {
       patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
