@@ -122,7 +122,9 @@ class DeployVersion(models.Model):
 
 Status = {
     0: '未上线',
-    1: '已上线',
+    1: '通过',
+    2: '未通过',
+    3: '上线',
 }
 
 

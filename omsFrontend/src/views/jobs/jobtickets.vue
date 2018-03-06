@@ -35,14 +35,9 @@
           <el-table-column prop='status' label='工单状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-tag>
+                <el-tag :type="STATUS_COLOR[scope.row.status]">
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
-                <el-tooltip class="item" effect="dark" content="更新状态" placement="top">
-                  <el-button v-if="scope.row.status===0" @click="changeStatus(scope.row)" type="text"
-                             icon="el-icon-edit"
-                             class="modifychange"></el-button>
-                </el-tooltip>
               </div>
             </template>
           </el-table-column>
@@ -54,14 +49,28 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='create_time' label='附件' sortable="custom">
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-button @click="getEncloseur(scope.row.id)" size="mini"
+                           icon="el-icon-document"></el-button>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="操作" width="300">
             <template slot-scope="scope">
-            <el-button-group>
-                            <el-button @click="getEncloseur(scope.row.id)" type="warning" size="mini">附件</el-button>
-              <el-button v-if="scope.row.status===0" @click="changeJobPass(scope.row.id)" type="primary" size="mini">通过</el-button>
-              <el-button v-if="scope.row.status===0" @click="changeJobNopass(scope.row.id)" type="danger" size="mini">未通过</el-button>
-              <el-button v-if="scope.row.status===1" @click="changeJobOnline(scope.row.id)" type="success" size="mini">已上线</el-button>
-            </el-button-group>
+              <el-button-group>
+                <el-button v-if="scope.row.status===0" @click="changeJobPass(scope.row)" type="primary"
+                           size="mini">
+                  通过
+                </el-button>
+                <el-button v-if="scope.row.status===0" @click="changeJobNopass(scope.row)" type="danger" size="mini">
+                  未通过
+                </el-button>
+                <el-button v-if="scope.row.status===1" @click="changeJobOnline(scope.row)" type="success"
+                           size="mini">上线
+                </el-button>
+              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -84,21 +93,28 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="statusForm" @close="cleanForm">
+    <el-dialog :visible.sync="onlineForm" @close="cleanForm">
       <el-form :model="rowdata" ref="ruleForm" label-width="100px">
-        <el-form-item label="状态" prop="status">
-          <el-radio v-model="rowdata.status" v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">
-            {{STATUS_TEXT[item]}}
-          </el-radio>
-        </el-form-item>
         <el-form-item label="通知对象">
           <el-checkbox v-model="send_acc">财务</el-checkbox>
           <el-checkbox v-model="send_cs">客服</el-checkbox>
           <el-checkbox v-model="send_it">部门群组</el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button @click="statusForm=false">取 消</el-button>
-          <el-button type="primary" @click="updateStatus">确 定</el-button>
+          <el-button @click="onlineForm=false">取 消</el-button>
+          <el-button type="primary" @click="updateOnline">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog :visible.sync="nopassForm" @close="cleanForm">
+      <el-form :model="nopass" ref="ruleForm" label-width="100px">
+        <el-form-item label="原因">
+          <el-input v-model="nopass.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="nopassForm=false">取 消</el-button>
+          <el-button type="primary" @click="updateNopass">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -183,9 +199,20 @@ export default {
       pageformat: pageformat,
       rowdata: {
         id: '',
-        status: ''
+        status: 3
       },
-      STATUS_TEXT: { '0': '未上线', '1': '已上线' },
+      STATUS_TEXT: {
+        0: '未上线',
+        1: '通过',
+        2: '未通过',
+        3: '上线'
+      },
+      STATUS_COLOR: {
+        0: 'danger',
+        1: 'success',
+        2: 'info',
+        3: 'primary'
+      },
       listQuery: {
         limit: LIMIT,
         offset: '',
@@ -203,7 +230,7 @@ export default {
         ol: true, // 有序列表
         help: true
       },
-      statusForm: false,
+      onlineForm: false,
       addForm: false,
       ruleForm: {
         name: '',
@@ -235,7 +262,12 @@ export default {
       showForm: false,
       send_acc: false,
       send_cs: false,
-      send_it: false
+      send_it: false,
+      nopassForm: false,
+      nopass: {
+        id: '',
+        content: ''
+      }
     }
   },
 
@@ -281,40 +313,72 @@ export default {
       this.fileList.remove(file)
       this.count -= 1
     },
-    changeStatus(row) {
-      this.statusForm = true
-      this.rowdata = row
+    changeJobPass(row) {
+      const rowdata = {
+        status: 1
+      }
+      patchDeployTicket(row.id, rowdata).then(() => {
+        const messageForm = {
+          action_user: 'itsupport',
+          title: '【上线申请通过】' + row.name,
+          message: `上线内容: ${row.version}`
+        }
+        postSendmessage(messageForm)
+        this.fetchData()
+      })
     },
-    updateStatus() {
+    changeJobNopass(row) {
+      this.nopass.id = row.id
+      this.nopass.name = row.name
+    },
+    updateNopass() {
+      const rowdata = {
+        status: 2
+      }
+      patchDeployTicket(this.nopass.id, rowdata).then(() => {
+        const messageForm = {
+          action_user: 'ITDept_SkypeID',
+          title: '【申请未通过】' + this.nopass.name,
+          message: `原因: ${this.nopass.content}`
+        }
+        postSendmessage(messageForm)
+        this.nopassForm = false
+        this.fetchData()
+      })
+    },
+    changeJobOnline(row) {
+      this.onlineForm = true
+      this.rowdata.id = row.id
+      this.rowdata.name = row.name
+    },
+    updateOnline() {
       patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
-        if (this.rowdata.status === '1') {
-          if (this.send_acc) {
-            const messageForm = {
-              action_user: 'molly',
-              title: '【已上线】' + this.rowdata.name,
-              message: `上线内容: ${this.rowdata.content}`
-            }
-            postSendmessage(messageForm)
+        if (this.send_acc) {
+          const messageForm = {
+            action_user: 'molly',
+            title: '【已上线】' + this.rowdata.name,
+            message: `上线内容: ${this.rowdata.content}`
           }
-          if (this.send_cs) {
-            const messageForm = {
-              action_user: 'linda',
-              title: '【已上线】' + this.rowdata.name,
-              message: `上线内容: ${this.rowdata.content}`
-            }
-            postSendmessage(messageForm)
+          postSendmessage(messageForm)
+        }
+        if (this.send_cs) {
+          const messageForm = {
+            action_user: 'linda',
+            title: '【已上线】' + this.rowdata.name,
+            message: `上线内容: ${this.rowdata.content}`
           }
-          if (this.send_it) {
-            const messageForm = {
-              action_user: 'ITDept_SkypeID',
-              title: '【已上线】' + this.rowdata.name,
-              message: `上线内容: ${this.rowdata.content}`
-            }
-            postSendmessage(messageForm)
+          postSendmessage(messageForm)
+        }
+        if (this.send_it) {
+          const messageForm = {
+            action_user: 'ITDept_SkypeID',
+            title: '【已上线】' + this.rowdata.name,
+            message: `上线内容: ${this.rowdata.content}`
           }
+          postSendmessage(messageForm)
         }
         this.fetchData()
-        this.statusForm = false
+        this.onlineForm = false
       })
     },
     handleSortChange(val) {
@@ -349,8 +413,8 @@ export default {
               })
             }
             const messageForm = {
-              action_user: 'itsupport',
-              title: '【上线申请】' + this.ruleForm.name,
+              action_user: 'omar',
+              title: '【新上线申请】' + this.ruleForm.name,
               message: `上线内容: ${this.ruleForm.content}`
             }
             postSendmessage(messageForm)
@@ -370,16 +434,8 @@ export default {
     cleanForm() {
       this.send_acc = false
       this.send_cs = false
-    },
-    changeJobPass(id) {
-      console.log(id)
-    },
-    changeJobNopass(id) {
-      console.log(id)
-    },
-    changeJobOnline(id) {
-      console.log(id)
     }
+
   }
 }
 </script>
