@@ -60,15 +60,15 @@
           <el-table-column label="操作" width="300">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button v-if="scope.row.status===0" @click="changeJobPass(scope.row)" type="primary"
+                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobPass(scope.row)" type="primary"
                            size="mini">
                   通过
                 </el-button>
-                <el-button v-if="scope.row.status===0" @click="changeJobNopass(scope.row)" type="danger" size="mini">
+                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobNopass(scope.row)" type="danger" size="mini">
                   未通过
                 </el-button>
-                <el-button v-if="scope.row.status===1" @click="changeJobOnline(scope.row)" type="success"
-                           size="mini">上线
+                <el-button v-if="scope.row.status===1&&role==='super'" @click="changeJobOnline(scope.row)" type="success"
+                           size="mini">已上线
                 </el-button>
               </el-button-group>
             </template>
@@ -186,6 +186,7 @@ import {
 import { LIMIT, pagesize, pageformat, uploadurl, apiUrl } from '@/config'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -205,7 +206,7 @@ export default {
         0: '未上线',
         1: '通过',
         2: '未通过',
-        3: '上线'
+        3: '已上线'
       },
       STATUS_COLOR: {
         0: 'danger',
@@ -270,7 +271,11 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
+  },
   created() {
     this.fetchData()
   },

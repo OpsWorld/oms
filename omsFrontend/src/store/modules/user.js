@@ -67,6 +67,10 @@ const user = {
           localStorage.setItem('groups', groups)
           if (groups.indexOf(super_group) >= 0) {
             commit('SET_ROLE', 'super')
+          } else if (groups.indexOf('OMS_Dev_Manager') >= 0) {
+            commit('SET_ROLE', 'devmanager')
+          } else if (groups.indexOf('OMS_Test_Manager') >= 0) {
+            commit('SET_ROLE', 'testmanager')
           } else {
             commit('SET_ROLE', 'user')
           }
