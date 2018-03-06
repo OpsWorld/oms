@@ -51,7 +51,7 @@ class DeployTicketViewSet(viewsets.ModelViewSet):
 
 
 class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
-    queryset = DeployTicketEnclosure.objects.all()
+    queryset = DeployTicketEnclosure.objects.all().order_by('status')
     serializer_class = DeployTicketEnclosureSerializer
     filter_fields = ('ticket__id',)
 

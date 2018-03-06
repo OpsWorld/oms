@@ -219,7 +219,7 @@ export default {
         offset: '',
         create_user__username: '',
         search: '',
-        ordering: ''
+        ordering: 'status'
       },
       toolbars: {
         preview: true, // 预览
