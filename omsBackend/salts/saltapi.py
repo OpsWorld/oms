@@ -108,14 +108,14 @@ class SaltAPI(object):
         ret = content['return'][0]
         return ret
 
-    def remote_cmd(self, tgt, fun, client='local_async', expr_form='list', arg='', **kwargs):
+    def remote_cmd(self, tgt, client='local_async', expr_form='list', arg=''):
         """
         异步执行远程命令、部署模块
         """
 
         data = {'client': client, 'tgt': tgt, 'fun': 'cmd.run', 'arg': arg, 'expr_form': expr_form}
+        print(data)
         content = self.salt_request(data)
-        print(content)
         ret = content['return'][0]['jid']
         return ret
 
@@ -177,11 +177,11 @@ def main():
     sapi = SaltAPI(url=salt_info["url"], username=salt_info["username"], password=salt_info["password"])
     jid = '20180221113323607348'
     tgt = ['ph-it-sql-prod-02']
-    arg = ['osfinger', 'ipv4', 'cpu_model', 'num_cpus', 'memory_info', 'disk_info']
+    arg = 'ls'
     # jid = sapi.remote_cmd(tgt=tgt, fun='cmd.run', arg=cmd)
     # print(jid)
     # print(sapi.sync_remote_server(tgt, arg))
-    print(sapi.sync_remote_server(tgt, arg))
+    print(sapi.remote_cmd(tgt=tgt, arg=arg))
 
 
 if __name__ == '__main__':

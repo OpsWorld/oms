@@ -138,31 +138,6 @@ export function deleteDeploycmd(id) {
   })
 }
 
-// deployversions
-export function postDeployVersion(data) {
-  return request({
-    url: apiURL.deployversions,
-    method: 'post',
-    data
-  })
-}
-
-export function getDeployVersion(query) {
-  return request({
-    url: apiURL.deployversions,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putDeployVersion(id, data) {
-  return request({
-    url: apiURL.deployversions + id + '/',
-    method: 'put',
-    data
-  })
-}
-
 // deploytickets
 export function postDeployTicket(data) {
   return request({

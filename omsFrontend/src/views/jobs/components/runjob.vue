@@ -1,104 +1,135 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col v-if="jobs.total_step===1" :span="8">
+      <el-col :span="10">
         <el-card>
           <div slot="header">
             <a class="jobname">【{{jobs.name}}】</a>
           </div>
-          <el-form :model="versionForm" :rules="svnrules" ref="versionForm" label-width="90px">
-            <el-form-item label="发布版本" prop="version">
-              <el-input v-model="versionForm.version"></el-input>
-            </el-form-item>
-            <el-form-item label="更新内容" prop="content">
-              <el-input v-model="versionForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-            </el-form-item>
-          </el-form>
-        </el-card>
+          <template v-if="jobs.total_step===1">
+            <el-steps :active="jobs.cur_step" process-status="finish" finish-status="success" align-center>
+              <el-step title="版本信息"></el-step>
+              <el-step title="svn"></el-step>
+              <el-step title="完成"></el-step>
+            </el-steps>
 
-        <el-card>
-          <div slot="header">
-            <a class="jobname">{{jobs.name}}</a>
-          </div>
+            <div class="stepitem">
+              <el-form v-if="jobs.cur_step===0" :model="versionForm" :rules="svnrules" ref="versionForm"
+                       label-width="90px">
+                <el-form-item label="发布版本" prop="version">
+                  <el-input v-model="versionForm.version" :disabled="onlyread"></el-input>
+                </el-form-item>
+                <el-form-item label="更新内容" prop="content">
+                  <el-input v-model="versionForm.content" type="textarea"
+                            :autosize="{ minRows: 5, maxRows: 10}" :disabled="onlyread"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="saveVersion('versionForm')">确定</el-button>
+                </el-form-item>
+              </el-form>
 
-          <el-form :model="ruleForm" :rules="svnrules" ref="ruleForm" label-width="90px">
-            <el-form-item label="发布步骤" prop="env">
-              <el-select v-model="ruleForm.env" placeholder="请选择发布环境" @change="selectEnv">
-                <el-option v-for="item in envs" :key="item.id" :value="item.name"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="发布命令" prop="deploy_cmd">
-              <el-select v-model="ruleForm.deploy_cmd" placeholder="请选择发布命令">
-                <el-option v-for="item in cmds" :key="item.id" :label="item.name"
-                           :value="item.deploy_cmd"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="代码路径">
-              <el-input v-model="jobs.code_url" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="通知skype">
-              <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('versionForm')">svn更新</el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-      </el-col>
+              <el-form v-if="jobs.cur_step>0 && jobs.cur_step<jobs.total_step + 1" :model="ruleForm" ref="ruleForm"
+                       label-width="90px">
+                <el-form-item label="发布命令" prop="deploy_cmd">
+                  <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选
+                  </el-checkbox>
+                  <div style="margin: 15px 0;"></div>
+                  <el-checkbox-group v-model="checkedcmds" @change="handleCheckedcmdsChange">
+                    <el-checkbox v-for="item in cmds" :label="item" :key="item.deploy_cmd">{{item.name}}</el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm('ruleForm')">发布</el-button>
+                </el-form-item>
+              </el-form>
 
-      <el-col v-else :span="8">
-        <el-card>
-          <div slot="header">
-            <a class="jobname">【{{jobs.name}}】</a>
-          </div>
-          <el-steps :active="jobs.cur_step" finish-status="success">
-            <el-step title="版本信息"></el-step>
-            <el-step title="步骤 2"></el-step>
-            <el-step title="步骤 3"></el-step>
-          </el-steps>
+              <el-form v-if="jobs.cur_step>jobs.total_step" :model="ruleForm" ref="ruleForm" label-width="90px">
+                <el-form-item label="发布版本" prop="version">
+                  <el-input v-model="jobs.version" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="更新内容" prop="content">
+                  <el-input v-model="jobs.content" type="textarea"
+                            :autosize="{ minRows: 5, maxRows: 10}" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="发送通知">
+                  <el-checkbox v-model="sendnotice"></el-checkbox>
+                </el-form-item>
+              </el-form>
+            </div>
+          </template>
 
-          <div class="stepitem">
-            <el-form v-if="jobs.cur_step===0" :model="versionForm" :rules="svnrules" ref="versionForm"
-                     label-width="90px">
-              <el-form-item label="发布版本" prop="version">
-                <el-input v-model="versionForm.version"></el-input>
-              </el-form-item>
-              <el-form-item label="更新内容" prop="content">
-                <el-input v-model="versionForm.content" type="textarea"
-                          :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="changeJobDone">确定</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+          <template v-else>
+            <el-steps :active="jobs.cur_step" process-status="finish" finish-status="success" align-center>
+              <el-step title="版本信息"></el-step>
+              <el-step title="svn"></el-step>
+              <el-step title="同步"></el-step>
+              <el-step title="完成"></el-step>
+            </el-steps>
 
+            <div class="stepitem">
+              <el-form v-if="jobs.cur_step===0" :model="versionForm" :rules="svnrules" ref="versionForm"
+                       label-width="90px">
+                <el-form-item label="发布版本" prop="version">
+                  <el-input v-model="versionForm.version" :disabled="onlyread"></el-input>
+                </el-form-item>
+                <el-form-item label="更新内容" prop="content">
+                  <el-input v-model="versionForm.content" type="textarea"
+                            :autosize="{ minRows: 5, maxRows: 10}" :disabled="onlyread"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="saveVersion('versionForm')">确定</el-button>
+                </el-form-item>
+              </el-form>
+
+              <el-form v-if="jobs.cur_step>0 && jobs.cur_step<jobs.total_step + 1" :model="ruleForm" ref="ruleForm"
+                       label-width="90px">
+                <el-form-item label="发布命令" prop="deploy_cmd">
+                  <el-checkbox v-model="checkAll" @change="handleCheckAllChange">全选
+                  </el-checkbox>
+                  <div style="margin: 15px 0;"></div>
+                  <el-checkbox-group v-model="checkedcmds" @change="handleCheckedcmdsChange">
+                    <el-checkbox v-for="item in cmds" :label="item" :key="item.deploy_cmd">{{item.name}}</el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm('ruleForm')">发布</el-button>
+                </el-form-item>
+              </el-form>
+
+              <el-form v-if="jobs.cur_step>jobs.total_step" :model="ruleForm" ref="ruleForm" label-width="90px">
+                <el-form-item label="发布版本" prop="version">
+                  <el-input v-model="jobs.version" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="更新内容" prop="content">
+                  <el-input v-model="jobs.content" type="textarea"
+                            :autosize="{ minRows: 5, maxRows: 10}" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="发送通知">
+                  <el-checkbox v-model="sendnotice"></el-checkbox>
+                </el-form-item>
+              </el-form>
+            </div>
+
+          </template>
           <hr class="heng"/>
-
           <div class="foot_btn">
             <el-button type="danger" plain @click="changeCurstepZero">取消</el-button>
-            <el-button type="primary" plain @click="changeCurstep" :disabled="!jobs.done">下一步</el-button>
+            <el-button v-if="jobs.cur_step < jobs.total_step + 1" type="primary" @click="changeCurstep"
+                       :disabled="!jobs.done">下一步
+            </el-button>
+            <el-button v-else type="success" @click="changeCurstep">完成发布</el-button>
           </div>
         </el-card>
       </el-col>
 
-      <el-col :span="16">
-        <job-record ref="jobrecord"></job-record>
+      <el-col :span="14">
+        <job-record ref="jobrecord" @updateStatus="changeJobDone"></job-record>
       </el-col>
     </el-row>
   </div>
 </template>
 <script>
-import {
-  getJob,
-  patchJob,
-  postDeployJob,
-  getDeployenv,
-  getDeploycmd,
-  postDeployVersion,
-  putDeployVersion,
-  getDeployVersion
-} from '@/api/job'
+import { getJob, patchJob, postDeployJob, getDeployenv, getDeploycmd } from '@/api/job'
 import { mapGetters } from 'vuex'
 import { postSendmessage } from '@/api/tool'
 import jobRecord from './jobrecord.vue'
@@ -113,7 +144,6 @@ export default {
       route_path: this.$route.path.split('/'),
       job_id: this.$route.params.job_id,
       versionForm: {
-        job: '',
         version: '',
         content: ''
       },
@@ -136,7 +166,14 @@ export default {
       cmds: [],
       jobs: {},
       sendnotice: true,
-      hasversion: false
+      hasversion: false,
+      stepForm: {
+        cur_step: 1,
+        done: false
+      },
+      onlyread: false,
+      checkAll: true,
+      checkedcmds: []
     }
   },
   computed: {
@@ -146,7 +183,6 @@ export default {
   },
   created() {
     this.fetchJobData()
-    this.fetchJobenvData()
   },
   methods: {
     fetchJobData() {
@@ -154,15 +190,20 @@ export default {
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
         this.ruleForm.job = this.jobs.name
-        this.fetchDeployversionData()
+        if (this.jobs.cur_step > 0 && this.jobs.cur_step < this.jobs.total_step + 1) {
+          this.fetchJobenvData(this.jobs.cur_step)
+        }
       })
     },
-    fetchJobenvData() {
+    fetchJobenvData(level) {
       const parmas = {
-        job__id: this.job_id
+        job__id: this.job_id,
+        level: level
       }
       getDeployenv(parmas).then(response => {
-        this.envs = response.data
+        this.envs = response.data[0]
+        this.ruleForm.env = this.envs.name
+        this.fetchDeploycmdData(this.envs.id)
       })
     },
     fetchDeploycmdData(env) {
@@ -170,71 +211,30 @@ export default {
         env__id: env
       }
       getDeploycmd(parmas).then(response => {
-        this.cmds = response.data
+        this.checkedcmds = this.cmds = response.data
       })
-    },
-    fetchDeployversionData() {
-      const parmas = {
-        job__name: this.jobs.name
-      }
-      getDeployVersion(parmas).then(response => {
-        this.versionForm = response.data[0]
-        if (response.data.length > 0) {
-          this.hasversion = true
-        } else {
-          this.versionForm = {
-            job: this.jobs.name,
-            version: '',
-            content: ''
-          }
-          this.hasversion = false
-        }
-      })
-    },
-    selectEnv(env) {
-      const selectenv = this.envs.filter(envs => envs.name === env)[0]
-      this.ruleForm.deploy_hosts = selectenv.deploy_hosts
-      this.ruleForm.deploy_cmd = ''
-      this.fetchDeploycmdData(selectenv.id)
     },
     submitForm(formdata) {
-      if (this.hasversion) {
-        putDeployVersion(this.versionForm.id, this.versionForm)
-      } else {
-        console.log(this.hasversion)
-        postDeployVersion(this.versionForm)
-      }
+      this.ruleForm.content = this.jobs.content
+      this.ruleForm.version = this.jobs.version
       this.$refs[formdata].validate((valid) => {
-        this.ruleForm = Object.assign(this.ruleForm, this.versionForm)
         if (valid) {
-          if ((typeof this.ruleForm.deploy_hosts) === 'string') {
-            this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.split(',')
-          }
-          this.ruleForm.deploy_hosts = this.ruleForm.deploy_hosts.join()
-          if (this.ruleForm.env === 'svn') {
-            this.ruleForm.deploy_cmd = this.ruleForm.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
-          }
-          postDeployJob(this.ruleForm).then(response => {
-            console.log(response.data.j_id)
-            this.$message({
-              message: '构建成功，系统正在玩命发布中 ...',
-              type: 'success'
-            })
-            // 调用子组件 job-record 的fetchDeployJobData
-            this.$refs.jobrecord.fetchDeployJobData()
-
-            if (this.sendnotice) {
-              const messageForm = {
-                action_user: 'ITDept_SkypeID',
-                title: `【${this.ruleForm.job}】更新`,
-                message: `版本号: ${this.ruleForm.version}\n更新内容: ${this.ruleForm.content}\n操作人: ${this.ruleForm.action_user}`
-              }
-              postSendmessage(messageForm)
+          this.ruleForm.deploy_hosts = this.envs.deploy_hosts.join()
+          for (const item of this.checkedcmds) {
+            if (this.ruleForm.env === 'svn') {
+              this.ruleForm.deploy_cmd = item.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
+            } else {
+              this.ruleForm.deploy_cmd = item.deploy_cmd
             }
-          }).catch(error => {
-            this.$message.error('构建失败，请检查参数是否正确！')
-            console.log(error)
-          })
+            postDeployJob(this.ruleForm).then(response => {
+              console.log(response.data.j_id)
+              // 调用子组件 job-record 的fetchDeployJobData
+              this.$refs.jobrecord.fetchDeployJobData()
+            }).catch(error => {
+              this.$message.error('构建失败，请检查参数是否正确！')
+              console.log(error)
+            })
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -242,20 +242,51 @@ export default {
       })
     },
     changeCurstep() {
-      if (this.jobs.cur_step++ > 2) {
-        this.jobs.cur_step = 0
+      this.jobs.cur_step++
+      this.stepForm.done = this.jobs.done = false
+      if (this.jobs.cur_step > this.jobs.total_step + 1) {
+        this.jobs.cur_step = this.stepForm.cur_step = 0
+        if (this.sendnotice) {
+          const messageForm = {
+            action_user: 'ITDept_SkypeID',
+            title: `【${this.jobs.name}】更新`,
+            message: `版本号: ${this.jobs.version}\n更新内容: ${this.jobs.content}\n操作人: ${this.ruleForm.action_user}`
+          }
+          postSendmessage(messageForm)
+        }
+        patchJob(this.job_id, this.stepForm).then(() => {
+          this.$router.push('/jobs/jobs')
+        })
+      } else {
+        this.stepForm.cur_step = this.jobs.cur_step
+        patchJob(this.job_id, this.stepForm).then(() => {
+          this.fetchJobData()
+        })
       }
-      this.jobs.done = false
     },
     changeCurstepZero() {
-      this.jobs.cur_step = 0
+      this.onlyread = this.stepForm.done = this.jobs.done = false
+      this.jobs.cur_step = this.stepForm.cur_step = 0
+      patchJob(this.job_id, this.stepForm)
     },
     changeJobDone() {
-      const data = {
-        done: true
-      }
-      patchJob(this.job_id, data)
-      this.jobs.done = true
+      this.onlyread = this.stepForm.done = this.jobs.done = true
+      patchJob(this.job_id, this.stepForm)
+    },
+    saveVersion(formdata) {
+      this.$refs[formdata].validate((valid) => {
+        if (valid) {
+          patchJob(this.job_id, this.versionForm)
+          this.onlyread = this.stepForm.done = this.jobs.done = true
+        }
+      })
+    },
+    handleCheckAllChange(val) {
+      this.checkedcmds = val ? this.cmds : []
+    },
+    handleCheckedcmdsChange(value) {
+      const checkedCount = value.length
+      this.checkAll = checkedCount === this.cmds.length
     }
   }
 }
@@ -269,6 +300,6 @@ export default {
 
   .stepitem {
     margin-top: 50px;
-    min-height: 300px;
+    min-height: 200px;
   }
 </style>

@@ -2,7 +2,7 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployVersion, DeployTicket, DeployTicketEnclosure
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployTicket, DeployTicketEnclosure
 from hosts.models import Host
 from users.models import User
 from tools.models import Upload
@@ -12,7 +12,7 @@ from omsBackend.settings import sapi
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'code_url', 'deploy_path', 'cur_step', 'total_step', 'done', 'create_time', 'showdev', 'desc']
+        fields = ['url', 'id', 'name', 'version', 'content', 'code_url', 'deploy_path', 'cur_step', 'total_step', 'done', 'create_time', 'showdev', 'desc']
 
 
 class DeployenvSerializer(serializers.ModelSerializer):
@@ -41,19 +41,11 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         deploy_cmd = validated_data["deploy_cmd"]
         deploy_hosts = validated_data["deploy_hosts"]
         print(deploy_cmd)
-        jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), fun='cmd.run', arg=deploy_cmd)
+        jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), arg=deploy_cmd)
         validated_data["j_id"] = jid
         deployjob = DeployJobs.objects.create(**validated_data)
         deployjob.save()
         return deployjob
-
-
-class DeployVersionSerializer(serializers.ModelSerializer):
-    job = serializers.SlugRelatedField(queryset=Jobs.objects.all(), slug_field='name')
-
-    class Meta:
-        model = DeployVersion
-        fields = ['url', 'id', 'job', 'version', 'content']
 
 
 class DeployTicketSerializer(serializers.ModelSerializer):

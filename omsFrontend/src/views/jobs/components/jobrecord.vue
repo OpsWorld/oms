@@ -150,6 +150,7 @@ export default {
             getUpdateJobsStatus(pramas).then(response => {
               if (response.data.count === 0) {
                 clearInterval(this.check_job_status)
+                this.$emit('updateStatus')
                 this.fetchDeployJobData()
               } else {
                 console.log('check job_status 3/s')

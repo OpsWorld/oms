@@ -79,6 +79,9 @@
         <el-form-item label="选择主机" prop="hosts">
           <sesect-hosts :selecthost="envForm.deploy_hosts" @gethosts="getaddHosts"></sesect-hosts>
         </el-form-item>
+        <el-form-item label="编排顺序" prop="level">
+          <el-input-number v-model="envForm.level" :min="1" :max="5"></el-input-number>
+        </el-form-item>
         <el-form-item label="描述" prop="desc">
           <el-input v-model="envForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -95,6 +98,9 @@
         </el-form-item>
         <el-form-item label="选择主机" prop="hosts">
           <sesect-hosts :selecthost="envdata.deploy_hosts" @gethosts="geteditHosts"></sesect-hosts>
+        </el-form-item>
+        <el-form-item label="编排顺序" prop="level">
+          <el-input-number v-model="envdata.level" :min="1" :max="5"></el-input-number>
         </el-form-item>
         <el-form-item label="描述" prop="desc">
           <el-input v-model="envdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
@@ -193,6 +199,7 @@ export default {
         job: this.$route.params.job_id,
         name: '',
         deploy_hosts: [],
+        level: 1,
         desc: ''
       },
       cmdsData: [],
