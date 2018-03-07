@@ -1,11 +1,10 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-row :gutter="20">
-      <el-col :span="8">
-
+      <el-col v-if="jobs.total_step===1" :span="8">
         <el-card>
           <div slot="header">
-            <a class="jobname">【{{jobs.name}}】更新信息</a>
+            <a class="jobname">【{{jobs.name}}】</a>
           </div>
           <el-form :model="versionForm" :rules="svnrules" ref="versionForm" label-width="90px">
             <el-form-item label="发布版本" prop="version">
@@ -46,6 +45,43 @@
           </el-form>
         </el-card>
       </el-col>
+
+      <el-col v-else :span="8">
+        <el-card>
+          <div slot="header">
+            <a class="jobname">【{{jobs.name}}】</a>
+          </div>
+          <el-steps :active="jobs.cur_step" finish-status="success">
+            <el-step title="版本信息"></el-step>
+            <el-step title="步骤 2"></el-step>
+            <el-step title="步骤 3"></el-step>
+          </el-steps>
+
+          <div class="stepitem">
+            <el-form v-if="jobs.cur_step===0" :model="versionForm" :rules="svnrules" ref="versionForm"
+                     label-width="90px">
+              <el-form-item label="发布版本" prop="version">
+                <el-input v-model="versionForm.version"></el-input>
+              </el-form-item>
+              <el-form-item label="更新内容" prop="content">
+                <el-input v-model="versionForm.content" type="textarea"
+                          :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="changeJobDone">确定</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <hr class="heng"/>
+
+          <div class="foot_btn">
+            <el-button type="danger" plain @click="changeCurstepZero">取消</el-button>
+            <el-button type="primary" plain @click="changeCurstep" :disabled="!jobs.done">下一步</el-button>
+          </div>
+        </el-card>
+      </el-col>
+
       <el-col :span="16">
         <job-record ref="jobrecord"></job-record>
       </el-col>
@@ -55,6 +91,7 @@
 <script>
 import {
   getJob,
+  patchJob,
   postDeployJob,
   getDeployenv,
   getDeploycmd,
@@ -67,7 +104,9 @@ import { postSendmessage } from '@/api/tool'
 import jobRecord from './jobrecord.vue'
 
 export default {
-  components: { jobRecord },
+  components: {
+    jobRecord
+  },
 
   data() {
     return {
@@ -201,11 +240,35 @@ export default {
           return false
         }
       })
+    },
+    changeCurstep() {
+      if (this.jobs.cur_step++ > 2) {
+        this.jobs.cur_step = 0
+      }
+      this.jobs.done = false
+    },
+    changeCurstepZero() {
+      this.jobs.cur_step = 0
+    },
+    changeJobDone() {
+      const data = {
+        done: true
+      }
+      patchJob(this.job_id, data)
+      this.jobs.done = true
     }
   }
 }
 </script>
 
 <style lang='scss'>
+  .foot_btn {
+    float: right;
+    margin-bottom: 30px;
+  }
 
+  .stepitem {
+    margin-top: 50px;
+    min-height: 300px;
+  }
 </style>

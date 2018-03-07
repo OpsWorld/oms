@@ -26,6 +26,14 @@ export function putJob(id, data) {
   })
 }
 
+export function patchJob(id, data) {
+  return request({
+    url: apiURL.jobs + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
 export function deleteJob(id) {
   return request({
     url: apiURL.jobs + id + '/',

@@ -20,7 +20,7 @@ class DeployenvSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Deployenv
-        fields = ['url', 'id', 'job', 'name', 'deploy_hosts']
+        fields = ['url', 'id', 'job', 'name', 'level', 'deploy_hosts']
 
 
 class DeploycmdSerializer(serializers.ModelSerializer):

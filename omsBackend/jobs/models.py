@@ -72,6 +72,7 @@ class Jobs(models.Model):
 class Deployenv(models.Model):
     job = models.ForeignKey(Jobs, verbose_name=u'发布任务')
     name = models.CharField(max_length=50, verbose_name=u'名称')
+    level = models.IntegerField(default=1, verbose_name=u'顺序')
     deploy_hosts = models.ManyToManyField(Host, null=True, blank=True, verbose_name=u'发布主机')
 
     def __str__(self):
