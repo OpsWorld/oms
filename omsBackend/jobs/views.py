@@ -35,7 +35,7 @@ class DeploycmdViewSet(viewsets.ModelViewSet):
 class DeployJobsViewSet(viewsets.ModelViewSet):
     queryset = DeployJobs.objects.all().order_by('-create_time')
     serializer_class = DeployJobsSerializer
-    filter_fields = ['job__name']
+    filter_fields = ['job__id']
     search_fields = ['version', 'content']
 
 
@@ -59,8 +59,8 @@ class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
 @api_view()
 def update_jobs_status(request):
     try:
-        job = request.GET['job__name']
-        jobs = DeployJobs.objects.filter(job__name=job).filter(deploy_status='deploy')
+        job = request.GET['job__id']
+        jobs = DeployJobs.objects.filter(job__id=job).filter(deploy_status='deploy')
         count = len(jobs)
         for job in jobs:
             print(job)

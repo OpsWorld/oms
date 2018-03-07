@@ -20,7 +20,9 @@ class Jobs(models.Model):
     code_url = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'代码地址')
     deploy_path = models.CharField(max_length=250, null=True, blank=True, verbose_name=u'发布路径')
     cur_step = models.IntegerField(default=0, verbose_name=u'当前步骤')
+    total_step = models.IntegerField(default=0, verbose_name=u'总步骤')
     showdev = models.BooleanField(default=False, verbose_name=u'研发可见')
+    done = models.BooleanField(default=False, verbose_name=u'完成')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'描述')
 
@@ -30,6 +32,11 @@ class Jobs(models.Model):
     class Meta:
         verbose_name = u'项目或任务'
         verbose_name_plural = u'项目或任务'
+
+    def save(self, *args, **kwargs):
+        envs = Deployenv.objects.filter(job=self.id)
+        self.total_step = len(envs)
+        super(Jobs, self).save(*args, **kwargs)
 
     @staticmethod
     def has_read_permission(request):
