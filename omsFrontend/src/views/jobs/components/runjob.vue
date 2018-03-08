@@ -58,7 +58,7 @@
             </div>
           </template>
 
-          <template v-else>
+          <template v-if="jobs.total_step===2">
             <el-steps :active="jobs.cur_step" process-status="finish" finish-status="success" align-center>
               <el-step title="版本信息"></el-step>
               <el-step title="svn"></el-step>
@@ -189,6 +189,7 @@ export default {
       const parmas = null
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
+        console.log(this.jobs.total_step)
         this.ruleForm.job = this.jobs.name
         if (this.jobs.cur_step > 0 && this.jobs.cur_step < this.jobs.total_step + 1) {
           this.fetchJobenvData(this.jobs.cur_step)
