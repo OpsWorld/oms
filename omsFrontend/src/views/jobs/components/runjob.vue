@@ -189,7 +189,6 @@ export default {
       const parmas = null
       getJob(parmas, this.job_id).then(response => {
         this.jobs = response.data
-        console.log(this.jobs.total_step)
         this.ruleForm.job = this.jobs.name
         if (this.jobs.cur_step > 0 && this.jobs.cur_step < this.jobs.total_step + 1) {
           this.fetchJobenvData(this.jobs.cur_step)
