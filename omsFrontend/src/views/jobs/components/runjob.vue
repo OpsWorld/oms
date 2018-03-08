@@ -46,7 +46,7 @@
           </template>
           <hr class="heng"/>
           <div class="foot_btn">
-            <el-checkbox v-model="sendnotice" style="margin-right: 20px">发送通知</el-checkbox>
+            <el-checkbox v-if="jobs.cur_step===jobs.total_step && jobs.done" v-model="sendnotice" style="margin-right: 20px">发送通知</el-checkbox>
             <el-button type="danger" plain @click="changeCurstepZero">取消</el-button>
             <el-button v-if="jobs.cur_step===jobs.total_step" type="success" @click="changeCurstep"
                        :disabled="!jobs.done">完成发布
@@ -100,7 +100,7 @@ export default {
       cur_env: {},
       cmds: [],
       jobs: {},
-      sendnotice: false,
+      sendnotice: true,
       hasversion: false,
       stepForm: {
         cur_step: 1,
