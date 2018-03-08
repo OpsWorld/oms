@@ -60,14 +60,17 @@
           <el-table-column label="操作" width="300">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobPass(scope.row)" type="primary"
+                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobPass(scope.row)"
+                           type="primary"
                            size="mini">
                   通过
                 </el-button>
-                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobNopass(scope.row)" type="danger" size="mini">
+                <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobNopass(scope.row)"
+                           type="danger" size="mini">
                   未通过
                 </el-button>
-                <el-button v-if="scope.row.status===1&&role==='super'" @click="changeJobOnline(scope.row)" type="success"
+                <el-button v-if="scope.row.status===1&&role==='super'" @click="changeJobOnline(scope.row)"
+                           type="success"
                            size="mini">已上线
                 </el-button>
               </el-button-group>
@@ -187,6 +190,7 @@ import { LIMIT, pagesize, pageformat, uploadurl, apiUrl } from '@/config'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getConversionTime } from '@/utils'
 import { mapGetters } from 'vuex'
+import { getUser } from 'api/user'
 
 export default {
   data() {
@@ -323,12 +327,20 @@ export default {
         status: 1
       }
       patchDeployTicket(row.id, rowdata).then(() => {
-        const messageForm = {
-          action_user: 'itsupport',
-          title: '【上线申请通过】' + row.name,
-          message: `上线内容: ${row.version}`
+        const pramas = {
+          groups__name: 'OMS_Dev_Manager'
         }
-        postSendmessage(messageForm)
+        getUser(pramas).then(uu => {
+          const users = uu.data
+          for (const user of users) {
+            const messageForm = {
+              action_user: user.username,
+              title: '【上线申请通过】' + row.name,
+              message: `上线内容: ${row.version}`
+            }
+            postSendmessage(messageForm)
+          }
+        })
         this.fetchData()
       })
     },

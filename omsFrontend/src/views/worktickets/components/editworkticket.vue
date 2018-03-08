@@ -274,7 +274,6 @@ export default {
       }).then(response => {
         this.commentForm.ticket = this.ticket_id
         this.rowdata.edit_user = this.commentForm.create_user
-        console.log(this.radio_status)
         if (this.radio_status === '1') {
           this.commentForm.content = '【工单状态变化】工单被' + this.commentForm.create_user + '重新指派给' + this.rowdata.action_user + ',' + this.mailcontent
           const messageForm = {
