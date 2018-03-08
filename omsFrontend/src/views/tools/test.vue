@@ -1,32 +1,28 @@
 <template>
   <div>
-    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-    <div style="margin: 15px 0;"></div>
-    <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-      <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-    </el-checkbox-group>
+    <el-button type="primary" @click="add">默认按钮</el-button>
+    <el-steps :space="100" :active="active" finish-status="success">
+      <el-step v-for="(item, index) in steps" :key="index" :title="item.title"></el-step>
+    </el-steps>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data: function() {
     return {
-      checkAll: false,
-      checkedCities: [],
-      cities: ['上海', '北京', '广州', '深圳'],
-      isIndeterminate: true
+      steps: [
+        { title: '1111' },
+        { title: '2222' }
+      ],
+      active: 0
     }
   },
   methods: {
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? this.cities : []
-      this.isIndeterminate = false
-    },
-    handleCheckedCitiesChange(value) {
-      const checkedCount = value.length
-      this.checkAll = checkedCount === this.cities.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length
+    add: function() {
+      this.steps.push({
+        title: '5555'
+      })
     }
   }
 }
