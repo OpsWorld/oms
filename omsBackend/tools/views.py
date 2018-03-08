@@ -52,7 +52,7 @@ class SendmessageViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         content = request.data["title"] + '\n' + request.data["message"]
-        action_user = request.data["action_user"]
+        action_user = request.data["action_user"].split(',')
         for i in action_user:
             try:
                 to_action_user = User.objects.get(username=i).skype
