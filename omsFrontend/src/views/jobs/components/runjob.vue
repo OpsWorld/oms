@@ -23,7 +23,7 @@
                             :autosize="{ minRows: 5, maxRows: 10}" :disabled="onlyread"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="saveVersion('versionForm')">确定</el-button>
+                  <el-button type="primary" @click="saveVersion('versionForm')">Submit</el-button>
                 </el-form-item>
               </el-form>
 
@@ -38,7 +38,7 @@
                   </el-checkbox-group>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm('ruleForm')">发布</el-button>
+                  <el-button type="primary" @click="submitForm('ruleForm')">Deploy</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -47,11 +47,11 @@
           <hr class="heng"/>
           <div class="foot_btn">
             <el-checkbox v-if="jobs.cur_step===jobs.total_step && jobs.done" v-model="sendnotice" style="margin-right: 20px">发送通知</el-checkbox>
-            <el-button type="danger" plain @click="changeCurstepZero">取消发布</el-button>
+            <el-button type="danger" plain @click="changeCurstepZero">Cancel</el-button>
             <el-button v-if="jobs.cur_step===jobs.total_step" type="success" @click="changeCurstep"
-                       :disabled="!jobs.done">完成发布
+                       :disabled="!jobs.done">Complete
             </el-button>
-            <el-button v-else type="primary" @click="changeCurstep" :disabled="!jobs.done">下一步</el-button>
+            <el-button v-else type="primary" @click="changeCurstep" :disabled="!jobs.done">Next</el-button>
           </div>
         </el-card>
       </el-col>
