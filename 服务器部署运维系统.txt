@@ -1,0 +1,109 @@
+1.安装依赖包
+yum install -y epel-release
+yum install -y telnet openssl-devel bzip2-devel vim gcc readline-devel sqlite-devel lrzsz zip-devel wget perl-devel net-tools unzip python-devel python-pip git openldap-devel
+
+
+2.安装python
+#安装pyenv(python版本管理)
+git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+exec $SHELL
+source ~/.bash_profile
+
+#安装python
+pyenv install 3.6.3
+
+#virtualenv 创建虚拟python环境
+git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv
+echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bash_profile
+source ~/.bash_profile
+pyenv virtualenv 3.6.3 envoms
+pyenv activate envoms
+
+3.安装nodejs
+#安装nvm(node版本管理)
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+nvm install 8.9.1
+nvm use 8.9.1
+
+4.安装数据库(postgresql)
+yum install -y https://download.postgresql.org/pub/repos/yum/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-2.noarch.rpm
+yum install-y postgresql95-server postgresql95-contrib
+/usr/pgsql-9.5/bin/postgresql95-setup initdb
+systemctl enable postgresql-9.5.service
+systemctl start postgresql-9.5.service
+su - postgres
+```
+ALTER USER postgres WITH PASSWORD 'abc123';
+CREATE USER oms WITH PASSWORD '123456';
+CREATE DATABASE oms OWNER oms;
+GRANT ALL PRIVILEGES ON DATABASE oms to oms;
+```
+#修改配置
+vi /var/lib/pgsql/9.5/data/postgresql.conf
+修改#listen_addresses = 'localhost'  为  listen_addresses='*'
+
+vi /var/lib/pgsql/9.5/data/pg_hba.conf
+修改如下内容，信任指定服务器连接
+# IPv4 local connections:
+host    all            all      127.0.0.1/32      trust
+host    all            all      10.211.55.6/32（需要连接的服务器IP）  trust
+
+systemctl restart postgresql-9.5.service
+
+5.拉取代码
+mkdir -p /data/projects/
+cd !$
+git clone git@bitbucket.org:larrytblucky/oms.git
+
+#django
+cd oms/omsBackend
+pyenv active envoms
+pip install -r requirements.txt
+sh init.sh
+
+6.配置启动服务
+cp oms.service /etc/systemd/system/oms.service
+systemctl daemon-reload
+systemctl start oms
+systemctl enable oms
+
+7.安装nginx
+yum install -y nginx
+#配置
+cp oms/nginx_oms.conf /etc/nginx/conf.d/oms.conf
+
+
+8.安装saltapi
+安装最新版 salt-master salt-minion salt-api
+参考官网：https://docs.saltstack.com/en/latest/topics/installation/rhel.html
+
+#设置api key
+cd /etc/pki/tls/
+mkdir saltapi
+cd saltapi
+# 生成 key
+openssl genrsa -out key.pem 4096
+# 生成证书
+openssl req -new -x509 -key key.pem -out cert.pem -days 1826
+
+# salt认证
+useradd -M salt
+passwd salt
+
+# 启动
+service salt-master restart
+service salt-api restart
+
+# 访问
+{"username": "salt", "password": "123"}
+
+
+
+
+
+
