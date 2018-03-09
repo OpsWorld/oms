@@ -7,7 +7,7 @@
 [![vue](https://img.shields.io/badge/vue-2.5.9-brightgreen.svg)](https://github.com/vuejs/vue)
 [![element-ui](https://img.shields.io/badge/element--ui-2.0.7-brightgreen.svg)](https://github.com/ElemeFE/element)
 
-注意：该项目是采用的前后端分离开发，是在python3.6下面开发的，因为是使用的django-rest-framework，理论页支持python2.7x,不支持低版本游览器(如ie)
+注意：该项目是采用的前后端分离开发，是在python3.6下面开发的，因为是使用的django-rest-framework，理论也支持python2.7x；由于前端使用的是vuejs,所有不支持低版本ie游览器。
 
 ## 基础模块
 > 几乎所有系统都必须要一下基础模块，其他模块都是基于基础模块扩展的，不用过多说明，顾名思义。
