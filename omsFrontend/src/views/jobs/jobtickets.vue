@@ -68,7 +68,7 @@
                            type="danger" size="mini">
                   未通过
                 </el-button>
-                <el-button v-if="scope.row.status===1&&role==='super'" @click="updateNopass(scope.row)"
+                <el-button v-if="scope.row.status===1&&role==='super'" @click="changeJobOnline(scope.row)"
                            type="success" size="mini">
                   已上线
                 </el-button>
@@ -356,6 +356,12 @@ export default {
         this.nopassForm = false
         this.fetchData()
       })
+    },
+    changeJobOnline(row) {
+      this.onlineForm = true
+      this.rowdata.id = row.id
+      this.rowdata.name = row.name
+      this.rowdata.content = row.content
     },
     updateOnline() {
       patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
