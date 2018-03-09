@@ -49,7 +49,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_time' label='附件' sortable="custom">
+          <el-table-column prop='create_time' label='附件'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-button @click="getEncloseur(scope.row.id)" size="mini"
@@ -296,10 +296,12 @@ export default {
         ticket__id: id
       }
       getDeployTicketEnclosur(parms).then(response => {
+        console.log(response.data)
         this.enclosureData = response.data
       })
     },
     getEncloseur(id) {
+      console.log(id)
       this.showForm = true
       this.EnclosureData(id)
     },

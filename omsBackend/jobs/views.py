@@ -40,12 +40,12 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
 
 
 class DeployTicketViewSet(viewsets.ModelViewSet):
-    queryset = DeployTicket.objects.all().order_by('id')
+    queryset = DeployTicket.objects.all().order_by('status', 'create_time')
     serializer_class = DeployTicketSerializer
 
 
 class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
-    queryset = DeployTicketEnclosure.objects.all().order_by('status')
+    queryset = DeployTicketEnclosure.objects.all()
     serializer_class = DeployTicketEnclosureSerializer
     filter_fields = ('ticket__id',)
 
