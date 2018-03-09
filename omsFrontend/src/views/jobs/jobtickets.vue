@@ -61,17 +61,16 @@
             <template slot-scope="scope">
               <el-button-group>
                 <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobPass(scope.row)"
-                           type="primary"
-                           size="mini">
+                           type="primary" size="mini">
                   通过
                 </el-button>
                 <el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobNopass(scope.row)"
                            type="danger" size="mini">
                   未通过
                 </el-button>
-                <el-button v-if="scope.row.status===1&&role==='super'" @click="changeJobOnline(scope.row)"
-                           type="success"
-                           size="mini">已上线
+                <el-button v-if="scope.row.status===1&&role==='super'" @click="updateNopass(scope.row)"
+                           type="success" size="mini">
+                  已上线
                 </el-button>
               </el-button-group>
             </template>
@@ -356,12 +355,6 @@ export default {
         this.nopassForm = false
         this.fetchData()
       })
-    },
-    changeJobOnline(row) {
-      this.onlineForm = true
-      this.rowdata.id = row.id
-      this.rowdata.name = row.name
-      this.rowdata.content = row.content
     },
     updateOnline() {
       patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
