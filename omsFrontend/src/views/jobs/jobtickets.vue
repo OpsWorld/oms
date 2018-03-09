@@ -327,20 +327,12 @@ export default {
         status: 1
       }
       patchDeployTicket(row.id, rowdata).then(() => {
-        const pramas = {
-          groups__name: 'OMS_Dev_Manager'
+        const messageForm = {
+          action_user: 'itsupport',
+          title: '【上线申请通过】' + row.name,
+          message: `上线内容: ${row.version}`
         }
-        getUser(pramas).then(uu => {
-          const users = uu.data
-          for (const user of users) {
-            const messageForm = {
-              action_user: user.username,
-              title: '【上线申请通过】' + row.name,
-              message: `上线内容: ${row.version}`
-            }
-            postSendmessage(messageForm)
-          }
-        })
+        postSendmessage(messageForm)
         this.fetchData()
       })
     },
@@ -430,20 +422,29 @@ export default {
                 postDeployTicketEnclosur(this.enclosureForm)
               })
             }
-            const messageForm = {
-              action_user: 'omar',
-              title: '【新上线申请】' + this.ruleForm.name,
-              message: `上线内容: ${this.ruleForm.content}`
+            const pramas = {
+              groups__name: 'OMS_Dev_Manager'
             }
-            postSendmessage(messageForm)
-            this.addForm = false
-            this.fetchData()
+            getUser(pramas).then(uu => {
+              const users = uu.data
+              for (const user of users) {
+                const messageForm = {
+                  action_user: user.username,
+                  title: '【新上线申请】' + this.ruleForm.name,
+                  message: `上线内容: ${this.ruleForm.content}`
+                }
+                postSendmessage(messageForm)
+              }
+              this.addForm = false
+              this.fetchData()
+            })
           })
         } else {
           console.log('error submit!!')
           return false
         }
-      })
+      }
+      )
     },
     deleteEnclosure(id) {
       deleteDeployTicketEnclosur(id)
