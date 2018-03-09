@@ -340,6 +340,7 @@ export default {
     changeJobNopass(row) {
       this.nopass.id = row.id
       this.nopass.name = row.name
+      this.nopassForm = true
     },
     updateNopass() {
       const rowdata = {
