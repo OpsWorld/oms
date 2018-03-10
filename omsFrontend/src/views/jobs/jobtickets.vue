@@ -348,7 +348,7 @@ export default {
       }
       patchDeployTicket(this.nopass.id, rowdata).then(() => {
         const messageForm = {
-          action_user: 'ITDept_SkypeID',
+          action_user: 'itsupport',
           title: '【申请未通过】' + this.nopass.name,
           message: `原因: ${this.nopass.content}`
         }
