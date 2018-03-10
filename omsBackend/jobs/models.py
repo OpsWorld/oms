@@ -134,6 +134,7 @@ class DeployTicket(models.Model):
     content = models.TextField(verbose_name=u'上线内容')
     create_user = models.ForeignKey(User, related_name='deployticket_create_user', verbose_name=u'创建者')
     status = models.CharField(max_length=3, choices=Status.items(), default=0, verbose_name=u'状态')
+    skype_to = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'通知人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     def __str__(self):

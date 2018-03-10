@@ -53,7 +53,7 @@ class DeployTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeployTicket
-        fields = ['url', 'id', 'name', 'create_user', 'version', 'content', 'status', 'create_time']
+        fields = ['url', 'id', 'name', 'create_user', 'version', 'content', 'status', 'skype_to', 'create_time']
 
 
 class DeployTicketEnclosureSerializer(serializers.ModelSerializer):

@@ -42,6 +42,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='创建人'></el-table-column>
+          <el-table-column prop='skype_to' label='通知备注'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -131,6 +132,13 @@
         </el-form-item>
         <el-form-item label="内容" prop="content">
           <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="通知对象" prop="skype_to">
+          <el-checkbox-group v-model="ruleForm.skype_to">
+            <el-checkbox v-for="item in Object.keys(skype_tos)" :key="item" :label="skype_tos[item]">
+              {{skype_tos[item]}}
+            </el-checkbox>
+          </el-checkbox-group>
         </el-form-item>
         <el-form-item>
           <hr class="heng"/>
@@ -240,6 +248,7 @@ export default {
         name: '',
         version: '',
         content: '',
+        skype_to: [],
         create_user: localStorage.getItem('username')
       },
       rules: {
@@ -271,7 +280,8 @@ export default {
       nopass: {
         id: '',
         content: ''
-      }
+      },
+      skype_tos: { 0: '财务', 1: '客服', 2: '研发' }
     }
   },
   computed: {
@@ -406,6 +416,7 @@ export default {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.skype_to = this.ruleForm.skype_to.join()
           postDeployTicket(this.ruleForm).then(response => {
             this.$message({
               type: 'success',
@@ -456,7 +467,6 @@ export default {
       this.send_acc = false
       this.send_cs = false
     }
-
   }
 }
 </script>
