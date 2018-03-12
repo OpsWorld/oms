@@ -44,6 +44,7 @@ import { postDeployTicket, postDeployTicketEnclosur } from '@/api/job'
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { getConversionTime } from '@/utils'
+import { uploadurl } from '@/config'
 
 export default {
 
@@ -74,7 +75,9 @@ export default {
         ticket: '',
         create_user: localStorage.getItem('username'),
         file: ''
-      }
+      },
+      skype_tos: { 0: '财务', 1: '客服', 2: '研发' },
+      uploadurl: uploadurl
     }
   },
 
@@ -116,8 +119,7 @@ export default {
                 }
                 postSendmessage(messageForm)
               }
-              this.addForm = false
-              this.fetchData()
+              this.$emit('DialogStatus', false)
             })
           })
         } else {
@@ -126,8 +128,15 @@ export default {
         }
       }
       )
+    },
+    handleSuccess(file, fileList) {
+      this.fileList.push(fileList.raw)
+      this.count += 1
+    },
+    handleRemove(file, fileList) {
+      this.fileList.remove(file)
+      this.count -= 1
     }
-
   }
 }
 </script>

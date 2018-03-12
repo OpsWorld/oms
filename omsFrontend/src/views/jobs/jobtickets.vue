@@ -27,7 +27,7 @@
                   width="300"
                   trigger="hover"
                   :content="scope.row.content">
-                  <el-button size="mini" slot="reference">{{scope.row.content.slice(0, 10)}}...</el-button>
+                  <el-button size="mini" slot="reference">{{scope.row.content.slice(0, 5)}}...</el-button>
                 </el-popover>
               </div>
             </template>
@@ -126,11 +126,11 @@
     </el-dialog>
 
     <el-dialog :visible.sync="addForm">
-      <add-group></add-group>
+      <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
 
     <el-dialog :visible.sync="editForm">
-      <edit-group></edit-group>
+      <edit-group :ruleForm="ticketdata" @DialogStatus="getDialogStatus"></edit-group>
     </el-dialog>
 
     <el-dialog :visible.sync="showForm">
@@ -139,8 +139,6 @@
           <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
             <i class="fa fa-paperclip"></i>
             <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-            <!--<el-button type="text" icon="el-icon-delete"-->
-            <!--@click="deleteEnclosure(item.id)"></el-button>-->
           </li>
         </ul>
       </div>
@@ -153,29 +151,17 @@
 </template>
 
 <script>
-import {
-  getDeployTicket,
-  patchDeployTicket,
-  postDeployTicket,
-  putDeployTicket,
-  postDeployTicketEnclosur,
-  getDeployTicketEnclosur,
-  deleteDeployTicketEnclosur
-} from '@/api/job'
-import { LIMIT, pagesize, pageformat, uploadurl, apiUrl } from '@/config'
-import { postUpload, postSendmessage } from 'api/tool'
-import { getConversionTime } from '@/utils'
+import { getDeployTicket, patchDeployTicket, getDeployTicketEnclosur } from '@/api/job'
+import { LIMIT, pagesize, pageformat, apiUrl } from '@/config'
+import { postSendmessage } from 'api/tool'
 import { mapGetters } from 'vuex'
-import { getUser } from 'api/user'
 import addGroup from './components/addjobticket.vue'
 import editGroup from './components/editjobticket.vue'
 
 export default {
   components: { addGroup, editGroup },
-
   data() {
     return {
-      route_path: this.$route.path.split('/'),
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
@@ -205,19 +191,8 @@ export default {
         search: '',
         ordering: 'status'
       },
-      toolbars: {
-        preview: true, // 预览
-        bold: true, // 粗体
-        italic: true, // 斜体
-        header: true, // 标题
-        underline: true, // 下划线
-        strikethrough: true, // 中划线
-        ol: true, // 有序列表
-        help: true
-      },
       onlineForm: false,
       addForm: false,
-      uploadurl: uploadurl,
       apiurl: apiUrl,
       enclosureData: [],
       showForm: false,
@@ -230,7 +205,7 @@ export default {
         id: '',
         content: ''
       },
-      skype_tos: { 0: '财务', 1: '客服', 2: '研发' }
+      ticketdata: {}
     }
   },
   computed: {
@@ -254,12 +229,10 @@ export default {
         ticket__id: id
       }
       getDeployTicketEnclosur(parms).then(response => {
-        console.log(response.data)
         this.enclosureData = response.data
       })
     },
     getEncloseur(id) {
-      console.log(id)
       this.showForm = true
       this.EnclosureData(id)
     },
@@ -273,14 +246,6 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
-    },
-    handleSuccess(file, fileList) {
-      this.fileList.push(fileList.raw)
-      this.count += 1
-    },
-    handleRemove(file, fileList) {
-      this.fileList.remove(file)
-      this.count -= 1
     },
     changeJobPass(row) {
       const rowdata = {
@@ -362,73 +327,22 @@ export default {
       }
       this.fetchData()
     },
-    postForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.ruleForm.skype_to = this.ruleForm.skype_to.join()
-          postDeployTicket(this.ruleForm).then(response => {
-            this.$message({
-              type: 'success',
-              message: '恭喜你，新建成功'
-            })
-            for (var fileList of this.fileList) {
-              const formData = new FormData()
-              formData.append('username', this.enclosureForm.create_user)
-              formData.append('file', fileList)
-              formData.append('create_time', getConversionTime(fileList.uid))
-              formData.append('type', fileList.type)
-              formData.append('archive', this.route_path[1])
-              postUpload(formData).then(res => {
-                this.enclosureForm.file = res.data.filepath
-                this.enclosureForm.ticket = response.data.id
-                postDeployTicketEnclosur(this.enclosureForm)
-              })
-            }
-            const pramas = {
-              groups__name: 'OMS_Dev_Manager'
-            }
-            getUser(pramas).then(uu => {
-              const users = uu.data
-              for (const user of users) {
-                const messageForm = {
-                  action_user: user.username,
-                  title: '【新上线申请】' + this.ruleForm.name,
-                  message: `上线内容: ${this.ruleForm.content}`
-                }
-                postSendmessage(messageForm)
-              }
-              this.addForm = false
-              this.fetchData()
-            })
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      }
-      )
-    },
     editBefore(row) {
       this.editForm = true
-      this.ruleForm = row
-    },
-    putForm() {
-      putDeployTicket(this.ruleForm.id, this.ruleForm)
-    },
-    deleteEnclosure(id) {
-      deleteDeployTicketEnclosur(id)
-      this.EnclosureData(id)
+      this.ticketdata = row
     },
     cleanForm() {
       this.send_acc = false
       this.send_cs = false
+    },
+    getDialogStatus(data) {
+      this.addForm = data
+      this.editForm = data
+      this.fetchData()
     }
   }
 }
 </script>
 
 <style lang='scss'>
-  .modifychange {
-    margin: 5px;
-  }
 </style>

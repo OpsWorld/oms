@@ -147,9 +147,9 @@ export function postDeployTicket(data) {
   })
 }
 
-export function getDeployTicket(query) {
+export function getDeployTicket(query, id) {
   return request({
-    url: apiURL.deploytickets,
+    url: id ? apiURL.deploytickets + id + '/' : apiURL.deploytickets,
     method: 'get',
     params: query
   })
