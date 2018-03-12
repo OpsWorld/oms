@@ -155,7 +155,10 @@ export default {
   },
   methods: {
     fetchDemandData() {
-      getDemandManager().then(response => {
+      const parmas = {
+        status__lt: 3
+      }
+      getDemandManager(parmas).then(response => {
         this.demands = response.data
       })
     },

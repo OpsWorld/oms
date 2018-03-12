@@ -114,7 +114,8 @@ export default {
       Demand_Status: {
         0: '未审核',
         1: '已通过',
-        2: '未通过'
+        2: '未通过',
+        3: '已完成'
       },
       Status_Text: {
         1: '已指派',

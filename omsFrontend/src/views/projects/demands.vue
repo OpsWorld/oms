@@ -112,12 +112,14 @@ export default {
       STATUS_TEXT: {
         0: '未审核',
         1: '已通过',
-        2: '未通过'
+        2: '未通过',
+        3: '已完成'
       },
       STATUS_COLOR: {
         0: 'danger',
         1: 'success',
-        2: 'info'
+        2: 'warning',
+        3: 'info'
       },
       listQuery: {
         limit: LIMIT,

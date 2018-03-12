@@ -27,7 +27,8 @@ Project_Status = {
 TicketStatus = {
     0: '未审核',
     1: '已通过',
-    2: '未通过'
+    2: '未通过',
+    3: '已完成'
 }
 
 admin_groups = ['admin', 'OMS_Dev_Manager', 'OMS_Test_Manager', 'OMS_Super_Admin']
