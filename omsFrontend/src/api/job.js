@@ -155,6 +155,14 @@ export function getDeployTicket(query) {
   })
 }
 
+export function putDeployTicket(id, data) {
+  return request({
+    url: apiURL.deploytickets + id + '/',
+    method: 'put',
+    data
+  })
+}
+
 export function patchDeployTicket(id, data) {
   return request({
     url: apiURL.deploytickets + id + '/',
