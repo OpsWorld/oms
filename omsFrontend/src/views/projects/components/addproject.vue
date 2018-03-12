@@ -5,7 +5,7 @@
         <el-form-item label="关联需求" prop="demand">
           <el-input v-if="Object.keys(demand).length>0" v-model="ruleForm.demand" disabled></el-input>
           <el-select v-else v-model="ruleForm.demand" filterable placeholder="请选择关联需求">
-            <el-option v-for="item in demands" :key="item.id" :value="item.name"></el-option>
+            <el-option v-for="item in demands" :key="item.id" :value="item.pid" :label="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="名称" prop="name">

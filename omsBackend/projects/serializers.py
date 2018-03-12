@@ -9,7 +9,7 @@ from tools.models import Upload
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    demand = serializers.SlugRelatedField(queryset=DemandManager.objects.all(), slug_field='name')
+    demand = serializers.SlugRelatedField(queryset=DemandManager.objects.all(), slug_field='pid')
     type = serializers.SlugRelatedField(queryset=ProjectType.objects.all(), slug_field='name', allow_null=True)
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
     action_user = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username',
