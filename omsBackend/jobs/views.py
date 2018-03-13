@@ -17,7 +17,7 @@ class JobsViewSet(viewsets.ModelViewSet):
     serializer_class = JobsSerializer
     filter_backends = (JobFilterBackend, SearchFilter, DjangoFilterBackend)
     filter_fields = ['showdev']
-    search_fields = ('name', 'code_url')
+    search_fields = ['name', 'code_url']
 
 
 class DeployenvViewSet(viewsets.ModelViewSet):
@@ -47,7 +47,7 @@ class DeployTicketViewSet(viewsets.ModelViewSet):
 class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = DeployTicketEnclosure.objects.all()
     serializer_class = DeployTicketEnclosureSerializer
-    filter_fields = ('ticket__id',)
+    filter_fields = ['ticket__id']
 
 
 @api_view()

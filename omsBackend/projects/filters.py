@@ -8,7 +8,7 @@ from dry_rest_permissions.generics import DRYPermissionFiltersBase
 
 from django_filters import rest_framework as filters
 from django_filters import DateFromToRangeFilter
-from projects.models import Project, DemandManager
+from projects.models import Project
 
 
 class ProjectFilter(filters.FilterSet):
@@ -44,13 +44,3 @@ class ProjectFilterBackend(DRYPermissionFiltersBase):
                 ) |
                 Q(is_public=True)
             ).distinct()
-
-
-class DemandManagerFilter(filters.FilterSet):
-    class Meta:
-        model = DemandManager
-        fields = {
-            'pid': ['exact'],
-            'status': ['exact', 'lt'],
-            'create_user__username': ['exact']
-        }

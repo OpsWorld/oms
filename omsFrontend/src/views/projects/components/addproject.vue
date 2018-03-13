@@ -156,7 +156,7 @@ export default {
   methods: {
     fetchDemandData() {
       const parmas = {
-        status__lt: 3
+        status: 1
       }
       getDemandManager(parmas).then(response => {
         this.demands = response.data

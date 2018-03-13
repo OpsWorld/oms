@@ -15,7 +15,7 @@ from projects.serializers import (ProjectSerializer,
 from projects.filters import ProjectFilterBackend
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from projects.filters import ProjectFilter, DemandManagerFilter
+from projects.filters import ProjectFilter
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -62,7 +62,7 @@ class DemandManagerViewSet(viewsets.ModelViewSet):
     serializer_class = DemandManagerSerializer
     search_fields = ['name', 'content']
     ordering_fields = ['status', 'create_time']
-    filter_class = DemandManagerFilter
+    filter_fields = ['pid', 'status', 'create_user__username']
 
 
 class DemandEnclosureViewSet(viewsets.ModelViewSet):
