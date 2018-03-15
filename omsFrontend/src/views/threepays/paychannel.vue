@@ -41,10 +41,10 @@
                   ref="upload"
                   :action="uploadurl"
                   :show-file-list="false"
-                  :disabled="count>10?true:false"
+                  :disabled="count>9"
                   :before-upload="beforeAvatarUpload">
                   <el-button slot="trigger" size="mini" type="danger" plain icon="upload2"
-                             :disabled="count>10?true:false">
+                             :disabled="count>9">
                     上传
                   </el-button>
                   <div slot="tip" class="el-upload__tip">

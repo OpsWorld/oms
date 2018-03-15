@@ -53,12 +53,12 @@
           <el-table-column label="操作" width="200">
             <template slot-scope="scope">
               <el-button type="success" size="mini" @click="updateForm(scope.row)">修改</el-button>
-              <el-button v-if="role==='super' && scope.row.status === 0" type="primary" size="mini"
+              <el-button v-if="(role==='super'|| paychannel_btn_copy_threepay) && scope.row.status === 0" type="primary" size="mini"
                          @click="copyPaychannel(scope.row)">
                 乾坤大挪移
               </el-button>
             </template>
-          </el-table-column>
+          </el-table- run
         </el-table>
       </div>
       <div class="table-pagination">
@@ -135,16 +135,19 @@ export default {
       platforms: [],
       STATUS_TEXT: { '0': '未接收', '1': '正在处理', '2': '已完成' },
       STATUS_TYPE: { '0': 'danger', '1': 'success', '2': 'info' },
-      enclosureData: []
+      enclosureData: [],
+      paychannel_btn_copy_threepay: false
     }
   },
 
   computed: {
     ...mapGetters([
+      'elements',
       'role'
     ])
   },
   created() {
+    this.paychannel_btn_copy_threepay = this.elements['对接通道进度-乾坤大挪移']
     this.fetchData()
     this.fetchPlatformData()
   },
