@@ -151,6 +151,7 @@ export default {
             getUpdateJobsStatus(pramas).then(response => {
               if (response.data.count === 0) {
                 clearInterval(this.check_job_status)
+                console.log('game over')
                 this.$emit('updateStatus')
                 this.fetchDeployJobData()
               } else {
@@ -159,7 +160,9 @@ export default {
             })
           }, 3000)
         } else {
+          console.log('game over22')
           clearInterval(this.check_job_status)
+          this.$emit('updateStatus')
         }
       })
     },
