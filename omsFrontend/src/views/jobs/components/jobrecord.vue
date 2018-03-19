@@ -42,6 +42,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='env' label='发布步骤'></el-table-column>
+          <el-table-column prop='deploy_cmd_host' label='命令目标'></el-table-column>
           <el-table-column prop='action_user' label='发布人'></el-table-column>
           <el-table-column prop='create_time' label='发布时间' sortable>
             <template slot-scope="scope">

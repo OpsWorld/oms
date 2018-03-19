@@ -86,7 +86,8 @@ export default {
         env: '',
         deploy_hosts: [],
         deploy_cmd: '',
-        action_user: localStorage.getItem('username')
+        action_user: localStorage.getItem('username'),
+        deploy_cmd_host: 'null'
       },
       svnrules: {
         version: [
@@ -166,6 +167,7 @@ export default {
               this.ruleForm.deploy_cmd = item.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
             } else {
               this.ruleForm.deploy_cmd = item.deploy_cmd
+              this.ruleForm.deploy_cmd_host = item.name
             }
             postDeployJob(this.ruleForm).then(response => {
               console.log(response.data.j_id)

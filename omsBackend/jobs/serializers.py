@@ -12,7 +12,8 @@ from omsBackend.settings import sapi
 class JobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Jobs
-        fields = ['url', 'id', 'name', 'version', 'content', 'code_url', 'deploy_path', 'cur_step', 'total_step', 'done', 'create_time', 'showdev', 'desc']
+        fields = ['url', 'id', 'name', 'version', 'content', 'code_url', 'deploy_path', 'cur_step', 'total_step',
+                  'done', 'create_time', 'showdev', 'desc']
 
 
 class DeployenvSerializer(serializers.ModelSerializer):
@@ -35,7 +36,8 @@ class DeployJobsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeployJobs
-        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'version', 'content', 'env', 'deploy_cmd', 'action_user', 'result', 'create_time']
+        fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'deploy_cmd_host', 'version', 'content',
+                  'env', 'deploy_cmd', 'action_user', 'result', 'create_time']
 
     def create(self, validated_data):
         deploy_cmd = validated_data["deploy_cmd"]
