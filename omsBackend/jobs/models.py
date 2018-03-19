@@ -84,6 +84,10 @@ class Deployenv(models.Model):
         verbose_name = u'发布环境'
         verbose_name_plural = u'发布环境'
 
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        super(Deployenv, self).save(*args, **kwargs)
+
 
 class Deploycmd(models.Model):
     env = models.ForeignKey(Deployenv, verbose_name=u'发布环境')
