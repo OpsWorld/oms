@@ -147,7 +147,8 @@ export default {
     ])
   },
   created() {
-    this.paychannel_btn_copy_threepay = this.elements['对接通道进度-乾坤大挪移']
+    this.paychannel_btn_copy_threepay =
+      this.elements['对接通道进度-乾坤大挪移']
     this.fetchData()
     this.fetchPlatformData()
   },

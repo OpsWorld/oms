@@ -260,7 +260,8 @@ export default {
     },
     changeStatus() {
       const data = {
-        ticket_status: 1
+        ticket_status: 1,
+        action_user: localStorage.getItem('username')
       }
       patchWorkticket(this.ticket_id, data).then(() => {
         this.fetchData()
