@@ -13,10 +13,11 @@ from projects.models import Project
 
 class ProjectFilter(filters.FilterSet):
     create_date = DateFromToRangeFilter()
+    update_date = DateFromToRangeFilter()
 
     class Meta:
         model = Project
-        fields = ['pid', 'status', 'demand__name', 'action_user__username', 'create_date']
+        fields = ['pid', 'status', 'demand__name', 'action_user__username', 'create_date', 'update_date']
 
 
 class ProjectFilterBackend(DRYPermissionFiltersBase):

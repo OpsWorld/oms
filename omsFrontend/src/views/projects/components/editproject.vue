@@ -83,7 +83,7 @@ import { getProjectEnclosure, postProjectEnclosure, deleteProjectEnclosure } fro
 import { postUpload } from 'api/tool'
 import { getUser } from 'api/user'
 import { apiUrl, uploadurl } from '@/config'
-import { getConversionTime } from '@/utils'
+import { getConversionTime, getCreatetime, getCreatedate } from '@/utils'
 
 export default {
   components: {},
@@ -147,6 +147,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.update_date = getCreatedate()
+          this.ruleForm.update_time = getCreatetime()
           putProject(this.ruleForm.id, this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({

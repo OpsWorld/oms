@@ -21,17 +21,25 @@
             </el-option>
           </el-select>
           <el-date-picker
-            v-model="selectdatatime"
+            v-model="selectcreatedate"
             type="daterange"
             range-separator="至"
-            start-placeholder="开始日期"
+            start-placeholder="创建日期"
             end-placeholder="结束日期"
-            @change="selectDatetime"
+            @change="selectCreatedate"
             :picker-options="pickerOptions">
           </el-date-picker>
-          <el-input style="width: 160px;" class="filter-item" placeholder="编号" @keyup.enter.native="searchClick"
-                    v-model="listQuery.pid"></el-input>
-          <el-input style="width: 180px;" class="filter-item" placeholder="标题、内容或类型" @keyup.enter.native="searchClick"
+          <el-date-picker
+            v-model="selectupdatedate"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="修改日期"
+            end-placeholder="结束日期"
+            @change="selectUpdatedate"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+          <el-input style="width: 200px;" class="filter-item" placeholder="编号、标题、内容或类型"
+                    @keyup.enter.native="searchClick"
                     v-model="listQuery.search"></el-input>
           <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
         </div>
@@ -54,7 +62,7 @@
           </el-table-column>
           <el-table-column prop='level' label='等级' sortable="custom">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+              <div slot="reference" style="text-align: center; color: rgb(0,0,0)">
                 <el-rate
                   v-model="scope.row.level"
                   :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
@@ -65,7 +73,7 @@
           </el-table-column>
           <el-table-column prop='status' label='状态' width="80">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
+              <div slot="reference">
                 <el-tag size="mini" :type="Status_Color[scope.row.status]">
                   {{Status_Text[scope.row.status]}}
                 </el-tag>
@@ -74,7 +82,7 @@
           </el-table-column>
           <el-table-column prop='task_complete' label='任务进度' sortable="custom" width="120">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
+              <div slot="reference">
                 {{scope.row.task_complete}}%
                 <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
                   <el-button @click="updateTaskComplete(scope.row)" type="text" icon="el-icon-edit"
@@ -85,7 +93,7 @@
           </el-table-column>
           <el-table-column prop='test_complete' label='测试进度' sortable="custom" width="120">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
+              <div slot="reference">
                 {{scope.row.test_complete}}%
                 <el-tooltip class="item" effect="dark" content="更新测试进度" placement="top">
                   <el-button @click="updateTestComplete(scope.row)" type="text" icon="el-icon-edit"
@@ -97,7 +105,7 @@
           <el-table-column prop='demand' label='关联需求'></el-table-column>
           <el-table-column prop='action_user' label='指派人' width="100">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
+              <div slot="reference">
                 <el-tag size="mini" v-for="item in scope.row.action_user" :key="item">
                   {{item}}
                 </el-tag>
@@ -106,8 +114,15 @@
           </el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+              <div slot="reference" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='update_time' label='修改时间' sortable="custom">
+            <template slot-scope="scope">
+              <div slot="reference" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{scope.row.update_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
@@ -208,7 +223,6 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        pid: '',
         status: '',
         create_user__username: '',
         action_user__username: '',
@@ -222,7 +236,8 @@ export default {
         task_complete: '',
         test_complete: ''
       },
-      selectdatatime: '',
+      selectcreatedate: '',
+      selectupdatedate: '',
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -300,7 +315,6 @@ export default {
     showAllTicket() {
       this.listQuery.create_user__username = ''
       this.listQuery.action_user__username = ''
-      this.listQuery.pid = ''
       this.listQuery.search = ''
       this.listQuery.status = ''
       this.fetchData()
@@ -343,13 +357,23 @@ export default {
         this.fetchData()
       })
     },
-    selectDatetime(val) {
+    selectCreatedate(val) {
       if (val) {
         this.listQuery.create_date_0 = formatDate(val[0], 'YYYY-MM-DD')
         this.listQuery.create_date_1 = formatDate(val[1], 'YYYY-MM-DD')
       } else {
         this.listQuery.create_date_0 = ''
         this.listQuery.create_date_1 = ''
+      }
+      this.fetchData()
+    },
+    selectUpdatedate(val) {
+      if (val) {
+        this.listQuery.update_date_0 = formatDate(val[0], 'YYYY-MM-DD')
+        this.listQuery.update_date_1 = formatDate(val[1], 'YYYY-MM-DD')
+      } else {
+        this.listQuery.update_date_0 = ''
+        this.listQuery.update_date_1 = ''
       }
       this.fetchData()
     }

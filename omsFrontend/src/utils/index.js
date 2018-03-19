@@ -272,19 +272,6 @@ export function getVersion(name) {
   return p.dependencies[name]
 }
 
-// get sendmail time
-export function getCreatetime() {
-  const date = new Date()
-  const Y = date.getFullYear().toString()
-  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
-  const D = date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate()
-  const h = date.getHours() + 1 < 10 ? '0' + date.getHours() : date.getHours()
-  const m = date.getMinutes() + 1 < 10 ? '0' + date.getMinutes() : date.getMinutes()
-  const s = date.getSeconds() + 1 < 10 ? '0' + date.getSeconds() : date.getSeconds()
-  const ctime = Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s
-  return ctime
-}
-
 export function getConversionTime(datetime) {
   let date
   if (datetime) {
@@ -299,6 +286,18 @@ export function getConversionTime(datetime) {
   const m = date.getMinutes() + 1 < 10 ? '0' + date.getMinutes() : date.getMinutes()
   const s = date.getSeconds() + 1 < 10 ? '0' + date.getSeconds() : date.getSeconds()
   const ctime = Y + M + D + h + m + s
+  return ctime
+}
+
+export function getCreatetime() {
+  const date = new Date()
+  const Y = date.getFullYear().toString()
+  const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+  const D = date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate()
+  const h = date.getHours() + 1 < 10 ? '0' + date.getHours() : date.getHours()
+  const m = date.getMinutes() + 1 < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  const s = date.getSeconds() + 1 < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  const ctime = Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s
   return ctime
 }
 

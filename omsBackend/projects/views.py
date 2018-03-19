@@ -23,8 +23,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     filter_backends = (ProjectFilterBackend, DjangoFilterBackend, SearchFilter, OrderingFilter)
     filter_class = ProjectFilter
-    search_fields = ['name', 'content', 'type__name']
-    ordering_fields = ('level', 'task_complete', 'test_complete', 'create_time')
+    search_fields = ['pid', 'name', 'content', 'type__name']
+    ordering_fields = ('level', 'task_complete', 'test_complete', 'create_time', 'update_time')
 
 
 class ProjectCommentViewSet(viewsets.ModelViewSet):

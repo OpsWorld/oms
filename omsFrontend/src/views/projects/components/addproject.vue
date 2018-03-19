@@ -75,7 +75,7 @@ import { postProject, getProjectType, postProjectEnclosure, getDemandManager } f
 import { postUpload, postSendmessage } from 'api/tool'
 import { getUser } from 'api/user'
 import { uploadurl } from '@/config'
-import { getConversionTime } from '@/utils'
+import { getConversionTime, getCreatetime, getCreatedate } from '@/utils'
 
 export default {
   components: {},
@@ -102,7 +102,9 @@ export default {
         follow_user: [],
         from_user: '',
         pid: '',
-        is_public: true
+        is_public: true,
+        update_date: getCreatedate(),
+        update_time: getCreatetime()
       },
       rules: {
         name: [
