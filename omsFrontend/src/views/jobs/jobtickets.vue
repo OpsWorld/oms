@@ -189,7 +189,7 @@ export default {
         offset: '',
         create_user__username: '',
         search: '',
-        ordering: 'status'
+        ordering: ''
       },
       onlineForm: false,
       addForm: false,
