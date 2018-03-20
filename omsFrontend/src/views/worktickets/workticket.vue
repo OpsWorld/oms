@@ -127,7 +127,6 @@ export default {
       tableData: [],
       tabletotal: 0,
       currentPage: 1,
-      ticket_status: '',
       pagesize: pagesize,
       rowdata: {
         ticket_status: '1',

@@ -280,7 +280,7 @@ export default {
           const messageForm = {
             action_user: this.rowdata.action_user,
             title: '【工单更换指派人】' + this.ticketData.name,
-            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.rowdata.action_user}\n工单地址: ${window.location.href}`
+            message: `指派人: ${this.rowdata.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else if (this.radio_status === '2') {
@@ -289,8 +289,8 @@ export default {
 
           const messageForm = {
             action_user: this.ticketData.create_user,
-            title: '【工单处理完成】' + this.ticketData.name,
-            message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            title: '【工单已完成】' + this.ticketData.name,
+            message: `指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
           }
           postSendmessage(messageForm)
         } else {
@@ -299,7 +299,7 @@ export default {
             const messageForm = {
               action_user: this.ticketData.create_user,
               title: '【工单有新回复】' + this.ticketData.name,
-              message: `回复人: ${this.commentForm.create_user}\n指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+              message: `指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
             }
             postSendmessage(messageForm)
           }

@@ -6,7 +6,6 @@
           <router-link :to="'adddemand'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
-          <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
             <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
@@ -21,9 +20,7 @@
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange"
-                  @selection-change="handleSelectionChange">
-          <el-table-column type="selection"></el-table-column>
+        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
@@ -41,6 +38,10 @@
                 <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
+                <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
+                  <el-button type="text" icon="el-icon-edit" class="modifychange"
+                             @click="updateDemand(scope.row.id)"></el-button>
+                </el-tooltip>
               </div>
             </template>
           </el-table-column>
@@ -81,17 +82,19 @@
       </div>
     </el-card>
 
-    <el-dialog
-      title="更改状态"
-      :visible.sync="show_status">
-      <el-radio-group v-model="updateform.status">
-        <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
-        </el-radio>
-      </el-radio-group>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="show_status=false">取 消</el-button>
-    <el-button type="primary" @click="changeDemand">确 定</el-button>
-  </span>
+    <el-dialog :visible.sync="statusForm">
+      <el-form label-width="90px">
+        <el-form-item label="更改状态" prop="status">
+          <el-radio-group v-model="updateform.status">
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="statusForm=false">取 消</el-button>
+          <el-button type="primary" @click="changeDemand">确 定</el-button>
+        </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -99,6 +102,9 @@
 <script>
 import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/project'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import { getPlatformPayChannel, patchPlatformPayChannel } from 'api/threeticket'
+import { getWorkticket, patchWorkticket } from 'api/workticket'
+import { postSendmessage } from 'api/tool'
 
 export default {
   components: {},
@@ -135,8 +141,7 @@ export default {
         id: '',
         status: '1'
       },
-      btnstatus: true,
-      show_status: false
+      statusForm: false
     }
   },
   created() {
@@ -174,17 +179,6 @@ export default {
       }
       this.fetchData()
     },
-    handleSelectionChange(val) {
-      this.selectId = []
-      for (var i = 0, len = val.length; i < len; i++) {
-        this.selectId.push(val[i].id)
-      }
-      if (this.selectId.length > 0) {
-        this.btnstatus = false
-      } else {
-        this.btnstatus = true
-      }
-    },
     deleteDemand(id) {
       deleteDemandManager(id).then(response => {
         this.$message({
@@ -197,14 +191,56 @@ export default {
         console.log(error)
       })
     },
+    updateDemand(id) {
+      this.statusForm = true
+      this.updateform.id = id
+    },
     changeDemand() {
-      for (var i = 0, len = this.selectId.length; i < len; i++) {
-        patchDemandManager(this.selectId[i], this.updateform).then(response => {
-          delete this.selectId[i]
+      patchDemandManager(this.updateform.id, this.updateform).then(response => {
+        this.$message({
+          message: '恭喜你，修改成功',
+          type: 'success'
         })
-      }
-      setTimeout(this.fetchData(), 500)
-      this.show_status = false
+        if (response.data.status === 3) {
+          const piddata = {
+            pid: response.data.pid
+          }
+          if (response.data.type === '来自第三方支付对接') {
+            const ticketdata = {
+              status: 2
+            }
+            getPlatformPayChannel(piddata).then(res => {
+              patchPlatformPayChannel(res.data[0].id, ticketdata).then(dd => {
+                const messageForm = {
+                  action_user: dd.data.create_user,
+                  title: '【通道已完成】' + dd.data.name,
+                  message: `平台: ${dd.data.platform}\n通道类型: ${dd.data.type}}`
+                }
+                postSendmessage(messageForm)
+              })
+            })
+          } else if (response.data.type === '来自工单') {
+            const ticketdata = {
+              ticket_status: 2
+            }
+            getWorkticket(piddata).then(res => {
+              patchWorkticket(res.data[0].id, ticketdata).then(tt => {
+                const messageForm = {
+                  action_user: tt.data.create_user,
+                  title: '【工单已完成】' + tt.data.name,
+                  message: `指派人: ${tt.data.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${tt.data.pid}`
+                }
+                postSendmessage(messageForm)
+              })
+            })
+          }
+        }
+        this.statusForm = false
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('修改失败')
+        console.log(error)
+      })
     }
   }
 }

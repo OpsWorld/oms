@@ -203,3 +203,11 @@ export function putPlatformPayChannel(id, data) {
     data
   })
 }
+
+export function patchPlatformPayChannel(id, data) {
+  return request({
+    url: apiURL.platformpaychannels + id + '/',
+    method: 'patch',
+    data
+  })
+}

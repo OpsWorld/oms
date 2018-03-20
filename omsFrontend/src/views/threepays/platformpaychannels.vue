@@ -214,7 +214,7 @@ export default {
           const messageForm = {
             action_user: this.ruleForm.create_user,
             title: '【通道已完成】' + this.ruleForm.name,
-            message: `平台: ${this.ruleForm.platform}\n通道类型: ${this.ruleForm.type}\n完成情况: ${this.STATUS_TEXT[this.ruleForm.status]}`
+            message: `平台: ${this.ruleForm.platform}\n通道类型: ${this.ruleForm.type}`
           }
           postSendmessage(messageForm)
         }
