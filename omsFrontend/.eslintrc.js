@@ -107,6 +107,7 @@ module.exports = {
         'no-undef': 2,
         'no-undef-init': 2,
         'no-unexpected-multiline': 2,
+        'no-constant-condition': 0,
         'no-unmodified-loop-condition': 2,
         'no-unneeded-ternary': [2, { 'defaultAssignment': false }],
         'no-unreachable': 2,

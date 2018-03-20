@@ -215,7 +215,8 @@ export default {
       butstatus: true,
       showresult: false,
       job_results: [],
-      check_job_status: ''
+      check_job_status: '',
+      deploy_cmds: []
     }
   },
   computed: {
@@ -250,7 +251,7 @@ export default {
       getDeployenv(parmas).then(response => {
         this.cur_env = response.data[0]
         if (this.cur_env) {
-          this.ruleForm.env = this.cur_env.name
+          this.ruleForm.env = this.cur_env.id
           this.fetchDeploycmdData(this.cur_env.id)
         }
       })
@@ -270,20 +271,17 @@ export default {
         if (valid) {
           this.ruleForm.deploy_hosts = this.cur_env.deploy_hosts.join()
           for (const item of this.checkedcmds) {
-            if (this.ruleForm.env === 'svn') {
-              this.ruleForm.deploy_cmd = item.deploy_cmd.replace(/\$\w+/, this.jobs.deploy_path) + ' -r ' + this.ruleForm.version
-            } else {
-              this.ruleForm.deploy_cmd = item.deploy_cmd
-              this.ruleForm.deploy_cmd_host = item.name
-            }
-            postDeployJob(this.ruleForm).then(response => {
-              console.log(response.data.j_id)
-              this.fetchDeployJobData()
-            }).catch(error => {
-              this.$message.error('构建失败，请检查参数是否正确！')
-              console.log(error)
-            })
+            this.deploy_cmds.push(item.name)
           }
+          this.ruleForm.deploy_cmd = this.deploy_cmds.join('||')
+          this.ruleForm.deploy_path = this.jobs.deploy_path
+          postDeployJob(this.ruleForm).then(response => {
+            console.log(response.data)
+            this.fetchDeployJobData()
+          }).catch(error => {
+            this.$message.error('构建失败，请检查参数是否正确！')
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false

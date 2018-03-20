@@ -37,17 +37,33 @@ class DeployJobsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeployJobs
         fields = ['url', 'id', 'job', 'j_id', 'deploy_status', 'deploy_hosts', 'deploy_cmd_host', 'version', 'content',
-                  'env', 'deploy_cmd', 'action_user', 'result', 'create_time']
+                  'env', 'deploy_path', 'deploy_cmd', 'action_user', 'result', 'create_time']
 
     def create(self, validated_data):
-        deploy_cmd = validated_data["deploy_cmd"]
+        deploy_path = validated_data["deploy_path"]
+        deploy_cmds = validated_data["deploy_cmd"]
         deploy_hosts = validated_data["deploy_hosts"]
-        print(deploy_cmd)
-        jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), arg=deploy_cmd)
-        validated_data["j_id"] = jid
-        deployjob = DeployJobs.objects.create(**validated_data)
-        deployjob.save()
-        return deployjob
+        version = validated_data["version"]
+        env_id = validated_data["env"]
+        env_name = Deployenv.objects.get(id=env_id).name
+        print(env_name)
+        jids = []
+        for cmd in deploy_cmds.split('||'):
+            import re
+            deploy_cmd = Deploycmd.objects.get(env=env_id, name=cmd).deploy_cmd
+            print(deploy_cmd)
+            if env_name == 'svn':
+                print('svn发布')
+                deploy_cmd = re.sub(r'\$\w+', deploy_path, deploy_cmd) + ' -r ' + version
+
+            jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), arg=deploy_cmd)
+            validated_data["j_id"] = jid
+            jids.append(jid)
+            validated_data["env"] = env_name
+            validated_data["deploy_cmd_host"] = cmd
+            deployjob = DeployJobs.objects.create(**validated_data)
+            deployjob.save()
+        return {"jids": jids}
 
 
 class DeployTicketSerializer(serializers.ModelSerializer):

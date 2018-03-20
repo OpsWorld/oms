@@ -110,6 +110,7 @@ class DeployJobs(models.Model):
     deploy_hosts = models.CharField(max_length=100, null=True, blank=True, verbose_name=u'发布主机')
     deploy_cmd_host = models.CharField(max_length=100, default='null', verbose_name=u'命令目标主机')
     env = models.CharField(max_length=10, verbose_name=u'发布环境')
+    deploy_path = models.CharField(max_length=250, null=True, blank=True, verbose_name=u'发布路径')
     version = models.CharField(max_length=20, default='HEAD', verbose_name=u'版本号')
     content = models.TextField(verbose_name=u'更新内容')
     deploy_cmd = models.TextField(verbose_name=u'发布命令')

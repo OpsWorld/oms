@@ -309,3 +309,15 @@ export function getCreatedate() {
   const cdate = Y + '-' + M + '-' + D
   return cdate
 }
+
+export function sleep(t) {
+  var now = new Date()
+  var exitTime = now.getTime() + t
+  while (true) {
+    now = new Date()
+    if (now.getTime() > exitTime) {
+      console.log(now)
+      return
+    }
+  }
+}
