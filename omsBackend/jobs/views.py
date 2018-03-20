@@ -40,7 +40,7 @@ class DeployJobsViewSet(viewsets.ModelViewSet):
 
 
 class DeployTicketViewSet(viewsets.ModelViewSet):
-    queryset = DeployTicket.objects.all().order_by('status', '-create_time')
+    queryset = DeployTicket.objects.all().order_by('-create_time')
     serializer_class = DeployTicketSerializer
 
 
