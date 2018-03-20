@@ -7,6 +7,7 @@ from hosts.models import Host
 from users.models import User
 from tools.models import Upload
 from omsBackend.settings import sapi
+from rest_framework.response import Response
 
 
 class JobsSerializer(serializers.ModelSerializer):
@@ -47,23 +48,23 @@ class DeployJobsSerializer(serializers.ModelSerializer):
         env_id = validated_data["env"]
         env_name = Deployenv.objects.get(id=env_id).name
         print(env_name)
-        jids = []
+        deployjobs = []
         for cmd in deploy_cmds.split('||'):
             import re
             deploy_cmd = Deploycmd.objects.get(env=env_id, name=cmd).deploy_cmd
-            print(deploy_cmd)
             if env_name == 'svn':
-                print('svn发布')
                 deploy_cmd = re.sub(r'\$\w+', deploy_path, deploy_cmd) + ' -r ' + version
 
             jid = sapi.remote_cmd(tgt=deploy_hosts.split(','), arg=deploy_cmd)
             validated_data["j_id"] = jid
-            jids.append(jid)
             validated_data["env"] = env_name
             validated_data["deploy_cmd_host"] = cmd
             deployjob = DeployJobs.objects.create(**validated_data)
             deployjob.save()
-        return {"jids": jids}
+            deployjobs.append(deployjob)
+            import time
+            time.sleep(1)
+        return deployjobs[0]
 
 
 class DeployTicketSerializer(serializers.ModelSerializer):

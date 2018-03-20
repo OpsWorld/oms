@@ -270,13 +270,14 @@ export default {
       this.$refs[formdata].validate((valid) => {
         if (valid) {
           this.ruleForm.deploy_hosts = this.cur_env.deploy_hosts.join()
+          this.deploy_cmds = []
           for (const item of this.checkedcmds) {
             this.deploy_cmds.push(item.name)
           }
           this.ruleForm.deploy_cmd = this.deploy_cmds.join('||')
           this.ruleForm.deploy_path = this.jobs.deploy_path
           postDeployJob(this.ruleForm).then(response => {
-            console.log(response.data)
+            console.log(response.data.j_id)
             this.fetchDeployJobData()
           }).catch(error => {
             this.$message.error('构建失败，请检查参数是否正确！')
@@ -351,6 +352,7 @@ export default {
             getUpdateJobsStatus(pramas).then(response => {
               if (response.data.count === 0) {
                 clearInterval(this.check_job_status)
+                this.jobs.done = true
                 this.fetchDeployJobData()
               } else {
                 console.log('check job_status 3/s')
@@ -358,6 +360,7 @@ export default {
             })
           }, 3000)
         } else {
+          console.log('setInterval_id:' + this.check_job_status)
           clearInterval(this.check_job_status)
         }
       })

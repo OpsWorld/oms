@@ -46,7 +46,7 @@ def get_minion_info(request, key_id):
 def cmdrun(request):
     hosts = request.data["hosts"]
     cmd = request.data["cmd"]
-    data = sapi.remote_cmd(tgt=hosts, fun='cmd.run', arg=cmd)
+    data = sapi.remote_cmd(tgt=hosts, arg=cmd)
     count = len(data)
     return Response({"results": data, "count": count})
 
