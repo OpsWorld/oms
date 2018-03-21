@@ -41,62 +41,6 @@ export function deleteProject(id) {
   })
 }
 
-// opsprojecttypes
-export function postProjectType(data) {
-  return request({
-    url: apiURL.opsprojecttypes,
-    method: 'post',
-    data
-  })
-}
-
-export function getProjectType(query) {
-  return request({
-    url: apiURL.opsprojecttypes,
-    method: 'get',
-    params: query
-  })
-}
-
-export function putProjectType(id, data) {
-  return request({
-    url: apiURL.opsprojecttypes + id + '/',
-    method: 'put',
-    data
-  })
-}
-
-export function deleteProjectType(id) {
-  return request({
-    url: apiURL.opsprojecttypes + id + '/',
-    method: 'delete'
-  })
-}
-
-// opsprojectenclosures
-export function postProjectEnclosure(data) {
-  return request({
-    url: apiURL.opsprojectenclosures,
-    method: 'post',
-    data
-  })
-}
-
-export function getProjectEnclosure(query) {
-  return request({
-    url: apiURL.opsprojectenclosures,
-    method: 'get',
-    params: query
-  })
-}
-
-export function deleteProjectEnclosure(id) {
-  return request({
-    url: apiURL.opsprojectenclosures + id + '/',
-    method: 'delete'
-  })
-}
-
 // opsdemandmanagers
 export function postopsDemandManager(data) {
   return request({

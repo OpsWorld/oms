@@ -129,8 +129,6 @@ module.exports = {
 
   // 运维项目
   opsprojects: `${url}/api/opsprojects/`,
-  opsprojectenclosures: `${url}/api/opsprojectenclosures/`,
-  opsprojecttypes: `${url}/api/opsprojecttypes/`,
   opsdemandmanagers: `${url}/api/opsdemandmanagers/`,
   opsdemandenclosures: `${url}/api/opsdemandenclosures/`
 }
