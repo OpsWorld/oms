@@ -23,7 +23,7 @@
               <el-button class="card-head-btn" type="text" icon="el-icon-plus" @click="addenvForm=true"></el-button>
             </div>
             <el-table :data="envsData" stripe @row-click="clickenvTable" style="width: 100%">
-              <el-table-column type="index" width="50"></el-table-column>
+              <el-table-column prop="level" label="顺序" width="50"></el-table-column>
               <el-table-column prop="name" label="名称" width="80"></el-table-column>
               <el-table-column prop="deploy_hosts" label="发布主机">
                 <template slot-scope="scope">
