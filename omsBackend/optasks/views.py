@@ -12,7 +12,7 @@ class OpsProjectViewSet(viewsets.ModelViewSet):
     queryset = OpsProject.objects.all().order_by('status', '-create_time')
     serializer_class = OpsProjectSerializer
     filter_fields = ['pid', 'status', 'demand__id']
-    search_fields = ['name', 'content']
+    search_fields = ['pid', 'name', 'content']
     ordering_fields = ['task_complete', 'create_time']
 
 

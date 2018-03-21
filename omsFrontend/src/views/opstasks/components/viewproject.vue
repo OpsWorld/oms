@@ -14,10 +14,6 @@
           <a class="ticketinfo action_user"><span class="han">
                               <a class="shu"></a>
                                 指派人：</span>{{ticketData.action_user}}</a>
-          </a>
-          <a class="shu"></a>
-          <span class="han">类型：</span>
-          <a>{{ticketData.type}}</a>
           <a class="shu"></a>
           <span class="han">当前状态：</span>
           <el-tag>
@@ -58,15 +54,6 @@
         </div>
       </div>
       <vue-markdown :source="ticketData.content"></vue-markdown>
-      <hr class="heng"/>
-      <div v-if='enclosureData.length>0'>
-        <ul>
-          <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-            <i class="fa fa-paperclip"></i>
-            <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-          </li>
-        </ul>
-      </div>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
@@ -75,7 +62,7 @@
   </div>
 </template>
 <script>
-import { getProject, patchProject, getProjectEnclosure } from '@/api/optask'
+import { getProject, patchProject } from '@/api/optask'
 import { postUpload } from 'api/tool'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
@@ -140,8 +127,7 @@ export default {
       },
       users: [],
       errortime: false,
-      apiurl: apiUrl,
-      enclosureData: []
+      apiurl: apiUrl
     }
   },
 
@@ -150,7 +136,6 @@ export default {
     this.fetchData()
     this.CommentData()
     this.getProjectUsers()
-    this.fetchEnclosureData()
   },
   methods: {
     fetchData() {
@@ -214,14 +199,6 @@ export default {
       } else {
         this.errortime = false
       }
-    },
-    fetchEnclosureData() {
-      const parms = {
-        project__id: this.pid
-      }
-      getProjectEnclosure(parms).then(response => {
-        this.enclosureData = response.data
-      })
     }
   }
 }

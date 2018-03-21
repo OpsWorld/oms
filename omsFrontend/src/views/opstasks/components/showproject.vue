@@ -11,9 +11,6 @@
         <el-tag size="mini" v-for="item in ruleForm.action_user" :key="item.id" style="margin-right: 3px">{{item}}
         </el-tag>
       </el-form-item>
-      <el-form-item label="等级" prop="level">
-        <span>{{ ruleForm.level }}</span>
-      </el-form-item>
       <el-form-item label="任务开始时间" prop="start_time">
         <span>{{ ruleForm.start_time }}</span>
       </el-form-item>

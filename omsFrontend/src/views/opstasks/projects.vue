@@ -139,9 +139,9 @@ export default {
       pagesize: pagesize,
       pageformat: pageformat,
       Project_Status: {
-        0: '未处理',
-        1: '处理中',
-        2: '已上线'
+        0: '进行中',
+        1: '已完成',
+        2: '搁置'
       },
       listQuery: {
         limit: LIMIT,

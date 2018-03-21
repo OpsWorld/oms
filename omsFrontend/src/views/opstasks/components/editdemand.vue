@@ -5,15 +5,20 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="ruleForm.type" placeholder="请选择类型">
-            <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="内容" prop="content">
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
+        </el-form-item>
+        <el-form-item label="时间" prop="end_time">
+          <el-date-picker
+            v-model="ruleForm.time"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
         <el-form-item label="附件">
           <el-upload
@@ -51,7 +56,7 @@
   </div>
 </template>
 <script>
-import { getDemandManager, getProjectType, putDemandManager } from '@/api/optask'
+import { getDemandManager, putDemandManager } from '@/api/optask'
 import { postopsDemandEnclosure, getDemandEnclosure, deleteDemandEnclosure } from '@/api/optask'
 import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
@@ -71,9 +76,6 @@ export default {
         ],
         content: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        type: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       users: [],
@@ -89,7 +91,6 @@ export default {
       },
       apiurl: apiUrl,
       uploadurl: uploadurl,
-      types: [],
       img_file: {},
       count: 0,
       enclosureData: [],
@@ -103,7 +104,6 @@ export default {
 
   created() {
     this.fetchData()
-    this.getTypes()
     this.fetchEnclosureData()
   },
   methods: {
@@ -111,6 +111,7 @@ export default {
       const query = null
       getDemandManager(query, this.pid).then(response => {
         this.ruleForm = response.data
+        this.ruleForm.time = [this.ruleForm.start_time, this.ruleForm.end_time]
         this.enclosureForm.project = this.ruleForm.id
         this.count = response.data.length
       })
@@ -118,6 +119,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.start_time = this.ruleForm.time[0]
+          this.ruleForm.end_time = this.ruleForm.time[1]
           putDemandManager(this.ruleForm.id, this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
@@ -136,11 +139,6 @@ export default {
 
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    getTypes() {
-      getProjectType().then(response => {
-        this.types = response.data
-      })
     },
     imgAdd(pos, file) {
       var md = this.$refs.md

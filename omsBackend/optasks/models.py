@@ -18,11 +18,10 @@ class OpsDemandManager(models.Model):
     task_complete = models.IntegerField(default=0, blank=True, verbose_name=u'任务进度')
     content = models.TextField(verbose_name=u'内容')
     create_user = models.ForeignKey(User, related_name='optasks_demand_create_user', verbose_name=u'创建者')
-    action_user = models.ForeignKey(User, related_name='optasks_demand_action_user', verbose_name=u'负责人')
     status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'状态')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-    start_time = models.DateField(null=True, blank=True, verbose_name=u'开始时间')
-    end_time = models.DateField(null=True, blank=True, verbose_name=u'计划完成时间')
+    start_time = models.DateField(verbose_name=u'开始时间')
+    end_time = models.DateField(verbose_name=u'计划完成时间')
 
     def __str__(self):
         return self.name
@@ -51,7 +50,7 @@ class OpsProject(models.Model):
     content = models.TextField(verbose_name=u'内容')
     status = models.CharField(max_length=3, choices=TicketStatus.items(), default=0, verbose_name=u'状态')
     create_user = models.ForeignKey(User, related_name='optasks_create_user', verbose_name=u'创建者')
-    action_user = models.ForeignKey(User, related_name='optasks_action_user', verbose_name=u'指派人')
+    action_user = models.ForeignKey(User, related_name='optasks_action_user', verbose_name=u'负责人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
     start_time = models.DateField(null=True, blank=True, verbose_name=u'开始时间')

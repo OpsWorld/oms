@@ -13,8 +13,8 @@ class OpsDemandManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpsDemandManager
         fields = (
-        'url', 'id', 'pid', 'name', 'task_complete', 'content', 'create_user', 'action_user', 'status', 'create_time',
-        'start_time', 'end_time')
+            'url', 'id', 'pid', 'name', 'task_complete', 'content', 'create_user', 'status', 'create_time',
+            'start_time', 'end_time')
 
 
 class OpsDemandEnclosureSerializer(serializers.ModelSerializer):

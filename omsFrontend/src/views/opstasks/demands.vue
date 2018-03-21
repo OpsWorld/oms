@@ -6,24 +6,21 @@
           <router-link :to="'addopsdemand'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
-          <el-button type="danger" :disabled="btnstatus" @click="show_status=true">更改状态</el-button>
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
             <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
           </el-radio-group>
         </div>
         <div class="table-search">
-          <el-input style="width: 160px;" class="filter-item" placeholder="编号" @keyup.enter.native="searchClick"
-                    v-model="listQuery.pid"></el-input>
-          <el-input style="width: 180px;" class="filter-item" placeholder="标题、内容或类型" @keyup.enter.native="searchClick"
-                    v-model="listQuery.search"></el-input>
-          <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
+          <el-input style="width: 180px;" placeholder="编号、标题、内容"
+                    @keyup.enter.native="searchClick"
+                    v-model="listQuery.search">
+            <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+          </el-input>
         </div>
       </div>
       <div>
-        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange"
-                  @selection-change="handleSelectionChange">
-          <el-table-column type="selection"></el-table-column>
+        <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
@@ -34,7 +31,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
@@ -44,7 +40,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='需求人'></el-table-column>
+          <el-table-column prop='create_user' label='创建人'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -52,7 +48,8 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='end_time' label='计划完成时间'></el-table-column>
+          <el-table-column prop='start_time' label='开始日期'></el-table-column>
+          <el-table-column prop='end_time' label='结束日期'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <router-link :to="'editopsdemand/' + scope.row.id">
@@ -80,24 +77,11 @@
         </div>
       </div>
     </el-card>
-
-    <el-dialog
-      title="更改状态"
-      :visible.sync="show_status">
-      <el-radio-group v-model="updateform.status">
-        <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
-        </el-radio>
-      </el-radio-group>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="show_status=false">取 消</el-button>
-    <el-button type="primary" @click="changeDemand">确 定</el-button>
-  </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDemandManager, patchDemandManager, deleteDemandManager } from '@/api/optask'
+import { getDemandManager, deleteDemandManager } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -110,9 +94,9 @@ export default {
       pagesize: pagesize,
       pageformat: pageformat,
       STATUS_TEXT: {
-        0: '未审核',
-        1: '已通过',
-        2: '未通过'
+        0: '进行中',
+        1: '已完成',
+        2: '搁置'
       },
       listQuery: {
         limit: LIMIT,
@@ -120,16 +104,13 @@ export default {
         pid: '',
         status: '0',
         create_user__username: '',
-        action_user__username: '',
         search: '',
         ordering: ''
       },
       updateform: {
         id: '',
         status: '1'
-      },
-      btnstatus: true,
-      show_status: false
+      }
     }
   },
   created() {
@@ -167,17 +148,6 @@ export default {
       }
       this.fetchData()
     },
-    handleSelectionChange(val) {
-      this.selectId = []
-      for (var i = 0, len = val.length; i < len; i++) {
-        this.selectId.push(val[i].id)
-      }
-      if (this.selectId.length > 0) {
-        this.btnstatus = false
-      } else {
-        this.btnstatus = true
-      }
-    },
     deleteDemand(id) {
       deleteDemandManager(id).then(response => {
         this.$message({
@@ -189,15 +159,6 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
-    },
-    changeDemand() {
-      for (var i = 0, len = this.selectId.length; i < len; i++) {
-        patchDemandManager(this.selectId[i], this.updateform).then(response => {
-          delete this.selectId[i]
-        })
-      }
-      setTimeout(this.fetchData(), 500)
-      this.show_status = false
     }
   }
 }

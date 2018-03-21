@@ -12,11 +12,11 @@
           </el-radio-group>
         </div>
         <div class="table-search">
-          <el-input style="width: 160px;" class="filter-item" placeholder="编号" @keyup.enter.native="searchClick"
-                    v-model="listQuery.pid"></el-input>
-          <el-input style="width: 180px;" class="filter-item" placeholder="标题、内容或类型" @keyup.enter.native="searchClick"
-                    v-model="listQuery.search"></el-input>
-          <el-button class="filter-item" type="primary" icon="search" @click="searchClick">搜索</el-button>
+          <el-input style="width: 180px;" placeholder="编号、标题、内容或类型"
+                    @keyup.enter.native="searchClick"
+                    v-model="listQuery.search">
+            <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
+          </el-input>
         </div>
       </div>
       <div>

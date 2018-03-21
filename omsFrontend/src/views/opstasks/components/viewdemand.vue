@@ -15,10 +15,6 @@
                               <a class="shu"></a>
                                 发起人：</span>{{ticketData.create_user}}</a>
                 <a class="shu"></a>
-                <span class="han">类型：</span>
-                <a v-if="ticketData.type">{{ticketData.type}}</a>
-                <a v-else class="ticketinfo">未设置</a>
-                <a class="shu"></a>
                 <span class="han">计划结束时间：</span>
                 <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
                 <a v-else class="ticketinfo">未设置</a>
