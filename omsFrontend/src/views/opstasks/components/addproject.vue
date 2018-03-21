@@ -15,17 +15,15 @@
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
         </el-form-item>
-        <el-form-item label="等级" prop="level">
-          <el-rate
-            v-model="ruleForm.level"
-            :colors="['#99A9BF', '#F7BA2A', '#ff1425']"
-            show-text
-            :texts="['E', 'D', 'C', 'B', 'A']">
-          </el-rate>
-          <a class="tips">Tip：星数代表问题紧急程度，星数越多，代表越紧急</a>
-        </el-form-item>
-        <el-form-item label="是否公开" prop="is_public">
-          <el-switch v-model="ruleForm.is_public" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        <el-form-item label="时间" prop="end_time">
+          <el-date-picker
+            v-model="ruleForm.time"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="postForm('ruleForm')">提交</el-button>
@@ -86,14 +84,16 @@ export default {
   },
 
   created() {
-    this.getProjectUsers()
+    this.getUsers()
     this.getUsers()
   },
   methods: {
     postForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.pid = 'po' + getConversionTime()
+          this.ruleForm.start_time = this.ruleForm.time[0]
+          this.ruleForm.end_time = this.ruleForm.time[1]
+          this.ruleForm.pid = 'pps' + getConversionTime()
           postProject(this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({

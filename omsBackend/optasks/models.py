@@ -52,7 +52,6 @@ class OpsProject(models.Model):
     create_user = models.ForeignKey(User, related_name='optasks_create_user', verbose_name=u'创建者')
     action_user = models.ForeignKey(User, related_name='optasks_action_user', verbose_name=u'负责人')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
-    update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
     start_time = models.DateField(null=True, blank=True, verbose_name=u'开始时间')
     end_time = models.DateField(null=True, blank=True, verbose_name=u'计划完成时间')
 

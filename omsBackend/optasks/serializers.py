@@ -34,4 +34,4 @@ class OpsProjectSerializer(serializers.ModelSerializer):
         model = OpsProject
         fields = (
             'url', 'id', 'demand', 'pid', 'name', 'status', 'task_complete', 'content', 'create_user', 'action_user',
-            'create_time', 'update_time', 'start_time', 'end_time')
+            'create_time', 'start_time', 'end_time')
