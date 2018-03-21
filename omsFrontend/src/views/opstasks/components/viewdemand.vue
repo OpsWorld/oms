@@ -13,11 +13,13 @@
                                 创建时间：</span>{{ticketData.create_time | parseDate}}</a>
                 <a class="ticketinfo create_user"><span class="han">
                               <a class="shu"></a>
-                                发起人：</span>{{ticketData.create_user}}</a>
+                                创建人：</span>{{ticketData.create_user}}</a>
                 <a class="shu"></a>
-                <span class="han">计划结束时间：</span>
-                <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
-                <a v-else class="ticketinfo">未设置</a>
+                <span class="han">计划开始日期：</span>
+                <a class="ticketinfo">{{ticketData.start_time}}</a>
+                <a class="shu"></a>
+                <span class="han">计划完成日期：</span>
+                <a class="ticketinfo">{{ticketData.end_time}}</a>
               </div>
             </div>
             <vue-markdown :source="ticketData.content"></vue-markdown>
