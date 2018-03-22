@@ -6,6 +6,7 @@
           <router-link :to="'addopsdemand'">
             <el-button type="primary" icon="el-icon-plus">新建</el-button>
           </router-link>
+          <el-button type="danger" size="small" @click="showAll">全部</el-button>
           <el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">
             <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
             </el-radio>
@@ -22,22 +23,44 @@
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column type="expand">
-            <el-table :data="ProjectData" style="width: 100%">
-              <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column property="date" label="日期" width="120"></el-table-column>
-              <el-table-column property="name" label="姓名" width="120"></el-table-column>
-              <el-table-column property="address" label="地址" width="120"></el-table-column>
-              <el-table-column label="操作">
             <template slot-scope="scope">
-                  <el-button type="success" size="small">详情</el-button>
-                  <el-button type="danger" size="small">删除</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+              <el-table :data="scope.row.projectData" border style="width: 100%">
+                <el-table-column type="index" width="50"></el-table-column>
+                <el-table-column prop="pid" label="编号"></el-table-column>
+                <el-table-column prop="name" label="任务概要"></el-table-column>
+                <el-table-column prop="action_user" label="负责人"></el-table-column>
+                <el-table-column prop="start_time" label="开始日期"></el-table-column>
+                <el-table-column prop="end_time" label="完成日期"></el-table-column>
+                <el-table-column prop="status" label="状态">
+                  <template slot-scope="props">
+                    <div slot="reference">
+                      <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
+                        {{STATUS_TEXT[props.row.status]}}
+                      </el-tag>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="task_complete" label="进度">
+                  <template slot-scope="props">
+                    <div slot="reference" class="name-wrapper">
+                      {{props.row.task_complete}}%
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" width="140">
+                  <template slot-scope="props">
+                    <el-button-group>
+                      <el-button type="success" plain size="mini" @click=showProject(props.row.content)>详情</el-button>
+                      <el-button type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
+                    </el-button-group>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
           </el-table-column>
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
+              <div slot="reference">
                 <router-link :to="'viewopsdemand/' + scope.row.id">
                   <a style="color: #257cff">{{scope.row.pid}}</a>
                 </router-link>
@@ -45,32 +68,37 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
+          <el-table-column prop='start_time' label='开始日期'></el-table-column>
+          <el-table-column prop='end_time' label='结束日期'></el-table-column>
           <el-table-column prop='status' label='状态'>
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
-                <el-tag size="mini">
+                <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
+                <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
+                  <el-button type="text" icon="el-icon-edit" class="modifychange"
+                             @click="updateDemand(scope.row.id)"></el-button>
+                </el-tooltip>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='create_user' label='创建人'></el-table-column>
-          <el-table-column prop='create_time' label='创建时间' sortable="custom">
+          <el-table-column prop='task_complete' label='项目进度'>
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{scope.row.create_time | parseDate}}</span>
+              <div slot="reference" class="name-wrapper">
+                {{scope.row.task_complete}}%
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='start_time' label='开始日期'></el-table-column>
-          <el-table-column prop='end_time' label='结束日期'></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="230">
             <template slot-scope="scope">
-              <router-link :to="'editopsdemand/' + scope.row.id">
-                <el-button type="success" size="small">修改</el-button>
-              </router-link>
-              <el-button type="pramary" size="small" @click="addProject(scope.row)">增加任务</el-button>
-              <el-button type="danger" size="small" @click="deleteDemand(scope.row.id)">删除</el-button>
+              <el-button-group>
+                <router-link :to="'editopsdemand/' + scope.row.id">
+                  <el-button type="success" size="mini">修改</el-button>
+                </router-link>
+                <el-button type="primary" size="mini" @click="addProject(scope.row)">增加任务</el-button>
+                <el-button type="danger" size="mini" @click="deleteDemand(scope.row.id)">删除</el-button>
+              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -91,15 +119,40 @@
         </div>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="addProForm">
+      <add-project :demand="demand_id" @DialogStatus="getDialogStatus"></add-project>
+    </el-dialog>
+
+    <el-dialog title="任务详情" :visible.sync="showProForm">
+      <div>{{proContent}}</div>
+    </el-dialog>
+
+    <el-dialog :visible.sync="demandstatusForm">
+      <el-form label-width="90px">
+        <el-form-item label="更改状态" prop="status">
+          <el-radio-group v-model="updateform.status">
+            <el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="demandstatusForm=false">取 消</el-button>
+          <el-button type="primary" @click="changeDemandStatus">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { getDemandManager, deleteDemandManager } from '@/api/optask'
+import { getDemandManager, deleteDemandManager, patchDemandManager, getProject, deleteProject } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import addProject from './components/addproject.vue'
 
 export default {
-  components: {},
+  components: { addProject },
   data() {
     return {
       tableData: [],
@@ -107,42 +160,26 @@ export default {
       currentPage: 1,
       pagesize: pagesize,
       pageformat: pageformat,
-      STATUS_TEXT: {
-        0: '进行中',
-        1: '已完成',
-        2: '搁置'
-      },
+      STATUS_TEXT: { 0: '进行中', 1: '已完成', 2: '搁置' },
+      STATUS_COLOR: { 0: 'primary', 1: 'success', 2: 'warning' },
       listQuery: {
         limit: LIMIT,
         offset: '',
         pid: '',
-        status: '0',
+        status: '',
         create_user__username: '',
         search: '',
         ordering: ''
       },
+      addProForm: false,
+      showProForm: false,
+      demand_id: '',
+      proContent: '',
+      demandstatusForm: false,
       updateform: {
         id: '',
         status: '1'
-      },
-      addProForm: false,
-      ProjectData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
+      }
     }
   },
   created() {
@@ -154,7 +191,31 @@ export default {
       getDemandManager(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+        this.tableData.map(function(item) {
+          const parmas = {
+            demand__id: item.id
+          }
+          getProject(parmas).then(res => {
+            item.projectData = res.data
+          })
+        })
       })
+    },
+    showAll() {
+      this.listQuery = {
+        limit: LIMIT,
+        offset: '',
+        pid: '',
+        status: '',
+        create_user__username: '',
+        search: '',
+        ordering: ''
+      }
+      this.fetchData()
+    },
+    getDialogStatus(data) {
+      this.addProForm = data
+      this.fetchData()
     },
     searchClick() {
       this.fetchData()
@@ -194,6 +255,33 @@ export default {
     },
     addProject(row) {
       this.addProForm = true
+      this.demand_id = row.id
+    },
+    showProject(content) {
+      this.showProForm = true
+      this.proContent = content
+    },
+    deleteProject(row) {
+      deleteProject(row.id).then(response => {
+        this.$message({
+          message: '恭喜你，删除成功',
+          type: 'success'
+        })
+        this.fetchData()
+      }).catch(error => {
+        this.$message.error('删除失败')
+        console.log(error)
+      })
+    },
+    updateDemand(id) {
+      this.demandstatusForm = true
+      this.updateform.id = id
+    },
+    changeDemandStatus() {
+      patchDemandManager(this.updateform.id, this.updateform).then(() => {
+        this.demandstatusForm = false
+        this.fetchData()
+      })
     }
   }
 }
