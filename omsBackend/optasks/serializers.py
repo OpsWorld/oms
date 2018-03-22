@@ -9,12 +9,13 @@ from tools.models import Upload
 
 class OpsDemandManagerSerializer(serializers.ModelSerializer):
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    action_user = serializers.SlugRelatedField(many=True, queryset=User.objects.all(), slug_field='username')
 
     class Meta:
         model = OpsDemandManager
         fields = (
-            'url', 'id', 'pid', 'name', 'task_complete', 'content', 'create_user', 'status', 'create_time',
-            'start_time', 'end_time')
+            'url', 'id', 'pid', 'name', 'task_complete', 'content1', 'content2', 'content3', 'create_user',
+            'action_user', 'status', 'create_time', 'start_time', 'end_time', 'desc')
 
 
 class OpsDemandEnclosureSerializer(serializers.ModelSerializer):
@@ -33,5 +34,5 @@ class OpsProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = OpsProject
         fields = (
-            'url', 'id', 'demand', 'pid', 'name', 'status', 'task_complete', 'content', 'create_user', 'action_user',
-            'create_time', 'start_time', 'end_time')
+            'url', 'id', 'demand', 'pid', 'name', 'status', 'task_complete', 'content1', 'content2', 'create_user',
+            'action_user', 'create_time', 'start_time', 'end_time')

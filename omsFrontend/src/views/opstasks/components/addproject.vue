@@ -8,8 +8,8 @@
         <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="内容" prop="content">
-      <el-input v-model="ruleForm.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+    <el-form-item label="内容" prop="content1">
+      <el-input v-model="ruleForm.content1" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
     </el-form-item>
     <el-form-item label="时间" prop="time">
       <el-date-picker

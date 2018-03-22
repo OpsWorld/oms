@@ -11,7 +11,7 @@ from optasks.serializers import (OpsProjectSerializer,
 class OpsDemandManagerViewSet(viewsets.ModelViewSet):
     queryset = OpsDemandManager.objects.all().order_by('-create_time')
     serializer_class = OpsDemandManagerSerializer
-    search_fields = ['name', 'content']
+    search_fields = ['name']
     ordering_fields = ['status', 'create_time']
     filter_fields = ['status', 'pid', 'create_user__username']
 

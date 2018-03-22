@@ -5,10 +5,14 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
-                        :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
-          <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
+        <el-form-item label="目标" prop="content1">
+          <el-input v-model="ruleForm.content1" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="范围" prop="content2">
+          <el-input v-model="ruleForm.content2" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="预算" prop="content3">
+          <el-input v-model="ruleForm.content3" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
         <el-form-item label="时间" prop="time">
           <el-date-picker
@@ -20,33 +24,36 @@
             value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="附件">
-          <el-upload
-            ref="upload"
-            :action="uploadurl"
-            :show-file-list="false"
-            :disabled="count>4"
-            :before-upload="beforeAvatarUpload">
-            <el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">
-              上传
-            </el-button>
-            <div slot="tip" class="el-upload__tip">
-              <p><a style="color: red">最多只能上传5个文件</a></p>
-            </div>
-          </el-upload>
-          <hr class="heng"/>
-          <div v-if='enclosureData.length>0' class="ticketenclosure">
-            <ul>
-              <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                <i class="fa fa-paperclip"></i>
-                <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                <el-tooltip class="item" effect="dark" content="删除附件" placement="right">
-                  <el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>
-                </el-tooltip>
-              </li>
-            </ul>
-          </div>
+        <el-form-item label="备注" prop="desc">
+          <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
+        <!--<el-form-item label="附件">-->
+        <!--<el-upload-->
+        <!--ref="upload"-->
+        <!--:action="uploadurl"-->
+        <!--:show-file-list="false"-->
+        <!--:disabled="count>4"-->
+        <!--:before-upload="beforeAvatarUpload">-->
+        <!--<el-button slot="trigger" size="mini" type="success" plain :disabled="count>4">-->
+        <!--上传-->
+        <!--</el-button>-->
+        <!--<div slot="tip" class="el-upload__tip">-->
+        <!--<p><a style="color: red">最多只能上传5个文件</a></p>-->
+        <!--</div>-->
+        <!--</el-upload>-->
+        <!--<hr class="heng"/>-->
+        <!--<div v-if='enclosureData.length>0' class="ticketenclosure">-->
+        <!--<ul>-->
+        <!--<li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">-->
+        <!--<i class="fa fa-paperclip"></i>-->
+        <!--<a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>-->
+        <!--<el-tooltip class="item" effect="dark" content="删除附件" placement="right">-->
+        <!--<el-button type="text" icon="el-icon-delete" @click="deleteEnclosure(item.id)"></el-button>-->
+        <!--</el-tooltip>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <!--</div>-->
+        <!--</el-form-item>-->
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
         </el-form-item>

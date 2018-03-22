@@ -53,7 +53,7 @@
                 <el-table-column label="操作" width="140">
                   <template slot-scope="props">
                     <el-button-group>
-                      <el-button type="success" plain size="mini" @click=showProject(props.row.content)>详情</el-button>
+                      <el-button type="success" plain size="mini" @click=showProject(props.row)>详情</el-button>
                       <el-button type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
                     </el-button-group>
                   </template>
@@ -62,13 +62,13 @@
             </template>
           </el-table-column>
           <el-table-column prop='pid' label='编号'>
-            <template slot-scope="scope">
-              <div slot="reference">
-                <router-link :to="'viewopsdemand/' + scope.row.id">
-                  <a style="color: #257cff">{{scope.row.pid}}</a>
-                </router-link>
-              </div>
-            </template>
+            <!--<template slot-scope="scope">-->
+              <!--<div slot="reference">-->
+                <!--<router-link :to="'viewopsdemand/' + scope.row.id">-->
+                  <!--<a style="color: #257cff">{{scope.row.pid}}</a>-->
+                <!--</router-link>-->
+              <!--</div>-->
+            <!--</template>-->
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='start_time' label='开始日期'></el-table-column>
@@ -289,9 +289,9 @@ export default {
       this.addProForm = true
       this.demand_id = row.id
     },
-    showProject(content) {
+    showProject(row) {
       this.showProForm = true
-      this.proContent = content
+      this.proContent = row.content1
     },
     deleteProject(row) {
       deleteProject(row.id).then(response => {
