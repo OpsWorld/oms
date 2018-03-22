@@ -24,7 +24,7 @@
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column type="expand">
             <template slot-scope="scope">
-              <el-table :data="scope.row.projectData" border style="width: 100%">
+              <el-table :data="scope.row.projectData" border stripe style="width: 100%">
                 <el-table-column type="index" width="50"></el-table-column>
                 <el-table-column prop="pid" label="编号"></el-table-column>
                 <el-table-column prop="name" label="任务概要"></el-table-column>
