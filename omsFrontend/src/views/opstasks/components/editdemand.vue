@@ -14,7 +14,7 @@
         <el-form-item label="预算" prop="content3">
           <el-input v-model="ruleForm.content3" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
-        <el-form-item label="时间" prop="time">
+        <el-form-item label="时间" prop="ttime">
           <el-date-picker
             v-model="ttime"
             type="daterange"
@@ -23,6 +23,11 @@
             end-placeholder="结束日期"
             value-format="yyyy-MM-dd">
           </el-date-picker>
+        </el-form-item>
+        <el-form-item label="参与者" prop="action_user">
+          <el-select v-model="ruleForm.action_user" filterable multiple placeholder="请选择参与者">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
@@ -67,6 +72,7 @@ import { postopsDemandEnclosure, getDemandEnclosure, deleteDemandEnclosure } fro
 import { apiUrl, uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
 import { postUpload } from 'api/tool'
+import { getUser } from 'api/user'
 
 export default {
   components: {},
@@ -80,7 +86,16 @@ export default {
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        content: [
+        time: [
+          { required: true, type: 'array', message: '请输入正确的内容', trigger: 'change' }
+        ],
+        content1: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content2: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content3: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
@@ -105,13 +120,15 @@ export default {
         create_user: localStorage.getItem('username'),
         file: ''
       },
-      ttime: []
+      ttime: [],
+      users: []
     }
   },
 
   created() {
     this.fetchData()
     this.fetchEnclosureData()
+    this.getUsers()
   },
   methods: {
     fetchData() {
@@ -195,6 +212,14 @@ export default {
     deleteEnclosure(id) {
       deleteDemandEnclosure(id)
       this.fetchEnclosureData()
+    },
+    getUsers() {
+      const query = {
+        groups__name: 'ITDept'
+      }
+      getUser(query).then(response => {
+        this.users = response.data
+      })
     }
   }
 }

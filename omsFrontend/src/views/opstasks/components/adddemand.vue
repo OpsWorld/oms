@@ -24,6 +24,11 @@
             value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="参与者" prop="action_user">
+          <el-select v-model="ruleForm.action_user" filterable multiple placeholder="请选择参与者">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -56,6 +61,7 @@ import { postopsDemandManager, postopsDemandEnclosure } from '@/api/optask'
 import { postUpload } from 'api/tool'
 import { uploadurl } from '@/config'
 import { getConversionTime } from '@/utils'
+import { getUser } from 'api/user'
 
 export default {
   components: {},
@@ -65,8 +71,11 @@ export default {
       route_path: this.$route.path.split('/'),
       ruleForm: {
         name: '',
-        content: '',
+        content1: '',
+        content2: '',
+        content3: '',
         create_user: localStorage.getItem('username'),
+        action_user: [],
         pid: '',
         time: ''
       },
@@ -74,7 +83,16 @@ export default {
         name: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        content: [
+        time: [
+          { required: true, type: 'array', message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content1: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content2: [
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
+        ],
+        content3: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
@@ -103,6 +121,7 @@ export default {
   },
 
   created() {
+    this.getUsers()
   },
   methods: {
     postForm(formName) {
@@ -162,6 +181,14 @@ export default {
     handleRemove(file, fileList) {
       this.fileList.remove(file)
       this.count -= 1
+    },
+    getUsers() {
+      const query = {
+        groups__name: 'ITDept'
+      }
+      getUser(query).then(response => {
+        this.users = response.data
+      })
     }
   }
 }
