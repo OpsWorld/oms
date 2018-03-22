@@ -254,12 +254,12 @@ export default {
           }
           getProject(parmas).then(res => {
             item.projectData = res.data
-            let task_complete = 0
+            item.task_complete = 0
             for (const pp of res.data) {
-              task_complete += Math.round(pp.task_complete / res.data.length)
+              item.task_complete += Math.round(pp.task_complete / res.data.length)
             }
             const data = {
-              task_complete: task_complete
+              task_complete: item.task_complete
             }
             patchDemandManager(item.id, data)
           })
@@ -358,8 +358,8 @@ export default {
         this.updatetaskform.status = 1
       }
       patchProject(this.updatetaskform.id, this.updatetaskform).then(response => {
-        this.taskCompleteForm = false
         this.fetchData()
+        this.taskCompleteForm = false
       })
     },
     updateProjectContent2(row) {
