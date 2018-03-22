@@ -126,11 +126,11 @@ export const asyncRouterMap = [
       { path: 'opsdemands', component: _import('opstasks/demands'), name: '项目列表' },
       { path: 'addopsdemand', hidden: true, component: _import('opstasks/components/adddemand'), name: '添加项目' },
       { path: 'editopsdemand/:id', hidden: true, component: _import('opstasks/components/editdemand'), name: '编辑项目' },
-      { path: 'viewopsdemand/:id', hidden: true, component: _import('opstasks/components/viewdemand'), name: '查看项目' },
-      { path: 'opsprojects', component: _import('opstasks/projects'), name: '任务列表' },
-      { path: 'addopsproject', hidden: true, component: _import('opstasks/components/addproject'), name: '添加运维任务' },
-      { path: 'editopsproject/:id', hidden: true, component: _import('opstasks/components/editproject'), name: '编辑运维任务' },
-      { path: 'viewopsproject/:id', hidden: true, component: _import('opstasks/components/viewproject'), name: '查看运维任务' }
+      { path: 'viewopsdemand/:id', hidden: true, component: _import('opstasks/components/viewdemand'), name: '查看项目' }
+      // { path: 'opsprojects', component: _import('opstasks/projects'), name: '任务列表' },
+      // { path: 'addopsproject', hidden: true, component: _import('opstasks/components/addproject'), name: '添加运维任务' },
+      // { path: 'editopsproject/:id', hidden: true, component: _import('opstasks/components/editproject'), name: '编辑运维任务' },
+      // { path: 'viewopsproject/:id', hidden: true, component: _import('opstasks/components/viewproject'), name: '查看运维任务' }
     ]
   },
   {

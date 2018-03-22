@@ -34,7 +34,7 @@
                 <el-table-column prop="status" label="状态">
                   <template slot-scope="props">
                     <div slot="reference">
-                      <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
+                      <el-tag size="mini" :type="STATUS_COLOR[props.row.status]">
                         {{STATUS_TEXT[props.row.status]}}
                       </el-tag>
                     </div>
@@ -45,7 +45,7 @@
                     <div slot="reference" class="name-wrapper">
                       {{props.row.task_complete}}%
                       <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
-                        <el-button @click="updateTaskComplete(props.row)" type="text" icon="el-icon-edit"></el-button>
+                        <el-button v-if="scope.row.status==0" @click="updateTaskComplete(props.row)" type="text" icon="el-icon-edit"></el-button>
                       </el-tooltip>
                     </div>
                   </template>
@@ -80,7 +80,7 @@
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
                 <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
-                  <el-button type="text" icon="el-icon-edit" class="modifychange"
+                  <el-button v-if="scope.row.status!=1" type="text" icon="el-icon-edit" class="modifychange"
                              @click="updateDemand(scope.row.id)"></el-button>
                 </el-tooltip>
               </div>

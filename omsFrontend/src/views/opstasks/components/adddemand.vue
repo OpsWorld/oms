@@ -10,7 +10,7 @@
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
         </el-form-item>
-        <el-form-item label="时间" prop="end_time">
+        <el-form-item label="时间" prop="time">
           <el-date-picker
             v-model="ruleForm.time"
             type="daterange"

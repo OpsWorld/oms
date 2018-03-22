@@ -10,9 +10,9 @@
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
           <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到内容里面</a>
         </el-form-item>
-        <el-form-item label="时间" prop="end_time">
+        <el-form-item label="时间" prop="time">
           <el-date-picker
-            v-model="ruleForm.time"
+            v-model="ttime"
             type="daterange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -97,7 +97,8 @@ export default {
         project: '',
         create_user: localStorage.getItem('username'),
         file: ''
-      }
+      },
+      ttime: []
     }
   },
 
@@ -110,7 +111,7 @@ export default {
       const query = null
       getDemandManager(query, this.pid).then(response => {
         this.ruleForm = response.data
-        this.ruleForm.time = [this.ruleForm.start_time, this.ruleForm.end_time]
+        this.ttime = [this.ruleForm.start_time, this.ruleForm.end_time]
         this.enclosureForm.project = this.ruleForm.id
         this.count = response.data.length
       })
@@ -118,8 +119,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.ruleForm.start_time = this.ruleForm.time[0]
-          this.ruleForm.end_time = this.ruleForm.time[1]
+          this.ruleForm.start_time = this.ttime[0]
+          this.ruleForm.end_time = this.ttime[1]
           putDemandManager(this.ruleForm.id, this.ruleForm).then(response => {
             if (response.statusText === '"Created"') {
               this.$message({
