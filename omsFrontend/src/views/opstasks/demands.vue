@@ -197,6 +197,9 @@ export default {
           }
           getProject(parmas).then(res => {
             item.projectData = res.data
+            for (const pp of res.data) {
+              item.task_complete += pp.task_complete / res.data.length
+            }
           })
         })
       })
