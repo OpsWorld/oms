@@ -44,6 +44,9 @@
                   <template slot-scope="props">
                     <div slot="reference" class="name-wrapper">
                       {{props.row.task_complete}}%
+                      <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
+                        <el-button @click="updateTaskComplete(props.row)" type="text" icon="el-icon-edit"></el-button>
+                      </el-tooltip>
                     </div>
                   </template>
                 </el-table-column>
@@ -137,17 +140,38 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item>
-          <el-button @click="demandstatusForm=false">取 消</el-button>
           <el-button type="primary" @click="changeDemandStatus">确 定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
 
+    <el-dialog title="更新任务进度" :visible.sync="taskCompleteForm">
+      <el-form label-width="90px">
+        <el-form-item label="完成百分比" prop="task_complete">
+          <el-slider
+            style="margin-right: 50px"
+            v-model="updatetaskform.task_complete"
+            :step="10">
+          </el-slider>
+          <a>{{updatetaskform.task_complete}}%</a>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDemandManager, deleteDemandManager, patchDemandManager, getProject, deleteProject } from '@/api/optask'
+import {
+  getDemandManager,
+  deleteDemandManager,
+  patchDemandManager,
+  getProject,
+  deleteProject,
+  patchProject
+} from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addProject from './components/addproject.vue'
 
@@ -176,9 +200,14 @@ export default {
       demand_id: '',
       proContent: '',
       demandstatusForm: false,
+      taskCompleteForm: false,
       updateform: {
         id: '',
         status: '1'
+      },
+      updatetaskform: {
+        id: '',
+        task_complete: ''
       }
     }
   },
@@ -283,6 +312,17 @@ export default {
     changeDemandStatus() {
       patchDemandManager(this.updateform.id, this.updateform).then(() => {
         this.demandstatusForm = false
+        this.fetchData()
+      })
+    },
+    updateTaskComplete(row) {
+      this.taskCompleteForm = true
+      this.updatetaskform.id = row.id
+      this.updatetaskform.task_complete = row.task_complete
+    },
+    changeComplete() {
+      patchProject(this.updatetaskform.id, this.updatetaskform).then(response => {
+        this.taskCompleteForm = false
         this.fetchData()
       })
     }
