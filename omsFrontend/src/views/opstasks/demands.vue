@@ -45,15 +45,18 @@
                     <div slot="reference" class="name-wrapper">
                       {{props.row.task_complete}}%
                       <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
-                        <el-button v-if="scope.row.status==0" @click="updateTaskComplete(props.row)" type="text" icon="el-icon-edit"></el-button>
+                        <el-button v-if="scope.row.status==0" @click="updateTaskComplete(props.row)" type="text"
+                                   icon="el-icon-edit"></el-button>
                       </el-tooltip>
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" width="140">
+                <el-table-column label="操作" width="230">
                   <template slot-scope="props">
                     <el-button-group>
                       <el-button type="success" plain size="mini" @click=showProject(props.row)>详情</el-button>
+                      <el-button type="primary" plain size="mini" @click=updateProjectContent2(props.row)>完成情况
+                      </el-button>
                       <el-button type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
                     </el-button-group>
                   </template>
@@ -63,11 +66,11 @@
           </el-table-column>
           <el-table-column prop='pid' label='编号'>
             <!--<template slot-scope="scope">-->
-              <!--<div slot="reference">-->
-                <!--<router-link :to="'viewopsdemand/' + scope.row.id">-->
-                  <!--<a style="color: #257cff">{{scope.row.pid}}</a>-->
-                <!--</router-link>-->
-              <!--</div>-->
+            <!--<div slot="reference">-->
+            <!--<router-link :to="'viewopsdemand/' + scope.row.id">-->
+            <!--<a style="color: #257cff">{{scope.row.pid}}</a>-->
+            <!--</router-link>-->
+            <!--</div>-->
             <!--</template>-->
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
@@ -128,7 +131,14 @@
     </el-dialog>
 
     <el-dialog title="任务详情" :visible.sync="showProForm">
-      <div>{{proContent}}</div>
+      <el-form label-width="100px">
+        <el-form-item label="内容" prop="status">
+          <div>{{proContent.content1}}</div>
+        </el-form-item>
+        <el-form-item label="实际完成情况" prop="status">
+          <div>{{proContent.content2}}</div>
+        </el-form-item>
+      </el-form>
     </el-dialog>
 
     <el-dialog :visible.sync="demandstatusForm">
@@ -157,6 +167,18 @@
         </el-form-item>
         <el-form-item>
           <el-button @click="changeComplete" type="success" size="mini">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog title="更新完成情况" :visible.sync="content2ProForm">
+      <el-form label-width="100px">
+        <el-form-item label="实际完成情况" prop="content2">
+          <el-input v-model="updatecontent2form.content2" type="textarea"
+                    :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="changeProjectContent2" type="success" size="mini">确定</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -198,7 +220,7 @@ export default {
       addProForm: false,
       showProForm: false,
       demand_id: '',
-      proContent: '',
+      proContent: {},
       demandstatusForm: false,
       taskCompleteForm: false,
       updateform: {
@@ -208,7 +230,12 @@ export default {
       updatetaskform: {
         id: '',
         task_complete: ''
-      }
+      },
+      updatecontent2form: {
+        id: '',
+        content2: ''
+      },
+      content2ProForm: false
     }
   },
   created() {
@@ -291,7 +318,7 @@ export default {
     },
     showProject(row) {
       this.showProForm = true
-      this.proContent = row.content1
+      this.proContent = row
     },
     deleteProject(row) {
       deleteProject(row.id).then(response => {
@@ -323,6 +350,17 @@ export default {
     changeComplete() {
       patchProject(this.updatetaskform.id, this.updatetaskform).then(response => {
         this.taskCompleteForm = false
+        this.fetchData()
+      })
+    },
+    updateProjectContent2(row) {
+      this.content2ProForm = true
+      this.updatecontent2form.id = row.id
+      this.updatecontent2form.content2 = row.content2
+    },
+    changeProjectContent2() {
+      patchProject(this.updatecontent2form.id, this.updatecontent2form).then(response => {
+        this.content2ProForm = false
         this.fetchData()
       })
     }
