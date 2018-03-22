@@ -44,7 +44,8 @@ export default {
       route_path: this.$route.path.split('/'),
       ruleForm: {
         name: '',
-        content: '',
+        content1: '',
+        content2: '',
         create_user: localStorage.getItem('username'),
         level: 1,
         complete: 0,
@@ -60,7 +61,7 @@ export default {
         action_user: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
-        content: [
+        content1: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         time: [

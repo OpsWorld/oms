@@ -88,12 +88,6 @@ export default {
         ],
         content1: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        content2: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        content3: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       users: [],
