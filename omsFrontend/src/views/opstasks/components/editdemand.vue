@@ -120,8 +120,7 @@ export default {
         create_user: localStorage.getItem('username'),
         file: ''
       },
-      ttime: [],
-      users: []
+      ttime: []
     }
   },
 

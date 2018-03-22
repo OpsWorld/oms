@@ -29,7 +29,7 @@
                 <el-table-column prop="pid" label="编号"></el-table-column>
                 <el-table-column prop="name" label="任务概要"></el-table-column>
                 <el-table-column prop="action_user" label="负责人"></el-table-column>
-                <el-table-column prop="start_time" label="开始日期"></el-table-column>
+                <el-table-column prop="start_time" label="开始日期" sortable></el-table-column>
                 <el-table-column prop="end_time" label="完成日期"></el-table-column>
                 <el-table-column prop="status" label="状态">
                   <template slot-scope="props">
@@ -40,12 +40,13 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column prop="task_complete" label="进度">
+                <el-table-column prop="task_complete" label="进度" sortable>
                   <template slot-scope="props">
                     <div slot="reference" class="name-wrapper">
                       {{props.row.task_complete}}%
                       <el-tooltip class="item" effect="dark" content="更新任务进度" placement="top">
-                        <el-button v-if="scope.row.status==0" @click="updateTaskComplete(props.row)" type="text"
+                        <el-button v-if="scope.row.status==0&&props.row.task_complete!=100"
+                                   @click="updateTaskComplete(props.row)" type="text"
                                    icon="el-icon-edit"></el-button>
                       </el-tooltip>
                     </div>
@@ -74,9 +75,9 @@
             <!--</template>-->
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
-          <el-table-column prop='start_time' label='开始日期'></el-table-column>
+          <el-table-column prop='start_time' label='开始日期' sortable="custom"></el-table-column>
           <el-table-column prop='end_time' label='结束日期'></el-table-column>
-          <el-table-column prop='status' label='状态'>
+          <el-table-column prop='status' label='状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
@@ -89,7 +90,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='task_complete' label='项目进度'>
+          <el-table-column prop='task_complete' label='项目进度' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper">
                 {{scope.row.task_complete}}%
@@ -253,9 +254,14 @@ export default {
           }
           getProject(parmas).then(res => {
             item.projectData = res.data
+            let task_complete = 0
             for (const pp of res.data) {
-              item.task_complete += Math.round(pp.task_complete / res.data.length)
+              task_complete += Math.round(pp.task_complete / res.data.length)
             }
+            const data = {
+              task_complete: task_complete
+            }
+            patchDemandManager(item.id, data)
           })
         })
       })
@@ -348,6 +354,9 @@ export default {
       this.updatetaskform.task_complete = row.task_complete
     },
     changeComplete() {
+      if (this.updatetaskform.task_complete === 100) {
+        this.updatetaskform.status = 1
+      }
       patchProject(this.updatetaskform.id, this.updatetaskform).then(response => {
         this.taskCompleteForm = false
         this.fetchData()

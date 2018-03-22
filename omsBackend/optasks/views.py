@@ -9,10 +9,10 @@ from optasks.serializers import (OpsProjectSerializer,
 
 
 class OpsDemandManagerViewSet(viewsets.ModelViewSet):
-    queryset = OpsDemandManager.objects.all().order_by('-create_time')
+    queryset = OpsDemandManager.objects.all().order_by('start_time')
     serializer_class = OpsDemandManagerSerializer
-    search_fields = ['name']
-    ordering_fields = ['status', 'create_time']
+    search_fields = ['name', 'pid']
+    ordering_fields = ['task_complete', 'start_time', 'status']
     filter_fields = ['status', 'pid', 'create_user__username']
 
 
@@ -23,8 +23,6 @@ class OpsDemandEnclosureViewSet(viewsets.ModelViewSet):
 
 
 class OpsProjectViewSet(viewsets.ModelViewSet):
-    queryset = OpsProject.objects.all().order_by('status', '-create_time')
+    queryset = OpsProject.objects.all().order_by('start_time')
     serializer_class = OpsProjectSerializer
-    filter_fields = ['pid', 'status', 'demand__id']
-    search_fields = ['pid', 'name', 'content']
-    ordering_fields = ['task_complete', 'create_time']
+    filter_fields = ['demand__id']
