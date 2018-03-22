@@ -22,7 +22,7 @@
       </div>
       <div>
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
-          <el-table-column type="expand">
+          <el-table-column label="任务" type="expand" width="50">
             <template slot-scope="scope">
               <el-table :data="scope.row.projectData" border stripe style="width: 100%">
                 <el-table-column type="index" width="50"></el-table-column>
