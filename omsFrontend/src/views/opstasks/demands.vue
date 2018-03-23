@@ -66,13 +66,13 @@
             </template>
           </el-table-column>
           <el-table-column prop='pid' label='编号'>
-            <!--<template slot-scope="scope">-->
-            <!--<div slot="reference">-->
-            <!--<router-link :to="'viewopsdemand/' + scope.row.id">-->
-            <!--<a style="color: #257cff">{{scope.row.pid}}</a>-->
-            <!--</router-link>-->
-            <!--</div>-->
-            <!--</template>-->
+            <template slot-scope="scope">
+            <div slot="reference">
+            <router-link :to="'viewopsdemand/' + scope.row.id">
+            <a style="color: #257cff">{{scope.row.pid}}</a>
+            </router-link>
+            </div>
+            </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
           <el-table-column prop='start_time' label='开始日期' sortable="custom"></el-table-column>
@@ -100,9 +100,6 @@
           <el-table-column label="操作" width="230">
             <template slot-scope="scope">
               <el-button-group>
-                <router-link :to="'editopsdemand/' + scope.row.id">
-                  <el-button type="success" size="mini">修改</el-button>
-                </router-link>
                 <el-button type="primary" size="mini" @click="addProject(scope.row)">增加任务</el-button>
                 <el-button type="danger" size="mini" @click="deleteDemand(scope.row.id)">删除</el-button>
               </el-button-group>

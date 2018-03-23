@@ -1,40 +1,54 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card>
-      <el-row :gutter="20">
-        <el-col :span="24">
-          <el-card>
-            <div slot="header" class="clearfix">
-              <a class="title">{{ticketData.name}}</a>
-              <hr class="heng"/>
+      <div slot="header" class="clearfix">
+        <a class="title">{{ticketData.name}}</a>
+        <hr class="heng"/>
 
-              <div class="appendInfo">
-                <a class="ticketinfo create_user"><span class="han">
+        <div class="appendInfo">
+          <a class="ticketinfo create_user"><span class="han">
                                 创建时间：</span>{{ticketData.create_time | parseDate}}</a>
-                <a class="ticketinfo create_user"><span class="han">
+          <a class="ticketinfo create_user"><span class="han">
                               <a class="shu"></a>
                                 创建人：</span>{{ticketData.create_user}}</a>
-                <a class="shu"></a>
-                <span class="han">计划开始日期：</span>
-                <a class="ticketinfo">{{ticketData.start_time}}</a>
-                <a class="shu"></a>
-                <span class="han">计划完成日期：</span>
-                <a class="ticketinfo">{{ticketData.end_time}}</a>
-              </div>
-            </div>
-            <vue-markdown :source="ticketData.content"></vue-markdown>
-            <hr class="heng"/>
-            <div v-if='enclosureData.length>0'>
-              <ul>
-                <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                  <i class="fa fa-paperclip"></i>
-                  <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                </li>
-              </ul>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
+          <a class="ticketinfo create_user"><span class="han">
+                              <a class="shu"></a>
+                                参与者：</span>
+            <el-tag style="margin-right: 2px" size="mini" v-for="item in ticketData.action_user" :key="item">{{item}}
+            </el-tag>
+          </a>
+          <a class="shu"></a>
+          <span class="han">计划开始日期：</span>
+          <a class="ticketinfo">{{ticketData.start_time}}</a>
+          <a class="shu"></a>
+          <span class="han">计划完成日期：</span>
+          <a class="ticketinfo">{{ticketData.end_time}}</a>
+        </div>
+        <div v-if="role==='super'" class="appendInfo">
+          <span class="han">操作：</span>
+          <router-link :to="'/opstasks/editopsdemand/' + ticketData.id">
+            <el-button type="success" size="mini">修改</el-button>
+          </router-link>
+        </div>
+      </div>
+      <el-card>
+        <div slot="header" class="clearfix">
+          项目目标
+        </div>
+        {{ticketData.content1}}
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          项目范围
+        </div>
+        {{ticketData.content2}}
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          项目预算
+        </div>
+        {{ticketData.content3}}
+      </el-card>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
@@ -47,6 +61,7 @@ import { getDemandManager, getDemandEnclosure } from '@/api/optask'
 import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
 import { apiUrl } from '@/config'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -87,6 +102,12 @@ export default {
       apiurl: apiUrl,
       enclosureData: []
     }
+  },
+
+  computed: {
+    ...mapGetters([
+      'role'
+    ])
   },
 
   created() {
