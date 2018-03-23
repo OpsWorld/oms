@@ -124,7 +124,8 @@ export default {
         4: '测试中',
         5: '已测试',
         6: '待上线',
-        7: '已上线'
+        7: '已上线',
+        8: '暂停'
       },
       users: [],
       errortime: false,
