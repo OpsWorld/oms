@@ -35,19 +35,19 @@
         <div slot="header" class="clearfix">
           项目目标
         </div>
-        {{ticketData.content1}}
+        <vue-markdown :source="ticketData.content1"></vue-markdown>
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
           项目范围
         </div>
-        {{ticketData.content2}}
+        <a>{{ticketData.content2}}</a>
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
           项目预算
         </div>
-        {{ticketData.content3}}
+        <a>{{ticketData.content3}}</a>
       </el-card>
     </el-card>
     <el-tooltip placement="top" content="一路向西">
@@ -58,10 +58,10 @@
 </template>
 <script>
 import { getDemandManager, getDemandEnclosure } from '@/api/optask'
-import VueMarkdown from 'vue-markdown' // 前端解析markdown
 import BackToTop from '@/components/BackToTop'
 import { apiUrl } from '@/config'
 import { mapGetters } from 'vuex'
+import VueMarkdown from 'vue-markdown' // 前端解析markdown
 
 export default {
   components: {

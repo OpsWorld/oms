@@ -56,7 +56,7 @@
                   <template slot-scope="props">
                     <el-button-group>
                       <el-button type="success" plain size="mini" @click=showProject(props.row)>详情</el-button>
-                      <el-button type="primary" plain size="mini" @click=updateProjectContent2(props.row)>完成情况
+                      <el-button type="primary" plain size="mini" @click=updateProjectContent2(props.row)>修改
                       </el-button>
                       <el-button type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
                     </el-button-group>
@@ -67,11 +67,11 @@
           </el-table-column>
           <el-table-column prop='pid' label='编号'>
             <template slot-scope="scope">
-            <div slot="reference">
-            <router-link :to="'viewopsdemand/' + scope.row.id">
-            <a style="color: #257cff">{{scope.row.pid}}</a>
-            </router-link>
-            </div>
+              <div slot="reference">
+                <router-link :to="'viewopsdemand/' + scope.row.id">
+                  <a style="color: #257cff">{{scope.row.pid}}</a>
+                </router-link>
+              </div>
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称'></el-table-column>
@@ -129,14 +129,14 @@
     </el-dialog>
 
     <el-dialog title="任务详情" :visible.sync="showProForm">
-      <el-form label-width="100px">
-        <el-form-item label="内容" prop="status">
-          <div>{{proContent.content1}}</div>
-        </el-form-item>
-        <el-form-item label="实际完成情况" prop="status">
-          <div>{{proContent.content2}}</div>
-        </el-form-item>
-      </el-form>
+      <el-card>
+        <div slot="header" class="clearfix">任务内容</div>
+        <vue-markdown :source="proContent.content1"></vue-markdown>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">完成情况</div>
+        <vue-markdown :source="proContent.content2"></vue-markdown>
+      </el-card>
     </el-dialog>
 
     <el-dialog :visible.sync="demandstatusForm">
@@ -171,9 +171,31 @@
 
     <el-dialog title="更新完成情况" :visible.sync="content2ProForm">
       <el-form label-width="100px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="updatecontent2form.name" placeholder="请输入名称"></el-input>
+        </el-form-item>
+        <el-form-item label="指派人" prop="action_user">
+          <el-select v-model="updatecontent2form.action_user" filterable placeholder="请选择指派人">
+            <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="内容" prop="content1">
+          <el-input v-model="updatecontent2form.content1" type="textarea"
+                    :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
         <el-form-item label="实际完成情况" prop="content2">
           <el-input v-model="updatecontent2form.content2" type="textarea"
                     :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="时间" prop="time">
+          <el-date-picker
+            v-model="ttime"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button @click="changeProjectContent2" type="success" size="mini">确定</el-button>
@@ -194,9 +216,11 @@ import {
 } from '@/api/optask'
 import { LIMIT, pagesize, pageformat } from '@/config'
 import addProject from './components/addproject.vue'
+import VueMarkdown from 'vue-markdown' // 前端解析markdown
+import { getUser } from 'api/user'
 
 export default {
-  components: { addProject },
+  components: { VueMarkdown, addProject },
   data() {
     return {
       tableData: [],
@@ -229,15 +253,15 @@ export default {
         id: '',
         task_complete: ''
       },
-      updatecontent2form: {
-        id: '',
-        content2: ''
-      },
-      content2ProForm: false
+      updatecontent2form: {},
+      content2ProForm: false,
+      users: [],
+      ttime: []
     }
   },
   created() {
     this.fetchData()
+    this.getUsers()
   },
 
   methods: {
@@ -361,13 +385,23 @@ export default {
     },
     updateProjectContent2(row) {
       this.content2ProForm = true
-      this.updatecontent2form.id = row.id
-      this.updatecontent2form.content2 = row.content2
+      this.updatecontent2form = row
+      this.ttime = [row.start_time, row.end_time]
     },
     changeProjectContent2() {
+      this.updatecontent2form.start_time = this.ttime[0]
+      this.updatecontent2form.end_time = this.ttime[1]
       patchProject(this.updatecontent2form.id, this.updatecontent2form).then(response => {
         this.content2ProForm = false
         this.fetchData()
+      })
+    },
+    getUsers() {
+      const query = {
+        groups__name: 'ITDept'
+      }
+      getUser(query).then(response => {
+        this.users = response.data
       })
     }
   }

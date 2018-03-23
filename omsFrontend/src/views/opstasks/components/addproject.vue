@@ -47,11 +47,9 @@ export default {
         content1: '',
         content2: '',
         create_user: localStorage.getItem('username'),
-        level: 1,
-        complete: 0,
+        task_complete: 0,
         action_user: '',
         pid: '',
-        is_public: true,
         time: []
       },
       rules: {
