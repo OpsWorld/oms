@@ -8,7 +8,7 @@
           </div>
           <template>
             <el-steps :active="jobs.cur_step" process-status="finish" finish-status="success" align-center>
-              <el-step title="版本信息"></el-step>
+              <el-step title="版本信息" @click.native="changeCurstepZero"></el-step>
               <el-step v-for="item in steps" :key="item.level" :title="item.name"
                        @click.native="selectStep(item.level)"></el-step>
             </el-steps>
