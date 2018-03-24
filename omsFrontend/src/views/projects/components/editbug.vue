@@ -58,6 +58,9 @@
                     @imgAdd="imgAdd" ref="md"></mavon-editor>
       <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
     </el-form-item>
+    <el-form-item label="发送通知">
+      <el-checkbox v-model="sendnotice"></el-checkbox>
+    </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">更新</el-button>
     </el-form-item>
@@ -68,6 +71,7 @@ import { getUser } from 'api/user'
 import { getProject, getTestManager, putBugManager } from '@/api/project'
 import { postUpload } from 'api/tool'
 import { getConversionTime } from '@/utils'
+import { postSendmessage } from 'api/tool'
 
 export default {
   props: ['ruleForm'],
@@ -96,7 +100,8 @@ export default {
         strikethrough: true, // 中划线
         ol: true, // 有序列表
         help: true
-      }
+      },
+      sendnotice: false
     }
   },
   created() {
@@ -113,6 +118,14 @@ export default {
               message: '恭喜你，更新成功',
               type: 'success'
             })
+            if (this.sendnotice) {
+              const messageForm = {
+                action_user: this.ruleForm.action_user,
+                title: '【出bug啦】' + this.ruleForm.name,
+                message: `地址: ${window.location.href}`
+              }
+              postSendmessage(messageForm)
+            }
             this.$emit('DialogStatus', false)
           }).catch(error => {
             this.$message.error('更新失败')

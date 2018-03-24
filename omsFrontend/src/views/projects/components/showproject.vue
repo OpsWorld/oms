@@ -33,25 +33,25 @@
   </el-card>
 </template>
 <script>
-  export default {
-    components: {},
-    props: ['ruleForm'],
-    data() {
-      return {
-        STATUS_TEXT: {
-          1: '已指派',
-          2: '处理中',
-          3: '待测试',
-          4: '测试中',
-          5: '已测试',
-          6: '待上线',
-          7: '已上线',
-          8: '暂停',
-        }
+export default {
+  components: {},
+  props: ['ruleForm'],
+  data() {
+    return {
+      STATUS_TEXT: {
+        1: '已指派',
+        2: '处理中',
+        3: '待测试',
+        4: '测试中',
+        5: '已测试',
+        6: '待上线',
+        7: '已上线',
+        8: '暂停'
       }
-    },
-    created() {
-    },
-    methods: {}
-  }
+    }
+  },
+  created() {
+  },
+  methods: {}
+}
 </script>
