@@ -57,7 +57,6 @@ def update_jobs_status(request):
         jobs = DeployJobs.objects.filter(job__id=job).filter(deploy_status='deploy')
         count = len(jobs)
         for job in jobs:
-            print(job)
             j_id = job.j_id
             j = DeployJobs.objects.get(j_id=j_id)
             job_status = sapi.check_job(j_id)
@@ -66,10 +65,12 @@ def update_jobs_status(request):
                 if list(set(job_status.values()))[0]:
                     import re
                     j.result = sapi.get_result(j_id)
-                    if len(re.findall(r'error', j.result, re.I)) > 0:
-                        j.deploy_status = 'failed'
-                    else:
-                        j.deploy_status = 'success'
+                    for error in j.result.values():
+                        error_result = bool(re.search(r'Error', error, re.I))
+                        if error_result > 0:
+                            j.deploy_status = 'failed'
+                        else:
+                            j.deploy_status = 'success'
                 else:
                     j.deploy_status = 'deploy'
             except Exception as e:
