@@ -177,9 +177,6 @@ export default {
       svnrules: {
         version: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        content: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       steps: [],
