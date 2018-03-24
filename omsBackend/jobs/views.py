@@ -64,8 +64,12 @@ def update_jobs_status(request):
             print(list(set(job_status.values()))[0])
             try:
                 if list(set(job_status.values()))[0]:
+                    import re
                     j.result = sapi.get_result(j_id)
-                    j.deploy_status = 'success'
+                    if len(re.findall(r'error', j.result, re.I)) > 0:
+                        j.deploy_status = 'failed'
+                    else:
+                        j.deploy_status = 'success'
                 else:
                     j.deploy_status = 'deploy'
             except Exception as e:
