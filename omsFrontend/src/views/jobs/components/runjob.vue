@@ -53,7 +53,7 @@
             <el-button v-if="jobs.cur_step===jobs.total_step" type="success" @click="changeCurstep"
                        :disabled="!jobs.done">Complete
             </el-button>
-            <el-button v-else type="primary" @click="changeCurstep" :disabled="!jobs.done">Next</el-button>
+            <el-button v-else type="primary" @click="changeCurstep">Next</el-button>
           </div>
         </el-card>
       </el-col>
