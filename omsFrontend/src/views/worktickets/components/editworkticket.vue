@@ -52,9 +52,8 @@
           </div>
           <vue-markdown :source="ticketData.content"></vue-markdown>
 
-          <hr class="heng"/>
-
-          <div>
+          <div v-if="ticketData.ticket_status<2">
+            <hr class="heng"/>
             <el-upload
               ref="upload"
               :action="uploadurl"
@@ -84,7 +83,7 @@
         </el-card>
       </div>
 
-      <div>
+      <div v-if="ticketData.ticket_status<2">
         <el-form :model="commentForm" ref="mailcontent" label-width="80px" class="demo-ruleForm">
           <hr class="heng"/>
           <el-form-item label="问题处理" prop="content">
