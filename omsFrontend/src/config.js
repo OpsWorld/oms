@@ -10,18 +10,21 @@ const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
 if (process.env.NODE_ENV === 'production') {
   CONFIG = {
     apiUrl: '',
+    zkapiUrl: '',
     super_group: 'OMS_Super_Admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
 } else if (process.env.NODE_ENV === 'test') {
   CONFIG = {
     apiUrl: 'http://oms.tb-gaming.local:8000',
+    zkapiUrl: 'http://oms.tb-gaming.local:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
 } else {
   CONFIG = {
     apiUrl: 'http://127.0.0.1:8000',
+    zkapiUrl: 'http://127.0.0.1:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://127.0.0.1:8000'
   }
@@ -31,9 +34,11 @@ if (process.env.NODE_ENV === 'production') {
  接口API根地址
  */
 const url = CONFIG.apiUrl
+const zkurl = CONFIG.zkapiUrl
 
 module.exports = {
   apiUrl: CONFIG.apiUrl,
+  zkapiUrl: CONFIG.zkapiUrl,
   ws_url: CONFIG.wsurl,
 
   // 超级管理组
@@ -130,5 +135,9 @@ module.exports = {
   // 运维项目
   opsprojects: `${url}/api/opsprojects/`,
   opsdemandmanagers: `${url}/api/opsdemandmanagers/`,
-  opsdemandenclosures: `${url}/api/opsdemandenclosures/`
+  opsdemandenclosures: `${url}/api/opsdemandenclosures/`,
+
+  // zk考勤机
+  zkusers: `${zkurl}/api/zkusers/`,
+  zkpunchs: `${zkurl}/api/zkpunchs/`
 }

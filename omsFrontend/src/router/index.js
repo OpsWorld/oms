@@ -134,6 +134,17 @@ export const asyncRouterMap = [
     ]
   },
   {
+    name: '考勤管理',
+    path: '/zkmanager',
+    component: Layout,
+    icon: 'dropbox',
+    redirect: 'zkusers',
+    children: [
+      { path: 'zkusers', component: _import('zkmanager/zkusers'), name: '用户' },
+      { path: 'zkpunchs', component: _import('zkmanager/zkpunchs'), name: '打卡' }
+    ]
+  },
+  {
     name: '用户管理',
     path: '/users',
     component: Layout,

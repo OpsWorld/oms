@@ -15,12 +15,15 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='username' label='用户' sortable></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>
-            </template>
-          </el-table-column>
+          <el-table-column prop='user_id' label='用户号' sortable></el-table-column>
+          <el-table-column prop='username' label='用户'></el-table-column>
+          <el-table-column prop='password' label='密码'></el-table-column>
+          <el-table-column prop='role' label='角色'></el-table-column>
+          <!--<el-table-column label="操作">-->
+            <!--<template slot-scope="scope">-->
+              <!--<el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>-->
+            <!--</template>-->
+          <!--</el-table-column>-->
         </el-table>
       </div>
       <div class="table-pagination">
@@ -77,6 +80,7 @@ export default {
           message: '恭喜你，删除成功',
           type: 'success'
         })
+        this.fetchData()
       }).catch(error => {
         this.$message.error('删除失败')
         console.log(error)
