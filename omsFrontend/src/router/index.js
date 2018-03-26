@@ -137,7 +137,7 @@ export const asyncRouterMap = [
     name: '考勤管理',
     path: '/zkmanager',
     component: Layout,
-    icon: 'dropbox',
+    icon: 'drupal',
     redirect: 'zkusers',
     children: [
       { path: 'zkusers', component: _import('zkmanager/zkusers'), name: '用户' },
