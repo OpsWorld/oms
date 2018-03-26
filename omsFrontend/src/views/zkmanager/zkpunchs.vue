@@ -26,13 +26,19 @@
       <div>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='user' label='用户'></el-table-column>
-          <el-table-column prop='create_time' label='打卡时间'>
+          <el-table-column prop='status' label='打卡状态'>
             <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{scope.row.create_time | parseDate}}</span>
+              <div slot="reference">
+                <el-tag :type="Punch_Color[scope.row.status]">{{Punch_Text[scope.row.status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='create_date' label='打卡日期'></el-table-column>
+          <el-table-column prop='swork_time' label='签到时间'></el-table-column>
+          <el-table-column prop='ework_time' label='签退时间'></el-table-column>
+          <el-table-column prop='swork_timec' label='迟到时间'></el-table-column>
+          <el-table-column prop='ework_timec' label='早退时间'></el-table-column>
+          <el-table-column prop='work_time' label='实际工作时间'></el-table-column>
           <!--<el-table-column label="操作">-->
           <!--<template slot-scope="scope">-->
           <!--<el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>-->
@@ -102,6 +108,20 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }]
+      },
+      Punch_Text: {
+        0: '旷工',
+        1: '签到',
+        2: '签退',
+        3: '迟到',
+        4: '早退'
+      },
+      Punch_Color: {
+        0: 'danger',
+        1: 'success',
+        2: 'success',
+        3: 'warning',
+        4: 'warning'
       }
     }
   },
