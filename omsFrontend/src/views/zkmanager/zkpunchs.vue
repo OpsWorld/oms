@@ -3,6 +3,10 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
+          <!--<el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">-->
+            <!--<el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}-->
+            <!--</el-radio>-->
+          <!--</el-radio-group>-->
         </div>
         <div class="table-search">
           <el-date-picker
@@ -29,7 +33,7 @@
           <el-table-column prop='status' label='打卡状态'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag :type="Punch_Color[scope.row.status]">{{Punch_Text[scope.row.status]}}</el-tag>
+                <el-tag :type="STATUS_COLOR[scope.row.status]">{{STATUS_TEXT[scope.row.status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -79,6 +83,7 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
+        status: '',
         search: ''
       },
       selectcreatedate: [],
@@ -109,14 +114,14 @@ export default {
           }
         }]
       },
-      Punch_Text: {
+      STATUS_TEXT: {
         0: '旷工',
         1: '签到',
         2: '签退',
         3: '迟到',
         4: '早退'
       },
-      Punch_Color: {
+      STATUS_COLOR: {
         0: 'danger',
         1: 'success',
         2: 'success',
@@ -171,6 +176,9 @@ export default {
         this.listQuery.create_date_0 = ''
         this.listQuery.create_date_1 = ''
       }
+      this.fetchData()
+    },
+    changeStatus() {
       this.fetchData()
     }
   }
