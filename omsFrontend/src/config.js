@@ -37,10 +37,6 @@ const url = CONFIG.apiUrl
 const zkurl = CONFIG.zkapiUrl
 
 module.exports = {
-  apiUrl: CONFIG.apiUrl,
-  zkapiUrl: CONFIG.zkapiUrl,
-  ws_url: CONFIG.wsurl,
-
   // 超级管理组
   super_group: CONFIG.super_group,
 
@@ -139,5 +135,6 @@ module.exports = {
 
   // zk考勤机
   zkusers: `${zkurl}/api/zkusers/`,
-  zkpunchs: `${zkurl}/api/zkpunchs/`
+  zkpunchs: `${zkurl}/api/zkpunchs/`,
+  zkpunchset: `${zkurl}/api/zkpunchset/`
 }

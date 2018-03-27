@@ -141,7 +141,8 @@ export const asyncRouterMap = [
     redirect: 'zkusers',
     children: [
       { path: 'zkusers', component: _import('zkmanager/zkusers'), name: '用户' },
-      { path: 'zkpunchs', component: _import('zkmanager/zkpunchs'), name: '打卡' }
+      { path: 'zkpunchs', component: _import('zkmanager/zkpunchs'), name: '打卡' },
+      { path: 'zkset', component: _import('zkmanager/zkset'), name: '打卡设置' }
     ]
   },
   {
