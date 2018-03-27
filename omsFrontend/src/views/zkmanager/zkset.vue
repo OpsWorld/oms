@@ -1,6 +1,6 @@
 <template>
   <div class="components-container" style='height:100vh'>
-    <el-card style="width: 500px">
+    <el-card style="width: 400px">
       <div slot="header">
         <span style="margin-right: 10px">打卡时间设置</span>
         <el-button-group>
@@ -10,7 +10,7 @@
         </el-button-group>
       </div>
       <div>
-        <el-form v-if="tabletotal" label-position="left" label-width="200px">
+        <el-form v-if="tabletotal" label-position="left" label-width="120px">
           <el-form-item label="上班时间">
             <span>{{tableData.swork_time }}</span>
           </el-form-item>

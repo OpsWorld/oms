@@ -4,8 +4,8 @@
       <div class="head-lavel">
         <div class="table-button">
           <!--<el-radio-group v-model="listQuery.status" @change="changeStatus" style="margin-left: 20px">-->
-            <!--<el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}-->
-            <!--</el-radio>-->
+          <!--<el-radio v-for="item in Object.keys(STATUS_TEXT)" :key="item" :label="item">{{STATUS_TEXT[item]}}-->
+          <!--</el-radio>-->
           <!--</el-radio-group>-->
         </div>
         <div class="table-search">
@@ -30,19 +30,36 @@
       <div>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='user' label='用户'></el-table-column>
-          <el-table-column prop='status' label='打卡状态'>
-            <template slot-scope="scope">
-              <div slot="reference">
-                <el-tag :type="STATUS_COLOR[scope.row.status]">{{STATUS_TEXT[scope.row.status]}}</el-tag>
-              </div>
-            </template>
-          </el-table-column>
           <el-table-column prop='create_date' label='打卡日期'></el-table-column>
           <el-table-column prop='swork_time' label='签到时间'></el-table-column>
           <el-table-column prop='ework_time' label='签退时间'></el-table-column>
-          <el-table-column prop='swork_timec' label='迟到时间'></el-table-column>
-          <el-table-column prop='ework_timec' label='早退时间'></el-table-column>
-          <el-table-column prop='work_time' label='实际工作时间'></el-table-column>
+          <el-table-column prop='swork_status' label='签到状态'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag v-if="scope.row.swork_status" type="success">正常</el-tag>
+                <el-tag v-else type="warning">迟到</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='ework_status' label='签退状态'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag v-if="scope.row.ework_status" type="success">正常</el-tag>
+                <el-tag v-else type="warning">早退</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='nowork_status' label='是否旷工'>
+            <template slot-scope="scope">
+              <div slot="reference">
+                <el-tag v-if="scope.row.nowork_status" type="danger">旷工</el-tag>
+                <el-tag v-else type="success">未旷工</el-tag>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop='swork_timec' label='迟到时长'></el-table-column>
+          <el-table-column prop='ework_timec' label='早退时长'></el-table-column>
+          <el-table-column prop='work_time' label='工作时长'></el-table-column>
           <!--<el-table-column label="操作">-->
           <!--<template slot-scope="scope">-->
           <!--<el-button @click="deleteGroup(scope.row.id)" type="danger" size="small">删除</el-button>-->
