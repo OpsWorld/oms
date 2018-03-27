@@ -136,7 +136,7 @@ export default {
       EworkStatus: {
         0: '正常',
         1: '早退',
-        2: '未签到'
+        2: '未签退'
       },
       STATUS_COLOR: {
         0: 'success',
