@@ -10,14 +10,14 @@ const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
 if (process.env.NODE_ENV === 'production') {
   CONFIG = {
     apiUrl: '',
-    zkapiUrl: '',
+    zkapiUrl: 'http://127.0.0.1:9000',
     super_group: 'OMS_Super_Admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
 } else if (process.env.NODE_ENV === 'test') {
   CONFIG = {
     apiUrl: 'http://oms.tb-gaming.local:8000',
-    zkapiUrl: 'http://oms.tb-gaming.local:9000',
+    zkapiUrl: 'http://127.0.0.1:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
