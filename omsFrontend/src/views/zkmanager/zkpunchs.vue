@@ -36,16 +36,14 @@
           <el-table-column prop='swork_status' label='签到状态'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag v-if="scope.row.swork_status" type="success">正常</el-tag>
-                <el-tag v-else type="warning">迟到</el-tag>
+                <el-tag :type="STATUS_COLOR[scope.row.swork_status]">{{SworkStatus[scope.row.swork_status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
           <el-table-column prop='ework_status' label='签退状态'>
             <template slot-scope="scope">
               <div slot="reference">
-                <el-tag v-if="scope.row.ework_status" type="success">正常</el-tag>
-                <el-tag v-else type="warning">早退</el-tag>
+                <el-tag :type="STATUS_COLOR[scope.row.ework_status]">{{EworkStatus[scope.row.ework_status]}}</el-tag>
               </div>
             </template>
           </el-table-column>
@@ -100,7 +98,6 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        status: '',
         search: ''
       },
       selectcreatedate: [],
@@ -131,19 +128,20 @@ export default {
           }
         }]
       },
-      STATUS_TEXT: {
-        0: '旷工',
-        1: '签到',
-        2: '签退',
-        3: '迟到',
-        4: '早退'
+      SworkStatus: {
+        0: '正常',
+        1: '迟到',
+        2: '未签到'
+      },
+      EworkStatus: {
+        0: '正常',
+        1: '早退',
+        2: '未签到'
       },
       STATUS_COLOR: {
-        0: 'danger',
-        1: 'success',
-        2: 'success',
-        3: 'warning',
-        4: 'warning'
+        0: 'success',
+        1: 'danger',
+        2: 'warning'
       }
     }
   },
