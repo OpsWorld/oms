@@ -37,6 +37,7 @@ const url = CONFIG.apiUrl
 const zkurl = CONFIG.zkapiUrl
 
 module.exports = {
+  apiUrl: CONFIG.apiUrl,
   // 超级管理组
   super_group: CONFIG.super_group,
 
