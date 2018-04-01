@@ -165,7 +165,7 @@
             <el-table-column label='查看明细' type="expand" width="80">
               <template slot-scope="props">
                 <el-form label-position="left" inline class="table-expand">
-                  <el-form-item label="key信息" prop="keyinfo">
+                  <el-form-item v-if="role!='dev'" label="key信息" prop="keyinfo">
                     <el-input v-model="props.row.keyinfo" type="textarea" disabled
                               :autosize="{ minRows: 5, maxRows: 10}"></el-input>
                   </el-form-item>

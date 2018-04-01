@@ -71,6 +71,8 @@ const user = {
             commit('SET_ROLE', 'devmanager')
           } else if (groups.indexOf('OMS_Test_Manager') >= 0) {
             commit('SET_ROLE', 'testmanager')
+          } else if (groups.indexOf('Tb_Development') >= 0) {
+            commit('SET_ROLE', 'dev')
           } else {
             commit('SET_ROLE', 'user')
           }
