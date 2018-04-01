@@ -56,9 +56,9 @@
                   <template slot-scope="props">
                     <el-button-group>
                       <el-button type="success" plain size="mini" @click=showProject(props.row)>详情</el-button>
-                      <el-button v-if="scope.row.status==0" type="primary" plain size="mini" @click=updateProjectContent2(props.row)>修改
+                      <el-button v-if="props.row.status==0" type="primary" plain size="mini" @click=updateProjectContent2(props.row)>修改
                       </el-button>
-                      <el-button v-if="scope.row.status==0" type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
+                      <el-button v-if="props.row.status==0" type="danger" plain size="mini" @click=deleteProject(props.row)>删除</el-button>
                     </el-button-group>
                   </template>
                 </el-table-column>
