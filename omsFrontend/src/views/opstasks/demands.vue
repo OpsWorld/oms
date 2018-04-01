@@ -277,8 +277,9 @@ export default {
             item.projectData = res.data
             item.task_complete = 0
             for (const pp of res.data) {
-              item.task_complete += Math.round(pp.task_complete / res.data.length)
+              item.task_complete += pp.task_complete
             }
+            item.task_complete = Math.round(item.task_complete / res.data.length)
             const data = {
               task_complete: item.task_complete
             }
