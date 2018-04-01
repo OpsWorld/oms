@@ -10,21 +10,21 @@ const ws_scheme = window.location.protocol === 'https:' ? 'wss' : 'ws'
 if (process.env.NODE_ENV === 'production') {
   CONFIG = {
     apiUrl: '',
-    zkapiUrl: 'http://127.0.0.1:9000',
+    zkapiUrl: 'http://172.19.6.99:9000',
     super_group: 'OMS_Super_Admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
 } else if (process.env.NODE_ENV === 'test') {
   CONFIG = {
     apiUrl: 'http://oms.tb-gaming.local:8000',
-    zkapiUrl: 'http://127.0.0.1:9000',
+    zkapiUrl: 'http://172.19.6.99:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://' + rest_url + '/ws'
   }
 } else {
   CONFIG = {
     apiUrl: 'http://127.0.0.1:8000',
-    zkapiUrl: 'http://127.0.0.1:9000',
+    zkapiUrl: 'http://172.19.6.99:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://127.0.0.1:8000'
   }
