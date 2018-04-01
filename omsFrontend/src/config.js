@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
   CONFIG = {
     apiUrl: 'http://127.0.0.1:8000',
-    zkapiUrl: 'http://172.19.6.99:9000',
+    zkapiUrl: 'http://127.0.0.1:9000',
     super_group: 'admin',
     wsurl: ws_scheme + '://127.0.0.1:8000'
   }
