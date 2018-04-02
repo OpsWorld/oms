@@ -74,33 +74,31 @@
               </div>
             </el-card>
 
-            <lazy-render :time="500">
-              <div v-if="ticketData.status!=7">
-                <el-form :model="commentForm" ref="content" label-width="90px" class="demo-ruleForm">
-                  <hr class="heng"/>
-                  <el-form-item label="问题处理" prop="content">
-                    <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai"
-                                  :toolbars="toolbars"
-                                  @imgAdd="imgAdd" ref="md"></mavon-editor>
-                    <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
-                  </el-form-item>
-                  <el-form-item label="通知个人" prop="action_user">
-                    <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
-                      <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                    </el-select>
-                    <el-checkbox v-model="sendpeople">发送通知</el-checkbox>
-                  </el-form-item>
-                  <el-form-item label="通知技术部" prop="action_user">
-                    <el-checkbox v-model="sendgroup">发送通知</el-checkbox>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </lazy-render>
+            <div v-if="ticketData.status!=7">
+              <el-form :model="commentForm" ref="content" label-width="90px" class="demo-ruleForm">
+                <hr class="heng"/>
+                <el-form-item label="问题处理" prop="content">
+                  <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai"
+                                :toolbars="toolbars"
+                                @imgAdd="imgAdd" ref="md"></mavon-editor>
+                  <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
+                </el-form-item>
+                <el-form-item label="通知个人" prop="action_user">
+                  <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
+                    <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                  </el-select>
+                  <el-checkbox v-model="sendpeople">发送通知</el-checkbox>
+                </el-form-item>
+                <el-form-item label="通知技术部" prop="action_user">
+                  <el-checkbox v-model="sendgroup">发送通知</el-checkbox>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
 
-            <lazy-render :time="600">
+            <lazy-render :time="500">
               <el-card class="ticketcomment" v-if="commentData.length>0">
                 处理历史记录
                 <div v-for="item in commentData" :key="item.id">
@@ -173,7 +171,7 @@
               </el-card>
             </lazy-render>
 
-            <lazy-render :time="1100">
+            <lazy-render :time="1000">
               <el-card>
                 <div slot="header" class="clearfix">
                   <a class="right-title">关联bug</a>
