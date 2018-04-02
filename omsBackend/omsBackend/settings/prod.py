@@ -45,7 +45,7 @@ LDAP_AUTH_CONNECTION_PASSWORD = r'TUjweiAHZQ'
 #     }
 # }
 
-# enail账号
+# email账号
 MAIL_ACOUNT = {
     "mail_host": "mail.tb-gaming.com",
     "mail_user": "oms@tb-gaming.com",
