@@ -18,9 +18,10 @@ class Upload(models.Model):
     create_time = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'文件日期')
 
     def save(self, *args, **kwargs):
+        from re import sub
         self.size = '{}'.format(convert_size(self.file.size))
         filename = os.path.splitext(self.file.name)
-        self.filename = '{}-{}{}'.format(filename[0], self.create_time, filename[1]).replace(' ', '_')
+        self.filename = '{}-{}{}'.format(sub('\W+', '', filename[0]), self.create_time, filename[1]).replace(' ', '_')
         self.filepath = '{}/{}'.format(self.archive, self.filename)
         super(Upload, self).save(*args, **kwargs)
 
