@@ -1,211 +1,223 @@
 <template>
   <div class="components-container" style='height:100vh'>
-    <el-card>
-      <el-row :gutter="10">
-        <el-col :span="16">
+    <lazy-render :time="300">
+      <el-card>
+        <el-row :gutter="10">
+          <el-col :span="16">
+            <el-card>
+              <div slot="header" class="clearfix">
+                <a class="title">{{ticketData.name}}</a>
+                <hr class="heng"/>
 
-          <el-card>
-            <div slot="header" class="clearfix">
-              <a class="title">{{ticketData.name}}</a>
-              <hr class="heng"/>
-
-              <div class="appendInfo">
-                <a class="ticketinfo create_user"><span class="han">
+                <div class="appendInfo">
+                  <a class="ticketinfo create_user"><span class="han">
                                 创建时间：</span>{{ticketData.create_time | parseDate}}</a>
-                <a class="ticketinfo create_user"><span class="han">
+                  <a class="ticketinfo create_user"><span class="han">
                               <a class="shu"></a>
                                 发起人：</span>{{ticketData.create_user}}</a>
-                <a class="ticketinfo action_user">
-                  <span class="han"><a class="shu"></a>指派人：</span>
-                  <el-tag size="mini" v-for="item in ticketData.action_user" :key="item" style="margin-right: 3px">{{item}}
+                  <a class="ticketinfo action_user">
+                    <span class="han"><a class="shu"></a>指派人：</span>
+                    <el-tag size="mini" v-for="item in ticketData.action_user" :key="item" style="margin-right: 3px">
+                      {{item}}
+                    </el-tag>
+                  </a>
+                  <a class="shu"></a>
+                  <span class="han">类型：</span>
+                  <a>{{ticketData.type}}</a>
+                  <a class="shu"></a>
+                  <span class="han">当前状态：</span>
+                  <el-tag>
+                    {{Project_Status[ticketData.status]}}
                   </el-tag>
-                </a>
-                <a class="shu"></a>
-                <span class="han">类型：</span>
-                <a>{{ticketData.type}}</a>
-                <a class="shu"></a>
-                <span class="han">当前状态：</span>
-                <el-tag>
-                  {{Project_Status[ticketData.status]}}
-                </el-tag>
+                </div>
+                <div class="appendInfo">
+                  <span class="han">任务开始时间：</span>
+                  <a v-if="ticketData.start_time" class="ticketinfo">{{ticketData.start_time}}</a>
+                  <a v-else class="ticketinfo">未设置</a>
+                  <a class="shu"></a>
+                  <span class="han">计划结束时间：</span>
+                  <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
+                  <a v-else class="ticketinfo">未设置</a>
+                </div>
+                <div class="appendInfo" v-if="ticketData.status!=7">
+                  <span class="han">操作：</span>
+                  <!--<el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>-->
+                  <!--<el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>-->
+                  <a class="action">
+                    <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
+                      <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index">
+                      </el-option>
+                    </el-select>
+                    <el-date-picker
+                      v-if="rowdata.status === '2' && !ticketData.end_time"
+                      v-model="rowdata.end_time"
+                      type="date"
+                      value-format="yyyy-MM-dd"
+                      placeholder="设置计划结束时间"
+                      @change="changeProjectendtime"
+                      disable="have_endtime">
+                    </el-date-picker>
+                  </a>
+                  <!--<el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定-->
+                  <!--</el-button>-->
+                </div>
               </div>
-              <div class="appendInfo">
-                <span class="han">任务开始时间：</span>
-                <a v-if="ticketData.start_time" class="ticketinfo">{{ticketData.start_time}}</a>
-                <a v-else class="ticketinfo">未设置</a>
-                <a class="shu"></a>
-                <span class="han">计划结束时间：</span>
-                <a v-if="ticketData.end_time" class="ticketinfo">{{ticketData.end_time}}</a>
-                <a v-else class="ticketinfo">未设置</a>
+              <vue-markdown :source="ticketData.content"></vue-markdown>
+              <hr class="heng"/>
+              <div v-if='enclosureData.length>0'>
+                <ul>
+                  <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                    <i class="fa fa-paperclip"></i>
+                    <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                  </li>
+                </ul>
               </div>
-              <div class="appendInfo" v-if="ticketData.status!=7">
-                <span class="han">操作：</span>
-                <!--<el-button v-if="!showinput" type="success" size="small" @click="showinput=true">更改状态</el-button>-->
-                <!--<el-button v-if="showinput" type="warning" size="small" @click="showinput=false">收起</el-button>-->
-                <a class="action">
-                  <el-select v-model="rowdata.status" filterable placeholder="更新任务状态" @change="changeProjectstatus">
-                    <el-option v-for="(item, index) in Project_Status" :key="index" :label="item" :value="index">
+            </el-card>
+
+            <lazy-render :time="500">
+              <div v-if="ticketData.status!=7">
+                <el-form :model="commentForm" ref="content" label-width="90px" class="demo-ruleForm">
+                  <hr class="heng"/>
+                  <el-form-item label="问题处理" prop="content">
+                    <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai"
+                                  :toolbars="toolbars"
+                                  @imgAdd="imgAdd" ref="md"></mavon-editor>
+                    <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
+                  </el-form-item>
+                  <el-form-item label="通知个人" prop="action_user">
+                    <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
+                      <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+                    </el-select>
+                    <el-checkbox v-model="sendpeople">发送通知</el-checkbox>
+                  </el-form-item>
+                  <el-form-item label="通知技术部" prop="action_user">
+                    <el-checkbox v-model="sendgroup">发送通知</el-checkbox>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </lazy-render>
+
+            <lazy-render :time="600">
+              <el-card class="ticketcomment" v-if="commentData.length>0">
+                处理历史记录
+                <div v-for="item in commentData" :key="item.id">
+                  <hr class="heng"/>
+                  <el-row>
+                    <el-col :span="1">
+                      <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
+                    </el-col>
+                    <el-col :span="20">
+                      <div class="dialog-box">
+                        <span class="bot"></span>
+                        <span class="top"></span>
+                        <div class="comment">
+                          <vue-markdown :source="item.content"></vue-markdown>
+                          <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
+                        </div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-card>
+            </lazy-render>
+
+          </el-col>
+          <el-col :span="8">
+
+            <lazy-render :time="700">
+              <el-card v-if="viewproject_btn_add_testbug||role==='super'">
+                <div slot="header" class="clearfix">
+                  <a class="right-title">测试用例</a>
+                  <el-select style="margin-left: 20px" v-model="testquery.status" clearable placeholder="请选择状态筛选"
+                             @change="changeTeststatus">
+                    <el-option
+                      v-for="item in Object.keys(Test_Status)"
+                      :key="item"
+                      :label="Test_Status[item]"
+                      :value="item">
                     </el-option>
                   </el-select>
-                  <el-date-picker
-                    v-if="rowdata.status === '2' && !ticketData.end_time"
-                    v-model="rowdata.end_time"
-                    type="date"
-                    value-format="yyyy-MM-dd"
-                    placeholder="设置计划结束时间"
-                    @change="changeProjectendtime"
-                    disable="have_endtime">
-                  </el-date-picker>
-                </a>
-                <!--<el-button v-if="showinput" type="primary" size="small" @click="patchForm" :disabled="errortime">确定-->
-                <!--</el-button>-->
-              </div>
-            </div>
-            <vue-markdown :source="ticketData.content"></vue-markdown>
-            <hr class="heng"/>
-            <div v-if='enclosureData.length>0'>
-              <ul>
-                <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                  <i class="fa fa-paperclip"></i>
-                  <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                </li>
-              </ul>
-            </div>
-          </el-card>
+                  <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
+                             icon="el-icon-plus" @click="addTestFrom=true"></el-button>
+                </div>
+                <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%" height="350">
+                  <el-table-column type="index" width="50"></el-table-column>
+                  <el-table-column prop="id" label="编号" width="60">
+                    <template slot-scope="scope">
+                      <div slot="reference">
+                        <el-button type="text" @click="showTest(false, scope.row)">
+                          <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                        </el-button>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="name" label="名称">
+                    <template slot-scope="scope">
+                      <div slot="reference">
+                        <el-button type="text" @click="showTest(true, scope.row)">{{scope.row.name}}</el-button>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="status" label="状态" width="70">
+                    <template slot-scope="scope">
+                      <div slot="reference">
+                        <el-tag size="mini">{{Test_Status[scope.row.status]}}</el-tag>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
+                </el-table>
+              </el-card>
+            </lazy-render>
 
-          <div v-if="ticketData.status!=7">
-            <el-form :model="commentForm" ref="content" label-width="90px" class="demo-ruleForm">
-              <hr class="heng"/>
-              <el-form-item label="问题处理" prop="content">
-                <mavon-editor style="z-index: 1" v-model="commentForm.content" code_style="monokai" :toolbars="toolbars"
-                              @imgAdd="imgAdd" ref="md"></mavon-editor>
-                <a class="tips"> Tip：截图可以直接 Ctrl + v 粘贴到问题处理里面</a>
-              </el-form-item>
-              <el-form-item label="通知个人" prop="action_user">
-                <el-select v-model="ticketData.follow_user" filterable multiple placeholder="请选择通知人">
-                  <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
-                </el-select>
-                <el-checkbox v-model="sendpeople">发送通知</el-checkbox>
-              </el-form-item>
-              <el-form-item label="通知技术部" prop="action_user">
-                <el-checkbox v-model="sendgroup">发送通知</el-checkbox>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
+            <lazy-render :time="1100">
+              <el-card>
+                <div slot="header" class="clearfix">
+                  <a class="right-title">关联bug</a>
+                  <el-button size="mini" type="primary" plain @click="showAllBug">all</el-button>
+                  <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
+                             icon="el-icon-plus" @click="addBugFrom=true"></el-button>
+                </div>
+                <el-table :data="bugData" stripe style="width: 100%">
+                  <el-table-column type="index" width="50"></el-table-column>
+                  <el-table-column prop="id" label="编号" width="60">
+                    <template slot-scope="scope" v-if="viewproject_btn_add_testbug||role==='super'">
+                      <div slot="reference">
+                        <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
+                                   @click="showBug(false, scope.row)">
+                          <i class="fa fa-hashtag"></i>{{scope.row.id}}
+                        </el-button>
+                        <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="name" label="名称">
+                    <template slot-scope="scope">
+                      <div slot="reference">
+                        <el-button type="text" @click="showBug(true, scope.row)">{{scope.row.name}}</el-button>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="status" label="状态" width="70">
+                    <template slot-scope="scope">
+                      <div slot="reference">
+                        <el-tag size="mini">{{Bug_Status[scope.row.status]}}</el-tag>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
+                </el-table>
+              </el-card>
+            </lazy-render>
 
-          <el-card class="ticketcomment" v-if="commentData.length>0">
-            处理历史记录
-            <div v-for="item in commentData" :key="item.id">
-              <hr class="heng"/>
-              <el-row>
-                <el-col :span="1">
-                  <el-button type="primary" plain class="commentuser">{{item.create_user}}</el-button>
-                </el-col>
-                <el-col :span="20">
-                  <div class="dialog-box">
-                    <span class="bot"></span>
-                    <span class="top"></span>
-                    <div class="comment">
-                      <vue-markdown :source="item.content"></vue-markdown>
-                      <p class="commenttime">处理时间：{{item.create_time | parseDate}}</p>
-                    </div>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-          </el-card>
+          </el-col>
+        </el-row>
+      </el-card>
+    </lazy-render>
 
-        </el-col>
-        <el-col :span="8">
-
-          <el-card v-if="viewproject_btn_add_testbug||role==='super'">
-            <div slot="header" class="clearfix">
-              <a class="right-title">测试用例</a>
-              <el-select style="margin-left: 20px" v-model="testquery.status" clearable placeholder="请选择状态筛选"
-                         @change="changeTeststatus">
-                <el-option
-                  v-for="item in Object.keys(Test_Status)"
-                  :key="item"
-                  :label="Test_Status[item]"
-                  :value="item">
-                </el-option>
-              </el-select>
-              <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
-                         icon="el-icon-plus" @click="addTestFrom=true"></el-button>
-            </div>
-            <el-table :data="testData" stripe @row-click="clicktestTable" style="width: 100%" height="350">
-              <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column prop="id" label="编号" width="60">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-button type="text" @click="showTest(false, scope.row)">
-                      <i class="fa fa-hashtag"></i>{{scope.row.id}}
-                    </el-button>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="name" label="名称">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-button type="text" @click="showTest(true, scope.row)">{{scope.row.name}}</el-button>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="status" label="状态" width="70">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-tag size="mini">{{Test_Status[scope.row.status]}}</el-tag>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
-            </el-table>
-          </el-card>
-
-          <el-card>
-            <div slot="header" class="clearfix">
-              <a class="right-title">关联bug</a>
-              <el-button size="mini" type="primary" plain @click="showAllBug">all</el-button>
-              <el-button v-if="viewproject_btn_add_testbug||role==='super'" class="card-head-btn" type="text"
-                         icon="el-icon-plus" @click="addBugFrom=true"></el-button>
-            </div>
-            <el-table :data="bugData" stripe style="width: 100%">
-              <el-table-column type="index" width="50"></el-table-column>
-              <el-table-column prop="id" label="编号" width="60">
-                <template slot-scope="scope" v-if="viewproject_btn_add_testbug||role==='super'">
-                  <div slot="reference">
-                    <el-button v-if="viewproject_btn_add_testbug||role==='super'" type="text"
-                               @click="showBug(false, scope.row)">
-                      <i class="fa fa-hashtag"></i>{{scope.row.id}}
-                    </el-button>
-                    <a v-else><i class="fa fa-hashtag"></i>{{scope.row.id}}</a>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="name" label="名称">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-button type="text" @click="showBug(true, scope.row)">{{scope.row.name}}</el-button>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="status" label="状态" width="70">
-                <template slot-scope="scope">
-                  <div slot="reference">
-                    <el-tag size="mini">{{Bug_Status[scope.row.status]}}</el-tag>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop="action_user" label="开发" width="80"></el-table-column>
-            </el-table>
-          </el-card>
-
-        </el-col>
-      </el-row>
-    </el-card>
     <el-tooltip placement="top" content="一路向西">
       <back-to-top transitionName="fade" :customStyle="BackToTopStyle" :visibilityHeight="300"
                    :backPosition="50"></back-to-top>

@@ -26,6 +26,10 @@ Vue.use(mavonEditor)
 import fullCalendar from 'vue-fullcalendar'
 Vue.component('full-calendar', fullCalendar)
 
+/* 懒加载 */
+import LazyRender from 'vue-lazy-render'
+Vue.use(LazyRender)
+
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
