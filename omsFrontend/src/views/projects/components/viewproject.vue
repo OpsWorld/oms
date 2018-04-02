@@ -64,14 +64,18 @@
               </div>
               <vue-markdown :source="ticketData.content"></vue-markdown>
               <hr class="heng"/>
-              <div v-if='enclosureData.length>0'>
-                <ul>
-                  <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-                    <i class="fa fa-paperclip"></i>
-                    <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-                  </li>
-                </ul>
-              </div>
+
+              <lazy-render :time="500">
+                <div v-if='enclosureData.length>0'>
+                  <ul>
+                    <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
+                      <i class="fa fa-paperclip"></i>
+                      <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
+                    </li>
+                  </ul>
+                </div>
+              </lazy-render>
+
             </el-card>
 
             <div v-if="ticketData.status!=7">
