@@ -22,6 +22,7 @@ class SendmessageSerializer(serializers.ModelSerializer):
         model = Sendmessage
         fields = ['url', 'id', 'action_user', 'title', 'message']
 
+
 class CalenderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Calender
