@@ -9,11 +9,6 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入名称"></el-input>
         </el-form-item>
-        <el-form-item label="类型" prop="type">
-          <el-select v-model="ruleForm.type" placeholder="请选择类型">
-            <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="内容" prop="content">
           <mavon-editor style="z-index: 1" v-model="ruleForm.content" code_style="monokai"
                         :toolbars="toolbars" @imgAdd="imgAdd" ref="md"></mavon-editor>
@@ -47,7 +42,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button type="primary" @click="copyWorkticket">提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -56,8 +51,6 @@
 <script>
 import {
   getWorkticket,
-  putWorkticket,
-  getTickettype,
   postTicketenclosure,
   getTicketenclosure,
   deleteTicketenclosure,
@@ -84,9 +77,6 @@ export default {
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         content: [
-          { required: true, message: '请输入正确的内容', trigger: 'blur' }
-        ],
-        type: [
           { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
@@ -123,7 +113,6 @@ export default {
 
   created() {
     this.fetchData()
-    this.getTypes()
     this.fetchEnclosureData()
   },
   methods: {
@@ -135,27 +124,8 @@ export default {
         this.ruleForm = response.data[0]
       })
     },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.ruleForm.status = 1
-          putWorkticket(this.ruleForm.id, this.ruleForm).then(response => {
-            this.copyWorkticket(response.data)
-          })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-
     resetForm(formName) {
       this.$refs[formName].resetFields()
-    },
-    getTypes() {
-      getTickettype().then(response => {
-        this.types = response.data
-      })
     },
     imgAdd(pos, file) {
       var md = this.$refs.md
@@ -206,14 +176,14 @@ export default {
       deleteTicketenclosure(id)
       this.fetchEnclosureData()
     },
-    copyWorkticket(ticketData) {
+    copyWorkticket() {
       const DemandForm = {
-        pid: ticketData.pid,
-        name: ticketData.name,
-        content: ticketData.content,
+        pid: this.ruleForm.pid,
+        name: this.ruleForm.name,
+        content: this.ruleForm.content,
         type: '来自工单',
-        create_user: ticketData.create_user,
-        create_time: ticketData.create_time
+        create_user: this.ruleForm.create_user,
+        create_time: this.ruleForm.create_time
       }
       if (this.copy === 'op') {
         postopsDemandManager(DemandForm).then(response => {
@@ -288,12 +258,12 @@ export default {
           console.log(errordata)
         })
       }
-      this.commentForm.ticket = ticketData.id
+      this.commentForm.ticket = this.ruleForm.id
       postTicketcomment(this.commentForm)
       const data = {
         ticket_status: 1
       }
-      patchWorkticket(ticketData.id, data)
+      patchWorkticket(this.ruleForm.id, data)
     }
   }
 }
