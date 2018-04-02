@@ -146,8 +146,8 @@ JWT_REFRESH_EXPIRATION_DELTA的确切含义是自从原始token被发布出去�
 '''
 JWT_AUTH = {
     'JWT_AUTH_HEADER_PREFIX': 'token',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=7),
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=30),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=15),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=30),
 }
 
 # user model
