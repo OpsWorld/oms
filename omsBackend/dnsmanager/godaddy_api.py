@@ -318,4 +318,11 @@ if __name__ == '__main__':
         'data': '1.1.1.2',
         'ttl': 600
     }
-    print(godaddy.add_record('918168.net', record))
+    records = [{'data': 'Parked', 'name': '@', 'ttl': 600, 'type': 'A'},
+               {'data': '', 'name': '@', 'ttl': 3600, 'type': 'SOA'},
+               {'data': 'ns47.domaincontrol.com', 'name': '@', 'ttl': 3600, 'type': 'NS'},
+               {'data': 'ns48.domaincontrol.com', 'name': '@', 'ttl': 3600, 'type': 'NS'},
+               {'data': '_domainconnect.gd.domaincontrol.com', 'name': '_domainconnect', 'ttl': 3600, 'type': 'CNAME'},
+               {'data': '@', 'name': 'www', 'ttl': 3600, 'type': 'CNAME'},
+               {'data': '1.1.1.1', 'name': 'blog', 'ttl': 3600, 'type': 'A'}]
+    print(godaddy.replace_records('918168.net', records=records))
