@@ -2,9 +2,9 @@
 # author: itimor
 
 from rest_framework import viewsets
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployTicket, DeployTicketEnclosure
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployTicket, DeployTicketEnclosure, SqlTicket
 from jobs.serializers import (JobsSerializer, DeployenvSerializer, DeploycmdSerializer, DeployJobsSerializer,
-                              DeployTicketSerializer, DeployTicketEnclosureSerializer)
+                              DeployTicketSerializer, DeployTicketEnclosureSerializer, SqlTicketSerializer)
 from omsBackend.settings import sapi
 from jobs.filters import JobFilterBackend
 from rest_framework.filters import SearchFilter, DjangoFilterBackend
@@ -48,6 +48,11 @@ class DeployTicketEnclosureViewSet(viewsets.ModelViewSet):
     queryset = DeployTicketEnclosure.objects.all()
     serializer_class = DeployTicketEnclosureSerializer
     filter_fields = ['ticket__id']
+
+
+class SqlTicketTicketViewSet(viewsets.ModelViewSet):
+    queryset = SqlTicket.objects.all().order_by('-create_time')
+    serializer_class = SqlTicketSerializer
 
 
 @api_view()

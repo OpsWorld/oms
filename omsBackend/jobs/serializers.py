@@ -2,12 +2,12 @@
 # author: itimor
 
 from rest_framework import serializers
-from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployTicket, DeployTicketEnclosure
+from jobs.models import Jobs, Deployenv, Deploycmd, DeployJobs, DeployTicket, DeployTicketEnclosure, SqlTicket
 from hosts.models import Host
 from users.models import User
 from tools.models import Upload
 from omsBackend.settings import sapi
-from rest_framework.response import Response
+
 
 
 class JobsSerializer(serializers.ModelSerializer):
@@ -82,3 +82,11 @@ class DeployTicketEnclosureSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeployTicketEnclosure
         fields = ('url', 'id', 'ticket', 'file', 'create_user', 'create_time')
+
+
+class SqlTicketSerializer(serializers.ModelSerializer):
+    create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+
+    class Meta:
+        model = DeployTicket
+        fields = ['url', 'id', 'name', 'create_user', 'content', 'desc', 'create_time']

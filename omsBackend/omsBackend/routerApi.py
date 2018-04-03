@@ -60,7 +60,7 @@ router.register(r'idcs', IdcViewSet)
 router.register(r'hostgroups', HostGroupViewSet)
 
 from jobs.views import JobsViewSet, DeployenvViewSet, DeploycmdViewSet, DeployJobsViewSet, DeployTicketViewSet, \
-    DeployTicketEnclosureViewSet
+    DeployTicketEnclosureViewSet, SqlTicketTicketViewSet
 
 router.register(r'jobs', JobsViewSet)
 router.register(r'deployenvs', DeployenvViewSet)
@@ -68,6 +68,7 @@ router.register(r'deploycmds', DeploycmdViewSet)
 router.register(r'deployjobs', DeployJobsViewSet)
 router.register(r'deploytickets', DeployTicketViewSet)
 router.register(r'deployticketenclosures', DeployTicketEnclosureViewSet)
+router.register(r'sqltickets', SqlTicketTicketViewSet)
 
 from records.views import RecordViewSet
 

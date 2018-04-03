@@ -160,3 +160,18 @@ class DeployTicketEnclosure(models.Model):
     class Meta:
         verbose_name = u'工单附件'
         verbose_name_plural = u'工单附件'
+
+
+class SqlTicket(models.Model):
+    name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
+    content = models.TextField(verbose_name=u'sql语句')
+    desc = models.TextField(verbose_name=u'说明')
+    create_user = models.ForeignKey(User, related_name='sqlticket_create_user', verbose_name=u'创建者')
+    create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = u'sql工单'
+        verbose_name_plural = u'sql工单'
