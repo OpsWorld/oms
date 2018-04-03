@@ -35,11 +35,11 @@
               <router-link :to="'/worktickets/copyworkticket/' + pid">
                 <el-button type="primary" size="small">乾坤大挪移</el-button>
               </router-link>
-              <div class="action">
+              <div class="action" v-if="commentForm.create_user===ticketData.create_user">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
                   <el-radio label="2">关闭工单</el-radio>
-                  <el-radio label="1">更改指派人</el-radio>
+                  <el-radio v-if="role==='super'" label="1">更改指派人</el-radio>
                 </el-radio-group>
                 <div class="action" v-if="radio_status==1">
                   <el-select v-model="rowdata.action_user" filterable placeholder="请选择指派人">
