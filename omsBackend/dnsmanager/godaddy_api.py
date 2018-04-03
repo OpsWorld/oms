@@ -8,13 +8,8 @@ from .godaddy_key import APIKEY
 
 
 class Godaddy(object):
-    """The GoDaddyPy Account.
-
-    An account is used to provide authentication headers to the `godaddypy.Client`.
-    """
-
-    def __init__(self, api_key, api_secret, delegate=None):
-        """Create a new `godadypy.Account` object.
+    def __init__(self, api_key, api_secret, delegate=None, log_level=None):
+        """
 
         :type api_key: str
         :param api_key: The API_KEY provided by GoDaddy
@@ -24,7 +19,11 @@ class Godaddy(object):
         """
 
         # Logging setup
-        self.logger = logging.getLogger('GoDaddy')
+        self.logger = logging.getLogger('GoDaddy.domain')
+        # Explicit override of logging level
+        if log_level is not None:
+            self.logger.setLevel(log_level)
+
         self._api_key = api_key
         self._api_secret = api_secret
         self._delegate = delegate
