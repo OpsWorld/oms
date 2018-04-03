@@ -82,7 +82,7 @@
           </el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
-              <router-link v-if="scope.row.ticket_status<1" :to="'editworkticket/' + scope.row.pid">
+              <router-link v-if="username==scope.row.create_user&&scope.row.ticket_status<1" :to="'editworkticket/' + scope.row.pid">
                 <el-button type="success" size="mini">修改</el-button>
               </router-link>
             </template>
@@ -161,7 +161,8 @@ export default {
   computed: {
     ...mapGetters([
       'role',
-      'elements'
+      'elements',
+      'username'
     ])
   },
 
