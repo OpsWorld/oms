@@ -28,11 +28,11 @@
                 {{STATUS_TEXT[ticketData.ticket_status]}}
               </el-tag>
             </div>
-            <div class="appendInfo" v-if="workticketlist_btn_edit||role==='super'&&ticketData.ticket_status!=2">
+            <div class="appendInfo" v-if="ticketData.ticket_status!=2">
               <span class="han">工单操作：</span>
-              <el-button v-if="ticketData.ticket_status===0" type="success" size="small" @click="changeStatus">接收
+              <el-button v-if="role==='super'&&ticketData.ticket_status===0" type="success" size="small" @click="changeStatus">接收
               </el-button>
-              <router-link :to="'/worktickets/copyworkticket/' + pid">
+              <router-link v-if="workticketlist_btn_edit||role==='super'" :to="'/worktickets/copyworkticket/' + pid">
                 <el-button type="primary" size="small">乾坤大挪移</el-button>
               </router-link>
               <div class="action" v-if="username==ticketData.create_user">
