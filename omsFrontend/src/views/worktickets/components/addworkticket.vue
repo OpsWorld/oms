@@ -5,9 +5,6 @@
         <el-form-item label="标题" prop="name">
           <el-input v-model="ruleForm.name" placeholder="请输入标题"></el-input>
         </el-form-item>
-        <el-form-item label="指派人" prop="action_user">
-          <el-input v-model="ruleForm.action_user" disabled></el-input>
-        </el-form-item>
         <el-form-item label="工单类型" prop="type">
           <el-select v-model="ruleForm.type" placeholder="请选择工单类型">
             <el-option v-for="item in types" :key="item.id" :value="item.name"></el-option>
@@ -123,8 +120,8 @@ export default {
     ])
   },
   created() {
-    this.getTicketUsers()
-    this.getTicketType()
+    this.getUsers()
+    this.getTypes()
   },
   methods: {
     postForm(formName) {
@@ -170,13 +167,12 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    getTicketUsers() {
+    getUsers() {
       getUser().then(response => {
         this.users = response.data
       })
     },
-
-    getTicketType() {
+    getTypes() {
       getTickettype().then(response => {
         this.types = response.data
       })

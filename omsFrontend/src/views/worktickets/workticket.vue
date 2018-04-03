@@ -38,7 +38,7 @@
           <el-table-column type="selection" v-if="workticketlist_btn_change_status||role==='super'"></el-table-column>
           <el-table-column prop='pid' label='工单编号'>
             <template slot-scope="scope">
-              <router-link :to="'editworkticket/' + scope.row.pid">
+              <router-link :to="'viewworkticket/' + scope.row.pid">
                 <a style="color: #257cff">{{scope.row.pid}}</a>
               </router-link>
             </template>
@@ -78,6 +78,13 @@
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.update_time | parseDate}}</span>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="80">
+            <template slot-scope="scope">
+              <router-link v-if="rowdata.create_user===scope.row.create_user&&scope.row.ticket_status<1" :to="'editworkticket/' + scope.row.pid">
+                <el-button type="success" size="mini">修改</el-button>
+              </router-link>
             </template>
           </el-table-column>
         </el-table>
@@ -121,7 +128,7 @@ import { LIMIT, pagesize } from '@/config'
 import { mapGetters } from 'vuex'
 
 export default {
-  components: { },
+  components: {},
   data() {
     return {
       tableData: [],
