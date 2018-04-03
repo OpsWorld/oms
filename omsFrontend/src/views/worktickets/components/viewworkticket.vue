@@ -35,7 +35,7 @@
               <router-link :to="'/worktickets/copyworkticket/' + pid">
                 <el-button type="primary" size="small">乾坤大挪移</el-button>
               </router-link>
-              <div class="action" v-if="commentForm.create_user===ticketData.create_user">
+              <div class="action" v-if="username==ticketData.create_user">
                 <el-radio-group v-model="radio_status">
                   <el-radio label="0">不操作</el-radio>
                   <el-radio label="2">关闭工单</el-radio>
@@ -212,7 +212,8 @@ export default {
   computed: {
     ...mapGetters([
       'role',
-      'elements'
+      'elements',
+      'username'
     ])
   },
 
