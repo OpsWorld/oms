@@ -59,7 +59,8 @@ router.register(r'hosts', HostViewSet)
 router.register(r'idcs', IdcViewSet)
 router.register(r'hostgroups', HostGroupViewSet)
 
-from jobs.views import JobsViewSet, DeployenvViewSet, DeploycmdViewSet, DeployJobsViewSet, DeployTicketViewSet, DeployTicketEnclosureViewSet
+from jobs.views import JobsViewSet, DeployenvViewSet, DeploycmdViewSet, DeployJobsViewSet, DeployTicketViewSet, \
+    DeployTicketEnclosureViewSet
 
 router.register(r'jobs', JobsViewSet)
 router.register(r'deployenvs', DeployenvViewSet)
@@ -89,3 +90,7 @@ from optasks.views import OpsProjectViewSet, OpsDemandManagerViewSet, OpsDemandE
 router.register(r'opsprojects', OpsProjectViewSet)
 router.register(r'opsdemandmanagers', OpsDemandManagerViewSet)
 router.register(r'opsdemandenclosures', OpsDemandEnclosureViewSet)
+
+from dnsmanager.views import DnsApiKeyViewSet
+
+router.register(r'dnsapikeys', DnsApiKeyViewSet)

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'records',
     'projects',
     'optasks',
+    'dnsmanager',
 ]
 
 MIDDLEWARE = [
