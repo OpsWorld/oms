@@ -4,6 +4,6 @@
 # itimor
 APIKEY = {
     "name": 'test',
-    "key": '3mM44UYhNeXU4T_2K8gdt5qmzUTLoVHNeSjNC',
-    "secret": '2K8ixpD1VP8LXcqpv7PJ9i'
+    "key": 'dLDMrJikLukT_UbZYBYP4JM7Bu32pzHMMTd',
+    "secret": 'UbZaPp2fK2YTcpmGgDbzMV'
 }
