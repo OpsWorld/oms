@@ -88,5 +88,5 @@ class SqlTicketSerializer(serializers.ModelSerializer):
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
 
     class Meta:
-        model = DeployTicket
+        model = SqlTicket
         fields = ['url', 'id', 'name', 'create_user', 'content', 'desc', 'create_time']
