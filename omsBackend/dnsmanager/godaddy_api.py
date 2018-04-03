@@ -4,7 +4,7 @@
 import logging
 import sys
 import requests
-from .godaddy_key import APIKEY
+from godaddy_key import APIKEY
 
 
 class Godaddy(object):
@@ -85,7 +85,7 @@ class Godaddy(object):
         :param kwargs: any extra arguments that requests.request takes
         :type func: (url: Any, data: Any, json: Any, kwargs: Dict)
         """
-        resp = func(headers=self._get_headers(), **kwargs)
+        resp = func(headers=self.get_headers(), **kwargs)
         self._log_response_from_method(func.__name__, resp)
         self._validate_response_success(resp)
         return resp
@@ -104,26 +104,6 @@ class Godaddy(object):
             response.raise_for_status()
         except Exception as e:
             raise BadResponse(response.json())
-
-    def add_record(self, domain, record):
-        """Adds the specified DNS record to a domain.
-        :param domain: the domain to add the record to
-        :param record: the record to add
-        """
-        self.add_records(domain, [record])
-        # If we didn't get any exceptions, return True to let the user know
-        return True
-
-    def add_records(self, domain, records):
-        """Adds the specified DNS records to a domain.
-        :param domain: the domain to add the records to
-        :param records: the records to add
-        """
-        url = self.API_TEMPLATE + self.RECORDS.format(domain=domain)
-        self._patch(url, json=records)
-        self.logger.debug('Added records @ {}'.format(records))
-        # If we didn't get any exceptions, return True to let the user know
-        return True
 
     def get_domain_info(self, domain):
         """Get the GoDaddy supplied information about a specific domain.
@@ -176,6 +156,32 @@ class Godaddy(object):
         data = self._get_json_from_response(url)
         self.logger.debug('Retrieved {} record(s) from {}.'.format(len(data), domain))
         return data
+
+    def add_record(self, domain, record):
+        """Adds the specified DNS record to a domain.
+        :param domain: the domain to add the record to
+        :param record: the record to add
+        eg:  record = {
+        'type': 'A',
+        'name': 'ggg',
+        'data': '1.1.1.2',
+        'ttl': 600
+        }
+        """
+        self.add_records(domain, [record])
+        # If we didn't get any exceptions, return True to let the user know
+        return True
+
+    def add_records(self, domain, records):
+        """Adds the specified DNS records to a domain.
+        :param domain: the domain to add the records to
+        :param records: the records to add
+        """
+        url = self.API_TEMPLATE + self.RECORDS.format(domain=domain)
+        self._patch(url, json=records)
+        self.logger.debug('Added records @ {}'.format(records))
+        # If we didn't get any exceptions, return True to let the user know
+        return True
 
     def replace_records(self, domain, records, record_type=None, name=None):
         """This will replace all records at the domain.  Record type and record name can be provided to filter
@@ -306,4 +312,10 @@ if __name__ == '__main__':
     _api_key = APIKEY['key']
     _api_secret = APIKEY['secret']
     godaddy = Godaddy(api_key=_api_key, api_secret=_api_secret)
-    godaddy.get_domain_info('itimor.com')
+    record = {
+        'type': 'A',
+        'name': 'ggg',
+        'data': '1.1.1.2',
+        'ttl': 600
+    }
+    print(godaddy.add_record('918168.net', record))
