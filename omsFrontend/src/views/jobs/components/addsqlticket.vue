@@ -33,7 +33,8 @@ export default {
         name: '',
         desc: '',
         content: '',
-        create_user: localStorage.getItem('username')
+        create_user: localStorage.getItem('username'),
+        action_user: ''
       },
       rules: {
         name: [

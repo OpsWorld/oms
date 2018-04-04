@@ -36,6 +36,7 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='创建人'></el-table-column>
+          <el-table-column prop='action_user' label='执行人'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -163,7 +164,8 @@ export default {
     },
     changeSqlOnline(row) {
       const data = {
-        status: 1
+        status: 1,
+        action_user: localStorage.getItem('username')
       }
       patchSqlTicket(row.id, data).then(() => {
         const messageForm = {

@@ -174,6 +174,7 @@ class SqlTicket(models.Model):
     desc = models.TextField(verbose_name=u'说明')
     status = models.CharField(max_length=3, choices=SqlStatus.items(), default=0, verbose_name=u'状态')
     create_user = models.ForeignKey(User, related_name='sqlticket_create_user', verbose_name=u'创建者')
+    action_user = models.ForeignKey(User, null=True, blank=True, related_name='sqlticket_action_user', verbose_name=u'执行者')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 
     def __str__(self):
