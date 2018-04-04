@@ -23,6 +23,7 @@
 
 <script>
 import { postSqlTicket } from '@/api/job'
+import { postSendmessage } from 'api/tool'
 
 export default {
   data() {
@@ -59,6 +60,12 @@ export default {
               type: 'success',
               message: '恭喜你，新建成功'
             })
+            const messageForm = {
+              action_user: 'ITDept_SkypeID',
+              title: '【sql执行申请】' + this.ruleForm.name,
+              message: this.ruleForm.desc
+            }
+            postSendmessage(messageForm)
           }).catch(error => {
             this.$message.error('新建失败')
             console.log(error)

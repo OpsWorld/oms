@@ -168,8 +168,8 @@ export default {
       patchSqlTicket(row.id, data).then(() => {
         const messageForm = {
           action_user: 'ITDept_SkypeID',
-          title: '【sql已执行】',
-          message: this.rowdata.name
+          title: '【sql已执行】' + this.ruleForm.name,
+          message: this.ruleForm.desc
         }
         postSendmessage(messageForm)
         this.fetchData()
