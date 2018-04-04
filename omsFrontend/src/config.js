@@ -108,8 +108,11 @@ module.exports = {
   updaejobsstatus: `${url}/api/update_jobs_status/`,
   deploycmds: `${url}/api/deploycmds/`,
   deployversions: `${url}/api/deployversions/`,
+
+  // 发布工单
   deploytickets: `${url}/api/deploytickets/`,
   deployticketenclosures: `${url}/api/deployticketenclosures/`,
+  sqltickets: `${url}/api/sqltickets/`,
 
   // salt
   get_all_key: `${url}/api/salts/get_all_key/`,

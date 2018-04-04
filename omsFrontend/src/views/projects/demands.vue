@@ -228,7 +228,7 @@ export default {
                 const messageForm = {
                   action_user: tt.data.create_user,
                   title: '【工单已完成】' + tt.data.name,
-                  message: `指派人: ${tt.data.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${tt.data.pid}`
+                  message: `指派人: ${tt.data.action_user}\n工单地址: http://${window.location.host}/#/worktickets/viewworkticket/${tt.data.pid}`
                 }
                 postSendmessage(messageForm)
               })

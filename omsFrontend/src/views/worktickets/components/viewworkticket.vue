@@ -361,7 +361,6 @@ export default {
         this.users = response.data
       })
     }
-
   }
 }
 </script>

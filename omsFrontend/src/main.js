@@ -22,6 +22,8 @@ import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 Vue.use(mavonEditor)
 
+import 'prismjs/themes/prism-twilight.css'
+
 /* calendar */
 import fullCalendar from 'vue-fullcalendar'
 Vue.component('full-calendar', fullCalendar)

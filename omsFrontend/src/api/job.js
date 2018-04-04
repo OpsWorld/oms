@@ -194,3 +194,36 @@ export function deleteDeployTicketEnclosur(id) {
     method: 'delete'
   })
 }
+
+// sqltickets
+export function postSqlTicket(data) {
+  return request({
+    url: apiURL.sqltickets,
+    method: 'post',
+    data
+  })
+}
+
+export function getSqlTicket(query, id) {
+  return request({
+    url: id ? apiURL.sqltickets + id + '/' : apiURL.sqltickets,
+    method: 'get',
+    params: query
+  })
+}
+
+export function putSqlTicket(id, data) {
+  return request({
+    url: apiURL.sqltickets + id + '/',
+    method: 'put',
+    data
+  })
+}
+
+export function patchSqlTicket(id, data) {
+  return request({
+    url: apiURL.sqltickets + id + '/',
+    method: 'patch',
+    data
+  })
+}

@@ -14,6 +14,9 @@
         </div>
       </div>
       <div>
+        <el-button type="primary" size="mini" icon="document" @click='handleCopy(listQuery.search,$event)'>copy
+        </el-button>
+        <prism language="sql" :plugins="['toolbar', 'show-language']" :code="listQuery.search"></prism>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='username' label='用户' sortable></el-table-column>
           <el-table-column label="操作">
@@ -41,9 +44,18 @@
 <script>
 import { getzkUser, deletezkUser } from 'api/zk'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import Prism from 'vue-prismjs'
+import clip from '@/utils/clipboard' // use clipboard directly
+import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 
 export default {
-  components: {},
+  components: {
+    Prism
+  },
+
+  directives: {
+    clipboard
+  },
   data() {
     return {
       tableData: [],
@@ -95,6 +107,16 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields()
+    },
+    handleCopy(text, event) {
+      clip(text, event)
+    },
+    clipboardSuccess() {
+      this.$message({
+        message: '复制成功',
+        type: 'success',
+        duration: 1500
+      })
     }
   }
 }

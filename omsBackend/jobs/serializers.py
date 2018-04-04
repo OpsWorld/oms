@@ -89,4 +89,4 @@ class SqlTicketSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SqlTicket
-        fields = ['url', 'id', 'name', 'create_user', 'content', 'desc', 'create_time']
+        fields = ['url', 'id', 'name', 'create_user', 'content', 'desc', 'status', 'create_time']
