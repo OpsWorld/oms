@@ -18,21 +18,15 @@
         <el-table :data="tableData" border style="width: 100%" @sort-change="handleSortChange">
           <el-table-column prop='id' label='ID'></el-table-column>
           <el-table-column prop='name' label='标题'></el-table-column>
-          <el-table-column prop='version' label='项目和版本'></el-table-column>
-          <el-table-column prop='content' label='内容'>
+          <el-table-column prop='content' label='SQL'>
             <template slot-scope="scope">
-              <div slot="reference">
-                <el-popover
-                  placement="top"
-                  width="300"
-                  trigger="hover"
-                  :content="scope.row.content">
-                  <el-button size="mini" slot="reference">{{scope.row.content.slice(0, 5)}}...</el-button>
-                </el-popover>
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-button type="primary" size="mini" @click="showSqlContent(scope.row.content)">查看</el-button>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='status' label='工单状态' sortable="custom">
+          <el-table-column prop='desc' label='说明'></el-table-column>
+          <el-table-column prop='status' label='状态' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-tag :type="STATUS_COLOR[scope.row.status]">
@@ -42,7 +36,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='create_user' label='创建人'></el-table-column>
-          <el-table-column prop='desc' label='说明'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -50,23 +43,12 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="300">
+          <el-table-column v-if="role==='super'" label="操作">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.status===0&&role==='super'" @click="editBefore(scope.row)" type="success"
-                         size="mini">修改
-              </el-button>
-              <!--<el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobPass(scope.row)"-->
-              <!--type="primary" size="mini">-->
-              <!--通过-->
-              <!--</el-button>-->
-              <!--<el-button v-if="scope.row.status===0&&role==='devmanager'" @click="changeJobNopass(scope.row)"-->
-              <!--type="danger" size="mini">-->
-              <!--未通过-->
-              <!--</el-button>-->
-              <el-button v-if="role==='super'" @click="changeSqlOnline(scope.row)"
-                         type="success" size="mini">
-                已执行
-              </el-button>
+              <el-button-group v-if="scope.row.status!=1">
+                <el-button @click="editSqlContent(scope.row)" type="success" size="mini">修改</el-button>
+                <el-button @click="changeSqlOnline(scope.row)" type="primary" size="mini">已执行</el-button>
+              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -89,67 +71,40 @@
       </div>
     </el-card>
 
-    <el-dialog :visible.sync="onlineForm" @close="cleanForm">
-      <el-form :model="rowdata" ref="ruleForm" label-width="100px">
-        <el-form-item label="通知对象">
-          <el-checkbox v-model="send_acc">财务</el-checkbox>
-          <el-checkbox v-model="send_cs">客服</el-checkbox>
-          <el-checkbox v-model="send_it">部门群组</el-checkbox>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="onlineForm=false">取 消</el-button>
-          <el-button type="primary" @click="updateOnline">确 定</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
-    <el-dialog :visible.sync="nopassForm" @close="cleanForm">
-      <el-form :model="nopass" ref="ruleForm" label-width="100px">
-        <el-form-item label="原因">
-          <el-input v-model="nopass.content" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="nopassForm=false">取 消</el-button>
-          <el-button type="primary" @click="updateNopass">确 定</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
-
     <el-dialog :visible.sync="addForm">
       <add-group @DialogStatus="getDialogStatus"></add-group>
     </el-dialog>
 
     <el-dialog :visible.sync="editForm">
-      <edit-group :ruleForm="ticketdata" @DialogStatus="getDialogStatus"></edit-group>
+      <edit-group :ruleForm="rowdata" @DialogStatus="getDialogStatus"></edit-group>
     </el-dialog>
 
     <el-dialog :visible.sync="showForm">
-      <div v-if='enclosureData.length>0' class="ticketenclosure">
-        <ul>
-          <li v-for="item in enclosureData" :key="item.id" v-if="item.file" style="list-style:none">
-            <i class="fa fa-paperclip"></i>
-            <a :href="apiurl + '/upload/' + item.file" :download="item.file">{{item.file.split('/')[1]}}</a>
-          </li>
-        </ul>
-      </div>
-      <div v-else>
-        没有上传附件
-      </div>
+      <el-button type="primary" size="mini" icon="document" @click='handleCopy(selectsql,$event)'>copy
+      </el-button>
+      <prism language="sql" :plugins="['toolbar', 'show-language']" :code="selectsql"></prism>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
-import { getDeployTicket, patchDeployTicket, getDeployTicketEnclosur } from '@/api/job'
-import { LIMIT, pagesize, pageformat, apiUrl } from '@/config'
+import { getSqlTicket, patchSqlTicket } from '@/api/job'
+import { LIMIT, pagesize, pageformat } from '@/config'
 import { postSendmessage } from 'api/tool'
 import { mapGetters } from 'vuex'
-import addGroup from './components/addjobticket.vue'
-import editGroup from './components/editjobticket.vue'
+import addGroup from './components/addsqlticket.vue'
+import editGroup from './components/editsqlticket.vue'
+import Prism from 'vue-prismjs'
+import clip from '@/utils/clipboard' // use clipboard directly
+import clipboard from '@/directive/clipboard/index.js' // use clipboard by v-directive
 
 export default {
-  components: { addGroup, editGroup },
+  components: {
+    addGroup, editGroup, Prism
+  },
+  directives: {
+    clipboard
+  },
   data() {
     return {
       tableData: [],
@@ -158,44 +113,25 @@ export default {
       ticket_status: '',
       pagesize: pagesize,
       pageformat: pageformat,
-      rowdata: {
-        id: '',
-        status: 3
-      },
       STATUS_TEXT: {
-        0: '未上线',
-        1: '通过',
-        2: '未通过',
-        3: '已上线'
+        0: '未执行',
+        1: '已执行'
       },
       STATUS_COLOR: {
         0: 'danger',
-        1: 'success',
-        2: 'info',
-        3: 'primary'
+        1: 'success'
       },
       listQuery: {
         limit: LIMIT,
         offset: '',
-        create_user__username: '',
         search: '',
         ordering: ''
       },
-      onlineForm: false,
       addForm: false,
-      apiurl: apiUrl,
-      enclosureData: [],
-      showForm: false,
       editForm: false,
-      send_acc: false,
-      send_cs: false,
-      send_it: false,
-      nopassForm: false,
-      nopass: {
-        id: '',
-        content: ''
-      },
-      ticketdata: {}
+      showForm: false,
+      rowdata: {},
+      selectsql: ''
     }
   },
   computed: {
@@ -209,22 +145,10 @@ export default {
 
   methods: {
     fetchData() {
-      getDeployTicket(this.listQuery).then(response => {
+      getSqlTicket(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
       })
-    },
-    EnclosureData(id) {
-      const parms = {
-        ticket__id: id
-      }
-      getDeployTicketEnclosur(parms).then(response => {
-        this.enclosureData = response.data
-      })
-    },
-    getEncloseur(id) {
-      this.showForm = true
-      this.EnclosureData(id)
     },
     searchClick() {
       this.fetchData()
@@ -237,74 +161,18 @@ export default {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
     },
-    changeJobPass(row) {
-      const rowdata = {
+    changeSqlOnline(row) {
+      const data = {
         status: 1
       }
-      patchDeployTicket(row.id, rowdata).then(() => {
+      patchSqlTicket(row.id, data).then(() => {
         const messageForm = {
-          action_user: 'itsupport',
-          title: '【上线申请通过】' + row.name,
-          message: `上线内容: ${row.version}`
+          action_user: 'ITDept_SkypeID',
+          title: '【sql已执行】',
+          message: this.rowdata.name
         }
         postSendmessage(messageForm)
         this.fetchData()
-      })
-    },
-    changeJobNopass(row) {
-      this.nopass.id = row.id
-      this.nopass.name = row.name
-      this.nopassForm = true
-    },
-    updateNopass() {
-      const rowdata = {
-        status: 2
-      }
-      patchDeployTicket(this.nopass.id, rowdata).then(() => {
-        const messageForm = {
-          action_user: 'itsupport',
-          title: '【申请未通过】' + this.nopass.name,
-          message: `原因: ${this.nopass.content}`
-        }
-        postSendmessage(messageForm)
-        this.nopassForm = false
-        this.fetchData()
-      })
-    },
-    changeSqlOnline(row) {
-      this.onlineForm = true
-      this.rowdata.id = row.id
-      this.rowdata.name = row.name
-      this.rowdata.content = row.content
-    },
-    updateOnline() {
-      patchDeployTicket(this.rowdata.id, this.rowdata).then(() => {
-        if (this.send_acc) {
-          const messageForm = {
-            action_user: 'molly',
-            title: '【已上线】' + this.rowdata.name,
-            message: `上线内容: ${this.rowdata.content}`
-          }
-          postSendmessage(messageForm)
-        }
-        if (this.send_cs) {
-          const messageForm = {
-            action_user: 'linda',
-            title: '【已上线】' + this.rowdata.name,
-            message: `上线内容: ${this.rowdata.content}`
-          }
-          postSendmessage(messageForm)
-        }
-        if (this.send_it) {
-          const messageForm = {
-            action_user: 'ITDept_SkypeID',
-            title: '【已上线】' + this.rowdata.name,
-            message: `上线内容: ${this.rowdata.content}`
-          }
-          postSendmessage(messageForm)
-        }
-        this.fetchData()
-        this.onlineForm = false
       })
     },
     handleSortChange(val) {
@@ -317,18 +185,28 @@ export default {
       }
       this.fetchData()
     },
-    editBefore(row) {
+    editSqlContent(row) {
       this.editForm = true
-      this.ticketdata = row
-    },
-    cleanForm() {
-      this.send_acc = false
-      this.send_cs = false
+      this.rowdata = row
     },
     getDialogStatus(data) {
       this.addForm = data
       this.editForm = data
       this.fetchData()
+    },
+    showSqlContent(sql) {
+      this.showForm = true
+      this.selectsql = sql
+    },
+    handleCopy(text, event) {
+      clip(text, event)
+    },
+    clipboardSuccess() {
+      this.$message({
+        message: '复制成功',
+        type: 'success',
+        duration: 1000
+      })
     }
   }
 }

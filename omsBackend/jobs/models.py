@@ -162,11 +162,17 @@ class DeployTicketEnclosure(models.Model):
         verbose_name_plural = u'工单附件'
 
 
+SqlStatus = {
+    0: '未执行',
+    1: '已执行'
+}
+
+
 class SqlTicket(models.Model):
     name = models.CharField(max_length=100, blank=True, verbose_name=u'标题')
     content = models.TextField(verbose_name=u'sql语句')
     desc = models.TextField(verbose_name=u'说明')
-    status = models.CharField(max_length=3, choices=Status.items(), default=0, verbose_name=u'状态')
+    status = models.CharField(max_length=3, choices=SqlStatus.items(), default=0, verbose_name=u'状态')
     create_user = models.ForeignKey(User, related_name='sqlticket_create_user', verbose_name=u'创建者')
     create_time = models.DateTimeField(auto_now_add=True, verbose_name=u'创建时间')
 

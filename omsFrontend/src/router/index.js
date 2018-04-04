@@ -114,7 +114,8 @@ export const asyncRouterMap = [
       { path: 'jobs', component: _import('jobs/jobs'), name: '项目列表' },
       { path: 'jobtickets', component: _import('jobs/jobtickets'), name: '上线申请' },
       { path: 'editjob/:job_id', hidden: true, component: _import('jobs/components/editjob'), name: '编辑项目' },
-      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' }
+      { path: 'runjob/:job_id', hidden: true, component: _import('jobs/components/runjob'), name: '构建项目' },
+      { path: 'sqltickets', component: _import('jobs/sqltickets'), name: 'SQL执行申请' }
     ]
   },
   {
@@ -128,10 +129,6 @@ export const asyncRouterMap = [
       { path: 'addopsdemand', hidden: true, component: _import('opstasks/components/adddemand'), name: '添加项目' },
       { path: 'editopsdemand/:id', hidden: true, component: _import('opstasks/components/editdemand'), name: '编辑项目' },
       { path: 'viewopsdemand/:id', hidden: true, component: _import('opstasks/components/viewdemand'), name: '查看项目' }
-      // { path: 'opsprojects', component: _import('opstasks/projects'), name: '任务列表' },
-      // { path: 'addopsproject', hidden: true, component: _import('opstasks/components/addproject'), name: '添加运维任务' },
-      // { path: 'editopsproject/:id', hidden: true, component: _import('opstasks/components/editproject'), name: '编辑运维任务' },
-      // { path: 'viewopsproject/:id', hidden: true, component: _import('opstasks/components/viewproject'), name: '查看运维任务' }
     ]
   },
   {
@@ -191,10 +188,10 @@ export const asyncRouterMap = [
     redirect: 'upload',
     children: [
       { path: 'upload', component: _import('tools/upload'), name: '上传列表' },
-      { path: 'opswikiadmin', component: _import('wikis/opswikiadmin'), name: '运维文档管理' },
-      { path: 'addopswiki', hidden: true, component: _import('wikis/components/addopswiki'), name: '添加运维文档' },
-      { path: 'editopswiki/:wikiid', hidden: true, component: _import('wikis/components/editopswiki'), name: '编辑运维文档' },
-      { path: 'viewopswiki/:wikiid', hidden: true, component: _import('wikis/components/viewopswiki'), name: '查看运维文档' },
+      // { path: 'opswikiadmin', component: _import('wikis/opswikiadmin'), name: '运维文档管理' },
+      // { path: 'addopswiki', hidden: true, component: _import('wikis/components/addopswiki'), name: '添加运维文档' },
+      // { path: 'editopswiki/:wikiid', hidden: true, component: _import('wikis/components/editopswiki'), name: '编辑运维文档' },
+      // { path: 'viewopswiki/:wikiid', hidden: true, component: _import('wikis/components/viewopswiki'), name: '查看运维文档' },
       { path: 'test', component: _import('tools/test'), name: '测试页面' }
     ]
   },
