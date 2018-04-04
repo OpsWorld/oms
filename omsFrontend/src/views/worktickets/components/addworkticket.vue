@@ -99,14 +99,15 @@ export default {
         file: ''
       },
       toolbars: {
-        preview: true, // 预览
         bold: true, // 粗体
         italic: true, // 斜体
         header: true, // 标题
         underline: true, // 下划线
         strikethrough: true, // 中划线
         ol: true, // 有序列表
-        help: true
+        help: true,
+        subfield: false, // 单双栏模式
+        preview: true // 预览
       },
       img_file: {},
       uploadurl: uploadurl,
@@ -152,7 +153,7 @@ export default {
             const messageForm = {
               action_user: this.ruleForm.action_user,
               title: '【新工单】' + this.ruleForm.name,
-              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/editworkticket/${this.ruleForm.pid}`
+              message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}\n工单地址: http://${window.location.host}/#/worktickets/viewworkticket/${this.ruleForm.pid}`
             }
             postSendmessage(messageForm)
             this.$router.push('/worktickets/workticket')
