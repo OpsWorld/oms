@@ -52,10 +52,11 @@ export default {
           putSqlTicket(this.ruleForm.id, this.ruleForm).then(response => {
             this.$message({
               type: 'success',
-              message: '恭喜你，新建成功'
+              message: '恭喜你，更新成功'
             })
+            this.$emit('DialogStatus', false)
           }).catch(error => {
-            this.$message.error('新建失败')
+            this.$message.error('更新失败')
             console.log(error)
           })
         } else {
@@ -63,7 +64,6 @@ export default {
           return false
         }
       })
-      this.$emit('DialogStatus', false)
     }
 
   }

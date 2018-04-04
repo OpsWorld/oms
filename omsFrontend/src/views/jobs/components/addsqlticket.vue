@@ -61,11 +61,12 @@ export default {
               message: '恭喜你，新建成功'
             })
             const messageForm = {
-              action_user: 'ITDept_SkypeID',
+              action_user: 'itsupport',
               title: '【sql执行申请】' + this.ruleForm.name,
               message: this.ruleForm.desc
             }
             postSendmessage(messageForm)
+            this.$emit('DialogStatus', false)
           }).catch(error => {
             this.$message.error('新建失败')
             console.log(error)
@@ -75,9 +76,7 @@ export default {
           return false
         }
       })
-      this.$emit('DialogStatus', false)
     }
-
   }
 }
 </script>
