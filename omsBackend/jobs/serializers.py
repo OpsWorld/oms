@@ -86,7 +86,7 @@ class DeployTicketEnclosureSerializer(serializers.ModelSerializer):
 
 class SqlTicketSerializer(serializers.ModelSerializer):
     create_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
-    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username')
+    action_user = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='username', allow_null=True)
 
     class Meta:
         model = SqlTicket
