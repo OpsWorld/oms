@@ -68,7 +68,7 @@ class DnspodApi(object):
         """
         将 方法,基础url,参数合并成 url请求,并向服务器发送获取结果然后返回
         """
-        user_agent = "ooxx"
+        user_agent = "itimor@126.com"
         auth_param = self.auth_param()
         if param_data:
             params = dict(auth_param, **param_data)
