@@ -378,6 +378,8 @@ export default {
     changeComplete() {
       if (this.updatetaskform.task_complete === 100) {
         this.updatetaskform.status = 1
+      } else {
+        this.updatetaskform.status = 0
       }
       patchProject(this.updatetaskform.id, this.updatetaskform).then(response => {
         this.fetchData()
