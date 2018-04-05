@@ -46,16 +46,16 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入工单标题', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         desc: [
-          { required: true, message: '请输入工单内容', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         env: [
-          { required: true, type: 'array', message: '请输入工单内容', trigger: 'blur' }
+          { required: true, type: 'array', message: '请输入正确的内容', trigger: 'blur' }
         ],
         content: [
-          { required: true, message: '请输入工单内容', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       envs: { 0: '测试', 1: '正式' }

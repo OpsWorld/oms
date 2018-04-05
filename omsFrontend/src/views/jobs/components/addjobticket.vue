@@ -60,13 +60,13 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入工单标题', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         version: [
-          { required: true, message: '请输入工单内容', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ],
         content: [
-          { required: true, message: '请输入工单内容', trigger: 'blur' }
+          { required: true, message: '请输入正确的内容', trigger: 'blur' }
         ]
       },
       fileList: [],
