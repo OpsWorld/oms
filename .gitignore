@@ -4,8 +4,7 @@
 .python-version
 upload/
 migrations/
-yarn-debug.log*
-yarn-error.log*
+*.log
 *.out
 node_modules/
 package-lock.json
