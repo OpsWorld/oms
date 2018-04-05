@@ -5,7 +5,6 @@ from __future__ import unicode_literals
 import requests
 import json
 import logging
-from dnspod_key import KEYINFO
 
 
 def initlog(logfile):
@@ -184,7 +183,8 @@ class DnspodApi(object):
 
 
 if __name__ == '__main__':
+    from dnspod_key import KEYINFO
     initlog('./trans.log')
     dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
     record_id = 353763350
-    print(dnsapi.update_record('itimor.com', record_id, 'email', '2.2.2.2'))
+    print(dnsapi.get_domains())

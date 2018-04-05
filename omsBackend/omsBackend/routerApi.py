@@ -91,6 +91,7 @@ from optasks.views import OpsProjectViewSet, OpsDemandManagerViewSet
 router.register(r'opsprojects', OpsProjectViewSet)
 router.register(r'opsdemandmanagers', OpsDemandManagerViewSet)
 
-from dnsmanager.views import DnsApiKeyViewSet
+from dnsmanager.views import DnsApiKeyViewSet, DnspodDomainViewSet
 
 router.register(r'dnsapikeys', DnsApiKeyViewSet)
+router.register(r'dnspoddomains', DnspodDomainViewSet, base_name='dnspoddomains')
