@@ -183,7 +183,7 @@ class Godaddy(object):
         # If we didn't get any exceptions, return True to let the user know
         return True
 
-    def replace_records(self, domain, records, record_type, name=None):
+    def replace_records(self, domain, records, record_type=None, name=None):
         """This will replace all records at the domain.  Record type and record name can be provided to filter
         which records to replace.
         :param domain: the domain to replace records at
@@ -236,7 +236,7 @@ class Godaddy(object):
         # If we didn't get any exceptions, return True to let the user know
         return True
 
-    def delete_records(self, domain, name, record_type=None):
+    def delete_record(self, domain, name, record_type):
         """Deletes records by name.  You can also add a record type, which will only delete records with the
         specified type/name combo.  If no record type is specified, ALL records that have a matching name will be
         deleted.
@@ -254,7 +254,7 @@ class Godaddy(object):
         save = list()
         deleted = 0
         for record in records:
-            if (record_type == record['type'] or record_type is None) and name == record['name']:
+            if record_type == record['type'] and name == record['name']:
                 deleted += 1
             else:
                 save.append(record)
@@ -317,4 +317,4 @@ if __name__ == '__main__':
     records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
                {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
                ]
-    print(godaddy.delete_records('918168.net', name='ggg', record_type='A'))
+    print(godaddy.delete_record('918168.net', name='ggg', record_type='A'))
