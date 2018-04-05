@@ -35,6 +35,7 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='env' label='执行环境'></el-table-column>
           <el-table-column prop='create_user' label='创建人'></el-table-column>
           <el-table-column prop='action_user' label='执行人'></el-table-column>
           <el-table-column prop='create_time' label='创建时间' sortable="custom">

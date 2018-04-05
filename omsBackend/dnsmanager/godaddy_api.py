@@ -4,7 +4,7 @@
 import logging
 import sys
 import requests
-from godaddy_key import APIKEY
+from godaddy_key import KEYINFO
 
 
 class Godaddy(object):
@@ -263,7 +263,7 @@ class Godaddy(object):
         # If we didn't get any exceptions, return True to let the user know
         return True
 
-    def update_record(self, domain, record, record_type=None, name=None):
+    def update_record(self, domain, record, record_type, name):
         """Call to GoDaddy API to update a single DNS record
         :param name: only required if the record is None (deletion)
         :param record_type: only required if the record is None (deletion)
@@ -271,10 +271,6 @@ class Godaddy(object):
         :param record: dict with record info (ex. {'name': 'dynamic', 'ttl': 3600, 'data': '1.1.1.1', 'type': 'A'})
         :return: True if no exceptions occurred
         """
-        if record_type is None:
-            record_type = record['type']
-        if name is None:
-            name = record['name']
         url = self.API_TEMPLATE + self.RECORDS_TYPE_NAME.format(domain=domain, type=record_type, name=name)
         self._put(url, json=record)
         self.logger.info(
@@ -309,8 +305,8 @@ class BadResponse(Exception):
 
 
 if __name__ == '__main__':
-    _api_key = APIKEY['key']
-    _api_secret = APIKEY['secret']
+    _api_key = KEYINFO['key']
+    _api_secret = KEYINFO['secret']
     godaddy = Godaddy(api_key=_api_key, api_secret=_api_secret)
     record = {
         'type': 'A',

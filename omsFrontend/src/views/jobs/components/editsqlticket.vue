@@ -6,6 +6,13 @@
     <el-form-item label="说明" prop="desc">
       <el-input v-model="ruleForm.desc"></el-input>
     </el-form-item>
+    <el-form-item label="执行环境" prop="env">
+      <el-checkbox-group v-model="ruleForm.env">
+        <el-checkbox v-for="item in Object.keys(envs)" :key="item" :label="envs[item]">
+          {{envs[item]}}
+        </el-checkbox>
+      </el-checkbox-group>
+    </el-form-item>
     <el-form-item label="SQL" prop="content">
       <el-input
         type="textarea"
@@ -36,19 +43,25 @@ export default {
         desc: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }
         ],
+        env: [
+          { required: true, type: 'array', message: '请输入工单内容', trigger: 'blur' }
+        ],
         content: [
           { required: true, message: '请输入工单内容', trigger: 'blur' }
         ]
-      }
+      },
+      envs: { 0: '测试', 1: '正式' }
     }
   },
 
   created() {
+    this.ruleForm.env = this.ruleForm.env.split(',')
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.ruleForm.env = this.ruleForm.env.join()
           putSqlTicket(this.ruleForm.id, this.ruleForm).then(response => {
             this.$message({
               type: 'success',
