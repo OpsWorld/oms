@@ -183,7 +183,7 @@ class Godaddy(object):
         # If we didn't get any exceptions, return True to let the user know
         return True
 
-    def replace_records(self, domain, records, record_type=None, name=None):
+    def replace_records(self, domain, records, record_type, name=None):
         """This will replace all records at the domain.  Record type and record name can be provided to filter
         which records to replace.
         :param domain: the domain to replace records at
@@ -214,7 +214,7 @@ class Godaddy(object):
         if domains is None:
             domains = self.get_domains()
         elif sys.version_info < (3, 0):
-            if type(domains) == str or type(domains) == unicode:
+            if type(domains) == str:
                 domains = [domains]
         elif sys.version_info >= (3, 0) and type(domains) == str:
             domains = [domains]
@@ -254,7 +254,7 @@ class Godaddy(object):
         save = list()
         deleted = 0
         for record in records:
-            if (record_type == str(record['type']) or record_type is None) and name == str(record['name']):
+            if (record_type == record['type'] or record_type is None) and name == record['name']:
                 deleted += 1
             else:
                 save.append(record)
@@ -318,11 +318,7 @@ if __name__ == '__main__':
         'data': '1.1.1.2',
         'ttl': 600
     }
-    records = [{'data': 'Parked', 'name': '@', 'ttl': 600, 'type': 'A'},
-               {'data': '', 'name': '@', 'ttl': 3600, 'type': 'SOA'},
-               {'data': 'ns47.domaincontrol.com', 'name': '@', 'ttl': 3600, 'type': 'NS'},
-               {'data': 'ns48.domaincontrol.com', 'name': '@', 'ttl': 3600, 'type': 'NS'},
-               {'data': '_domainconnect.gd.domaincontrol.com', 'name': '_domainconnect', 'ttl': 3600, 'type': 'CNAME'},
-               {'data': '@', 'name': 'www', 'ttl': 3600, 'type': 'CNAME'},
-               {'data': '1.1.1.1', 'name': 'blog', 'ttl': 3600, 'type': 'A'}]
-    print(godaddy.replace_records('918168.net', records=records))
+    records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
+               {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
+               ]
+    print(godaddy.delete_records('918168.net', name='ggg', record_type='A'))
