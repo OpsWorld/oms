@@ -7,13 +7,14 @@ import json
 import logging
 
 
-def initlog(logfile):
+def initlog(logfile, logname):
     """
     创建日志实例
     """
+    # logger = logging.getLogger(logname) # 有logname就不生产日志
     logger = logging.getLogger()
-    hdlr = logging.FileHandler(logfile)
-    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+    hdlr = logging.FileHandler(logfile, encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
     logger.setLevel(logging.NOTSET)
@@ -172,8 +173,8 @@ class DnspodApi(object):
 
 
 if __name__ == '__main__':
-    from dnspod_key import KEYINFO
-    initlog('./trans.log')
-    dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
+    from dnspod_key import DMSPOD_KEYINFO
+    initlog('./dnsapi.log', 'DnspodApi')
+    dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
     record_id = 353763350
     print(dnsapi.get_domains())
