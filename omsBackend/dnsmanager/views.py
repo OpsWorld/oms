@@ -22,7 +22,8 @@ class DnspodDomainViewSet(viewsets.ViewSet):
     serializer_class = DnspodDomainSerializer
 
     def list(self, request):
-        dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
+        dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
         query = dnsapi.get_domains()
         serializer = DnspodDomainSerializer(query, many=True)
         return Response(serializer.data)
@@ -32,15 +33,17 @@ class DnspodRecordViewSet(viewsets.ViewSet):
     serializer_class = DnspodRecordSerializer
 
     def list(self, request):
-        dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
+        dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
         domain = request.GET['domain']
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
         query = dnsapi.get_records(domain)
         serializer = DnspodRecordSerializer(query, many=True)
         return Response(serializer.data)
 
     def post(self, request, record_type="A", ttl=600):
-        dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
+        dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
         domain = request.data['domain']
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
         if request.data['action'] == 'create':
             sub_domain = request.data['sub_domain']
             value = request.data['value']
@@ -64,8 +67,9 @@ class GodaddyDomainViewSet(viewsets.ViewSet):
     serializer_class = GodaddyDomainSerializer
 
     def list(self, request):
-        godaddy = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
-        query = godaddy.get_domains()
+        dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
+        dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
+        query = dnsapi.get_domains()
         serializer = GodaddyDomainSerializer(query, many=True)
         return Response(serializer.data)
 
@@ -74,15 +78,17 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
     serializer_class = GodaddyRecordSerializer
 
     def list(self, request):
+        dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
         domain = request.GET['domain']
-        dnsapi = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
+        dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
         query = dnsapi.get_records(domain)
         serializer = GodaddyRecordSerializer(query, many=True)
         return Response(serializer.data)
 
     def post(self, request, record_type="A", ttl=600):
-        dnsapi = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
+        dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
         domain = request.data['domain']
+        dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
         if request.data['action'] == 'create':
             sub_domain = request.data['sub_domain']
             value = request.data['value']
