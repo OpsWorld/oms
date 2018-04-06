@@ -51,7 +51,6 @@ export function getGodaddyDomain(query) {
   })
 }
 
-
 // dnspodrecords
 export function postDnspodRecord(data) {
   return request({

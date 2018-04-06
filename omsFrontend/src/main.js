@@ -32,6 +32,10 @@ Vue.component('full-calendar', fullCalendar)
 import LazyRender from 'vue-lazy-render'
 Vue.use(LazyRender)
 
+/* datatables */
+import DataTables from 'vue-data-tables'
+Vue.use(DataTables)
+
 // register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])

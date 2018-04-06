@@ -7,9 +7,7 @@ from dnsmanager.models import DnsApiKey
 from dnsmanager.serializers import DnsApiKeySerializer, DnspodDomainSerializer, DnspodRecordSerializer, \
     GodaddyDomainSerializer, GodaddyRecordSerializer
 from dnsmanager.dnspod_api import DnspodApi
-from dnsmanager.dnspod_key import DMSPOD_KEYINFO
 from dnsmanager.godaddy_api import GodaddyApi
-from dnsmanager.godaddy_key import GODADDY_KEYINFO
 
 
 class DnsApiKeyViewSet(viewsets.ModelViewSet):

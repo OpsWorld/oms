@@ -144,6 +144,16 @@ export const asyncRouterMap = [
     ]
   },
   {
+    name: 'dns管理',
+    path: '/dnsmanager',
+    component: Layout,
+    icon: 'drupal',
+    redirect: 'dnspoddomain',
+    children: [
+      { path: 'dnspoddomain', component: _import('dnsmanager/dnspoddomain'), name: 'dnspod' }
+    ]
+  },
+  {
     name: '用户管理',
     path: '/users',
     component: Layout,
