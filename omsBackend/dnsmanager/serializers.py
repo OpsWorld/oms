@@ -28,3 +28,9 @@ class DnspodRecordSerializer(serializers.Serializer):
     mx = serializers.CharField()
     status = serializers.CharField()
     updated_on = serializers.DateTimeField()
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass

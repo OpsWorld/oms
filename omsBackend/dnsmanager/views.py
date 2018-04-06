@@ -34,3 +34,18 @@ class DnspodRecordViewSet(viewsets.ViewSet):
         query = dnsapi.get_records(domain)
         serializer = DnspodRecordSerializer(query, many=True)
         return Response(serializer.data)
+
+    def create(self, request, record_type="A", ttl=600):
+        domain = request.data['domain']
+        sub_domain = request.data['sub_domain']
+        value = request.data['value']
+        record_type = request.data.get('record_type', record_type)
+        ttl = request.data.get('ttl', ttl)
+        if not request.data['record_id']:
+            dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
+            query = dnsapi.add_record(domain, sub_domain, value, record_type, ttl=ttl)
+        else:
+            record_id = request.data['record_id']
+            dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
+            query = dnsapi.update_record(domain, record_id, sub_domain, value, record_type, ttl=ttl)
+        return Response(query)

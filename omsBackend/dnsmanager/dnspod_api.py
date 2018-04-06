@@ -144,7 +144,7 @@ class DnspodApi(object):
         ret_json = self.post_data(url, pam)
         status_code = json.loads(ret_json, encoding='utf-8').get('status').get('code')
         if int(status_code) == 1:
-            return "OK"
+            return ret_json
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise DnspodApiError(error_code, error_message)
@@ -169,7 +169,7 @@ class DnspodApi(object):
         ret_json = self.post_data(url, pam)
         status_code = json.loads(ret_json, encoding='utf-8').get('status').get('code')
         if int(status_code) == 1:
-            return "OK"
+            return ret_json
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise DnspodApiError(error_code, error_message)
