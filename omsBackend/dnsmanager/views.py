@@ -75,18 +75,24 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
 
     def list(self, request):
         domain = request.GET['domain']
-        godaddy = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
-        query = godaddy.get_records(domain)
+        dnsapi = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
+        query = dnsapi.get_records(domain)
         serializer = GodaddyRecordSerializer(query, many=True)
         return Response(serializer.data)
 
     def post(self, request, record_type="A", ttl=600):
-        godaddy = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
+        dnsapi = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
         domain = request.data['domain']
         if request.data['action'] == 'create':
             sub_domain = request.data['sub_domain']
             value = request.data['value']
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
-            query = godaddy.add_record(domain, sub_domain, value, record_type, ttl=ttl)
+            query = dnsapi.add_record(domain, sub_domain, value, record_type, ttl=ttl)
+        elif request.data['action'] == 'update':
+            sub_domain = request.data['sub_domain']
+            value = request.data['value']
+            record_type = request.data.get('record_type', record_type)
+            ttl = request.data.get('ttl', ttl)
+            query = dnsapi.update_record(domain, sub_domain, record_type, value, ttl=ttl)
         return Response(query)

@@ -22,12 +22,9 @@ def initlog(logfile, logname):
 
 
 class GodaddyApiError(Exception):
-    def __init__(self, message, *args, **kwargs):
-        self._message = message
+    def __init__(self, error_message, *args, **kwargs):
         super(GodaddyApiError, *args, **kwargs)
-
-    def __str__(self, *args, **kwargs):
-        return 'Response Data: {}'.format(self._message)
+        self.error_message = error_message
 
 
 class GodaddyApi(object):
@@ -167,13 +164,13 @@ class GodaddyApi(object):
         for domain in domains:
             a_records = self.get_records(domain, record_type=record_type)
             for record in a_records:
-                r_name = str(record['name'])
-                r_ip = str(record['data'])
+                r_name = record['name']
+                r_ip = record['data']
                 if not r_ip == ip:
                     if ((subdomains is None) or
                             (type(subdomains) == list and subdomains.count(r_name)) or
                             (type(subdomains) == str and subdomains == r_name)):
-                        record.update(data=str(ip))
+                        record.update(data=ip)
                         self.update_record(domain, record)
         return True
 
@@ -192,18 +189,16 @@ class GodaddyApi(object):
         logging.info("Deleted {} records @ {}".format(deleted, domain))
         return True
 
-    def update_record(self, domain, record, record_type, name):
+    def update_record(self, domain, name, record_type, value, ttl=600):
+        record = {
+            'type': record_type,
+            'name': name,
+            'data': value,
+            'ttl': ttl
+        }
         url = self.API_TEMPLATE + self.RECORDS_TYPE_NAME.format(domain=domain, type=record_type, name=name)
         self._put(url, json=record)
-        logging.info('Updated record. Domain {} name {} type {}'.format(domain, record['name'], record['type']))
-        return True
-
-    def update_record_ip(self, ip, domain, name, record_type):
-        records = self.get_records(domain, name=name, record_type=record_type)
-        data = {'data': str(ip)}
-        for _rec in records:
-            _rec.update(data)
-            self.update_record(domain, _rec)
+        logging.info('Updated record. Domain {} name {} type {}'.format(domain, name, record_type))
         return True
 
 
@@ -215,11 +210,11 @@ if __name__ == '__main__':
     godaddy = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
     record = {
         'type': 'A',
-        'name': 'fff',
+        'name': 'aaa',
         'data': '1.1.1.3',
         'ttl': 3600
     }
     records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
                {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
                ]
-    print(godaddy.update_record('918168.net', record, 'A', 'aaa'))
+    print(godaddy.update_record('918168.net', record, 'A'))
