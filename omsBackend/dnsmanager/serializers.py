@@ -30,12 +30,6 @@ class DnspodRecordSerializer(serializers.Serializer):
     status = serializers.CharField()
     updated_on = serializers.DateTimeField()
 
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
-
 
 class GodaddyDomainSerializer(serializers.Serializer):
     domainId = serializers.IntegerField()

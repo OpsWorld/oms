@@ -83,7 +83,7 @@ class DnspodApi(object):
         logging.info(msg)
         return msg
 
-    def get_domains(self, type=None, offset=None, length=None):
+    def get_domains(self):
         method = 'List'
         url = self.API_DOMAINS + method
         ret_json = self.post_data(url)

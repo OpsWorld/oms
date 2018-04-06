@@ -151,17 +151,17 @@ class GodaddyApi(object):
         self.logger.debug('Retrieved {} record(s) from {}.'.format(len(data), domain))
         return data
 
-    def add_record(self, domain, record):
+    def add_record(self, domain, sub_domain, value, record_type="A", ttl=600):
         """Adds the specified DNS record to a domain.
         :param domain: the domain to add the record to
         :param record: the record to add
-        eg:  record = {
-        'type': 'A',
-        'name': 'ggg',
-        'data': '1.1.1.2',
-        'ttl': 600
-        }
         """
+        record = {
+            'type': record_type,
+            'name': sub_domain,
+            'data': value,
+            'ttl': ttl
+        }
         self.add_records(domain, [record])
         # If we didn't get any exceptions, return True to let the user know
         return True
