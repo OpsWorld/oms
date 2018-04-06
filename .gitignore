@@ -10,4 +10,4 @@ node_modules/
 package-lock.json
 *.db
 .vscode/
-*_key.py
+dnsapi_key.py
