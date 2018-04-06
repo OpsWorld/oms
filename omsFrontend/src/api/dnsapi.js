@@ -1,74 +1,87 @@
 import request from '@/utils/request'
 import apiURL from '@/config'
 
-// hosts
-export function postHost(data) {
+// dnsapikeys
+export function postDnsapiKey(data) {
   return request({
-    url: apiURL.hosts,
+    url: apiURL.dnsapikeys,
     method: 'post',
     data
   })
 }
 
-export function getHost(query) {
+export function getDnsapiKey(query) {
   return request({
-    url: apiURL.hosts,
+    url: apiURL.dnsapikeys,
     method: 'get',
     params: query
   })
 }
 
-export function putHost(id, data) {
+export function putDnsapiKey(id, data) {
   return request({
-    url: apiURL.hosts + id + '/',
+    url: apiURL.dnsapikeys + id + '/',
     method: 'put',
     data
   })
 }
 
-export function patchHost(id, data) {
+export function deleteDnsapiKey(id) {
   return request({
-    url: apiURL.hosts + id + '/',
-    method: 'patch',
-    data
-  })
-}
-
-export function deleteHost(id) {
-  return request({
-    url: apiURL.hosts + id + '/',
+    url: apiURL.dnsapikeys + id + '/',
     method: 'delete'
   })
 }
 
-// idcs
-export function postIdc(data) {
+// dnspoddomains
+export function getDnspodDomain(query) {
   return request({
-    url: apiURL.idcs,
+    url: apiURL.dnspoddomains,
+    method: 'get',
+    params: query
+  })
+}
+
+// godaddydomains
+export function getGodaddyDomain(query) {
+  return request({
+    url: apiURL.godaddydomains,
+    method: 'get',
+    params: query
+  })
+}
+
+
+// dnspodrecords
+export function postDnspodRecord(data) {
+  return request({
+    url: apiURL.dnspodrecords,
     method: 'post',
     data
   })
 }
 
-export function getIdc(query) {
+export function getDnspodRecord(query) {
   return request({
-    url: apiURL.idcs,
+    url: apiURL.dnspodrecords,
     method: 'get',
     params: query
   })
 }
 
-export function putIdc(id, data) {
+// godaddyreecords
+export function postGodaddyRecord(data) {
   return request({
-    url: apiURL.idcs + id + '/',
-    method: 'put',
+    url: apiURL.godaddyreecords,
+    method: 'post',
     data
   })
 }
 
-export function deleteIdc(id) {
+export function getGodaddyRecord(query) {
   return request({
-    url: apiURL.idcs + id + '/',
-    method: 'delete'
+    url: apiURL.godaddyreecords,
+    method: 'get',
+    params: query
   })
 }
