@@ -100,5 +100,5 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             value = request.data['value']
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
-            query = dnsapi.update_record(domain, sub_domain, record_type, value, ttl=ttl)
+            query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
         return Response(query)

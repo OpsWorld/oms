@@ -139,6 +139,9 @@ class GodaddyApi(object):
         return True
 
     def add_records(self, domain, records):
+        """
+        添加记录用的patch, 没有post, 好傻逼的api
+        """
         url = self.API_TEMPLATE + self.RECORDS.format(domain=domain)
         self._patch(url, json=records)
         logging.debug('Added records @ {}'.format(records))
@@ -189,10 +192,13 @@ class GodaddyApi(object):
         logging.info("Deleted {} records @ {}".format(deleted, domain))
         return True
 
-    def update_record(self, domain, name, record_type, value, ttl=600):
+    def update_record(self, domain, name, value, record_type='A', ttl=600):
+        """
+        修改只能修改 value/ttl, 好傻逼的api
+        """
         record = {
             'type': record_type,
-            'name': name,
+            'name': "ddd",
             'data': value,
             'ttl': ttl
         }
@@ -217,4 +223,4 @@ if __name__ == '__main__':
     records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
                {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
                ]
-    print(godaddy.update_record('918168.net', record, 'A'))
+    print(godaddy.update_record('918168.net', 'aaa', '2.2.2.3'))
