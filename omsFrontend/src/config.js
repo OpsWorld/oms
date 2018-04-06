@@ -140,5 +140,12 @@ module.exports = {
   // zk考勤机
   zkusers: `${zkurl}/api/zkusers/`,
   zkpunchs: `${zkurl}/api/zkpunchs/`,
-  zkpunchset: `${zkurl}/api/zkpunchset/`
+  zkpunchset: `${zkurl}/api/zkpunchset/`,
+
+  // dnsapi
+  dnsapikeys: `${url}/api/dnsapikeys/`,
+  dnspoddomains: `${url}/api/dnspoddomains/`,
+  dnspodrecords: `${url}/api/dnspodrecords/`,
+  godaddydomains: `${url}/api/godaddydomains/`,
+  godaddyreecords: `${url}/api/godaddyreecords/`
 }
