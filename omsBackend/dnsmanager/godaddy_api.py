@@ -203,11 +203,11 @@ class GodaddyApi(object):
 
 
 if __name__ == '__main__':
-    from godaddy_key import GODADDY_KEYINFO
+    from dnsapi_key import GODADDY_KEYINFO
 
     initlog('./dnsapi.log', 'GoDaddyApi')
 
-    godaddy = GodaddyApi(api_key=GODADDY_KEYINFO['key'], api_secret=GODADDY_KEYINFO['secret'])
+    godaddy = GodaddyApi(GODADDY_KEYINFO['key'], GODADDY_KEYINFO['secret'])
     record = {
         'type': 'A',
         'name': 'aaa',

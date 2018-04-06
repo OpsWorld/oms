@@ -173,8 +173,8 @@ class DnspodApi(object):
 
 
 if __name__ == '__main__':
-    from dnspod_key import DMSPOD_KEYINFO
+    from dnsapi_key import DNSPOD_KEYINFO
     initlog('./dnsapi.log', 'DnspodApi')
-    dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
+    dnsapi = DnspodApi(DNSPOD_KEYINFO['user'], DNSPOD_KEYINFO['pwd'])
     record_id = 353763350
     print(dnsapi.get_domains())
