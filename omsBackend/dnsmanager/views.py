@@ -35,17 +35,25 @@ class DnspodRecordViewSet(viewsets.ViewSet):
         serializer = DnspodRecordSerializer(query, many=True)
         return Response(serializer.data)
 
-    def create(self, request, record_type="A", ttl=600):
+    def post(self, request, record_type="A", ttl=600):
         domain = request.data['domain']
-        sub_domain = request.data['sub_domain']
-        value = request.data['value']
-        record_type = request.data.get('record_type', record_type)
-        ttl = request.data.get('ttl', ttl)
-        if not request.data['record_id']:
+        if request.data['action'] == 'create':
+            sub_domain = request.data['sub_domain']
+            value = request.data['value']
+            record_type = request.data.get('record_type', record_type)
+            ttl = request.data.get('ttl', ttl)
             dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
             query = dnsapi.add_record(domain, sub_domain, value, record_type, ttl=ttl)
-        else:
+        elif request.data['action'] == 'update':
+            sub_domain = request.data['sub_domain']
+            value = request.data['value']
+            record_type = request.data.get('record_type', record_type)
+            ttl = request.data.get('ttl', ttl)
             record_id = request.data['record_id']
             dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
             query = dnsapi.update_record(domain, record_id, sub_domain, value, record_type, ttl=ttl)
+        elif request.data['action'] == 'remove':
+            record_id = request.data['record_id']
+            dnsapi = DnspodApi(user=KEYINFO['user'], pwd=KEYINFO['pwd'])
+            query = dnsapi.delete_record(domain, record_id)
         return Response(query)
