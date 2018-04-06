@@ -4,10 +4,9 @@
 import logging
 import sys
 import requests
-from godaddy_key import KEYINFO
 
 
-class Godaddy(object):
+class GodaddyApi(object):
     def __init__(self, api_key, api_secret, delegate=None, log_level=None):
         """
 
@@ -119,12 +118,7 @@ class Godaddy(object):
         """
         url = self.API_TEMPLATE + self.DOMAINS
         data = self._get_json_from_response(url)
-        domains = list()
-        for item in data:
-            domain = item['domain']
-            domains.append(domain)
-            self.logger.debug('Discovered domains: {}'.format(domain))
-        return domains
+        return data
 
     def update_domain(self, domain, **kwargs):
         """
@@ -305,9 +299,9 @@ class BadResponse(Exception):
 
 
 if __name__ == '__main__':
-    _api_key = KEYINFO['key']
-    _api_secret = KEYINFO['secret']
-    godaddy = Godaddy(api_key=_api_key, api_secret=_api_secret)
+    from godaddy_key import KEYINFO
+
+    godaddy = GodaddyApi(api_key=KEYINFO['key'], api_secret=KEYINFO['secret'])
     record = {
         'type': 'A',
         'name': 'ggg',
@@ -317,4 +311,4 @@ if __name__ == '__main__':
     records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
                {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
                ]
-    print(godaddy.delete_record('918168.net', name='ggg', record_type='A'))
+    print(godaddy.get_records('918168.net'))

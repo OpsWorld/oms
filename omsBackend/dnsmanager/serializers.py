@@ -14,6 +14,7 @@ class DnsApiKeySerializer(serializers.ModelSerializer):
 class DnspodDomainSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
+    status = serializers.CharField()
     records = serializers.CharField()
     created_on = serializers.DateTimeField()
 
@@ -34,3 +35,18 @@ class DnspodRecordSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         pass
+
+
+class GodaddyDomainSerializer(serializers.Serializer):
+    domainId = serializers.IntegerField()
+    domain = serializers.CharField()
+    status = serializers.CharField()
+    # expires = serializers.DateTimeField()
+    createdAt = serializers.DateTimeField()
+
+
+class GodaddyRecordSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    data = serializers.CharField()
+    type = serializers.CharField()
+    ttl = serializers.IntegerField()

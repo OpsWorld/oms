@@ -2,7 +2,7 @@
 # author: itimor
 
 # itimor
-KEYINFO = {
+DMSPOD_KEYINFO = {
     "user": 'kevinloo@126.com',
     "pwd": 'jay541430183',
 }

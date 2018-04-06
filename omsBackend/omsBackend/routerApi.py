@@ -91,8 +91,10 @@ from optasks.views import OpsProjectViewSet, OpsDemandManagerViewSet
 router.register(r'opsprojects', OpsProjectViewSet)
 router.register(r'opsdemandmanagers', OpsDemandManagerViewSet)
 
-from dnsmanager.views import DnsApiKeyViewSet, DnspodDomainViewSet, DnspodRecordViewSet
+from dnsmanager.views import DnsApiKeyViewSet, DnspodDomainViewSet, DnspodRecordViewSet, GodaddyDomainViewSet, GodaddyRecordViewSet
 
 router.register(r'dnsapikeys', DnsApiKeyViewSet)
 router.register(r'dnspoddomains', DnspodDomainViewSet, base_name='dnspoddomains')
 router.register(r'dnspodrecords', DnspodRecordViewSet, base_name='dnspodrecords')
+router.register(r'godaddydomains', GodaddyDomainViewSet, base_name='godaddydomains')
+router.register(r'godaddyreecords', GodaddyRecordViewSet, base_name='godaddyreecords')
