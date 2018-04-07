@@ -87,7 +87,7 @@ export default {
       dnsapis: [],
       domain_searchDef: {
         colProps: {
-          span: 20
+          span: 24
         }
       },
       record_searchDef: {
