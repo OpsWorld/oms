@@ -194,7 +194,7 @@ class GodaddyApi(object):
 
     def update_record(self, domain, name, value, record_type='A', ttl=600):
         """
-        修改只能修改 value/ttl, 好傻逼的api
+        修改只能修改 value和ttl, 好傻逼的api
         """
         record = {
             'type': record_type,

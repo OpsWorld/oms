@@ -11,7 +11,7 @@ def initlog(logfile, logname):
     """
     创建日志实例
     """
-    # logger = logging.getLogger(logname) # 有logname就不生产日志
+    # logger = logging.getLogger(logname) # y
     logger = logging.getLogger()
     hdlr = logging.FileHandler(logfile, encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
@@ -150,6 +150,31 @@ class DnspodApi(object):
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise DnspodApiError(error_code, error_message)
 
+    def update_record(self, domain, record_id, sub_domain, value, record_type="A", record_line=u'默认', mx=None, ttl=600):
+        method = 'Modify'
+        url = self.API_RECORDS + method
+        domain_id = self.get_domain_id(domain)
+        pam = {'domain_id': domain_id,
+               'record_id': record_id,
+               'sub_domain': sub_domain,
+               'record_type': record_type,
+               'record_line': record_line,
+               'value': value}
+        if record_type == 'MX':
+            if mx is None:
+                pam['mx'] = mx
+            else:
+                pam['mx'] = 5
+                logging.warning("邮件协议 MX 类型 需要添加MX优先级[1-20]")
+        pam['ttl'] = ttl
+        ret_json = self.post_data(url, pam)
+        status_code = json.loads(ret_json, encoding='utf-8').get('status').get('code')
+        if int(status_code) == 1:
+            return ret_json
+        error_code, error_message = int(status_code), self.get_error_msg(ret_json)
+        logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
+        raise DnspodApiError(error_code, error_message)
+
     def delete_record(self, domain, record_id):
         method = 'Remove'
         url = self.API_RECORDS + method
@@ -173,8 +198,9 @@ class DnspodApi(object):
 
 
 if __name__ == '__main__':
-    from dnsapi_key import DNSPOD_KEYINFO
+    from dnspod_key import DMSPOD_KEYINFO
+
     initlog('./dnsapi.log', 'DnspodApi')
-    dnsapi = DnspodApi(DNSPOD_KEYINFO['user'], DNSPOD_KEYINFO['pwd'])
+    dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
     record_id = 353763350
     print(dnsapi.get_domains())

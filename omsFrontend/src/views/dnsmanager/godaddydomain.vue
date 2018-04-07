@@ -15,8 +15,8 @@
         </el-col>
         <el-col :span="18">
           <el-card v-if="showrecord">
-            <data-tables :data="recordData" :actions-def="actionsDef" :search-def="record_searchDef"
-                         :pagination-def="paginationDef">
+            <data-tables :data="recordData" :actions-def="actionsDef" :action-col-def="actionColDef"
+                         :search-def="record_searchDef" :pagination-def="paginationDef">
               <el-table-column prop="name" label="记录" sortable="custom"></el-table-column>
               <el-table-column prop="type" label="类型" sortable="custom"></el-table-column>
               <el-table-column prop="data" label="值" sortable="custom"></el-table-column>
@@ -45,6 +45,26 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addGroupSubmit('ruleForm')">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog :visible.sync="editForm">
+      <el-form :model="rowdata" ref="rowdata" label-width="100px">
+        <el-form-item label="名称" prop="sub_domain">
+          <el-input v-model="rowdata.sub_domain" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="类型" prop="record_type">
+          <el-input v-model="rowdata.record_type" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="值" prop="value">
+          <el-input v-model="rowdata.value"></el-input>
+        </el-form-item>
+        <el-form-item label="ttl" prop="ttl">
+          <el-input v-model="rowdata.ttl"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="editGroupSubmit('rowdata')">立即修改</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -102,7 +122,31 @@ export default {
         record_type: 'A',
         ttl: 600
       },
-      record_types: ['A', 'CNAME']
+      record_types: ['A', 'CNAME'],
+      editForm: false,
+      rowdata: {},
+      actionColDef: {
+        label: '操作',
+        tableColProps: {
+          align: 'center'
+        },
+        def: [{
+          handler: row => {
+            this.editForm = true
+            this.rowdata = {
+              action: 'update',
+              sub_domain: row.name,
+              record_type: row.type,
+              value: row.data,
+              ttl: row.ttl
+            }
+          },
+          buttonProps: {
+            type: 'success'
+          },
+          name: '编辑'
+        }]
+      }
     }
   },
 
@@ -155,6 +199,21 @@ export default {
         this.addForm = false
       }).catch(error => {
         this.$message.error('添加失败')
+        console.log(error)
+      })
+    },
+    editGroupSubmit() {
+      this.rowdata.dnsname = this.ruleForm.dnsname
+      this.rowdata.domain = this.ruleForm.domain
+      postGodaddyRecord(this.rowdata).then(() => {
+        this.$message({
+          message: '恭喜你，修改成功',
+          type: 'success'
+        })
+        this.fetchRecordData()
+        this.editForm = false
+      }).catch(error => {
+        this.$message.error('修改失败')
         console.log(error)
       })
     }
