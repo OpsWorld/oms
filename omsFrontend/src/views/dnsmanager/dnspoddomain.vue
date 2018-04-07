@@ -92,7 +92,7 @@ export default {
       },
       record_searchDef: {
         colProps: {
-          span: 10
+          span: 8
         }
       },
       listQuery: {
@@ -105,7 +105,7 @@ export default {
       recordData: [],
       actionsDef: {
         colProps: {
-          span: 8
+          span: 16
         },
         def: [{
           name: '添加',
