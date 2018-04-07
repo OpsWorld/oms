@@ -53,6 +53,7 @@ export function getGodaddyDomain(query) {
 
 // dnspodrecords
 export function postDnspodRecord(data) {
+  console.log(data)
   return request({
     url: apiURL.dnspodrecords,
     method: 'post',
@@ -70,6 +71,7 @@ export function getDnspodRecord(query) {
 
 // godaddyreecords
 export function postGodaddyRecord(data) {
+  console.log(data)
   return request({
     url: apiURL.godaddyreecords,
     method: 'post',
