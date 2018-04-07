@@ -150,6 +150,7 @@ export const asyncRouterMap = [
     icon: 'eye',
     redirect: 'dnspoddomain',
     children: [
+      { path: 'dnsapis', component: _import('dnsmanager/dnsapis'), name: 'api列表' },
       { path: 'dnspoddomain', component: _import('dnsmanager/dnspoddomain'), name: 'dnspod' }
     ]
   },

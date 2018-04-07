@@ -41,7 +41,15 @@
               </div>
               <div class='progress-item'>
                 <span>研发管理</span>
-                <el-progress :percentage="80"></el-progress>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>运维管理</span>
+                <el-progress :percentage="100"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>考勤管理</span>
+                <el-progress :percentage="100"></el-progress>
               </div>
             </el-card>
             <el-card class="box-card-card">
@@ -49,7 +57,11 @@
                 <span>待开发功能</span>
               </div>
               <div class='progress-item'>
-                <span>工作流系统</span>
+                <span>dns管理</span>
+                <el-progress :percentage="0"></el-progress>
+              </div>
+              <div class='progress-item'>
+                <span>zabbix管理</span>
                 <el-progress :percentage="0"></el-progress>
               </div>
             </el-card>

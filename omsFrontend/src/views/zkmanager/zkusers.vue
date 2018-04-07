@@ -51,7 +51,6 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchdata: '',
       currentPage: 1,
       pagesize: pagesize,
       pageformat: pageformat,

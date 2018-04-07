@@ -14,6 +14,7 @@ class DnsApiKeyViewSet(viewsets.ModelViewSet):
     queryset = DnsApiKey.objects.all()
     serializer_class = DnsApiKeySerializer
     filter_fields = ['name']
+    search_fields = ['name']
 
 
 class DnspodDomainViewSet(viewsets.ViewSet):

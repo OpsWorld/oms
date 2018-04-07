@@ -38,7 +38,7 @@
                 <el-tag size="mini" :type="STATUS_COLOR[scope.row.status]">
                   {{STATUS_TEXT[scope.row.status]}}
                 </el-tag>
-                <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
+                <el-tooltip v-if="scope.row.status<2" class="item" effect="dark" content="更改状态" placement="top">
                   <el-button type="text" icon="el-icon-edit" class="modifychange"
                              @click="updateDemand(scope.row.id)"></el-button>
                 </el-tooltip>
