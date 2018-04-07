@@ -151,7 +151,8 @@ export const asyncRouterMap = [
     redirect: 'dnspoddomain',
     children: [
       { path: 'dnsapis', component: _import('dnsmanager/dnsapis'), name: 'api列表' },
-      { path: 'dnspoddomain', component: _import('dnsmanager/dnspoddomain'), name: 'dnspod' }
+      { path: 'dnspoddomain', component: _import('dnsmanager/dnspoddomain'), name: 'dnspod' },
+      { path: 'godaddydomain', component: _import('dnsmanager/godaddydomain'), name: 'godaddy' }
     ]
   },
   {
