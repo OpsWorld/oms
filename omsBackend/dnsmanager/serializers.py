@@ -8,7 +8,7 @@ from dnsmanager.models import DnsApiKey
 class DnsApiKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = DnsApiKey
-        fields = ['url', 'id', 'name', 'key', 'secret', 'desc']
+        fields = ['url', 'id', 'name', 'key', 'secret', 'type', 'desc']
 
 
 class DnspodDomainSerializer(serializers.Serializer):

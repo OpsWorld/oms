@@ -19,6 +19,7 @@
           <el-table-column prop='name' label='名称' sortable></el-table-column>
           <el-table-column prop='key' label='key'></el-table-column>
           <el-table-column prop='secret' label='secret'></el-table-column>
+          <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
@@ -52,6 +53,12 @@
         <el-form-item label="secret" prop="secret">
           <el-input v-model="ruleForm.secret"></el-input>
         </el-form-item>
+        <el-form-item label="类型" prop="type">
+          <el-select v-model="ruleForm.type" placeholder="请选择类型">
+            <el-option v-for="item in Dns_Types" :key="item.id" :value="item"></el-option>
+          </el-select>
+          <el-input v-model="ruleForm.type"></el-input>
+        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc"></el-input>
         </el-form-item>
@@ -72,11 +79,16 @@
         <el-form-item label="secret" prop="secret">
           <el-input v-model="rowdata.secret"></el-input>
         </el-form-item>
+        <el-form-item label="类型" prop="type">
+          <el-select v-model="rowdata.type" placeholder="请选择类型">
+            <el-option v-for="item in Dns_Types" :key="item.id" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="rowdata.desc"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="editGroupSubmit('rowdata')">立即创建</el-button>
+          <el-button type="primary" @click="editGroupSubmit('rowdata')">立即更新</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -106,11 +118,13 @@ export default {
         name: '',
         key: '',
         secret: '',
+        type: '',
         desc: ''
       },
       addForm: false,
       editForm: false,
-      rowdata: {}
+      rowdata: {},
+      Dns_Types: ['dnspod', 'godaddy']
     }
   },
 

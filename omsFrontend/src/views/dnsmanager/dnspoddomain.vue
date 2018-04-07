@@ -1,16 +1,36 @@
 <template>
   <div class="components-container" style='height:100vh'>
     <el-card>
-      <data-tables :data="tableData" :search-def="searchDef">
-        <el-table-column prop="name" label="域名" sortable="custom"></el-table-column>
-        <el-table-column prop="status" label="状态" sortable="custom"></el-table-column>
-      </data-tables>
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <el-tabs v-model='listQuery.dnsname' @tab-click="handleClick" type="border-card">
+            <el-tab-pane v-for="item in dnsapis" :key="item.id" :label="item.name" :name="item.name">
+              <data-tables :data="tableData" :search-def="domain_searchDef" :pagination-def="paginationDef"
+                           @row-click="handleRowClick">
+                <el-table-column prop="name" label="域名" sortable="custom"></el-table-column>
+                <el-table-column prop="status" label="状态" sortable="custom"></el-table-column>
+              </data-tables>
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+        <el-col :span="18">
+          <el-card>
+            <data-tables :data="recordData" :search-def="record_searchDef" :pagination-def="paginationDef">
+              <el-table-column prop="name" label="记录" sortable="custom"></el-table-column>
+              <el-table-column prop="type" label="类型" sortable="custom"></el-table-column>
+              <el-table-column prop="value" label="值" sortable="custom"></el-table-column>
+              <el-table-column prop="ttl" label="ttl" sortable="custom"></el-table-column>
+              <el-table-column prop="status" label="状态" sortable="custom"></el-table-column>
+            </data-tables>
+          </el-card>
+        </el-col>
+      </el-row>
     </el-card>
   </div>
 </template>
 
 <script>
-import { getDnspodDomain } from 'api/dnsapi'
+import { getDnsapiKey, getDnspodDomain, getDnspodRecord } from 'api/dnsapi'
 
 export default {
   components: {},
@@ -18,27 +38,62 @@ export default {
     return {
       tableData: [],
       tabletotal: 0,
-      searchDef: {
+      dnsapis: [],
+      domain_searchDef: {
         colProps: {
-          span: 12
+          span: 20
+        }
+      },
+      record_searchDef: {
+        colProps: {
+          span: 10
         }
       },
       listQuery: {
-        dnsname: 'dnspod01'
-      }
+        dnsname: ''
+      },
+      paginationDef: {
+        show: false
+      },
+      recordData: []
     }
   },
 
   created() {
-    this.fetchData()
+    this.fetchDnsapiData()
   },
 
   methods: {
-    fetchData() {
+    fetchData(dnsname) {
+      this.listQuery.dnsname = dnsname
       getDnspodDomain(this.listQuery).then(response => {
         this.tableData = response.data
         this.tabletotal = response.data.length
       })
+    },
+    fetchDnsapiData() {
+      const data = {
+        type: 'dnspod'
+      }
+      getDnsapiKey(data).then(response => {
+        this.dnsapis = response.data
+        this.fetchData(this.dnsapis[0].name)
+      })
+    },
+    fetchRecordData(domain) {
+      const data = {
+        dnsname: this.listQuery.dnsname,
+        domain: domain
+      }
+      getDnspodRecord(data).then(response => {
+        this.recordData = response.data
+      })
+    },
+    handleClick(tab) {
+      this.fetchData(tab.name)
+    },
+    handleRowClick(row) {
+      this.fetchRecordData(row.name)
     }
   }
 }

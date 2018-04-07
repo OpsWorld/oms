@@ -13,7 +13,7 @@ from dnsmanager.godaddy_api import GodaddyApi
 class DnsApiKeyViewSet(viewsets.ModelViewSet):
     queryset = DnsApiKey.objects.all()
     serializer_class = DnsApiKeySerializer
-    filter_fields = ['name']
+    filter_fields = ['name', 'type']
     search_fields = ['name']
 
 
