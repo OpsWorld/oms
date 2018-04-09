@@ -84,3 +84,21 @@ export function getGodaddyRecord(query) {
     params: query
   })
 }
+
+// dnsdomains
+export function getDnsDomain(query) {
+  return request({
+    url: apiURL.dnsdomains,
+    method: 'get',
+    params: query
+  })
+}
+
+// dnsrecords
+export function getDnsRecord(query) {
+  return request({
+    url: apiURL.dnsrecords,
+    method: 'get',
+    params: query
+  })
+}

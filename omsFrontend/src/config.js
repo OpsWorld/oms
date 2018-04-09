@@ -144,6 +144,8 @@ module.exports = {
 
   // dnsapi
   dnsapikeys: `${url}/api/dnsapikeys/`,
+  dnsdomains: `${url}/api/dnsdomains/`,
+  dnsrecords: `${url}/api/dnsrecords/`,
   dnspoddomains: `${url}/api/dnspoddomains/`,
   dnspodrecords: `${url}/api/dnspodrecords/`,
   godaddydomains: `${url}/api/godaddydomains/`,

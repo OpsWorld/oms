@@ -3,9 +3,9 @@
 
 from rest_framework import viewsets
 from rest_framework.response import Response
-from dnsmanager.models import DnsApiKey
-from dnsmanager.serializers import DnsApiKeySerializer, DnspodDomainSerializer, DnspodRecordSerializer, \
-    GodaddyDomainSerializer, GodaddyRecordSerializer
+from dnsmanager.models import DnsApiKey, DnsDomain, DnsRecord
+from dnsmanager.serializers import DnsApiKeySerializer, DnsDomainSerializer, DnsRecordSerializer
+from dnsmanager.serializers import DnspodDomainSerializer, DnspodRecordSerializer, GodaddyDomainSerializer, GodaddyRecordSerializer
 from dnsmanager.dnspod_api import DnspodApi
 from dnsmanager.godaddy_api import GodaddyApi
 
@@ -13,6 +13,20 @@ from dnsmanager.godaddy_api import GodaddyApi
 class DnsApiKeyViewSet(viewsets.ModelViewSet):
     queryset = DnsApiKey.objects.all()
     serializer_class = DnsApiKeySerializer
+    filter_fields = ['name', 'type']
+    search_fields = ['name']
+
+
+class DnsDomainViewSet(viewsets.ModelViewSet):
+    queryset = DnsDomain.objects.all()
+    serializer_class = DnsDomainSerializer
+    filter_fields = ['name', 'type']
+    search_fields = ['name']
+
+
+class DnsRecordViewSet(viewsets.ModelViewSet):
+    queryset = DnsRecord.objects.all()
+    serializer_class = DnsRecordSerializer
     filter_fields = ['name', 'type']
     search_fields = ['name']
 

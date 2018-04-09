@@ -2,13 +2,25 @@
 # author: itimor
 
 from rest_framework import serializers
-from dnsmanager.models import DnsApiKey
+from dnsmanager.models import DnsApiKey, DnsDomain, DnsRecord
 
 
 class DnsApiKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = DnsApiKey
         fields = ['url', 'id', 'name', 'key', 'secret', 'type', 'desc']
+
+
+class DnsDomainSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DnsDomain
+        fields = ['url', 'id', 'name', 'status', 'type', 'desc']
+
+
+class DnsRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DnsRecord
+        fields = ['url', 'id', 'name', 'status', 'type', 'value', 'ttl', 'desc']
 
 
 class DnspodDomainSerializer(serializers.Serializer):
