@@ -12,6 +12,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
 from utils.tools import removeNone
 
+
 class HostViewSet(viewsets.ModelViewSet):
     queryset = Host.objects.all()
     serializer_class = HostSerializer
