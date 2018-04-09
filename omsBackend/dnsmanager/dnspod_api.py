@@ -198,7 +198,7 @@ class DnspodApi(object):
 
 
 if __name__ == '__main__':
-    from dnspod_key import DMSPOD_KEYINFO
+    from dnsapi_key import DMSPOD_KEYINFO
 
     initlog('./dnsapi.log', 'DnspodApi')
     dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])

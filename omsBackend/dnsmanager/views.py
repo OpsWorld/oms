@@ -5,7 +5,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from dnsmanager.models import DnsApiKey, DnsDomain, DnsRecord
 from dnsmanager.serializers import DnsApiKeySerializer, DnsDomainSerializer, DnsRecordSerializer
-from dnsmanager.serializers import DnspodDomainSerializer, DnspodRecordSerializer, GodaddyDomainSerializer, GodaddyRecordSerializer
+from dnsmanager.serializers import DnspodDomainSerializer, DnspodRecordSerializer, GodaddyDomainSerializer, \
+    GodaddyRecordSerializer
 from dnsmanager.dnspod_api import DnspodApi
 from dnsmanager.godaddy_api import GodaddyApi
 
@@ -39,6 +40,15 @@ class DnspodDomainViewSet(viewsets.ViewSet):
         dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
         query = dnsapi.get_domains()
         serializer = DnspodDomainSerializer(query, many=True)
+        for item in query:
+            dnsdomain = dict()
+            if item['status'] == 'enable':
+                dnsdomain['status'] = 0
+            else:
+                dnsdomain['status'] = 1
+            dnsdomain['name'] = item['name']
+            dnsdomain['type'] = 'dnspod'
+            DnsDomain.objects.update_or_create(name=dnsdomain['name'], defaults=dnsdomain)
         return Response(serializer.data)
 
 
@@ -73,6 +83,21 @@ class DnspodRecordViewSet(viewsets.ViewSet):
         elif request.data['action'] == 'remove':
             record_id = request.data['record_id']
             query = dnsapi.delete_record(domain, record_id)
+        elif request.data['action'] == 'sync':
+            query = dnsapi.get_records(domain)
+            for item in query:
+                dnsrecord = dict()
+                if item['status'] == 'enabled':
+                    dnsrecord['status'] = 0
+                else:
+                    dnsrecord['status'] = 1
+                dnsrecord['dnsinfo'] = request.GET['dnsname']
+                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
+                dnsrecord['name'] = item['name']
+                dnsrecord['value'] = item['value']
+                dnsrecord['ttl'] = item['ttl']
+                dnsrecord['type'] = item['type']
+                DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
         return Response(query)
 
 
@@ -84,6 +109,16 @@ class GodaddyDomainViewSet(viewsets.ViewSet):
         dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
         query = dnsapi.get_domains()
         serializer = GodaddyDomainSerializer(query, many=True)
+        for item in query:
+            dnsdomain = dict()
+            if item['status'] == 'ACTIVE':
+                dnsdomain['status'] = 0
+            else:
+                dnsdomain['status'] = 1
+            dnsdomain['type'] = 'godaddy'
+            dnsdomain['name'] = item['domain']
+            DnsDomain.objects.update_or_create(name=dnsdomain['name'], defaults=dnsdomain)
+            return
         return Response(serializer.data)
 
 
@@ -114,4 +149,20 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
+        elif request.data['action'] == 'sync':
+            query = dnsapi.get_records(domain)
+            for item in query:
+                dnsrecord = dict()
+                if item['status'] == 'enabled':
+                    dnsrecord['status'] = 0
+                else:
+                    dnsrecord['status'] = 1
+                dnsrecord['dnsinfo'] = request.GET['dnsname']
+                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
+                dnsrecord['name'] = item['name']
+                dnsrecord['value'] = item['value']
+                dnsrecord['ttl'] = item['ttl']
+                dnsrecord['type'] = item['type']
+                DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
+                return
         return Response(query)

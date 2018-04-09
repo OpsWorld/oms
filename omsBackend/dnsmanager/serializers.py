@@ -18,9 +18,11 @@ class DnsDomainSerializer(serializers.ModelSerializer):
 
 
 class DnsRecordSerializer(serializers.ModelSerializer):
+    domain = serializers.SlugRelatedField(queryset=DnsDomain.objects.all(), slug_field='name')
+
     class Meta:
         model = DnsRecord
-        fields = ['url', 'id', 'name', 'status', 'type', 'value', 'ttl', 'desc']
+        fields = ['url', 'id', 'domain', 'dnsinfo', 'name', 'status', 'type', 'value', 'ttl', 'desc']
 
 
 class DnspodDomainSerializer(serializers.Serializer):

@@ -223,4 +223,4 @@ if __name__ == '__main__':
     records = [{'data': '1.1.1.123', 'name': 'blog', 'ttl': 3600, 'type': 'A'},
                {'type': 'A', 'name': 'ggg', 'data': '1.1.1.2', 'ttl': 600}
                ]
-    print(godaddy.update_record('918168.net', 'aaa', '2.2.2.3'))
+    print(godaddy.get_domains())
