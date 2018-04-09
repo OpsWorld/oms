@@ -57,7 +57,6 @@
           <el-select v-model="ruleForm.type" placeholder="请选择类型">
             <el-option v-for="item in Dns_Types" :key="item.id" :value="item"></el-option>
           </el-select>
-          <el-input v-model="ruleForm.type"></el-input>
         </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="ruleForm.desc"></el-input>
