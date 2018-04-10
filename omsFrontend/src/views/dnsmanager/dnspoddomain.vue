@@ -54,12 +54,10 @@
     <el-dialog :visible.sync="editForm">
       <el-form :model="rowdata" ref="rowdata" label-width="100px">
         <el-form-item label="名称" prop="sub_domain">
-          <el-input v-model="rowdata.sub_domain"></el-input>
+          <el-input v-model="rowdata.sub_domain" disabled></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="record_type">
-          <el-select v-model="rowdata.record_type" placeholder="请选择类型">
-            <el-option v-for="item in record_types" :key="item.id" :value="item"></el-option>
-          </el-select>
+          <el-input v-model="rowdata.record_type" disabled></el-input>
         </el-form-item>
         <el-form-item label="值" prop="value">
           <el-input v-model="rowdata.value"></el-input>
