@@ -15,10 +15,31 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='name' label='名称' sortable></el-table-column>
-          <el-table-column prop='status' label='状态'></el-table-column>
+          <el-table-column prop='name' label='名称' sortable>
+            <template slot-scope="scope">
+              <router-link :to="'dnsrecords/' + scope.row.name">
+                <a style="color: #257cff">{{scope.row.name}}</a>
+              </router-link>
+            </template>
+          </el-table-column>
+          <el-table-column prop='status' label='状态'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag>
+                  {{Dns_Status[scope.row.status]}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
+          <el-table-column prop='dnsname' label='属于'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record
+              </el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <div class="table-pagination">
@@ -37,7 +58,7 @@
 </template>
 
 <script>
-import { getDnsDomain } from 'api/dnsapi'
+import { getDnsDomain, postDnspodRecord, postGodaddyRecord } from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -83,6 +104,29 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    syncGroup(row) {
+      row.action = 'sync'
+      row.domain = row.name
+      this.$message({
+        message: '正在同步中，请稍后',
+        type: 'info'
+      })
+      if (row.type === 'dnspod') {
+        postDnspodRecord(row).then(() => {
+          this.$message({
+            message: '同步成功',
+            type: 'success'
+          })
+        })
+      } else if (row.type === 'godaddy') {
+        postGodaddyRecord(row).then(() => {
+          this.$message({
+            message: '同步成功',
+            type: 'success'
+          })
+        })
+      }
     }
   }
 }

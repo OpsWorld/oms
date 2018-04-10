@@ -28,7 +28,7 @@ class DnsDomainViewSet(viewsets.ModelViewSet):
 class DnsRecordViewSet(viewsets.ModelViewSet):
     queryset = DnsRecord.objects.all()
     serializer_class = DnsRecordSerializer
-    filter_fields = ['name', 'type']
+    filter_fields = ['name', 'type', 'domain__name']
     search_fields = ['name']
 
 
@@ -46,6 +46,7 @@ class DnspodDomainViewSet(viewsets.ViewSet):
                 dnsdomain['status'] = 0
             else:
                 dnsdomain['status'] = 1
+            dnsdomain['dnsinfo'] = request.GET['dnsname']
             dnsdomain['name'] = item['name']
             dnsdomain['type'] = 'dnspod'
             DnsDomain.objects.update_or_create(name=dnsdomain['name'], defaults=dnsdomain)
@@ -91,14 +92,13 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                     dnsrecord['status'] = 0
                 else:
                     dnsrecord['status'] = 1
-                dnsrecord['dnsinfo'] = dnsinfo
                 dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
                 dnsrecord['name'] = item['name']
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                d, create = DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
-                return create
+                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'], defaults=dnsrecord)
+            return Response({'status': create})
         return Response(query)
 
 
@@ -116,10 +116,10 @@ class GodaddyDomainViewSet(viewsets.ViewSet):
                 dnsdomain['status'] = 0
             else:
                 dnsdomain['status'] = 1
+            dnsdomain['dnsinfo'] = request.GET['dnsname']
             dnsdomain['type'] = 'godaddy'
             dnsdomain['name'] = item['domain']
             DnsDomain.objects.update_or_create(name=dnsdomain['name'], defaults=dnsdomain)
-            return
         return Response(serializer.data)
 
 
@@ -150,4 +150,15 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
+        elif request.data['action'] == 'sync':
+            query = dnsapi.get_records(domain)
+            for item in query:
+                dnsrecord = dict()
+                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
+                dnsrecord['name'] = item['name']
+                dnsrecord['value'] = item['data']
+                dnsrecord['ttl'] = item['ttl']
+                dnsrecord['type'] = item['type']
+                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'], defaults=dnsrecord)
+            return Response({'status': create})
         return Response(query)

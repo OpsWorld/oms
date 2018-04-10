@@ -3,6 +3,7 @@
     <el-card>
       <div class="head-lavel">
         <div class="table-button">
+          <a>{{listQuery.domain__name}}</a>
         </div>
         <div class="table-search">
           <el-input
@@ -16,7 +17,15 @@
       <div>
         <el-table :data='tableData' border style="width: 100%">
           <el-table-column prop='name' label='名称' sortable></el-table-column>
-          <el-table-column prop='status' label='状态'></el-table-column>
+          <el-table-column prop='status' label='状态'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag>
+                  {{Dns_Status[scope.row.status]}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='value' label='值'></el-table-column>
           <el-table-column prop='ttl' label='ttl'></el-table-column>
@@ -54,7 +63,8 @@ export default {
       listQuery: {
         limit: LIMIT,
         offset: '',
-        search: ''
+        search: '',
+        domain__name: this.$route.params.domain
       },
       Dns_Status: {
         0: '启用',

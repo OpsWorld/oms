@@ -14,7 +14,7 @@ class DnsApiKeySerializer(serializers.ModelSerializer):
 class DnsDomainSerializer(serializers.ModelSerializer):
     class Meta:
         model = DnsDomain
-        fields = ['url', 'id', 'name', 'status', 'type', 'desc']
+        fields = ['url', 'id', 'dnsname', 'name', 'status', 'type', 'desc']
 
 
 class DnsRecordSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class DnsRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DnsRecord
-        fields = ['url', 'id', 'domain', 'dnsinfo', 'name', 'status', 'type', 'value', 'ttl', 'desc']
+        fields = ['url', 'id', 'domain', 'name', 'status', 'type', 'value', 'ttl', 'desc']
 
 
 class DnspodDomainSerializer(serializers.Serializer):
