@@ -33,11 +33,20 @@
           </el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='dnsname' label='属于'></el-table-column>
-          <el-table-column prop='desc' label='备注'></el-table-column>
+          <el-table-column prop='desc' label='备注'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper">
+                <el-tooltip class="item" effect="dark" content="更新备注" placement="top">
+                  <el-button type="text" icon="el-icon-edit" class="modifychange"
+                             @click="updateDesc(scope.row)"></el-button>
+                </el-tooltip>
+                {{scope.row.desc}}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record
-              </el-button>
+              <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -127,6 +136,9 @@ export default {
           })
         })
       }
+    },
+    updateDesc(row) {
+
     }
   }
 }

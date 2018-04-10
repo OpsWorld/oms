@@ -140,7 +140,7 @@ class GodaddyApi(object):
 
     def add_records(self, domain, records):
         """
-        添加记录用的patch, 没有post, 好傻逼的api
+        傻逼api, 添加记录用的patch, 没有post
         """
         url = self.API_TEMPLATE + self.RECORDS.format(domain=domain)
         self._patch(url, json=records)
@@ -148,6 +148,9 @@ class GodaddyApi(object):
         return True
 
     def replace_records(self, domain, records, record_type=None, name=None):
+        """
+        傻逼api, 替换只能分类替换，全部替换会报错
+        """
         url = self._build_record_url(domain, name=name, record_type=record_type)
         self._put(url, json=records)
         return True
@@ -178,6 +181,9 @@ class GodaddyApi(object):
         return True
 
     def delete_record(self, domain, name, record_type):
+        """
+        傻逼api, 没有delete方法，只能用替换间接删除
+        """
         records = self.get_records(domain)
         if records is None:
             return False
@@ -194,7 +200,7 @@ class GodaddyApi(object):
 
     def update_record(self, domain, name, value, record_type='A', ttl=600):
         """
-        修改只能修改 value和ttl, 好傻逼的api
+        傻逼api, 修改只能修改 value和ttl, 不能搞个id 吗
         """
         record = {
             'type': record_type,
