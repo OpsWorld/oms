@@ -35,13 +35,13 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称' sortable>
-            <template slot-scope="scope">
-              <router-link :to="'dnsrecords/' + scope.row.name">
-                <a style="color: #257cff">{{scope.row.name}}</a>
-              </router-link>
-            </template>
+            <!--<template slot-scope="scope">-->
+              <!--<router-link :to="'dnsrecords/' + scope.row.name">-->
+                <!--<a style="color: #257cff">{{scope.row.name}}</a>-->
+              <!--</router-link>-->
+            <!--</template>-->
           </el-table-column>
-          <el-table-column prop='status' label='状态'>
+          <el-table-column prop='status' label='状态' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-tag>
@@ -50,15 +50,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='type' label='类型'></el-table-column>
-          <el-table-column prop='dnsname' label='属于'></el-table-column>
+          <el-table-column prop='type' label='类型' width="100"></el-table-column>
+          <el-table-column prop='dnsname' label='属于' width="100"></el-table-column>
           <el-table-column prop='use' label='用途'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record</el-button>
               <el-button type="success" size="small" @click="updateDesc(scope.row)">更新</el-button>
-              <el-button type="danger" size="small">有效期</el-button>
             </template>
           </el-table-column>
         </el-table>

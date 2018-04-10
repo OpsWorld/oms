@@ -1,46 +1,49 @@
 <template>
   <div class="components-container" style='height:100vh'>
-    <el-card>
-      <div class="head-lavel">
-        <div class="table-button">
-          <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
-        </div>
-        <div class="table-search">
-          <el-input
-            placeholder="搜索 ..."
-            v-model="listQuery.search"
-            @keyup.enter.native="searchClick">
-            <i class="el-icon-search el-input__icon" slot="suffix" @click="searchClick"></i>
-          </el-input>
-        </div>
-      </div>
-      <div>
-        <el-table :data='tableData' border style="width: 100%">
-          <el-table-column prop='name' label='名称' sortable></el-table-column>
-          <el-table-column prop='key' label='key'></el-table-column>
-          <el-table-column prop='secret' label='secret'></el-table-column>
-          <el-table-column prop='type' label='类型'></el-table-column>
-          <el-table-column prop='desc' label='备注'></el-table-column>
-          <el-table-column label="操作">
-            <template slot-scope="scope">
-              <el-button type="success" size="small" @click="editGroup(scope.row)">修改</el-button>
-              <el-button type="danger" size="small" @click="deleteGroup(scope.row.id)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="table-pagination">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-sizes="pagesize"
-          :page-size="listQuery.limit"
-          :layout="pageformat"
-          :total="tabletotal">
-        </el-pagination>
-      </div>
-    </el-card>
+    <el-row :gutter="20">
+      <el-col :span="6">
+        <el-card>
+          <div class="head-lavel">
+            <div class="table-button">
+              <el-button type="primary" icon="el-icon-plus" @click="addForm=true">新建</el-button>
+            </div>
+            <div class="table-search">
+            </div>
+          </div>
+          <div>
+            <el-table :data='tableData' border style="width: 100%">
+              <el-table-column prop='name' label='名称' sortable width="100">
+                <template slot-scope="scope">
+                  <a style="color: #257cff" @click="selectDns(scope.row)">{{scope.row.name}}</a>
+                </template>
+              </el-table-column>
+              <el-table-column prop='type' label='类型' width="80"></el-table-column>
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button type="success" size="mini" @click="editGroup(scope.row)">修改</el-button>
+                  <el-button type="danger" size="mini" @click="deleteGroup(scope.row.id)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table-pagination">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-sizes="pagesize"
+              :page-size="listQuery.limit"
+              :layout="pageformat"
+              :total="tabletotal">
+            </el-pagination>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="18">
+        <v-dnspod v-if="showdnspod" :dnsname="dnsname"></v-dnspod>
+        <v-godaddy v-if="showgodaddy" :dnsname="dnsname"></v-godaddy>
+      </el-col>
+    </el-row>
 
     <el-dialog :visible.sync="addForm">
       <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
@@ -98,9 +101,11 @@
 <script>
 import { getDnsapiKey, postDnsapiKey, putDnsapiKey, deleteDnsapiKey } from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
+import vDnspod from './components/dnspod.vue'
+import vGodaddy from './components/godaddy.vue'
 
 export default {
-  components: {},
+  components: { vDnspod, vGodaddy },
   data() {
     return {
       tableData: [],
@@ -123,7 +128,10 @@ export default {
       addForm: false,
       editForm: false,
       rowdata: {},
-      Dns_Types: ['dnspod', 'godaddy']
+      Dns_Types: ['dnspod', 'godaddy'],
+      showdnspod: false,
+      showgodaddy: false,
+      dnsname: ''
     }
   },
 
@@ -190,6 +198,16 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    selectDns(row) {
+      this.dnsname = row.name
+      this.showdnspod = false
+      this.showgodaddy = false
+      if (row.type === 'dnspod') {
+        this.showdnspod = true
+      } else if (row.type === 'godaddy') {
+        this.showgodaddy = true
+      }
     }
   }
 }
