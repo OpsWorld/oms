@@ -113,6 +113,15 @@ export default {
           handler: () => {
             this.addForm = true
           }
+        },
+        {
+          name: '同步',
+          buttonProps: {
+            type: 'success'
+          },
+          handler: () => {
+            this.addForm = true
+          }
         }]
       },
       addForm: false,

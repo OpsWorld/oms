@@ -91,13 +91,14 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                     dnsrecord['status'] = 0
                 else:
                     dnsrecord['status'] = 1
-                dnsrecord['dnsinfo'] = request.GET['dnsname']
+                dnsrecord['dnsinfo'] = dnsinfo
                 dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
                 dnsrecord['name'] = item['name']
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
+                return create
         return Response(query)
 
 
@@ -149,20 +150,4 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
-        elif request.data['action'] == 'sync':
-            query = dnsapi.get_records(domain)
-            for item in query:
-                dnsrecord = dict()
-                if item['status'] == 'enabled':
-                    dnsrecord['status'] = 0
-                else:
-                    dnsrecord['status'] = 1
-                dnsrecord['dnsinfo'] = request.GET['dnsname']
-                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
-                dnsrecord['name'] = item['name']
-                dnsrecord['value'] = item['value']
-                dnsrecord['ttl'] = item['ttl']
-                dnsrecord['type'] = item['type']
-                DnsRecord.objects.update_or_create(dnsinfo=dnsrecord['dnsinfo'], name=dnsrecord['name'], defaults=dnsrecord)
-                return
         return Response(query)
