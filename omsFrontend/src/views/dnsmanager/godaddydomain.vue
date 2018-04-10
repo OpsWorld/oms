@@ -5,7 +5,7 @@
         <el-col :span="6">
           <el-tabs v-model='listQuery.dnsname' @tab-click="handleClick" type="border-card">
             <el-tab-pane v-for="item in dnsapis" :key="item.id" :label="item.name" :name="item.name">
-              <data-tables :data="tableData" :search-def="domain_searchDef" :pagination-def="paginationDef"
+              <data-tables :data="tableData" :actions-def="domain_actionsDef" :search-def="domain_searchDef" :pagination-def="paginationDef"
                            @row-click="handleRowClick">
                 <el-table-column prop="domain" label="域名" sortable="custom"></el-table-column>
                 <el-table-column prop="status" label="状态" sortable="custom"></el-table-column>
@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="18">
           <el-card v-if="showrecord">
-            <data-tables :data="recordData" :actions-def="actionsDef" :action-col-def="actionColDef"
+            <data-tables :data="recordData" :actions-def="record_actionsDef" :action-col-def="actionColDef"
                          :search-def="record_searchDef" :pagination-def="paginationDef">
               <el-table-column prop="name" label="记录" sortable="custom"></el-table-column>
               <el-table-column prop="type" label="类型" sortable="custom"></el-table-column>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getDnsapiKey, getGodaddyDomain, getGodaddyRecord, postGodaddyRecord } from 'api/dnsapi'
+import { getDnsapiKey, getGodaddyDomain, getGodaddyRecord, postGodaddyRecord, PostGodaddyDomain } from 'api/dnsapi'
 
 export default {
   components: {},
@@ -84,7 +84,7 @@ export default {
       dnsapis: [],
       domain_searchDef: {
         colProps: {
-          span: 24
+          span: 18
         }
       },
       record_searchDef: {
@@ -100,7 +100,18 @@ export default {
       },
       showrecord: false,
       recordData: [],
-      actionsDef: {
+      domain_actionsDef: {
+        colProps: {
+          span: 6
+        },
+        def: [{
+          name: '同步',
+          handler: () => {
+            this.syncDomwin()
+          }
+        }]
+      },
+      record_actionsDef: {
         colProps: {
           span: 16
         },
@@ -215,6 +226,18 @@ export default {
       }).catch(error => {
         this.$message.error('修改失败')
         console.log(error)
+      })
+    },
+    syncDomwin() {
+      this.$message({
+        message: '正在同步中，请稍后',
+        type: 'info'
+      })
+      PostGodaddyDomain(this.listQuery).then(() => {
+        this.$message({
+          message: '同步成功',
+          type: 'success'
+        })
       })
     }
   }

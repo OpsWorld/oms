@@ -42,12 +42,28 @@ export function getDnspodDomain(query) {
   })
 }
 
+export function PostDnspodDomain(data) {
+  return request({
+    url: apiURL.dnspoddomains,
+    method: 'post',
+    data
+  })
+}
+
 // godaddydomains
 export function getGodaddyDomain(query) {
   return request({
     url: apiURL.godaddydomains,
     method: 'get',
     params: query
+  })
+}
+
+export function PostGodaddyDomain(data) {
+  return request({
+    url: apiURL.godaddydomains,
+    method: 'post',
+    data
   })
 }
 
