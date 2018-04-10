@@ -41,7 +41,7 @@ class DnsRecord(models.Model):
     domain = models.ForeignKey('DnsDomain', verbose_name=u'上级菜单')
     name = models.CharField(max_length=20, verbose_name=u'名称')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
-    type = models.CharField(choices=Dns_Types.items(), default='godaddy', max_length=10, verbose_name=u'类型')
+    type = models.CharField(default='A', max_length=10, verbose_name=u'类型')
     value = models.CharField(max_length=300, verbose_name=u'值')
     ttl = models.IntegerField(default=600, verbose_name=u'ttl')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')

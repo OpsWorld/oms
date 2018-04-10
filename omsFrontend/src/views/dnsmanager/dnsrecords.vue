@@ -30,6 +30,11 @@
           <el-table-column prop='value' label='值'></el-table-column>
           <el-table-column prop='ttl' label='ttl'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
+          <el-table-column label="操作">
+            <template slot-scope="scope">
+              <el-button type="success" size="small" @click="updateDesc(scope.row)">更新备注</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
       <div class="table-pagination">
@@ -44,11 +49,22 @@
         </el-pagination>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="addForm">
+      <el-form label-width="90px">
+        <el-form-item label="备注" prop="desc">
+          <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="changeDesc">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDnsRecord } from 'api/dnsapi'
+import { getDnsRecord, patchDnsRecord } from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -70,7 +86,9 @@ export default {
         0: '启用',
         1: '停用'
       },
-      Dns_Types: ['dnspod', 'godaddy']
+      Dns_Types: ['dnspod', 'godaddy'],
+      addForm: false,
+      rowdata: {}
     }
   },
 
@@ -95,6 +113,20 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.offset = (val - 1) * LIMIT
       this.fetchData()
+    },
+    updateDesc(row) {
+      this.addForm = true
+      this.rowdata = row
+    },
+    changeDesc() {
+      patchDnsRecord(this.rowdata.id, this.rowdata).then(() => {
+        this.$message({
+          message: '更新成功',
+          type: 'success'
+        })
+        this.addForm = false
+        this.fetchData()
+      })
     }
   }
 }

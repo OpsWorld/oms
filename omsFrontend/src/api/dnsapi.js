@@ -110,11 +110,27 @@ export function getDnsDomain(query) {
   })
 }
 
+export function patchDnsDomain(id, data) {
+  return request({
+    url: apiURL.dnsdomains + id + '/',
+    method: 'patch',
+    data
+  })
+}
+
 // dnsrecords
 export function getDnsRecord(query) {
   return request({
     url: apiURL.dnsrecords,
     method: 'get',
     params: query
+  })
+}
+
+export function patchDnsRecord(id, data) {
+  return request({
+    url: apiURL.dnsrecords + id + '/',
+    method: 'patch',
+    data
   })
 }

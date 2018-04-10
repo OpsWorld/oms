@@ -33,20 +33,11 @@
           </el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='dnsname' label='属于'></el-table-column>
-          <el-table-column prop='desc' label='备注'>
-            <template slot-scope="scope">
-              <div slot="reference" class="name-wrapper">
-                <el-tooltip class="item" effect="dark" content="更新备注" placement="top">
-                  <el-button type="text" icon="el-icon-edit" class="modifychange"
-                             @click="updateDesc(scope.row)"></el-button>
-                </el-tooltip>
-                {{scope.row.desc}}
-              </div>
-            </template>
-          </el-table-column>
+          <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record</el-button>
+              <el-button type="success" size="small" @click="updateDesc(scope.row)">更新备注</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -63,11 +54,22 @@
         </el-pagination>
       </div>
     </el-card>
+
+    <el-dialog :visible.sync="addForm">
+      <el-form label-width="90px">
+        <el-form-item label="备注" prop="desc">
+          <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="changeDesc">确 定</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getDnsDomain, postDnspodRecord, postGodaddyRecord } from 'api/dnsapi'
+import { getDnsDomain, postDnspodRecord, postGodaddyRecord, patchDnsDomain } from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -88,7 +90,9 @@ export default {
         0: '启用',
         1: '停用'
       },
-      Dns_Types: ['dnspod', 'godaddy']
+      Dns_Types: ['dnspod', 'godaddy'],
+      addForm: false,
+      rowdata: {}
     }
   },
 
@@ -138,7 +142,18 @@ export default {
       }
     },
     updateDesc(row) {
-
+      this.addForm = true
+      this.rowdata = row
+    },
+    changeDesc() {
+      patchDnsDomain(this.rowdata.id, this.rowdata).then(() => {
+        this.$message({
+          message: '更新成功',
+          type: 'success'
+        })
+        this.addForm = false
+        this.fetchData()
+      })
     }
   }
 }
