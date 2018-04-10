@@ -99,8 +99,7 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 'ttl': ttl,
             }
             domain = DnsDomain.objects.get(name=domain)
-            dnsrecord = DnsRecord.objects.get(domain=domain, name=sub_domain, type=record_type)
-            dnsrecord.update(**record)
+            DnsRecord.objects.update_or_create(domain=domain, name=sub_domain, type=record_type, **record)
             query = dnsapi.update_record(domain, record_id, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'remove':
             record_id = request.data['record_id']
@@ -190,8 +189,7 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                 'ttl': ttl,
             }
             domain = DnsDomain.objects.get(name=domain)
-            dnsrecord = DnsRecord.objects.get(domain=domain, name=sub_domain, type=record_type)
-            dnsrecord.update(**record)
+            DnsRecord.objects.update_or_create(domain=domain, name=sub_domain, type=record_type, **record)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'sync':
             query = dnsapi.get_records(domain)

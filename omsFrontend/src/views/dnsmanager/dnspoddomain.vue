@@ -145,7 +145,6 @@ export default {
         },
         def: [{
           handler: row => {
-            console.log(row)
             this.editForm = true
             this.rowdata = {
               action: 'update',
