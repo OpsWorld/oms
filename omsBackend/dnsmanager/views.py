@@ -79,6 +79,14 @@ class DnspodRecordViewSet(viewsets.ViewSet):
             value = request.data['value']
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
+            record = {
+                'domain': DnsDomain.objects.get(name=domain),
+                'name': sub_domain,
+                'type': record_type,
+                'value': value,
+                'ttl': ttl,
+            }
+            DnsRecord.objects.update_or_create(**record)
             query = dnsapi.add_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'update':
             sub_domain = request.data['sub_domain']
@@ -86,6 +94,13 @@ class DnspodRecordViewSet(viewsets.ViewSet):
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
             record_id = request.data['record_id']
+            record = {
+                'value': value,
+                'ttl': ttl,
+            }
+            domain = DnsDomain.objects.get(name=domain)
+            dnsrecord = DnsRecord.objects.get(domain=domain, name=sub_domain, type=record_type)
+            dnsrecord.update(**record)
             query = dnsapi.update_record(domain, record_id, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'remove':
             record_id = request.data['record_id']
@@ -103,7 +118,8 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                               defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 
@@ -155,12 +171,27 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             value = request.data['value']
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
+            record = {
+                'domain': DnsDomain.objects.get(name=domain),
+                'name': sub_domain,
+                'type': record_type,
+                'value': value,
+                'ttl': ttl,
+            }
+            DnsRecord.objects.update_or_create(**record)
             query = dnsapi.add_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'update':
             sub_domain = request.data['sub_domain']
             value = request.data['value']
             record_type = request.data.get('record_type', record_type)
             ttl = request.data.get('ttl', ttl)
+            record = {
+                'value': value,
+                'ttl': ttl,
+            }
+            domain = DnsDomain.objects.get(name=domain)
+            dnsrecord = DnsRecord.objects.get(domain=domain, name=sub_domain, type=record_type)
+            dnsrecord.update(**record)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'sync':
             query = dnsapi.get_records(domain)
@@ -171,6 +202,7 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['data']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                               defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
