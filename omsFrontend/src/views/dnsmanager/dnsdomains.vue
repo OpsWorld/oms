@@ -15,6 +15,25 @@
       </div>
       <div>
         <el-table :data='tableData' border style="width: 100%">
+          <el-table-column label="记录" type="expand" width="50">
+            <template slot-scope="scope">
+              <el-table :data='scope.row.recordData' border style="width: 100%">
+                <el-table-column prop='name' label='名称' sortable></el-table-column>
+                <el-table-column prop='status' label='状态'>
+                  <template slot-scope="props">
+                    <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                      <el-tag>
+                        {{Dns_Status[props.row.status]}}
+                      </el-tag>
+                    </div>
+                  </template>
+                </el-table-column>
+                <el-table-column prop='type' label='类型'></el-table-column>
+                <el-table-column prop='value' label='值'></el-table-column>
+                <el-table-column prop='ttl' label='ttl'></el-table-column>
+              </el-table>
+            </template>
+          </el-table-column>
           <el-table-column prop='name' label='名称' sortable>
             <template slot-scope="scope">
               <router-link :to="'dnsrecords/' + scope.row.name">
@@ -33,11 +52,13 @@
           </el-table-column>
           <el-table-column prop='type' label='类型'></el-table-column>
           <el-table-column prop='dnsname' label='属于'></el-table-column>
+          <el-table-column prop='use' label='用途'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" width="300">
             <template slot-scope="scope">
               <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record</el-button>
-              <el-button type="success" size="small" @click="updateDesc(scope.row)">更新备注</el-button>
+              <el-button type="success" size="small" @click="updateDesc(scope.row)">更新</el-button>
+              <el-button type="danger" size="small">有效期</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,6 +78,14 @@
 
     <el-dialog :visible.sync="addForm">
       <el-form label-width="90px">
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="rowdata.status">
+            <el-radio v-for="item in Object.keys(Dns_Status)" :key="item" :label="item">{{Dns_Status[item]}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="用途" prop="use">
+          <el-input v-model="rowdata.use" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -69,7 +98,13 @@
 </template>
 
 <script>
-import { getDnsDomain, postDnspodRecord, postGodaddyRecord, patchDnsDomain } from 'api/dnsapi'
+import {
+  getDnsDomain,
+  postDnspodRecord,
+  postGodaddyRecord,
+  patchDnsDomain,
+  getDnsRecord
+} from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
 export default {
@@ -87,12 +122,17 @@ export default {
         search: ''
       },
       Dns_Status: {
-        0: '启用',
-        1: '停用'
+        0: '使用中',
+        1: '备用',
+        2: '被墙'
       },
       Dns_Types: ['dnspod', 'godaddy'],
       addForm: false,
-      rowdata: {}
+      rowdata: {
+        status: '',
+        use: '',
+        desc: ''
+      }
     }
   },
 
@@ -105,6 +145,14 @@ export default {
       getDnsDomain(this.listQuery).then(response => {
         this.tableData = response.data.results
         this.tabletotal = response.data.count
+        this.tableData.map(function(item) {
+          const parmas = {
+            domain__name: item.name
+          }
+          getDnsRecord(parmas).then(res => {
+            item.recordData = res.data
+          })
+        })
       })
     },
     searchClick() {

@@ -48,10 +48,6 @@ class DnspodDomainViewSet(viewsets.ViewSet):
         query = dnsapi.get_domains()
         for item in query:
             dnsdomain = dict()
-            if item['status'] == 'enable':
-                dnsdomain['status'] = 0
-            else:
-                dnsdomain['status'] = 1
             dnsdomain['dnsname'] = request.data['dnsname']
             dnsdomain['name'] = item['name']
             dnsdomain['type'] = 'dnspod'
@@ -108,10 +104,6 @@ class DnspodRecordViewSet(viewsets.ViewSet):
             query = dnsapi.get_records(domain)
             for item in query:
                 dnsrecord = dict()
-                if item['status'] == 'enabled':
-                    dnsrecord['status'] = 0
-                else:
-                    dnsrecord['status'] = 1
                 dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
                 dnsrecord['name'] = item['name']
                 dnsrecord['value'] = item['value']
@@ -139,10 +131,6 @@ class GodaddyDomainViewSet(viewsets.ViewSet):
         query = dnsapi.get_domains()
         for item in query:
             dnsdomain = dict()
-            if item['status'] == 'ACTIVE':
-                dnsdomain['status'] = 0
-            else:
-                dnsdomain['status'] = 1
             dnsdomain['dnsname'] = request.data['dnsname']
             dnsdomain['type'] = 'godaddy'
             dnsdomain['name'] = item['domain']
