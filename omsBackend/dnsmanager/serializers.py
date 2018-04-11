@@ -14,7 +14,7 @@ class DnsApiKeySerializer(serializers.ModelSerializer):
 class DnsDomainSerializer(serializers.ModelSerializer):
     class Meta:
         model = DnsDomain
-        fields = ['url', 'id', 'dnsname', 'name', 'status', 'type', 'use', 'desc']
+        fields = ['url', 'id', 'dnsname', 'name', 'status', 'type', 'use', 'create_time', 'expire_time', 'datec', 'desc']
 
 
 class DnsRecordSerializer(serializers.ModelSerializer):
