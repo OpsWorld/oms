@@ -22,8 +22,8 @@
       </el-select>
     </el-form-item>
     <el-form-item label="测试人员" prop="test_user">
-      <el-select v-model="ruleForm.testusers" filterable placeholder="请选择用户">
-        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+      <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
+        <el-option v-for="item in testusers" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="开发人员" prop="action_user">
