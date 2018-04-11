@@ -22,15 +22,6 @@
                 <el-table-column prop='type' label='类型'></el-table-column>
                 <el-table-column prop='value' label='值'></el-table-column>
                 <el-table-column prop='ttl' label='ttl'></el-table-column>
-                <el-table-column prop='status' label='状态'>
-                  <template slot-scope="props">
-                    <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                      <el-tag>
-                        {{Dns_Status[props.row.status]}}
-                      </el-tag>
-                    </div>
-                  </template>
-                </el-table-column>
               </el-table>
             </template>
           </el-table-column>
