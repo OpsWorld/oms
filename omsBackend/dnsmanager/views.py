@@ -102,19 +102,18 @@ class DnspodRecordViewSet(viewsets.ViewSet):
             query = dnsapi.delete_record(domain, record_id)
         elif request.data['action'] == 'sync':
             query = dnsapi.get_records(domain)
+            domainquery = DnsDomain.objects.get(name=domain)
             for item in query:
                 dnsrecord = dict()
-                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
-                dnsrecord['name'] = item['name']
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
-                dnsrecord['type'] = item['type']
-                if dnsrecord['name'] == '@':
-                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
-                                                                   value=dnsrecord['value'], defaults=dnsrecord)
-                else:
-                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                if item['name'] == '@':
+                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
+                                                                   type=item['type'], value=dnsrecord['value'],
                                                                    defaults=dnsrecord)
+                else:
+                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
+                                                                   type=item['type'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 
@@ -185,18 +184,17 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'sync':
             query = dnsapi.get_records(domain)
+            domainquery = DnsDomain.objects.get(name=domain)
             for item in query:
                 dnsrecord = dict()
-                dnsrecord['domain'] = DnsDomain.objects.get(name=domain)
-                dnsrecord['name'] = item['name']
                 dnsrecord['value'] = item['data']
                 dnsrecord['ttl'] = item['ttl']
-                dnsrecord['type'] = item['type']
-                if dnsrecord['name'] == '@':
-                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
-                                                                   value=dnsrecord['value'], defaults=dnsrecord)
-                else:
-                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                if item['name'] == '@':
+                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
+                                                                   type=item['type'], value=dnsrecord['value'],
                                                                    defaults=dnsrecord)
+                else:
+                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
+                                                                   type=item['type'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
