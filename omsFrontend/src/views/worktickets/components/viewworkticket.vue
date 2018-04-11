@@ -99,6 +99,9 @@
             </el-select>
             <el-checkbox v-model="sendnotice">发送通知</el-checkbox>
           </el-form-item>
+          <el-form-item v-if="radio_status === '0'" label="通知运维">
+            <el-checkbox v-model="sendop"></el-checkbox>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
           </el-form-item>
@@ -206,6 +209,7 @@ export default {
       radio_status: '0',
       mailcontent: '',
       sendnotice: false,
+      sendop: true,
       selectcopy: false,
       workticketlist_btn_edit: false
     }
@@ -300,6 +304,14 @@ export default {
           if (this.sendnotice) {
             const messageForm = {
               action_user: this.ticketData.create_user,
+              title: '【工单有新回复】' + this.ticketData.name,
+              message: `指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
+            }
+            postSendmessage(messageForm)
+          }
+          if (this.sendop) {
+            const messageForm = {
+              action_user: 'itsupport',
               title: '【工单有新回复】' + this.ticketData.name,
               message: `指派人: ${this.ticketData.action_user}\n工单地址: ${window.location.href}`
             }

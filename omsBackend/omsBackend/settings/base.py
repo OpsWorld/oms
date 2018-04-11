@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'projects',
     'optasks',
     'dnsmanager',
+    'zkmanager',
 ]
 
 MIDDLEWARE = [
