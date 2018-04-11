@@ -7,7 +7,7 @@ from users.models import User, Role, Group
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('-create_date')
+    queryset = User.objects.all().order_by('-id')
     serializer_class = UserSerializer
     search_fields = ['username']
     filter_fields = ['groups__name']

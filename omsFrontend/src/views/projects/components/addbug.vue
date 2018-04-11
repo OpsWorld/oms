@@ -30,7 +30,7 @@
     </el-form-item>
     <el-form-item label="测试人员" prop="test_user">
       <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
-        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+        <el-option v-for="item in testusers" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="分配给" prop="action_user">
@@ -123,7 +123,8 @@ export default {
         ol: true, // 有序列表
         help: true
       },
-      testData: []
+      testData: [],
+      testusers: ''
     }
   },
   created() {
@@ -133,6 +134,7 @@ export default {
     }
     this.getUsers()
     this.getProjects()
+    this.getTestUsers()
   },
   methods: {
     submitForm(formName) {
@@ -185,6 +187,14 @@ export default {
       }
       getTestManager(pramas).then(response => {
         this.testData = response.data
+      })
+    },
+    getTestUsers() {
+      const query = {
+        groups__name: 'OMS_Test_Manager'
+      }
+      getUser(query).then(response => {
+        this.testusers = response.data
       })
     },
     imgAdd(pos, file) {

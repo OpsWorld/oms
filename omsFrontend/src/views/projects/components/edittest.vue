@@ -22,7 +22,7 @@
       </el-select>
     </el-form-item>
     <el-form-item label="测试人员" prop="test_user">
-      <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
+      <el-select v-model="ruleForm.testusers" filterable placeholder="请选择用户">
         <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
@@ -37,7 +37,7 @@
         type="date"
         value-format="yyyy-MM-dd"
         placeholder="选择日期时间"
-       >
+      >
       </el-date-picker>
     </el-form-item>
     <el-form-item>
@@ -64,12 +64,14 @@ export default {
         { 'label': 'Failed', value: '1' },
         { 'label': 'Block', value: '2' },
         { 'label': 'N/A', value: '3' }
-      ]
+      ],
+      testusers: ''
     }
   },
   created() {
     this.getUsers()
     this.getProjects()
+    this.getTestUsers()
   },
   methods: {
     submitForm(formName) {
@@ -100,6 +102,14 @@ export default {
       }
       getUser(query).then(response => {
         this.users = response.data
+      })
+    },
+    getTestUsers() {
+      const query = {
+        groups__name: 'OMS_Test_Manager'
+      }
+      getUser(query).then(response => {
+        this.testusers = response.data
       })
     },
     getProjects() {

@@ -22,7 +22,7 @@
     </el-form-item>
     <el-form-item label="测试人员" prop="test_user">
       <el-select v-model="ruleForm.test_user" filterable placeholder="请选择用户">
-        <el-option v-for="item in users" :key="item.id" :value="item.username"></el-option>
+        <el-option v-for="item in testusers" :key="item.id" :value="item.username"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="开发人员" prop="action_user">
@@ -83,7 +83,8 @@ export default {
         { 'label': 'Failed', value: '1' },
         { 'label': 'Block', value: '2' },
         { 'label': 'N/A', value: '3' }
-      ]
+      ],
+      testusers: ''
     }
   },
   created() {
@@ -92,6 +93,7 @@ export default {
     }
     this.getUsers()
     this.getProjects()
+    this.getTestUsers()
   },
   methods: {
     submitForm(formName) {
@@ -123,6 +125,14 @@ export default {
       }
       getUser(query).then(response => {
         this.users = response.data
+      })
+    },
+    getTestUsers() {
+      const query = {
+        groups__name: 'OMS_Test_Manager'
+      }
+      getUser(query).then(response => {
+        this.testusers = response.data
       })
     },
     getProjects() {
