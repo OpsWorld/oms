@@ -43,9 +43,9 @@
             </template>
           </el-table-column>
           <el-table-column label='距离到期天数' width="120">
-                        <template slot-scope="scope">
+            <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{[scope.row.create_time, scope.row.expire_time] | diffDate}}</span>
+                <span>{{scope.row.expire_time |diffDate}}</span>
               </div>
             </template>
           </el-table-column>
