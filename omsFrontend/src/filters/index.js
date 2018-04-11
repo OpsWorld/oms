@@ -100,3 +100,9 @@ export function parseDate(datestr) {
     return date + ' ' + time
   }
 }
+
+export function diffDate(date) {
+  const d1 = new Date(date[0])
+  const d2 = new Date(date[1])
+  return parseInt(d2 - d1) / 1000 / 60 / 60 / 24
+}

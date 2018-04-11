@@ -35,21 +35,17 @@ class DnsDomain(models.Model):
     use = models.TextField(null=True, blank=True, verbose_name=u'用途')
     create_time = models.DateTimeField(null=True, blank=True, verbose_name=u'创建时间')
     expire_time = models.DateTimeField(null=True, blank=True, verbose_name=u'过期时间')
-    datec = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'距离天数')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')
 
     def __str__(self):
         return self.name
 
-    # def save(self, *args, **kwargs):
-    #     import whois
-    #     from datetime import datetime
-    #     domain_info = whois.whois(self.name)
-    #     self.create_time = domain_info.creation_date
-    #     self.expire_time = domain_info.expiration_date[0]
-    #     now = datetime.now()
-    #     self.datec = (self.expire_time - now).days
-    #     super(DnsDomain, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        from utils.whois import whois
+        domain_info = whois(self.name)
+        self.create_time = domain_info["create_time"]
+        self.expire_time = domain_info["expire_time"]
+        super(DnsDomain, self).save(*args, **kwargs)
 
 
 class DnsRecord(models.Model):

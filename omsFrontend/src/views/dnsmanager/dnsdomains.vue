@@ -28,21 +28,28 @@
           <el-table-column prop='name' label='名称' sortable></el-table-column>
           <el-table-column prop='type' label='类型' width="100"></el-table-column>
           <el-table-column prop='dnsname' label='属于' width="100"></el-table-column>
-          <el-table-column prop='create_time' label='创建时间' width="100">
+          <el-table-column prop='create_time' label='注册时间' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.create_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='expire_time' label='过期时间' width="100">
+          <el-table-column prop='expire_time' label='到期时间' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.expire_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='datec' label='距离天数' width="100"></el-table-column>
+          <el-table-column label='距离到期天数' width="120">
+                        <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{[scope.row.create_time, scope.row.expire_time] | diffDate}}</span>
+              </div>
+            </template>
+          </el-table-column>
+          </el-table-column>
           <el-table-column prop='status' label='状态' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
