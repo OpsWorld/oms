@@ -109,8 +109,12 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
-                                                               defaults=dnsrecord)
+                if dnsrecord['name'] == '@':
+                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                                   value=dnsrecord['value'], defaults=dnsrecord)
+                else:
+                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                                   defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 
@@ -188,7 +192,11 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['data']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['type'] = item['type']
-                d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
-                                                               defaults=dnsrecord)
+                if dnsrecord['name'] == '@':
+                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                                   value=dnsrecord['value'], defaults=dnsrecord)
+                else:
+                    d, create = DnsRecord.objects.update_or_create(name=dnsrecord['name'], type=dnsrecord['type'],
+                                                                   defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)

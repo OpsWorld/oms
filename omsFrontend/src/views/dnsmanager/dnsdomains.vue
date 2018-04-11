@@ -19,6 +19,9 @@
             <template slot-scope="scope">
               <el-table :data='scope.row.recordData' border style="width: 100%">
                 <el-table-column prop='name' label='名称' sortable></el-table-column>
+                <el-table-column prop='type' label='类型'></el-table-column>
+                <el-table-column prop='value' label='值'></el-table-column>
+                <el-table-column prop='ttl' label='ttl'></el-table-column>
                 <el-table-column prop='status' label='状态'>
                   <template slot-scope="props">
                     <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -28,19 +31,18 @@
                     </div>
                   </template>
                 </el-table-column>
-                <el-table-column prop='type' label='类型'></el-table-column>
-                <el-table-column prop='value' label='值'></el-table-column>
-                <el-table-column prop='ttl' label='ttl'></el-table-column>
               </el-table>
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称' sortable>
             <!--<template slot-scope="scope">-->
-              <!--<router-link :to="'dnsrecords/' + scope.row.name">-->
-                <!--<a style="color: #257cff">{{scope.row.name}}</a>-->
-              <!--</router-link>-->
+            <!--<router-link :to="'dnsrecords/' + scope.row.name">-->
+            <!--<a style="color: #257cff">{{scope.row.name}}</a>-->
+            <!--</router-link>-->
             <!--</template>-->
           </el-table-column>
+          <el-table-column prop='type' label='类型' width="100"></el-table-column>
+          <el-table-column prop='dnsname' label='属于' width="100"></el-table-column>
           <el-table-column prop='status' label='状态' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
@@ -50,8 +52,6 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='type' label='类型' width="100"></el-table-column>
-          <el-table-column prop='dnsname' label='属于' width="100"></el-table-column>
           <el-table-column prop='use' label='用途'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作" width="300">
@@ -178,6 +178,7 @@ export default {
             message: '同步成功',
             type: 'success'
           })
+          this.fetchData()
         })
       } else if (row.type === 'godaddy') {
         postGodaddyRecord(row).then(() => {
@@ -185,6 +186,7 @@ export default {
             message: '同步成功',
             type: 'success'
           })
+          this.fetchData()
         })
       }
     },
