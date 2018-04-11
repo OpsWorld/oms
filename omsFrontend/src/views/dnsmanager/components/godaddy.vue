@@ -3,6 +3,9 @@
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
+          <div slot="header">
+            <span class="card-title">域名列表</span>
+          </div>
           <data-tables v-loading="domainloading" :data="tableData" :actions-def="domain_actionsDef"
                        :search-def="domain_searchDef"
                        :pagination-def="paginationDef"
@@ -14,6 +17,9 @@
       </el-col>
       <el-col :span="16">
         <el-card v-if="showrecord">
+          <div slot="header">
+            <span class="card-title">记录列表</span>
+          </div>
           <data-tables v-loading="recordloading" :data="recordData" :actions-def="record_actionsDef"
                        :action-col-def="actionColDef"
                        :search-def="record_searchDef" :pagination-def="paginationDef">
