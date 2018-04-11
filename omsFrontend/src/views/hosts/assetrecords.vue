@@ -180,7 +180,7 @@ export default {
       this.fetchData()
     },
     strToJson(str) {
-      var json = (new Function('return ' + str))()
+      var json = (new Function('return ' + str.replace('True', 'true')))()
       return json
     }
   }

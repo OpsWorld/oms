@@ -29,17 +29,6 @@
               </el-table-column>
             </el-table>
           </div>
-          <div class="table-pagination">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="currentPage"
-              :page-sizes="pagesize"
-              :page-size="listQuery.limit"
-              :layout="pageformat"
-              :total="tabletotal">
-            </el-pagination>
-          </div>
         </el-card>
       </el-col>
       <el-col :span="18">
@@ -103,7 +92,6 @@
 
 <script>
 import { getDnsapiKey, postDnsapiKey, putDnsapiKey, deleteDnsapiKey } from 'api/dnsapi'
-import { LIMIT, pagesize, pageformat } from '@/config'
 import vDnspod from './components/dnspod.vue'
 import vGodaddy from './components/godaddy.vue'
 
@@ -112,15 +100,6 @@ export default {
   data() {
     return {
       tableData: [],
-      tabletotal: 0,
-      currentPage: 1,
-      pagesize: pagesize,
-      pageformat: pageformat,
-      listQuery: {
-        limit: LIMIT,
-        offset: '',
-        search: ''
-      },
       ruleForm: {
         name: '',
         key: '',
@@ -144,9 +123,8 @@ export default {
 
   methods: {
     fetchData() {
-      getDnsapiKey(this.listQuery).then(response => {
-        this.tableData = response.data.results
-        this.tabletotal = response.data.count
+      getDnsapiKey().then(response => {
+        this.tableData = response.data
       })
     },
     addGroupSubmit() {
@@ -190,17 +168,6 @@ export default {
         this.$message.error('删除失败')
         console.log(error)
       })
-    },
-    searchClick() {
-      this.fetchData()
-    },
-    handleSizeChange(val) {
-      this.listQuery.limit = val
-      this.fetchData()
-    },
-    handleCurrentChange(val) {
-      this.listQuery.offset = (val - 1) * LIMIT
-      this.fetchData()
     },
     selectDns(row) {
       this.dnsname = row.name
