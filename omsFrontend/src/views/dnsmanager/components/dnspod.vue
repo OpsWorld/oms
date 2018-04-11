@@ -6,7 +6,11 @@
           <div slot="header">
             <span class="card-title">域名列表</span>
           </div>
-          <data-tables v-loading="domainloading" :data="tableData" :actions-def="domain_actionsDef"
+          <data-tables v-loading="domainloading"
+                       element-loading-text="让子弹飞一会儿"
+                       element-loading-background="rgba(0, 0, 0, 0.8)"
+                       :data="tableData"
+                       :actions-def="domain_actionsDef"
                        :search-def="domain_searchDef"
                        :pagination-def="paginationDef"
                        @row-click="handleRowClick">
@@ -19,7 +23,11 @@
           <div slot="header">
             <span class="card-title">记录列表</span>
           </div>
-          <data-tables v-loading="recordloading" :data="recordData" :actions-def="record_actionsDef"
+          <data-tables v-loading="recordloading"
+                       element-loading-text="让子弹飞一会儿"
+                       element-loading-background="rgba(0, 0, 0, 0.8)"
+                       :data="recordData"
+                       :actions-def="record_actionsDef"
                        :action-col-def="actionColDef"
                        :search-def="record_searchDef" :pagination-def="paginationDef">
             <el-table-column prop="name" label="记录" sortable="custom"></el-table-column>
