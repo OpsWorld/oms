@@ -119,11 +119,27 @@ export function patchDnsDomain(id, data) {
 }
 
 // dnsrecords
+export function postDnsRecord(data) {
+  return request({
+    url: apiURL.dnsrecords,
+    method: 'post',
+    data
+  })
+}
+
 export function getDnsRecord(query) {
   return request({
     url: apiURL.dnsrecords,
     method: 'get',
     params: query
+  })
+}
+
+export function putDnsRecord(id, data) {
+  return request({
+    url: apiURL.dnsrecords + id + '/',
+    method: 'put',
+    data
   })
 }
 

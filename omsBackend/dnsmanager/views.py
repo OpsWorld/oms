@@ -31,6 +31,54 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
     filter_fields = ['name', 'type', 'domain__name']
     search_fields = ['name']
 
+    def create(self, request, *args, **kwargs):
+        domain_type = request.data['domain_type']
+        dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
+        domain = request.data['domain']
+        if domain_type == 'dnspod':
+            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        elif domain_type == 'godaddy':
+            dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
+
+        name = request.data['name']
+        value = request.data['value']
+        type = request.data['type']
+        ttl = request.data['ttl']
+        use = request.data['use']
+        desc = request.data['desc']
+        record = {
+            'domain': DnsDomain.objects.get(name=domain),
+            'name': name,
+            'type': type,
+            'value': value,
+            'ttl': ttl,
+            'use': use,
+            'desc': desc
+        }
+        DnsRecord.objects.update_or_create(**record)
+        query = dnsapi.add_record(domain, name, value, type, ttl)
+        return Response(query)
+
+    def update(self, request, *args, **kwargs):
+        domain = request.data['domain']
+        domaininfo = DnsDomain.objects.get(name=domain)
+        domain_type = domaininfo.type
+        dnsinfo = DnsApiKey.objects.get(name=domaininfo.dnsname)
+        if domain_type == 'dnspod':
+            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        elif domain_type == 'godaddy':
+            dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
+        name = request.data['name']
+        value = request.data['value']
+        type = request.data['type']
+        ttl = request.data['ttl']
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        dnsapi.update_record(domain, name, value, type, ttl=ttl)
+        return Response(serializer.data)
+
 
 class DnspodDomainViewSet(viewsets.ViewSet):
     serializer_class = DnspodDomainSerializer
@@ -94,8 +142,8 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 'value': value,
                 'ttl': ttl,
             }
-            domain = DnsDomain.objects.get(name=domain)
-            DnsRecord.objects.update_or_create(domain=domain, name=sub_domain, type=record_type, **record)
+            domainquery = DnsDomain.objects.get(name=domain)
+            DnsRecord.objects.update_or_create(domain=domainquery, name=sub_domain, type=record_type, **record)
             query = dnsapi.update_record(domain, record_id, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'remove':
             record_id = request.data['record_id']
@@ -107,13 +155,8 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 dnsrecord = dict()
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
-                if item['name'] == '@':
-                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
-                                                                   type=item['type'], value=dnsrecord['value'],
-                                                                   defaults=dnsrecord)
-                else:
-                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
-                                                                   type=item['type'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'], type=item['type'],
+                                                               value=dnsrecord['value'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 
@@ -179,8 +222,8 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                 'value': value,
                 'ttl': ttl,
             }
-            domain = DnsDomain.objects.get(name=domain)
-            DnsRecord.objects.update_or_create(domain=domain, name=sub_domain, type=record_type, **record)
+            domainquery = DnsDomain.objects.get(name=domain)
+            DnsRecord.objects.update_or_create(domain=domainquery, name=sub_domain, type=record_type, **record)
             query = dnsapi.update_record(domain, sub_domain, value, record_type, ttl=ttl)
         elif request.data['action'] == 'sync':
             query = dnsapi.get_records(domain)
@@ -189,12 +232,7 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                 dnsrecord = dict()
                 dnsrecord['value'] = item['data']
                 dnsrecord['ttl'] = item['ttl']
-                if item['name'] == '@':
-                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
-                                                                   type=item['type'], value=dnsrecord['value'],
-                                                                   defaults=dnsrecord)
-                else:
-                    d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'],
-                                                                   type=item['type'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'], type=item['type'],
+                                                               value=dnsrecord['value'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)

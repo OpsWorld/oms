@@ -22,6 +22,13 @@
                 <el-table-column prop='type' label='类型'></el-table-column>
                 <el-table-column prop='value' label='值'></el-table-column>
                 <el-table-column prop='ttl' label='ttl'></el-table-column>
+                <el-table-column prop='use' label='用途'></el-table-column>
+                <el-table-column prop='desc' label='备注'></el-table-column>
+                <el-table-column label="操作">
+                  <template slot-scope="props">
+                    <el-button v-if="['NS', 'SOA'].indexOf(props.row.type)<0" type="success" size="mini" @click="editGroup(props.row)">更新Record</el-button>
+                  </template>
+                </el-table-column>
               </el-table>
             </template>
           </el-table-column>
@@ -45,7 +52,7 @@
           <el-table-column label='距离到期天数' width="120">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <span>{{scope.row.expire_time |diffDate}}</span>
+                <span>{{scope.row.expire_time | diffDate}}</span>
               </div>
             </template>
           </el-table-column>
@@ -59,12 +66,14 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='use' label='用途'></el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
-          <el-table-column label="操作" width="300">
+          <el-table-column label="操作" width="350">
             <template slot-scope="scope">
-              <el-button type="primary" size="small" @click="syncGroup(scope.row)">同步record</el-button>
-              <el-button type="success" size="small" @click="updateDesc(scope.row)">更新</el-button>
+              <el-button-group>
+                <el-button type="warning" size="mini" @click="syncGroup(scope.row)">同步record</el-button>
+                <el-button type="primary" size="mini" @click="addGroup(scope.row)">添加record</el-button>
+                <el-button type="success" size="mini" @click="updateDesc(scope.row)">更新domain</el-button>
+              </el-button-group>
             </template>
           </el-table-column>
         </el-table>
@@ -89,9 +98,6 @@
             <el-radio v-for="item in Object.keys(Dns_Status)" :key="item" :label="item">{{Dns_Status[item]}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="用途" prop="use">
-          <el-input v-model="rowdata.use" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
-        </el-form-item>
         <el-form-item label="备注" prop="desc">
           <el-input v-model="rowdata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
         </el-form-item>
@@ -100,6 +106,55 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog :visible.sync="addRecordForm">
+      <el-form :model="recordForm" ref="recordForm" label-width="100px">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="recordForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="类型" prop="type">
+          <el-select v-model="recordForm.type" placeholder="请选择类型">
+            <el-option v-for="item in record_types" :key="item.id" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="ip" prop="value">
+          <el-input v-model="recordForm.value"></el-input>
+        </el-form-item>
+        <el-form-item label="ttl" prop="ttl">
+          <el-input v-model="recordForm.ttl"></el-input>
+        </el-form-item>
+        <el-form-item label="用途" prop="use">
+          <el-input v-model="recordForm.use" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="desc">
+          <el-input v-model="recordForm.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="addDnsRecord('recordForm')">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
+    <el-dialog :visible.sync="editRecordForm">
+      <el-form :model="recorddata" ref="recorddata" label-width="100px">
+        <el-form-item label="ip" prop="value">
+          <el-input v-model="recorddata.value"></el-input>
+        </el-form-item>
+        <el-form-item label="ttl" prop="ttl">
+          <el-input v-model="recorddata.ttl"></el-input>
+        </el-form-item>
+        <el-form-item label="用途" prop="use">
+          <el-input v-model="recorddata.use" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" prop="desc">
+          <el-input v-model="recorddata.desc" type="textarea" :autosize="{ minRows: 5, maxRows: 10}"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="editDnsRecord('recorddata')">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -109,7 +164,9 @@ import {
   postDnspodRecord,
   postGodaddyRecord,
   patchDnsDomain,
-  getDnsRecord
+  getDnsRecord,
+  postDnsRecord,
+  putDnsRecord
 } from 'api/dnsapi'
 import { LIMIT, pagesize, pageformat } from '@/config'
 
@@ -138,7 +195,21 @@ export default {
         status: '',
         use: '',
         desc: ''
-      }
+      },
+      selectdomain: {},
+      addRecordForm: false,
+      recordForm: {
+        domain: '',
+        name: '',
+        value: '',
+        type: 'A',
+        ttl: 600,
+        use: '',
+        desc: ''
+      },
+      record_types: ['A', 'CNAME', 'MX', 'TXT'],
+      editRecordForm: false,
+      recorddata: {}
     }
   },
 
@@ -209,6 +280,42 @@ export default {
         })
         this.addForm = false
         this.fetchData()
+      })
+    },
+    addGroup(row) {
+      this.recordForm.domain = row.name
+      this.recordForm.dnsname = row.dnsname
+      this.recordForm.domain_type = row.type
+      this.addRecordForm = true
+    },
+    addDnsRecord() {
+      postDnsRecord(this.recordForm).then(() => {
+        this.$message({
+          message: '恭喜你，添加成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.addRecordForm = false
+      }).catch(error => {
+        const errordata = JSON.stringify(error.response.data)
+        this.$message.error(errordata)
+      })
+    },
+    editGroup(row) {
+      this.recorddata = row
+      this.editRecordForm = true
+    },
+    editDnsRecord() {
+      putDnsRecord(this.recorddata.id, this.recorddata).then(() => {
+        this.$message({
+          message: '恭喜你，更新成功',
+          type: 'success'
+        })
+        this.fetchData()
+        this.editRecordForm = false
+      }).catch(error => {
+        const errordata = JSON.stringify(error.response.data)
+        this.$message.error(errordata)
       })
     }
   }

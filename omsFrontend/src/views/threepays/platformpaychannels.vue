@@ -266,8 +266,8 @@ export default {
             }
           })
         }).catch(error => {
-          const errordata = Object.values(error.response.data)[0]
-          this.$message.error(errordata[0])
+          const errordata = JSON.stringify(error.response.data)
+          this.$message.error(errordata)
         })
       })
     }

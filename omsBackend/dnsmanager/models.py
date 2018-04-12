@@ -32,7 +32,6 @@ class DnsDomain(models.Model):
     name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
     type = models.CharField(choices=Dns_Types.items(), default='godaddy', max_length=10, verbose_name=u'类型')
-    use = models.TextField(null=True, blank=True, verbose_name=u'用途')
     create_time = models.DateTimeField(null=True, blank=True, verbose_name=u'创建时间')
     expire_time = models.DateTimeField(null=True, blank=True, verbose_name=u'过期时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')
@@ -50,12 +49,18 @@ class DnsDomain(models.Model):
 
 class DnsRecord(models.Model):
     domain = models.ForeignKey('DnsDomain', verbose_name=u'域名')
+    title = models.CharField(max_length=200, unique=True, null=True, blank=True, verbose_name=u'标题')
     name = models.CharField(max_length=20, verbose_name=u'名称')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
     type = models.CharField(default='A', max_length=10, verbose_name=u'类型')
     value = models.CharField(max_length=300, verbose_name=u'值')
     ttl = models.IntegerField(default=600, verbose_name=u'ttl')
+    use = models.TextField(null=True, blank=True, verbose_name=u'用途')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')
 
     def __str__(self):
-        return self.name
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.title = '{}-{}-{}-{}'.format(self.domain, self.name, self.type, self.value)
+        super(DnsRecord, self).save(*args, **kwargs)

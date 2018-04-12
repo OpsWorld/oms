@@ -210,9 +210,8 @@ export default {
           postSendmessage(messageForm)
           this.$router.push('/opstasks/opsdemands')
         }).catch(error => {
-          const errordata = Object.values(error.response.data)[0]
-          this.$message.error(errordata[0])
-          console.log(errordata)
+          const errordata = JSON.stringify(error.response.data)
+          this.$message.error(errordata)
         })
       } else {
         postDemandManager(DemandForm).then(response => {
@@ -253,8 +252,8 @@ export default {
           //          postSendmessage(messageForm)
           this.$router.push('/projects/demands')
         }).catch(error => {
-          const errordata = Object.values(error.response.data)[0]
-          this.$message.error(errordata[0])
+          const errordata = JSON.stringify(error.response.data)
+          this.$message.error(errordata)
           console.log(errordata)
         })
       }

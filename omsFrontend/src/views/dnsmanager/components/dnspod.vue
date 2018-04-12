@@ -27,8 +27,6 @@
                        element-loading-text="让子弹飞一会儿"
                        element-loading-background="rgba(0, 0, 0, 0.8)"
                        :data="recordData"
-                       :actions-def="record_actionsDef"
-                       :action-col-def="actionColDef"
                        :search-def="record_searchDef" :pagination-def="paginationDef">
             <el-table-column prop="name" label="记录" sortable="custom"></el-table-column>
             <el-table-column prop="type" label="类型" sortable="custom"></el-table-column>
