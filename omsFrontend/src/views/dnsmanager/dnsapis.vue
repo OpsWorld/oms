@@ -38,7 +38,7 @@
     </el-row>
 
     <el-dialog :visible.sync="addForm">
-      <el-form :model="ruleForm" ref="ruleForm" label-width="100px">
+      <el-form :model="ruleForm" ref="ruleForm" label-width="150px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
