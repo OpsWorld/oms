@@ -15,7 +15,7 @@ def whois(domain):
     create_time = datetime.strptime(d["whois_registrantDate"], UTC_FORMAT) + timedelta(hours=8)
     expire_time = datetime.strptime(d["whois_expirationDate"], UTC_FORMAT) + timedelta(hours=8)
 
-    return {"create_time": create_time, "expire_time": expire_time}
+    return {"create_time": create_time, "expire_time": expire_time, "dnsService": '|'.join(d["whois_dnsService"])}
 
 if __name__ == '__main__':
     print(whois('itimor.com'))

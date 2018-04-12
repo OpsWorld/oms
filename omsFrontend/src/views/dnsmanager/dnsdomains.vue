@@ -35,7 +35,6 @@
             </template>
           </el-table-column>
           <el-table-column prop='name' label='名称' sortable></el-table-column>
-          <el-table-column prop='type' label='类型' width="100"></el-table-column>
           <el-table-column prop='dnsname' label='属于' width="100"></el-table-column>
           <el-table-column prop='create_time' label='注册时间' width="100">
             <template slot-scope="scope">
@@ -51,7 +50,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label='距离到期天数' width="120">
+          <el-table-column label='到期天数' width="80">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.expire_time | diffDate}}</span>
@@ -62,21 +61,30 @@
           <el-table-column prop='status' label='状态' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
-                <el-tag>
+                <el-tag :type="Dns_Color[scope.row.status]">
                   {{Dns_Status[scope.row.status]}}
                 </el-tag>
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='update_time' label='修改时间'>
+          <el-table-column prop='update_time' label='修改时间' width="100">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <span>{{scope.row.update_time | parseDate}}</span>
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='dnsService' label='dns服务商'  width="260">
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <el-tag v-for="item in scope.row.dnsService.split('|')" :key="item">
+                  {{item}}
+                </el-tag>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
-          <el-table-column label="操作" width="350">
+          <el-table-column label="操作" width="260">
             <template slot-scope="scope">
               <el-button-group>
                 <el-button type="warning" size="mini" @click="syncGroup(scope.row)">同步记录</el-button>
@@ -197,6 +205,11 @@ export default {
         0: '使用中',
         1: '备用',
         2: '被墙'
+      },
+      Dns_Color: {
+        0: 'success',
+        1: 'warning',
+        2: 'danger'
       },
       Dns_Types: ['dnspod', 'godaddy'],
       addForm: false,
