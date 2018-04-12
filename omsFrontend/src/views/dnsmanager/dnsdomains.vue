@@ -74,7 +74,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop='dnsService' label='dns服务商'  width="260">
+          <el-table-column prop='dnsService' label='dns服务商' width="260">
             <template slot-scope="scope">
               <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
                 <el-tag v-for="item in scope.row.dnsService.split('|')" :key="item">
@@ -311,11 +311,13 @@ export default {
       this.addRecordForm = true
     },
     addDnsRecord() {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在火速连接api添加，请稍等。。。',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       postDnsRecord(this.recordForm).then(() => {
-        this.$message({
-          message: '恭喜你，添加成功',
-          type: 'success'
-        })
+        loading.close()
         this.fetchData()
         this.addRecordForm = false
       }).catch(error => {
@@ -328,11 +330,13 @@ export default {
       this.editRecordForm = true
     },
     editDnsRecord() {
+      const loading = this.$loading({
+        lock: true,
+        text: '正在火速连接api修改，请稍等。。。',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       putDnsRecord(this.recorddata.id, this.recorddata).then(() => {
-        this.$message({
-          message: '恭喜你，更新成功',
-          type: 'success'
-        })
+        loading.close()
         this.fetchData()
         this.editRecordForm = false
       }).catch(error => {

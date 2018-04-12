@@ -44,18 +44,9 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
         value = request.data['value']
         type = request.data['type']
         ttl = request.data['ttl']
-        use = request.data['use']
-        desc = request.data['desc']
-        record = {
-            'domain': DnsDomain.objects.get(name=domain),
-            'name': name,
-            'type': type,
-            'value': value,
-            'ttl': ttl,
-            'use': use,
-            'desc': desc
-        }
-        DnsRecord.objects.update_or_create(**record)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
         query = dnsapi.add_record(domain, name, value, type, ttl)
         return Response(query)
 
