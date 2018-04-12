@@ -147,7 +147,7 @@ export default {
         record_type: 'A',
         ttl: 600
       },
-      record_types: ['A', 'CNAME'],
+      record_types: ['A', 'CNAME', 'MX', 'TXT'],
       editForm: false,
       rowdata: {},
       actionColDef: {
