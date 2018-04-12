@@ -18,7 +18,7 @@
           <el-table-column label="记录" type="expand" width="50">
             <template slot-scope="scope">
               <el-table :data='scope.row.recordData' border style="width: 100%">
-                <el-table-column prop='name' label='名称' sortable></el-table-column>
+                <el-table-column prop='name' label='名称'></el-table-column>
                 <el-table-column prop='type' label='类型'></el-table-column>
                 <el-table-column prop='value' label='值'></el-table-column>
                 <el-table-column prop='ttl' label='ttl'></el-table-column>
@@ -26,7 +26,9 @@
                 <el-table-column prop='desc' label='备注'></el-table-column>
                 <el-table-column label="操作">
                   <template slot-scope="props">
-                    <el-button v-if="['NS', 'SOA'].indexOf(props.row.type)<0" type="success" size="mini" @click="editGroup(props.row)">更新Record</el-button>
+                    <el-button v-if="['NS', 'SOA'].indexOf(props.row.type)<0" type="success" size="mini"
+                               @click="editGroup(props.row)">修改
+                    </el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -66,13 +68,20 @@
               </div>
             </template>
           </el-table-column>
+          <el-table-column prop='update_time' label='修改时间'>
+            <template slot-scope="scope">
+              <div slot="reference" class="name-wrapper" style="text-align: center; color: rgb(0,0,0)">
+                <span>{{scope.row.update_time | parseDate}}</span>
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop='desc' label='备注'></el-table-column>
           <el-table-column label="操作" width="350">
             <template slot-scope="scope">
               <el-button-group>
-                <el-button type="warning" size="mini" @click="syncGroup(scope.row)">同步record</el-button>
-                <el-button type="primary" size="mini" @click="addGroup(scope.row)">添加record</el-button>
-                <el-button type="success" size="mini" @click="updateDesc(scope.row)">更新domain</el-button>
+                <el-button type="warning" size="mini" @click="syncGroup(scope.row)">同步记录</el-button>
+                <el-button type="primary" size="mini" @click="addGroup(scope.row)">添加记录</el-button>
+                <el-button type="success" size="mini" @click="updateDesc(scope.row)">修改</el-button>
               </el-button-group>
             </template>
           </el-table-column>
