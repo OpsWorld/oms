@@ -36,7 +36,7 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
         dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
         domain = request.data['domain']
         if domain_type == 'dnspod':
-            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         elif domain_type == 'godaddy':
             dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
 
@@ -56,7 +56,7 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
         domain_type = domaininfo.type
         dnsinfo = DnsApiKey.objects.get(name=domaininfo.dnsname)
         if domain_type == 'dnspod':
-            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         elif domain_type == 'godaddy':
             dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
         name = request.data['name']
@@ -76,14 +76,14 @@ class DnspodDomainViewSet(viewsets.ViewSet):
 
     def list(self, request):
         dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
-        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         query = dnsapi.get_domains()
         serializer = DnspodDomainSerializer(query, many=True)
         return Response(serializer.data)
 
     def post(self, request):
         dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
-        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         query = dnsapi.get_domains()
         for item in query:
             dnsdomain = dict()
@@ -100,7 +100,7 @@ class DnspodRecordViewSet(viewsets.ViewSet):
     def list(self, request):
         dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
         domain = request.GET['domain']
-        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         query = dnsapi.get_records(domain)
         serializer = DnspodRecordSerializer(query, many=True)
         return Response(serializer.data)
@@ -108,7 +108,7 @@ class DnspodRecordViewSet(viewsets.ViewSet):
     def post(self, request, record_type="A", ttl=600):
         dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
         domain = request.data['domain']
-        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret)
+        dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
         if request.data['action'] == 'create':
             sub_domain = request.data['sub_domain']
             value = request.data['value']

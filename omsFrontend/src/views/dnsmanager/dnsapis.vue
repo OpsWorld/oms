@@ -42,10 +42,10 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="ruleForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="key" prop="key">
+        <el-form-item label="key / id" prop="key">
           <el-input v-model="ruleForm.key"></el-input>
         </el-form-item>
-        <el-form-item label="secret" prop="secret">
+        <el-form-item label="secret / token" prop="secret">
           <el-input v-model="ruleForm.secret"></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="type">
@@ -63,14 +63,14 @@
     </el-dialog>
 
     <el-dialog :visible.sync="editForm">
-      <el-form :model="rowdata" ref="rowdata" label-width="100px">
+      <el-form :model="rowdata" ref="rowdata" label-width="150px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="rowdata.name"></el-input>
         </el-form-item>
-        <el-form-item label="key" prop="key">
+        <el-form-item label="key / id" prop="key">
           <el-input v-model="rowdata.key"></el-input>
         </el-form-item>
-        <el-form-item label="secret" prop="secret">
+        <el-form-item label="secret / token" prop="secret">
           <el-input v-model="rowdata.secret"></el-input>
         </el-form-item>
         <el-form-item label="类型" prop="type">
