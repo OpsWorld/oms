@@ -6,6 +6,7 @@ from django.db import models
 Dns_Types = {
     'dnspod': 'dnspod',
     'godaddy': 'godaddy',
+    'bind': 'bind',
 }
 
 
