@@ -92,7 +92,7 @@ export default {
             if (this.sendnotice) {
               const messageForm = {
                 action_user: this.ruleForm.action_user,
-                title: `【${this.demand}】${this.ruleForm.name}`,
+                title: this.ruleForm.name,
                 message: `提交人: ${this.ruleForm.create_user}\n指派人: ${this.ruleForm.action_user}`
               }
               postSendmessage(messageForm)
