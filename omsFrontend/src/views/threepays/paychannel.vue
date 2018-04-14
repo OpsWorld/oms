@@ -190,14 +190,15 @@
             </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
-                <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
-                <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
-                           @click="editDaifu(scope.row)">代付测试
-                </el-button>
-                <el-button v-if="paychannel_btn_delete_channel||role==='super'"
-                           @click="deletePayChannels(scope.row)"
-                           type="danger" size="mini">删除
-                </el-button>
+                <el-button-group>
+                  <el-button @click="editPayChannel(scope.row)" type="success" size="mini">修改</el-button>
+                  <el-button v-if="scope.row.type == '代付提款'" type="primary" size="mini"
+                             @click="editDaifu(scope.row)">代付
+                  </el-button>
+                  <el-button v-if="paychannel_btn_delete_channel||role==='super'"
+                             @click="deletePayChannels(scope.row)" type="danger" size="mini">删除
+                  </el-button>
+                </el-button-group>
               </template>
             </el-table-column>
           </el-table>
@@ -249,9 +250,11 @@ import editPaychannel from './components/editPaychannel.vue'
 import { LIMIT, pagesize, pageformat, apiUrl, uploadurl } from '@/config'
 import { getCreatetime, getConversionTime } from '@/utils'
 import { postUpload, postSendmessage } from 'api/tool'
+import ElButtonGroup from '../../../node_modules/element-ui/packages/button/src/button-group'
 
 export default {
   components: {
+    ElButtonGroup,
     addPaychannel, editPaychannel
   },
   data() {

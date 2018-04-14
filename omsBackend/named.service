@@ -1,0 +1,12 @@
+[Unit]
+Description=named
+
+[Service]
+ExecStart=/bin/bash -c '/usr/local/bind/sbin/named -c /usr/local/bind/etc/named.conf -u named -n1 -g'
+Restart=on-failure
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
