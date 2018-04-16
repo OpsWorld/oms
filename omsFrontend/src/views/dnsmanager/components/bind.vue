@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getDnsapiKey, getDnspodDomain, getDnspodRecord, postDnspodRecord, PostDnspodDomain } from 'api/dnsapi'
+import { getDnsapiKey, getBindDomain, getDnspodRecord, postDnspodRecord, PostBindDomain } from 'api/dnsapi'
 
 export default {
   components: {},
@@ -183,7 +183,7 @@ export default {
 
   methods: {
     fetchData() {
-      getDnspodDomain(this.listQuery).then(response => {
+      getBindDomain(this.listQuery).then(response => {
         this.tableData = response.data
         this.tabletotal = response.data.length
         this.domainloading = false
@@ -248,7 +248,7 @@ export default {
         message: '正在同步中，请稍后',
         type: 'info'
       })
-      PostDnspodDomain(this.listQuery).then(() => {
+      PostBindDomain(this.listQuery).then(() => {
         this.$message({
           message: '同步成功',
           type: 'success'

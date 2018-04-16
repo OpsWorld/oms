@@ -56,16 +56,16 @@ class BindApi(object):
         将 方法,基础url,参数合并成 url请求,并向服务器发送获取结果然后返回
         """
         self.auth_header()
-        try:
-            if method == 'get':
+        if method == 'get':
+            params = None
+            if param_data:
                 params = urllib.parse.urlencode(param_data)
-                reader = requests.get(url, params, headers=self.headers)
-            elif method == 'post':
-                reader = requests.post(url, data=param_data, headers=self.headers)
-            else:
-                reader = requests.put(url, data=param_data, headers=self.headers)
-        except Exception as e:
-            return ""
+            reader = requests.get(url, params, headers=self.headers)
+        elif method == 'post':
+            reader = requests.post(url, data=param_data, headers=self.headers)
+        else:
+            reader = requests.put(url, data=param_data, headers=self.headers)
+
         msg = reader.text
         return msg
 
@@ -115,4 +115,4 @@ if __name__ == '__main__':
     bindapi = BindApi(user=BIND_KEYINFO['user'], pwd=BIND_KEYINFO['pwd'])
     data = {'name': 'itimor.ph'}
     record = {'domain': 'itimor.ph', 'name': 'www', 'value': '1.1.1.12', 'type': 'A'}
-    print(bindapi.update_record(10, record))
+    print(bindapi.get_domains())

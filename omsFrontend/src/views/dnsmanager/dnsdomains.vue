@@ -18,6 +18,7 @@
           <el-table-column label="记录" type="expand" width="50">
             <template slot-scope="scope">
               <el-table :data='scope.row.recordData' border style="width: 100%">
+                <el-table-column prop="record_id" label="记录ID" sortable></el-table-column>
                 <el-table-column prop='name' label='名称'></el-table-column>
                 <el-table-column prop='type' label='类型'></el-table-column>
                 <el-table-column prop='value' label='值'></el-table-column>

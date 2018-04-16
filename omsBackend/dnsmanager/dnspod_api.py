@@ -126,12 +126,6 @@ class DnspodApi(object):
         logging.error("[__GetRecordIP:]API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise ApiError(error_code, error_message)
 
-    def get_record_id(self, domain, sub_domain, value, record_type="A"):
-        records = self.get_records(domain)
-        for record in records:
-            if record['name'] == sub_domain and record['value'] == value and record['type'] == record_type:
-                return record['id']
-
     def add_record(self, domain, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
         method = 'Create'
         url = self.API_RECORDS + method
@@ -156,11 +150,10 @@ class DnspodApi(object):
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise ApiError(error_code, error_message)
 
-    def update_record(self, domain, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
+    def update_record(self, domain, record_id, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
         method = 'Modify'
         url = self.API_RECORDS + method
         domain_id = self.get_domain_id(domain)
-        record_id = self.get_record_id(domain, sub_domain, value, record_type="A")
         pam = {'domain_id': domain_id,
                'record_id': record_id,
                'sub_domain': sub_domain,
@@ -182,11 +175,10 @@ class DnspodApi(object):
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise ApiError(error_code, error_message)
 
-    def delete_record(self, domain, sub_domain, value, record_type="A"):
+    def delete_record(self, domain, record_id):
         method = 'Remove'
         url = self.API_RECORDS + method
         domain_id = self.get_domain_id(domain)
-        record_id = self.get_record_id(domain, sub_domain, value, record_type="A")
         pam = {'domain_id': domain_id,
                'record_id': record_id}
         ret_json = self.post_data(url, pam)

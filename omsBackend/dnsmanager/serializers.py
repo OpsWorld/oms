@@ -14,7 +14,8 @@ class DnsApiKeySerializer(serializers.ModelSerializer):
 class DnsDomainSerializer(serializers.ModelSerializer):
     class Meta:
         model = DnsDomain
-        fields = ['url', 'id', 'dnsname', 'name', 'dnsService', 'status', 'type', 'create_time', 'expire_time', 'update_time', 'desc']
+        fields = ['url', 'id', 'dnsname', 'name', 'dnsService', 'status', 'type', 'create_time', 'expire_time',
+                  'update_time', 'desc']
 
 
 class DnsRecordSerializer(serializers.ModelSerializer):
@@ -49,7 +50,6 @@ class GodaddyDomainSerializer(serializers.Serializer):
     domainId = serializers.IntegerField()
     domain = serializers.CharField()
     status = serializers.CharField()
-    # expires = serializers.DateTimeField()
     createdAt = serializers.DateTimeField()
 
 
@@ -58,3 +58,23 @@ class GodaddyRecordSerializer(serializers.Serializer):
     data = serializers.CharField()
     type = serializers.CharField()
     ttl = serializers.IntegerField()
+
+
+class BindDomainSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
+
+class BindRecordSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    type = serializers.CharField()
+    value = serializers.CharField()
+    ttl = serializers.CharField()
+    mx = serializers.CharField()
+    domain_id = serializers.IntegerField()
+    expire = serializers.IntegerField()
+    minimum = serializers.IntegerField()
+    refresh = serializers.IntegerField()
+    retry = serializers.IntegerField()
+    serial = serializers.IntegerField()

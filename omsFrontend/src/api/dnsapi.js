@@ -67,6 +67,23 @@ export function PostGodaddyDomain(data) {
   })
 }
 
+// binddomains
+export function getBindDomain(query) {
+  return request({
+    url: apiURL.binddomains,
+    method: 'get',
+    params: query
+  })
+}
+
+export function PostBindDomain(data) {
+  return request({
+    url: apiURL.binddomains,
+    method: 'post',
+    data
+  })
+}
+
 // dnspodrecords
 export function postDnspodRecord(data) {
   return request({

@@ -34,6 +34,7 @@
       <el-col :span="18">
         <v-dnspod v-if="showdnspod" :dnsname="dnsname"></v-dnspod>
         <v-godaddy v-if="showgodaddy" :dnsname="dnsname"></v-godaddy>
+        <v-bind v-if="showbind" :dnsname="dnsname"></v-bind>
       </el-col>
     </el-row>
 
@@ -94,9 +95,10 @@
 import { getDnsapiKey, postDnsapiKey, putDnsapiKey, deleteDnsapiKey } from 'api/dnsapi'
 import vDnspod from './components/dnspod.vue'
 import vGodaddy from './components/godaddy.vue'
+import vBind from './components/bind.vue'
 
 export default {
-  components: { vDnspod, vGodaddy },
+  components: { vDnspod, vGodaddy, vBind },
   data() {
     return {
       tableData: [],
@@ -113,6 +115,7 @@ export default {
       Dns_Types: ['dnspod', 'godaddy', 'bind'],
       showdnspod: false,
       showgodaddy: false,
+      showbind: false,
       dnsname: ''
     }
   },
@@ -177,6 +180,8 @@ export default {
         this.showdnspod = true
       } else if (row.type === 'godaddy') {
         this.showgodaddy = true
+      } else if (row.type === 'bind') {
+        this.showbind = true
       }
     }
   }

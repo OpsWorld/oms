@@ -6,9 +6,10 @@ from rest_framework.response import Response
 from dnsmanager.models import DnsApiKey, DnsDomain, DnsRecord
 from dnsmanager.serializers import DnsApiKeySerializer, DnsDomainSerializer, DnsRecordSerializer
 from dnsmanager.serializers import DnspodDomainSerializer, DnspodRecordSerializer, GodaddyDomainSerializer, \
-    GodaddyRecordSerializer
+    GodaddyRecordSerializer, BindDomainSerializer, BindRecordSerializer
 from dnsmanager.dnspod_api import DnspodApi
 from dnsmanager.godaddy_api import GodaddyApi
+from dnsmanager.bind_api import BindApi
 
 
 class DnsApiKeyViewSet(viewsets.ModelViewSet):
@@ -52,22 +53,26 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         domain = request.data['domain']
-        domaininfo = DnsDomain.objects.get(name=domain)
-        domain_type = domaininfo.type
-        dnsinfo = DnsApiKey.objects.get(name=domaininfo.dnsname)
-        if domain_type == 'dnspod':
-            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
-        elif domain_type == 'godaddy':
-            dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
-        name = request.data['name']
-        value = request.data['value']
-        type = request.data['type']
-        ttl = request.data['ttl']
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=False)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        dnsapi.update_record(domain, name, value, type, ttl=ttl)
+
+        domaininfo = DnsDomain.objects.get(name=domain)
+        domain_type = domaininfo.type
+        name = request.data['name']
+        value = request.data['value']
+        type = request.data['type']
+        ttl = request.data['ttl']
+        dnsinfo = DnsApiKey.objects.get(name=domaininfo.dnsname)
+        if domain_type == 'dnspod':
+            dnsapi = DnspodApi(dnsinfo.key, dnsinfo.secret, '%s,%s' % (dnsinfo.key, dnsinfo.secret))
+            record_id = request.data['record_id']
+            dnsapi.update_record(domain, record_id, name, value, type, ttl=ttl)
+        elif domain_type == 'godaddy':
+            dnsapi = GodaddyApi(dnsinfo.key, dnsinfo.secret)
+            dnsapi.update_record(domain, name, value, type, ttl=ttl)
+
         return Response(serializer.data)
 
 
@@ -149,7 +154,8 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['record_id'] = item['id']
-                d, create = DnsRecord.objects.update_or_create(domain=domainquery, record_id=dnsrecord['record_id'], defaults=dnsrecord)
+                d, create = DnsRecord.objects.update_or_create(domain=domainquery, record_id=dnsrecord['record_id'],
+                                                               defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 
@@ -229,3 +235,27 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
                                                                value=dnsrecord['value'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
+
+
+class BindDomainViewSet(viewsets.ViewSet):
+    serializer_class = BindDomainSerializer
+
+    def list(self, request):
+        dnsinfo = DnsApiKey.objects.get(name=request.GET['dnsname'])
+        dnsapi = BindApi(user=dnsinfo.key, pwd=None, token=dnsinfo.secret)
+        query = dnsapi.get_domains()
+        serializer = BindDomainSerializer(query, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        dnsinfo = DnsApiKey.objects.get(name=request.data['dnsname'])
+        dnsapi = BindApi(user=dnsinfo.key, pwd=None, token=dnsinfo.secret)
+        query = dnsapi.get_domains()
+        for item in query:
+            dnsdomain = dict()
+            dnsdomain['dnsname'] = request.data['dnsname']
+            dnsdomain['name'] = item['name']
+            dnsdomain['type'] = 'bind'
+            d, create = DnsDomain.objects.update_or_create(name=dnsdomain['name'], defaults=dnsdomain)
+        return Response({'status': create})
+
