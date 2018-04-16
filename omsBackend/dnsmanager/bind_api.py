@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 import requests
 import json
+import urllib.parse
 
 
 class ApiError(Exception):
@@ -30,6 +31,8 @@ class BindApi(object):
 
         # url
         self.API_URL = 'http://127.0.0.1:8888/api/'
+        self.DOMAIN_URL = self.API_URL + 'domains/'
+        self.RECORD_URL = self.API_URL + 'records/'
 
     def get_token(self):
         pam = {'username': self.user, 'password': self.pwd}
@@ -55,11 +58,12 @@ class BindApi(object):
         self.auth_header()
         try:
             if method == 'get':
-                reader = requests.get(url, headers=self.headers)
+                params = urllib.parse.urlencode(param_data)
+                reader = requests.get(url, params, headers=self.headers)
             elif method == 'post':
                 reader = requests.post(url, data=param_data, headers=self.headers)
             else:
-                reader = requests.post(url, headers=self.headers)
+                reader = requests.put(url, data=param_data, headers=self.headers)
         except Exception as e:
             return ""
         msg = reader.text
@@ -67,39 +71,48 @@ class BindApi(object):
 
     def get_domains(self):
         method = 'get'
-        suffix_url = 'domains/'
-        url = self.API_URL + suffix_url
-        ret_json = self.get_response(url, method)
+        ret_json = self.get_response(self.DOMAIN_URL, method)
         req = json.loads(ret_json, encoding='utf-8')
+        return req
+
+    def get_domain_id(self, domain):
+        method = 'get'
+        param_data = {'name': domain}
+        ret_json = self.get_response(self.DOMAIN_URL, method, param_data)
+        req = json.loads(ret_json, encoding='utf-8')[0]['id']
         return req
 
     def add_domain(self, data):
         method = 'post'
-        suffix_url = 'domains/'
-        url = self.API_URL + suffix_url
-        ret_json = self.get_response(url, method, param_data=data)
+        ret_json = self.get_response(self.DOMAIN_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
         return req
 
-    def get_domain_id(self):
+    def get_records(self, domain):
         method = 'get'
-        suffix_url = 'domains/'
-        url = self.API_URL + suffix_url
-        ret_json = self.get_response(url, method)
+        param_data = {'domain__name': domain}
+        ret_json = self.get_response(self.RECORD_URL, method, param_data)
         req = json.loads(ret_json, encoding='utf-8')
         return req
 
-    @staticmethod
-    def get_error_msg(last_json_data):
-        """
-        增加服务器返回错误信息
-        """
-        return json.loads(last_json_data, encoding='utf-8').get('status').get("message")
+    def add_record(self, domain, record, value, type='A'):
+        method = 'post'
+        title = '{}-{}-{}-{}'.format(domain, record, value, type)
+        data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type}
+        ret_json = self.get_response(self.RECORD_URL, method, param_data=data)
+        req = json.loads(ret_json, encoding='utf-8')
+        return req['title']
 
+    def update_record(self, record_id, data):
+        method = 'put'
+        ret_json = self.get_response(self.RECORD_URL + str(record_id) + '/', method, param_data=data)
+        req = json.loads(ret_json, encoding='utf-8')
+        return req
 
 if __name__ == '__main__':
     from dnsapi_key import BIND_KEYINFO
 
     bindapi = BindApi(user=BIND_KEYINFO['user'], pwd=BIND_KEYINFO['pwd'])
     data = {'name': 'itimor.ph'}
-    print(bindapi.add_domain(data))
+    record = {'domain': 'itimor.ph', 'name': 'www', 'value': '1.1.1.12', 'type': 'A'}
+    print(bindapi.update_record(10, record))
