@@ -30,8 +30,9 @@ Dns_Status = {
 
 
 class DnsDomain(models.Model):
+    title = models.CharField(max_length=200, unique=True, null=True, blank=True, verbose_name=u'记录名')
     dnsname = models.CharField(max_length=20, verbose_name=u'归属dns')
-    name = models.CharField(max_length=20, unique=True, verbose_name=u'名称')
+    name = models.CharField(max_length=20, verbose_name=u'名称')
     dnsService = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'dns服务商')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
     type = models.CharField(choices=Dns_Types.items(), default='godaddy', max_length=10, verbose_name=u'类型')
@@ -49,12 +50,13 @@ class DnsDomain(models.Model):
         self.create_time = domain_info["create_time"]
         self.expire_time = domain_info["expire_time"]
         self.dnsService = domain_info["dnsService"]
+        self.title = '{}-{}'.format(self.dnsname, self.name)
         super(DnsDomain, self).save(*args, **kwargs)
 
 
 class DnsRecord(models.Model):
+    title = models.CharField(max_length=200, unique=True, null=True, blank=True, verbose_name=u'记录名')
     domain = models.ForeignKey('DnsDomain', verbose_name=u'域名')
-    title = models.CharField(max_length=200, unique=True, null=True, blank=True, verbose_name=u'标题')
     name = models.CharField(max_length=20, verbose_name=u'名称')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
     type = models.CharField(default='A', max_length=10, verbose_name=u'类型')
