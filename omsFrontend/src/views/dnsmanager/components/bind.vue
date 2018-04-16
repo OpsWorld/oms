@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { getDnsapiKey, getBindDomain, getDnspodRecord, postDnspodRecord, PostBindDomain } from 'api/dnsapi'
+import { getDnsapiKey, getBindDomain, getBindRecord, postBindRecord, PostBindDomain } from 'api/dnsapi'
 
 export default {
   components: {},
@@ -204,7 +204,7 @@ export default {
         domain: this.ruleForm.domain
       }
       this.ruleForm.dnsname = this.listQuery.dnsname
-      getDnspodRecord(data).then(response => {
+      getBindRecord(data).then(response => {
         this.recordData = response.data
         this.recordloading = false
       })
@@ -216,7 +216,7 @@ export default {
       this.fetchRecordData()
     },
     addGroupSubmit() {
-      postDnspodRecord(this.ruleForm).then(() => {
+      postBindRecord(this.ruleForm).then(() => {
         this.$message({
           message: '恭喜你，添加成功',
           type: 'success'
@@ -231,7 +231,7 @@ export default {
     editGroupSubmit() {
       this.rowdata.dnsname = this.ruleForm.dnsname
       this.rowdata.domain = this.ruleForm.domain
-      postDnspodRecord(this.rowdata).then(() => {
+      postBindRecord(this.rowdata).then(() => {
         this.$message({
           message: '恭喜你，修改成功',
           type: 'success'

@@ -135,7 +135,7 @@
             <el-option v-for="item in record_types" :key="item.id" :value="item"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="ip" prop="value">
+        <el-form-item label="值" prop="value">
           <el-input v-model="recordForm.value"></el-input>
         </el-form-item>
         <el-form-item label="ttl" prop="ttl">
@@ -155,7 +155,13 @@
 
     <el-dialog :visible.sync="editRecordForm">
       <el-form :model="recorddata" ref="recorddata" label-width="100px">
-        <el-form-item label="ip" prop="value">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="recorddata.name" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="类型" prop="type">
+          <el-input v-model="recorddata.type" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="值" prop="value">
           <el-input v-model="recorddata.value"></el-input>
         </el-form-item>
         <el-form-item label="ttl" prop="ttl">
@@ -181,6 +187,7 @@ import {
   getDnsDomain,
   postDnspodRecord,
   postGodaddyRecord,
+  postBindRecord,
   patchDnsDomain,
   getDnsRecord,
   postDnsRecord,
@@ -283,6 +290,14 @@ export default {
         })
       } else if (row.type === 'godaddy') {
         postGodaddyRecord(row).then(() => {
+          this.$message({
+            message: '同步成功',
+            type: 'success'
+          })
+          this.fetchData()
+        })
+      } else if (row.type === 'bind') {
+        postBindRecord(row).then(() => {
           this.$message({
             message: '同步成功',
             type: 'success'

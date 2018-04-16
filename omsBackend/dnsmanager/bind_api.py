@@ -95,16 +95,17 @@ class BindApi(object):
         req = json.loads(ret_json, encoding='utf-8')
         return req
 
-    def add_record(self, domain, record, value, type='A'):
+    def add_record(self, domain, record, value, type='A', ttl=600):
         method = 'post'
         title = '{}-{}-{}-{}'.format(domain, record, value, type)
-        data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type}
+        data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
         ret_json = self.get_response(self.RECORD_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
         return req['title']
 
-    def update_record(self, record_id, data):
+    def update_record(self, record_id, domain, record, value, type='A', ttl=600):
         method = 'put'
+        data = {'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
         ret_json = self.get_response(self.RECORD_URL + str(record_id) + '/', method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
         return req
@@ -114,5 +115,4 @@ if __name__ == '__main__':
 
     bindapi = BindApi(user=BIND_KEYINFO['user'], pwd=BIND_KEYINFO['pwd'])
     data = {'name': 'itimor.ph'}
-    record = {'domain': 'itimor.ph', 'name': 'www', 'value': '1.1.1.12', 'type': 'A'}
     print(bindapi.get_domains())

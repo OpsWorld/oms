@@ -150,5 +150,6 @@ module.exports = {
   dnspodrecords: `${url}/api/dnspodrecords/`,
   godaddydomains: `${url}/api/godaddydomains/`,
   godaddyreecords: `${url}/api/godaddyreecords/`,
-  binddomains: `${url}/api/binddomains/`
+  binddomains: `${url}/api/binddomains/`,
+  bindreecords: `${url}/api/bindreecords/`
 }

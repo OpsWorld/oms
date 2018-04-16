@@ -150,7 +150,7 @@ class DnspodApi(object):
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
         raise ApiError(error_code, error_message)
 
-    def update_record(self, domain, record_id, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
+    def update_record(self, record_id, domain, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
         method = 'Modify'
         url = self.API_RECORDS + method
         domain_id = self.get_domain_id(domain)
