@@ -101,7 +101,7 @@ class BindApi(object):
         data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
         ret_json = self.get_response(self.RECORD_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
-        return req['title']
+        return req
 
     def update_record(self, record_id, domain, record, value, type='A', ttl=600):
         method = 'put'

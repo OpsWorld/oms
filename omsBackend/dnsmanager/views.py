@@ -47,10 +47,11 @@ class DnsRecordViewSet(viewsets.ModelViewSet):
         value = request.data['value']
         type = request.data['type']
         ttl = request.data['ttl']
+        query = dnsapi.add_record(domain, name, value, type, ttl)
+        request.data['record_id'] = query['id']
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        query = dnsapi.add_record(domain, name, value, type, ttl)
         return Response(query)
 
     def update(self, request, *args, **kwargs):
@@ -160,6 +161,7 @@ class DnspodRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['record_id'] = item['id']
+                dnsrecord['title'] = '{}-{}-{}-{}'.format(domainquery, dnsrecord['name'], dnsrecord['type'], dnsrecord['value'])
                 d, create = DnsRecord.objects.update_or_create(domain=domainquery, record_id=dnsrecord['record_id'],
                                                                defaults=dnsrecord)
             return Response({'status': create})
@@ -235,8 +237,11 @@ class GodaddyRecordViewSet(viewsets.ViewSet):
             domainquery = DnsDomain.objects.get(name=domain)
             for item in query:
                 dnsrecord = dict()
+                dnsrecord['name'] = item['domain']
+                dnsrecord['type'] = item['type']
                 dnsrecord['value'] = item['data']
                 dnsrecord['ttl'] = item['ttl']
+                dnsrecord['title'] = '{}-{}-{}-{}'.format(domainquery, dnsrecord['name'], dnsrecord['type'], dnsrecord['value'])
                 d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'], type=item['type'],
                                                                value=dnsrecord['value'], defaults=dnsrecord)
             return Response({'status': create})
@@ -318,6 +323,7 @@ class BindRecordViewSet(viewsets.ViewSet):
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
                 dnsrecord['record_id'] = item['id']
+                dnsrecord['title'] = '{}-{}-{}-{}'.format(domainquery, dnsrecord['name'], dnsrecord['type'], dnsrecord['value'])
                 d, create = DnsRecord.objects.update_or_create(domain=domainquery, record_id=dnsrecord['record_id'],
                                                                defaults=dnsrecord)
             return Response({'status': create})
