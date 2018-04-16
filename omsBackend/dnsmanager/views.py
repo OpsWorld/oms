@@ -144,10 +144,12 @@ class DnspodRecordViewSet(viewsets.ViewSet):
             domainquery = DnsDomain.objects.get(name=domain)
             for item in query:
                 dnsrecord = dict()
+                dnsrecord['name'] = item['name']
+                dnsrecord['type'] = item['type']
                 dnsrecord['value'] = item['value']
                 dnsrecord['ttl'] = item['ttl']
-                d, create = DnsRecord.objects.update_or_create(domain=domainquery, name=item['name'], type=item['type'],
-                                                               value=dnsrecord['value'], defaults=dnsrecord)
+                dnsrecord['record_id'] = item['id']
+                d, create = DnsRecord.objects.update_or_create(domain=domainquery, record_id=dnsrecord['record_id'], defaults=dnsrecord)
             return Response({'status': create})
         return Response(query)
 

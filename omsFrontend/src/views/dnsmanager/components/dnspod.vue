@@ -32,6 +32,7 @@
             <el-table-column prop="type" label="类型" sortable="custom"></el-table-column>
             <el-table-column prop="value" label="值" sortable="custom"></el-table-column>
             <el-table-column prop="ttl" label="ttl" sortable="custom"></el-table-column>
+            <el-table-column prop="record_id" label="记录ID" sortable="custom"></el-table-column>
             <el-table-column prop="status" label="状态" sortable="custom"></el-table-column>
           </data-tables>
         </el-card>

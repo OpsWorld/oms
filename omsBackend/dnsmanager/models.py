@@ -2,6 +2,7 @@
 # author: itimor
 
 from django.db import models
+from django.utils import timezone
 
 Dns_Types = {
     'dnspod': 'dnspod',
@@ -34,8 +35,8 @@ class DnsDomain(models.Model):
     dnsService = models.CharField(max_length=200, null=True, blank=True, verbose_name=u'dns服务商')
     status = models.CharField(choices=Dns_Status.items(), default=0, max_length=1, verbose_name=u'状态')
     type = models.CharField(choices=Dns_Types.items(), default='godaddy', max_length=10, verbose_name=u'类型')
-    create_time = models.DateTimeField(null=True, blank=True, verbose_name=u'创建时间')
-    expire_time = models.DateTimeField(null=True, blank=True, verbose_name=u'过期时间')
+    create_time = models.DateTimeField(default=timezone.now, verbose_name=u'创建时间')
+    expire_time = models.DateTimeField(default=timezone.now, verbose_name=u'过期时间')
     update_time = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')
 
@@ -59,6 +60,7 @@ class DnsRecord(models.Model):
     type = models.CharField(default='A', max_length=10, verbose_name=u'类型')
     value = models.CharField(max_length=300, verbose_name=u'值')
     ttl = models.IntegerField(default=600, verbose_name=u'ttl')
+    record_id = models.CharField(max_length=11, null=True, blank=True, verbose_name=u'ttl')
     use = models.TextField(null=True, blank=True, verbose_name=u'用途')
     desc = models.TextField(null=True, blank=True, verbose_name=u'备注')
 
