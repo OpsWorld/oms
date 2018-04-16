@@ -98,7 +98,7 @@ class BindApi(object):
 
     def add_record(self, domain, record, value, type='A', ttl=600):
         method = 'post'
-        title = '{}-{}-{}-{}'.format(domain, record, value, type)
+        title = '{}-{}-{}-{}'.format(domain, record, type, value)
         data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
         ret_json = self.get_response(self.RECORD_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')

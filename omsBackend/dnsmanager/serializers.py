@@ -77,3 +77,5 @@ class BindRecordSerializer(serializers.Serializer):
     refresh = serializers.IntegerField()
     retry = serializers.IntegerField()
     serial = serializers.IntegerField()
+    status = serializers.CharField()
+
