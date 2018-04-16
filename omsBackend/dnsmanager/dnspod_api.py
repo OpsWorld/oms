@@ -21,13 +21,13 @@ def initlog(logfile, logname):
     return logger
 
 
-class DnspodApiError(Exception):
+class ApiError(Exception):
     """
     错误类，用于对外显示错误信息
     """
 
     def __init__(self, error_code, error_message):
-        super(DnspodApiError, self).__init__()
+        super(ApiError, self).__init__()
         self.error_code = int(error_code)
         self.error_message = error_message
 
@@ -99,20 +99,20 @@ class DnspodApi(object):
             return "OK"
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
     def get_domain_id(self, domain):
         method = 'Info'
         url = self.API_DOMAINS + method
         ret_json = self.post_data(url, param_data={'domain': domain})
         if ret_json == "":
-            raise DnspodApiError(-1000, "与服务器通讯通讯失败，未获取到数据")
+            raise ApiError(-1000, "与服务器通讯通讯失败，未获取到数据")
         status_code = json.loads(ret_json, encoding='utf-8').get('status').get('code')
         if int(status_code) == 1:
             return json.loads(ret_json, encoding='utf-8').get('domain').get('id')
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("[__GetRecordIP:]API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
     def get_records(self, domain):
         method = 'List'
@@ -124,12 +124,12 @@ class DnspodApi(object):
             return json.loads(ret_json, encoding='utf-8').get('records')
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("[__GetRecordIP:]API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
-    def get_record_id(self, domain, sub_domain):
+    def get_record_id(self, domain, sub_domain, value, record_type="A"):
         records = self.get_records(domain)
         for record in records:
-            if record['name'] == sub_domain:
+            if record['name'] == sub_domain and record['value'] == value and record['type'] == record_type:
                 return record['id']
 
     def add_record(self, domain, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
@@ -154,13 +154,13 @@ class DnspodApi(object):
             return ret_json
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
     def update_record(self, domain, sub_domain, value, record_type="A", ttl=600, record_line=u'默认', mx=None):
         method = 'Modify'
         url = self.API_RECORDS + method
         domain_id = self.get_domain_id(domain)
-        record_id = self.get_record_id(domain, sub_domain)
+        record_id = self.get_record_id(domain, sub_domain, value, record_type="A")
         pam = {'domain_id': domain_id,
                'record_id': record_id,
                'sub_domain': sub_domain,
@@ -180,12 +180,13 @@ class DnspodApi(object):
             return ret_json
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
-    def delete_record(self, domain, record_id):
+    def delete_record(self, domain, sub_domain, value, record_type="A"):
         method = 'Remove'
         url = self.API_RECORDS + method
         domain_id = self.get_domain_id(domain)
+        record_id = self.get_record_id(domain, sub_domain, value, record_type="A")
         pam = {'domain_id': domain_id,
                'record_id': record_id}
         ret_json = self.post_data(url, pam)
@@ -194,7 +195,7 @@ class DnspodApi(object):
             return ret_json
         error_code, error_message = int(status_code), self.get_error_msg(ret_json)
         logging.error("API返回错误,错误码:%d,错误说明:%s" % (error_code, error_message))
-        raise DnspodApiError(error_code, error_message)
+        raise ApiError(error_code, error_message)
 
     @staticmethod
     def get_error_msg(last_json_data):
@@ -210,4 +211,4 @@ if __name__ == '__main__':
     initlog('./dnsapi.log', 'DnspodApi')
     dnsapi = DnspodApi(user=DMSPOD_KEYINFO['user'], pwd=DMSPOD_KEYINFO['pwd'])
     record_id = 353763350
-    print(dnsapi.get_record_id('itimor.com', 'aaa'))
+    print(dnsapi.get_record_id('itimor.com', 'aaa', '1.1.1.6', 'A'))

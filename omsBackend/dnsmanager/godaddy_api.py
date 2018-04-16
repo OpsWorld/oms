@@ -21,9 +21,9 @@ def initlog(logfile, logname):
     return logger
 
 
-class GodaddyApiError(Exception):
+class ApiError(Exception):
     def __init__(self, error_message, *args, **kwargs):
-        super(GodaddyApiError, *args, **kwargs)
+        super(ApiError, *args, **kwargs)
         self.error_message = error_message
 
 
@@ -103,7 +103,7 @@ class GodaddyApi(object):
         try:
             response.raise_for_status()
         except Exception as e:
-            raise GodaddyApiError(response.json())
+            raise ApiError(response.json())
 
     def get_domain_info(self, domain):
         url = self.API_TEMPLATE + self.DOMAIN_INFO.format(domain=domain)

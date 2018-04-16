@@ -110,7 +110,7 @@ export default {
       addForm: false,
       editForm: false,
       rowdata: {},
-      Dns_Types: ['dnspod', 'godaddy'],
+      Dns_Types: ['dnspod', 'godaddy', 'bind'],
       showdnspod: false,
       showgodaddy: false,
       dnsname: ''
