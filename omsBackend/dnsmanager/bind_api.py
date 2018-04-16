@@ -82,8 +82,9 @@ class BindApi(object):
         req = json.loads(ret_json, encoding='utf-8')[0]['id']
         return req
 
-    def add_domain(self, data):
+    def add_domain(self, domain):
         method = 'post'
+        data = {'name': domain}
         ret_json = self.get_response(self.DOMAIN_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
         return req

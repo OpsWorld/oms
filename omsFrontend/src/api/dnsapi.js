@@ -121,7 +121,7 @@ export function getGodaddyRecord(query) {
 // bindreecords
 export function postBindRecord(data) {
   return request({
-    url: apiURL.bindreecords,
+    url: apiURL.bindrecords,
     method: 'post',
     data
   })
@@ -129,7 +129,7 @@ export function postBindRecord(data) {
 
 export function getBindRecord(query) {
   return request({
-    url: apiURL.bindreecords,
+    url: apiURL.bindrecords,
     method: 'get',
     params: query
   })

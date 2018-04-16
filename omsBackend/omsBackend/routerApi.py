@@ -102,7 +102,7 @@ router.register(r'dnspodrecords', DnspodRecordViewSet, base_name='dnspodrecords'
 router.register(r'godaddydomains', GodaddyDomainViewSet, base_name='godaddydomains')
 router.register(r'godaddyreecords', GodaddyRecordViewSet, base_name='godaddyreecords')
 router.register(r'binddomains', BindDomainViewSet, base_name='binddomains')
-router.register(r'bindreecords', BindRecordViewSet, base_name='bindreecords')
+router.register(r'bindrecords', BindRecordViewSet, base_name='bindrecords')
 
 from zkmanager.views import ZkUserViewSet, PunchViewSet, PunchSetViewSet
 

@@ -151,5 +151,5 @@ module.exports = {
   godaddydomains: `${url}/api/godaddydomains/`,
   godaddyreecords: `${url}/api/godaddyreecords/`,
   binddomains: `${url}/api/binddomains/`,
-  bindreecords: `${url}/api/bindreecords/`
+  bindrecords: `${url}/api/bindrecords/`
 }

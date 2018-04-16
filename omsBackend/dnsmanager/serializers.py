@@ -72,7 +72,6 @@ class BindRecordSerializer(serializers.Serializer):
     value = serializers.CharField()
     ttl = serializers.CharField()
     mx = serializers.CharField()
-    domain_id = serializers.IntegerField()
     expire = serializers.IntegerField()
     minimum = serializers.IntegerField()
     refresh = serializers.IntegerField()

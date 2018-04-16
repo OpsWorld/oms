@@ -176,6 +176,7 @@ export default {
       this.dnsname = row.name
       this.showdnspod = false
       this.showgodaddy = false
+      this.showbind = false
       if (row.type === 'dnspod') {
         this.showdnspod = true
       } else if (row.type === 'godaddy') {
