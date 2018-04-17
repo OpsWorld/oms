@@ -96,10 +96,13 @@ class BindApi(object):
         req = json.loads(ret_json, encoding='utf-8')
         return req
 
-    def add_record(self, domain, record, value, type='A', ttl=600):
+    def add_record(self, domain, record, value, type='A', ttl=600, mx=10):
         method = 'post'
         title = '{}-{}-{}-{}'.format(domain, record, type, value)
-        data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
+		if type == 'mx':
+		    data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl, 'mx': mx}
+		else:
+            data = {'title': title, 'domain': domain, 'name': record, 'value': value, 'type': type, 'ttl': ttl}
         ret_json = self.get_response(self.RECORD_URL, method, param_data=data)
         req = json.loads(ret_json, encoding='utf-8')
         return req
